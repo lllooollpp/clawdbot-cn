@@ -7,6 +7,7 @@ import type {
   ChannelsStatusSnapshot,
   DiscordStatus,
   FeishuStatus,
+  WeComStatus,
   GoogleChatStatus,
   IMessageStatus,
   NostrProfile,
@@ -46,6 +47,7 @@ export function renderChannels(props: ChannelsProps) {
   const signal = (channels?.signal ?? null) as SignalStatus | null;
   const imessage = (channels?.imessage ?? null) as IMessageStatus | null;
   const feishu = (channels?.feishu ?? null) as FeishuStatus | null;
+  const wecom = (channels?.wecom ?? null) as WeComStatus | null;
   const nostr = (channels?.nostr ?? null) as NostrStatus | null;
   const channelOrder = resolveChannelOrder(props.snapshot);
   const orderedChannels = channelOrder
@@ -71,6 +73,7 @@ export function renderChannels(props: ChannelsProps) {
           signal,
           imessage,
           feishu,
+          wecom,
           nostr,
           channelAccounts: props.snapshot?.channelAccounts ?? null,
         }),
@@ -113,6 +116,7 @@ function resolveChannelOrder(snapshot: ChannelsStatusSnapshot | null): ChannelKe
     "signal",
     "imessage",
     "feishu",
+    "wecom",
     "nostr",
   ];
 }

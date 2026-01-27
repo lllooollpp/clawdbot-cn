@@ -245,6 +245,25 @@ export type FeishuStatus = {
   lastProbeAt?: number | null;
 };
 
+export type WeComProbe = {
+  ok: boolean;
+  status?: number | null;
+  error?: string | null;
+  elapsedMs?: number | null;
+};
+
+export type WeComStatus = {
+  configured: boolean;
+  corpId?: string | null;
+  agentId?: string | null;
+  running: boolean;
+  lastStartAt?: number | null;
+  lastStopAt?: number | null;
+  lastError?: string | null;
+  probe?: WeComProbe | null;
+  lastProbeAt?: number | null;
+};
+
 export type NostrProfile = {
   name?: string | null;
   displayName?: string | null;
