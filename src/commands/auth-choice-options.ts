@@ -10,6 +10,7 @@ export type AuthChoiceOption = {
 };
 
 export type AuthChoiceGroupId =
+  | "domestic"
   | "openai"
   | "anthropic"
   | "google"
@@ -37,6 +38,12 @@ const AUTH_CHOICE_GROUP_DEFS: {
   hint?: string;
   choices: AuthChoice[];
 }[] = [
+  {
+    value: "domestic",
+    label: "Domestic / Local Alternatives (国内优先 🇨🇳)",
+    hint: "DeepSeek, SiliconFlow, Volcengine, Bocha, Ollama",
+    choices: ["deepseek-api-key", "siliconflow-api-key", "volcengine-api-key", "bocha-api-key", "ollama"],
+  },
   {
     value: "openai",
     label: "OpenAI",
@@ -196,6 +203,31 @@ export function buildAuthChoiceOptions(params: {
   });
   options.push({ value: "moonshot-api-key", label: "Moonshot AI API key" });
   options.push({ value: "kimi-code-api-key", label: "Kimi Code API key" });
+  options.push({
+    value: "deepseek-api-key",
+    label: "DeepSeek API key",
+    hint: "DeepSeek V3/R1 (🇨🇳)",
+  });
+  options.push({
+    value: "siliconflow-api-key",
+    label: "SiliconFlow API key",
+    hint: "Aggregated models (🇨🇳)",
+  });
+  options.push({
+    value: "volcengine-api-key",
+    label: "Volcengine Ark (火山引擎方舟) 🇨🇳",
+    hint: "ByteDance Ark platform (豆包/Doubao models)",
+  });
+  options.push({
+    value: "bocha-api-key",
+    label: "Bocha Search API key (博查 🇨🇳)",
+    hint: "Web search alternative (Brave search alternative)",
+  });
+  options.push({
+    value: "ollama",
+    label: "Ollama (Local LLM 🏠)",
+    hint: "Run models locally on your machine",
+  });
   options.push({ value: "synthetic-api-key", label: "Synthetic API key" });
   options.push({
     value: "venice-api-key",

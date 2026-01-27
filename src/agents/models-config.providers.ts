@@ -86,6 +86,31 @@ const DASHSCOPE_DEFAULT_COST = {
   cacheWrite: 0,
 };
 
+const DEEPSEEK_BASE_URL = "https://api.deepseek.com";
+const DEEPSEEK_DEFAULT_MODEL_ID = "deepseek-chat";
+const DEEPSEEK_REASONER_MODEL_ID = "deepseek-reasoner";
+const DEEPSEEK_DEFAULT_CONTEXT_WINDOW = 64000;
+const DEEPSEEK_DEFAULT_MAX_TOKENS = 8192;
+const DEEPSEEK_DEFAULT_COST = {
+  input: 1, // 1 RMB / M tokens approx
+  output: 2,
+  cacheRead: 0.1,
+  cacheWrite: 0.1,
+};
+
+const SILICONFLOW_BASE_URL = "https://api.siliconflow.cn/v1";
+const SILICONFLOW_DEFAULT_MODEL_ID = "deepseek-ai/DeepSeek-V3";
+const SILICONFLOW_DEFAULT_CONTEXT_WINDOW = 32000;
+const SILICONFLOW_DEFAULT_MAX_TOKENS = 4096;
+
+const VOLCENGINE_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3";
+const VOLCENGINE_DEFAULT_COST = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+};
+
 const OLLAMA_BASE_URL = "http://127.0.0.1:11434/v1";
 const OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
 const OLLAMA_DEFAULT_CONTEXT_WINDOW = 128000;
@@ -112,7 +137,7 @@ interface OllamaTagsResponse {
   models: OllamaModel[];
 }
 
-async function discoverOllamaModels(): Promise<ModelDefinitionConfig[]> {
+export async function discoverOllamaModels(): Promise<ModelDefinitionConfig[]> {
   // Skip Ollama discovery in test environments
   if (process.env.VITEST || process.env.NODE_ENV === "test") {
     return [];
@@ -146,6 +171,38 @@ async function discoverOllamaModels(): Promise<ModelDefinitionConfig[]> {
     });
   } catch (error) {
     console.warn(`Failed to discover Ollama models: ${String(error)}`);
+    return [];
+  }
+}
+
+export async function discoverVolcengineModels(params: {
+  apiKey: string;
+  baseUrl?: string;
+}): Promise<ModelDefinitionConfig[]> {
+  const baseUrl = params.baseUrl || VOLCENGINE_BASE_URL;
+  try {
+    const response = await fetch(`${baseUrl}/models`, {
+      headers: {
+        Authorization: `Bearer ${params.apiKey}`,
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) return [];
+    const data = (await response.json()) as any;
+    if (!data.data || !Array.isArray(data.data)) return [];
+    return data.data.map((m: any) => ({
+      id: m.id,
+      name: m.id,
+      reasoning:
+        m.id.toLowerCase().includes("r1") ||
+        m.id.toLowerCase().includes("deep") ||
+        m.id.toLowerCase().includes("reasoner"),
+      input: ["text"],
+      cost: VOLCENGINE_DEFAULT_COST,
+      contextWindow: 128000,
+      maxTokens: 4096,
+    }));
+  } catch {
     return [];
   }
 }
@@ -391,11 +448,73 @@ function buildDashScopeProvider(): ProviderConfig {
   };
 }
 
+function buildDeepSeekProvider(): ProviderConfig {
+  return {
+    baseUrl: DEEPSEEK_BASE_URL,
+    api: "openai-completions",
+    models: [
+      {
+        id: DEEPSEEK_DEFAULT_MODEL_ID,
+        name: "DeepSeek V3",
+        reasoning: false,
+        input: ["text"],
+        cost: DEEPSEEK_DEFAULT_COST,
+        contextWindow: DEEPSEEK_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: DEEPSEEK_DEFAULT_MAX_TOKENS,
+      },
+      {
+        id: DEEPSEEK_REASONER_MODEL_ID,
+        name: "DeepSeek R1 (Reasoner)",
+        reasoning: true,
+        input: ["text"],
+        cost: DEEPSEEK_DEFAULT_COST,
+        contextWindow: DEEPSEEK_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: DEEPSEEK_DEFAULT_MAX_TOKENS,
+      },
+    ],
+  };
+}
+
+function buildSiliconFlowProvider(): ProviderConfig {
+  return {
+    baseUrl: SILICONFLOW_BASE_URL,
+    api: "openai-completions",
+    models: [
+      {
+        id: SILICONFLOW_DEFAULT_MODEL_ID,
+        name: "DeepSeek V3 (SiliconFlow)",
+        reasoning: false,
+        input: ["text"],
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        contextWindow: SILICONFLOW_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: SILICONFLOW_DEFAULT_MAX_TOKENS,
+      },
+      {
+        id: "deepseek-ai/DeepSeek-R1",
+        name: "DeepSeek R1 (SiliconFlow)",
+        reasoning: true,
+        input: ["text"],
+        cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+        contextWindow: SILICONFLOW_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: SILICONFLOW_DEFAULT_MAX_TOKENS,
+      },
+    ],
+  };
+}
+
 function buildSyntheticProvider(): ProviderConfig {
   return {
     baseUrl: SYNTHETIC_BASE_URL,
     api: "anthropic-messages",
     models: SYNTHETIC_MODEL_CATALOG.map(buildSyntheticModelDefinition),
+  };
+}
+
+function buildVolcengineProvider(): ProviderConfig {
+  return {
+    baseUrl: VOLCENGINE_BASE_URL,
+    api: "openai-completions",
+    models: [],
   };
 }
 
@@ -460,6 +579,20 @@ export async function resolveImplicitProviders(params: {
     providers.zhipu = { ...buildZhipuProvider(), apiKey: zhipuKey };
   }
 
+  const deepseekKey =
+    resolveEnvApiKeyVarName("deepseek") ??
+    resolveApiKeyFromProfiles({ provider: "deepseek", store: authStore });
+  if (deepseekKey) {
+    providers.deepseek = { ...buildDeepSeekProvider(), apiKey: deepseekKey };
+  }
+
+  const siliconflowKey =
+    resolveEnvApiKeyVarName("siliconflow") ??
+    resolveApiKeyFromProfiles({ provider: "siliconflow", store: authStore });
+  if (siliconflowKey) {
+    providers.siliconflow = { ...buildSiliconFlowProvider(), apiKey: siliconflowKey };
+  }
+
   const dashscopeKey =
     resolveEnvApiKeyVarName("dashscope") ??
     resolveApiKeyFromProfiles({ provider: "dashscope", store: authStore });
@@ -488,6 +621,13 @@ export async function resolveImplicitProviders(params: {
     resolveApiKeyFromProfiles({ provider: "ollama", store: authStore });
   if (ollamaKey) {
     providers.ollama = { ...(await buildOllamaProvider()), apiKey: ollamaKey };
+  }
+
+  const volcengineKey =
+    resolveEnvApiKeyVarName("volcengine") ??
+    resolveApiKeyFromProfiles({ provider: "volcengine", store: authStore });
+  if (volcengineKey) {
+    providers.volcengine = { ...buildVolcengineProvider(), apiKey: volcengineKey };
   }
 
   return providers;

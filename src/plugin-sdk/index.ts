@@ -96,6 +96,7 @@ export {
   SignalConfigSchema,
   SlackConfigSchema,
   TelegramConfigSchema,
+  FeishuConfigSchema,
 } from "../config/zod-schema.providers-core.js";
 export { WhatsAppConfigSchema } from "../config/zod-schema.providers-whatsapp.js";
 export {
@@ -361,6 +362,14 @@ export {
   stripMarkdown,
 } from "../line/markdown-to-line.js";
 export type { ProcessedLineMessage } from "../line/markdown-to-line.js";
+
+// Channel: Feishu
+export {
+  listFeishuAccountIds,
+  resolveDefaultFeishuAccountId,
+  resolveFeishuAccount,
+} from "../feishu/accounts.js";
+export type { ResolvedFeishuAccount } from "../feishu/types.js";
 
 // Media utilities
 export { loadWebMedia, type WebMediaResult } from "../web/media.js";

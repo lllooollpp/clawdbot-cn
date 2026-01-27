@@ -99,6 +99,8 @@ import {
   LogsTailResultSchema,
   type ModelsListParams,
   ModelsListParamsSchema,
+  type ModelsDiscoverParams,
+  ModelsDiscoverParamsSchema,
   type NodeDescribeParams,
   NodeDescribeParamsSchema,
   type NodeEventParams,
@@ -264,6 +266,9 @@ export const validateChannelsLogoutParams = ajv.compile<ChannelsLogoutParams>(
   ChannelsLogoutParamsSchema,
 );
 export const validateModelsListParams = ajv.compile<ModelsListParams>(ModelsListParamsSchema);
+export const validateModelsDiscoverParams = ajv.compile<ModelsDiscoverParams>(
+  ModelsDiscoverParamsSchema,
+);
 export const validateSkillsStatusParams = ajv.compile<SkillsStatusParams>(SkillsStatusParamsSchema);
 export const validateSkillsBinsParams = ajv.compile<SkillsBinsParams>(SkillsBinsParamsSchema);
 export const validateSkillsInstallParams =
@@ -409,6 +414,7 @@ export {
   AgentsListParamsSchema,
   AgentsListResultSchema,
   ModelsListParamsSchema,
+  ModelsDiscoverParamsSchema,
   SkillsStatusParamsSchema,
   SkillsInstallParamsSchema,
   SkillsUpdateParamsSchema,
@@ -483,6 +489,7 @@ export type {
   AgentsListParams,
   AgentsListResult,
   SkillsStatusParams,
+  ModelsDiscoverParams,
   SkillsBinsParams,
   SkillsBinsResult,
   SkillsInstallParams,

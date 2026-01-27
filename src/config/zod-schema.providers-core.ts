@@ -746,3 +746,48 @@ export const MSTeamsConfigSchema = z
         'channels.msteams.dmPolicy="open" requires channels.msteams.allowFrom to include "*"',
     });
   });
+
+export const FeishuGroupSchema = z
+  .object({
+    requireMention: z.boolean().optional(),
+    tools: ToolPolicySchema,
+    skills: z.array(z.string()).optional(),
+    enabled: z.boolean().optional(),
+    systemPrompt: z.string().optional(),
+  })
+  .strict();
+
+export const FeishuAccountSchema = z
+  .object({
+    name: z.string().optional(),
+    enabled: z.boolean().optional(),
+    appId: z.string().optional(),
+    appSecret: z.string().optional(),
+    encryptKey: z.string().optional(),
+    verificationToken: z.string().optional(),
+    markdown: MarkdownConfigSchema,
+    dmPolicy: DmPolicySchema.optional().default("pairing"),
+    allowFrom: z.array(z.string()).optional(),
+    groupPolicy: GroupPolicySchema.optional().default("allowlist"),
+    groups: z.record(z.string(), FeishuGroupSchema.optional()).optional(),
+    historyLimit: z.number().int().min(0).optional(),
+    dmHistoryLimit: z.number().int().min(0).optional(),
+    textChunkLimit: z.number().int().positive().optional(),
+    mediaMaxMb: z.number().positive().optional(),
+    heartbeat: ChannelHeartbeatVisibilitySchema,
+    webhookPath: z.string().optional(),
+  })
+  .strict();
+
+export const FeishuConfigSchema = FeishuAccountSchema.extend({
+  accounts: z.record(z.string(), FeishuAccountSchema.optional()).optional(),
+  defaultAccount: z.string().optional(),
+}).superRefine((value, ctx) => {
+  requireOpenAllowFrom({
+    policy: value.dmPolicy,
+    allowFrom: value.allowFrom,
+    ctx,
+    path: ["allowFrom"],
+    message: 'channels.feishu.dmPolicy="open" requires channels.feishu.allowFrom to include "*"',
+  });
+});

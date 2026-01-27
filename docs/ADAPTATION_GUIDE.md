@@ -1,31 +1,31 @@
-# Clawdbot 开发与适配指南
+# Clawdbot Development and Adaptation Guide
 
-## 1. 接入国内模型 (GLM / Qwen)
+## 1. Integrating Domestic Models (GLM / Qwen)
 
-目前已在 `src/agents/models-config.providers.ts` 中集成了方案。
+The solution has already been integrated in `src/agents/models-config.providers.ts`.
 
-### 1.1 使用方法
-1. **环境变量**: 在 `.env` 中设置 API Key：
-   - 智谱 GLM: `ZHIPU_API_KEY`
-   - 通义千问: `DASHSCOPE_API_KEY`
-2. **测试**:
-   运行 `pnpm dev models list` 检查模型是否已启用。
-
----
-
-## 2. 接入飞书 (Feishu)
-
-### 2.1 步骤
-1. **定义 Schema**: 在 `src/channels/plugins/config-schema.ts` 中定义飞书配置。
-2. **实现 Inbound**: 参考 `src/channels/plugins/onboarding/slack.ts` 实现飞书的 Webhook 回调。
-3. **实现 Outbound**: 参考 `src/channels/plugins/outbound/slack.ts` 实现飞书消息发送。
-4. **集成**: 在 `src/channels/plugins/index.ts` 中注册飞书。
+### 1.1 Usage Method
+1. **Environment Variables**: Set the API Key in `.env`:
+   - Zhipu GLM: `ZHIPU_API_KEY`
+   - Qwen: `DASHSCOPE_API_KEY`
+2. **Testing**:
+   Run `pnpm dev models list` to check if the model is enabled.
 
 ---
 
-## 3. 接入微信 (WeChat)
+## 2. Integrating Feishu (Feishu)
 
-### 3.1 方案建议
-由于微信私有协议的不稳定性，建议：
-1. **Wechaty**: 创建 `extensions/wechaty`，将 Wechaty 封装为 Clawdbot 插件。
-2. **企业微信**: 使用自建应用模式，流程同飞书。
+### 2.1 Steps
+1. **Define Schema**: Define Feishu configuration in `src/channels/plugins/config-schema.ts`.
+2. **Implement Inbound**: Refer to `src/channels/plugins/onboarding/slack.ts` to implement Feishu's Webhook callback.
+3. **Implement Outbound**: Refer to `src/channels/plugins/outbound/slack.ts` to implement Feishu message sending.
+4. **Integration**: Register Feishu in `src/channels/plugins/index.ts`.
+
+---
+
+## 3. Integrating WeChat (WeChat)
+
+### 3.1 Recommended Approach
+Due to the instability of WeChat's proprietary protocol, it is recommended to:
+1. **Wechaty**: Create `extensions/wechaty` and encapsulate Wechaty as a Clawdbot plugin.
+2. **WeCom (Enterprise WeChat)**: Use the self-built application mode, with the same process as Feishu.

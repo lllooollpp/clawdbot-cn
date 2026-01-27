@@ -334,6 +334,14 @@ const FIELD_LABELS: Record<string, string> = {
   "channels.mattermost.oncharPrefixes": "Mattermost 字符前缀触发",
   "channels.mattermost.requireMention": "Mattermost 需要 @提及",
   "channels.signal.account": "Signal 账号",
+  "channels.feishu": "飞书",
+  "channels.feishu.appId": "App ID",
+  "channels.feishu.appSecret": "App Secret",
+  "channels.feishu.encryptKey": "Encrypt Key",
+  "channels.feishu.verificationToken": "Verification Token",
+  "channels.feishu.webhookPath": "Webhook 路径",
+  "channels.feishu.dmPolicy": "私聊策略",
+  "channels.feishu.groupPolicy": "群聊策略",
   "channels.imessage.cliPath": "iMessage CLI 路径",
   "plugins.enabled": "启用插件",
   "plugins.allow": "插件允许名单",
@@ -471,6 +479,11 @@ const FIELD_HELP: Record<string, string> = {
     "如果为 true，Slack 线程会話将继承父频道的转录内容（默认：false）。",
   "channels.mattermost.botToken":
     "来自 Mattermost 系统控制台 -> 集成 -> 机器人账号的 Token。",
+  "channels.feishu.appId": "飞书自建应用的 App ID。",
+  "channels.feishu.appSecret": "飞书自建应用的 App Secret。",
+  "channels.feishu.encryptKey": "可选：飞书事件订阅的 Encrypt Key (如果启用了加密)。",
+  "channels.feishu.verificationToken": "可选：飞书事件订阅的 Verification Token (用于验证请求来源)。",
+  "channels.feishu.webhookPath": "可选：飞书 Webhook 接收路径 (默认: /feishu/events)。",
   "channels.mattermost.baseUrl":
     "Mattermost 服务器的基础 URL（例如：https://chat.example.com）。",
   "channels.mattermost.chatmode":

@@ -5,41 +5,27 @@ read_when: "You want per-agent sandboxing or per-agent tool allow/deny policies 
 status: active
 ---
 
-# Multi-Agent Sandbox & Tools Configuration
+## 概述
 
-## Overview
+在多代理设置中，每个代理现在都可以拥有自己的：
+- **沙箱配置** (`agents.list[].sandbox` 会覆盖 `agents.defaults.sandbox`)
+- **工具限制** (`tools.allow` / `tools.deny`，以及 `agents.list[].tools`)
 
-Each agent in a multi-agent setup can now have its own:
-- **Sandbox configuration** (`agents.list[].sandbox` overrides `agents.defaults.sandbox`)
-- **Tool restrictions** (`tools.allow` / `tools.deny`, plus `agents.list[].tools`)
+这允许你运行多个具有不同安全配置的代理：
+- 个人助手，拥有全部权限
+- 家庭/工作代理，工具受限
+- 面向公众的代理，在沙箱中运行
 
-This allows you to run multiple agents with different security profiles:
-- Personal assistant with full access
-- Family/work agents with restricted tools
-- Public-facing agents in sandboxes
+`setupCommand` 应该放在 `sandbox.docker` 下（全局或每个代理单独设置），并在容器创建时运行一次。
 
-`setupCommand` belongs under `sandbox.docker` (global or per-agent) and runs once
-when the container is created.
-
-Auth is per-agent: each agent reads from its own `agentDir` auth store at:
-
-```
+认证是每个代理独立的：每个代理会从其自己的 `agentDir` 认证存储中读取，路径为：```
 ~/.clawdbot/agents/<agentId>/agent/auth-profiles.json
 ```
+凭证在代理之间 **不会** 共享。不要在多个代理之间重复使用 `agentDir`。
+如果想要共享凭证，请将 `auth-profiles.json` 复制到其他代理的 `agentDir` 中。
 
-Credentials are **not** shared between agents. Never reuse `agentDir` across agents.
-If you want to share creds, copy `auth-profiles.json` into the other agent's `agentDir`.
-
-For how sandboxing behaves at runtime, see [Sandboxing](/gateway/sandboxing).
-For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevated](/gateway/sandbox-vs-tool-policy-vs-elevated) and `clawdbot sandbox explain`.
-
----
-
-## Configuration Examples
-
-### Example 1: Personal + Restricted Family Agent
-
-```json
+有关运行时沙箱行为的信息，请参阅 [Sandboxing](/gateway/sandboxing)。
+有关调试“为什么被阻止了？”，请参阅 [Sandbox vs Tool Policy vs Elevated](/gateway/sandbox-vs-tool-policy-vs-elevated) 以及 `clawdbot sandbox explain`。```json
 {
   "agents": {
     "list": [
@@ -80,16 +66,13 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
   ]
 }
 ```
-
-**Result:**
-- `main` agent: Runs on host, full tool access
-- `family` agent: Runs in Docker (one container per agent), only `read` tool
+**结果：**
+- `main` 代理：在主机上运行，拥有完整的工具访问权限
+- `family` 代理：在 Docker 中运行（每个代理一个容器），仅拥有 `read` 工具访问权限
 
 ---
 
-### Example 2: Work Agent with Shared Sandbox
-
-```json
+### 示例 2：具有共享沙箱的工作代理```json
 {
   "agents": {
     "list": [
@@ -115,12 +98,9 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
   }
 }
 ```
-
 ---
 
-### Example 2b: Global coding profile + messaging-only agent
-
-```json
+### 示例 2b：全局编码配置 + 仅消息代理```json
 {
   "tools": { "profile": "coding" },
   "agents": {
@@ -133,16 +113,13 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
   }
 }
 ```
-
-**Result:**
-- default agents get coding tools
-- `support` agent is messaging-only (+ Slack tool)
+**结果：**
+- 默认代理获得编码工具
+- `support` 代理仅支持消息传递（+ Slack 工具）
 
 ---
 
-### Example 3: Different Sandbox Modes per Agent
-
-```json
+### 示例 3：每个代理的不同沙盒模式```json
 {
   "agents": {
     "defaults": {
@@ -175,16 +152,14 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
   }
 }
 ```
-
 ---
 
-## Configuration Precedence
+## 配置优先级
 
-When both global (`agents.defaults.*`) and agent-specific (`agents.list[].*`) configs exist:
+当同时存在全局配置（`agents.defaults.*`）和代理特定配置（`agents.list[].*`）时：
 
-### Sandbox Config
-Agent-specific settings override global:
-```
+### 沙盒配置
+代理特定的设置会覆盖全局设置：```
 agents.list[].sandbox.mode > agents.defaults.sandbox.mode
 agents.list[].sandbox.scope > agents.defaults.sandbox.scope
 agents.list[].sandbox.workspaceRoot > agents.defaults.sandbox.workspaceRoot
@@ -193,29 +168,28 @@ agents.list[].sandbox.docker.* > agents.defaults.sandbox.docker.*
 agents.list[].sandbox.browser.* > agents.defaults.sandbox.browser.*
 agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 ```
+**说明：**
+- `agents.list[].sandbox.{docker,browser,prune}.*` 会覆盖该代理的 `agents.defaults.sandbox.{docker,browser,prune}.*`（当 sandbox 作用域解析为 `"shared"` 时会被忽略）。
 
-**Notes:**
-- `agents.list[].sandbox.{docker,browser,prune}.*` overrides `agents.defaults.sandbox.{docker,browser,prune}.*` for that agent (ignored when sandbox scope resolves to `"shared"`).
+### 工具限制
+过滤顺序如下：
+1. **工具配置文件** (`tools.profile` 或 `agents.list[].tools.profile`)
+2. **提供者工具配置文件** (`tools.byProvider[provider].profile` 或 `agents.list[].tools.byProvider[provider].profile`)
+3. **全局工具策略** (`tools.allow` / `tools.deny`)
+4. **提供者工具策略** (`tools.byProvider[provider].allow/deny`)
+5. **代理特定的工具策略** (`agents.list[].tools.allow/deny`)
+6. **代理提供者策略** (`agents.list[].tools.byProvider[provider].allow/deny`)
+7. **沙箱工具策略** (`tools.sandbox.tools` 或 `agents.list[].tools.sandbox.tools`)
+8. **子代理工具策略** (`tools.subagents.tools`, 如果适用)
 
-### Tool Restrictions
-The filtering order is:
-1. **Tool profile** (`tools.profile` or `agents.list[].tools.profile`)
-2. **Provider tool profile** (`tools.byProvider[provider].profile` or `agents.list[].tools.byProvider[provider].profile`)
-3. **Global tool policy** (`tools.allow` / `tools.deny`)
-4. **Provider tool policy** (`tools.byProvider[provider].allow/deny`)
-5. **Agent-specific tool policy** (`agents.list[].tools.allow/deny`)
-6. **Agent provider policy** (`agents.list[].tools.byProvider[provider].allow/deny`)
-7. **Sandbox tool policy** (`tools.sandbox.tools` or `agents.list[].tools.sandbox.tools`)
-8. **Subagent tool policy** (`tools.subagents.tools`, if applicable)
+每一层级可以进一步限制工具，但不能恢复之前层级中被拒绝的工具。
+如果设置了 `agents.list[].tools.sandbox.tools`，它将替换该代理的 `tools.sandbox.tools`。
+如果设置了 `agents.list[].tools.profile`，它将覆盖该代理的 `tools.profile`。
+提供者工具键可以接受 `provider`（例如 `google-antigravity`）或 `provider/model`（例如 `openai/gpt-5.2`）。
 
-Each level can further restrict tools, but cannot grant back denied tools from earlier levels.
-If `agents.list[].tools.sandbox.tools` is set, it replaces `tools.sandbox.tools` for that agent.
-If `agents.list[].tools.profile` is set, it overrides `tools.profile` for that agent.
-Provider tool keys accept either `provider` (e.g. `google-antigravity`) or `provider/model` (e.g. `openai/gpt-5.2`).
+### 工具组（快捷方式）
 
-### Tool groups (shorthands)
-
-Tool policies (global, agent, sandbox) support `group:*` entries that expand to multiple concrete tools:
+工具策略（全局、代理、沙箱）支持 `group:*` 条目，这些条目会扩展为多个具体工具：
 
 - `group:runtime`: `exec`, `bash`, `process`
 - `group:fs`: `read`, `write`, `edit`, `apply_patch`
@@ -225,23 +199,16 @@ Tool policies (global, agent, sandbox) support `group:*` entries that expand to 
 - `group:automation`: `cron`, `gateway`
 - `group:messaging`: `message`
 - `group:nodes`: `nodes`
-- `group:clawdbot`: all built-in Clawdbot tools (excludes provider plugins)
+- `group:clawdbot`: 所有内置的 Clawdbot 工具（不包括提供者插件）
 
-### Elevated Mode
-`tools.elevated` is the global baseline (sender-based allowlist). `agents.list[].tools.elevated` can further restrict elevated for specific agents (both must allow).
+### 提升模式
+`tools.elevated` 是全局基础（基于发送者的白名单）。`agents.list[].tools.elevated` 可以进一步限制特定代理的提升权限（两者都必须允许）。
 
-Mitigation patterns:
-- Deny `exec` for untrusted agents (`agents.list[].tools.deny: ["exec"]`)
-- Avoid allowlisting senders that route to restricted agents
-- Disable elevated globally (`tools.elevated.enabled: false`) if you only want sandboxed execution
-- Disable elevated per agent (`agents.list[].tools.elevated.enabled: false`) for sensitive profiles
-
----
-
-## Migration from Single Agent
-
-**Before (single agent):**
-```json
+缓解模式：
+- 拒绝不受信任代理的 `exec`（`agents.list[].tools.deny: ["exec"]`）
+- 避免允许那些路由到受限代理的发送者
+- 如果只希望沙箱执行，可以全局禁用提升（`tools.elevated.enabled: false`）
+- 对于敏感配置，可以按代理禁用提升（`agents.list[].tools.elevated.enabled: false`）```json
 {
   "agents": {
     "defaults": {
@@ -261,9 +228,7 @@ Mitigation patterns:
   }
 }
 ```
-
-**After (multi-agent with different profiles):**
-```json
+**在（具有不同角色的多智能体）之后：**```json
 {
   "agents": {
     "list": [
@@ -277,15 +242,13 @@ Mitigation patterns:
   }
 }
 ```
-
-Legacy `agent.*` configs are migrated by `clawdbot doctor`; prefer `agents.defaults` + `agents.list` going forward.
+遗留的 `agent.*` 配置由 `clawdbot doctor` 进行迁移；建议今后使用 `agents.defaults` + `agents.list`。
 
 ---
 
-## Tool Restriction Examples
+## 工具限制示例
 
-### Read-only Agent
-```json
+### 只读代理```json
 {
   "tools": {
     "allow": ["read"],
@@ -293,9 +256,7 @@ Legacy `agent.*` configs are migrated by `clawdbot doctor`; prefer `agents.defau
   }
 }
 ```
-
-### Safe Execution Agent (no file modifications)
-```json
+### 安全执行代理（不修改文件）```json
 {
   "tools": {
     "allow": ["read", "exec", "process"],
@@ -303,9 +264,7 @@ Legacy `agent.*` configs are migrated by `clawdbot doctor`; prefer `agents.defau
   }
 }
 ```
-
-### Communication-only Agent
-```json
+### 仅通信代理```json
 {
   "tools": {
     "allow": ["sessions_list", "sessions_send", "sessions_history", "session_status"],
@@ -313,62 +272,53 @@ Legacy `agent.*` configs are migrated by `clawdbot doctor`; prefer `agents.defau
   }
 }
 ```
+---
+
+## 常见陷阱："non-main"
+
+`agents.defaults.sandbox.mode: "non-main"` 是基于 `session.mainKey`（默认值为 `"main"`）的，
+而不是代理 ID。群组/频道会话总是会获得它们自己的键，因此它们会被视为 "non-main" 并被沙箱化。如果你想让某个代理从不被沙箱化，可以设置 `agents.list[].sandbox.mode: "off"`。
 
 ---
 
-## Common Pitfall: "non-main"
+## 测试
 
-`agents.defaults.sandbox.mode: "non-main"` is based on `session.mainKey` (default `"main"`),
-not the agent id. Group/channel sessions always get their own keys, so they
-are treated as non-main and will be sandboxed. If you want an agent to never
-sandbox, set `agents.list[].sandbox.mode: "off"`.
+在配置多代理沙箱和工具之后：
 
----
-
-## Testing
-
-After configuring multi-agent sandbox and tools:
-
-1. **Check agent resolution:**
-   ```exec
+1. **检查代理解析：**   ```exec
    clawdbot agents list --bindings
    ```
-
-2. **Verify sandbox containers:**
-   ```exec
+2. **验证沙盒容器：**   ```exec
    docker ps --filter "label=clawdbot.sandbox=1"
    ```
+3. **测试工具限制：**
+   - 发送一个需要受限工具的消息
+   - 验证代理无法使用被拒绝的工具
 
-3. **Test tool restrictions:**
-   - Send a message requiring restricted tools
-   - Verify the agent cannot use denied tools
-
-4. **Monitor logs:**
-   ```exec
+4. **监控日志：**   ```exec
    tail -f "${CLAWDBOT_STATE_DIR:-$HOME/.clawdbot}/logs/gateway.log" | grep -E "routing|sandbox|tools"
    ```
+---
+
+## 故障排除
+
+### 尽管设置了 `mode: "all"`，代理仍未被沙箱隔离
+- 检查是否存在全局配置 `agents.defaults.sandbox.mode` 覆盖了该设置
+- 代理特定的配置具有优先级，因此请设置 `agents.list[].sandbox.mode: "all"`
+
+### 工具仍然可用，尽管在拒绝列表中
+- 检查工具过滤顺序：全局 → 代理 → 沙箱 → 子代理
+- 每个层级只能进一步限制，不能重新授予
+- 通过日志验证：`[tools] filtering tools for agent:${agentId}`
+
+### 每个代理的容器未被隔离
+- 在代理特定的沙箱配置中设置 `scope: "agent"`
+- 默认值为 `"session"`，即每个会话创建一个容器
 
 ---
 
-## Troubleshooting
+## 参考资料
 
-### Agent not sandboxed despite `mode: "all"`
-- Check if there's a global `agents.defaults.sandbox.mode` that overrides it
-- Agent-specific config takes precedence, so set `agents.list[].sandbox.mode: "all"`
-
-### Tools still available despite deny list
-- Check tool filtering order: global → agent → sandbox → subagent
-- Each level can only further restrict, not grant back
-- Verify with logs: `[tools] filtering tools for agent:${agentId}`
-
-### Container not isolated per agent
-- Set `scope: "agent"` in agent-specific sandbox config
-- Default is `"session"` which creates one container per session
-
----
-
-## See Also
-
-- [Multi-Agent Routing](/concepts/multi-agent)
-- [Sandbox Configuration](/gateway/configuration#agentsdefaults-sandbox)
-- [Session Management](/concepts/session)
+- [多代理路由](/concepts/multi-agent)
+- [沙箱配置](/gateway/configuration#agentsdefaults-sandbox)
+- [会话管理](/concepts/session)

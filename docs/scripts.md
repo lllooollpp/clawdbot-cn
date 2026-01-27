@@ -4,28 +4,29 @@ read_when:
   - Running scripts from the repo
   - Adding or changing scripts under ./scripts
 ---
-# Scripts
 
-The `scripts/` directory contains helper scripts for local workflows and ops tasks.
-Use these when a task is clearly tied to a script; otherwise prefer the CLI.
+# 脚本
 
-## Conventions
+`scripts/` 目录包含用于本地工作流程和运维任务的辅助脚本。  
+当任务明显与脚本相关时使用这些脚本；否则，请优先使用 CLI。
 
-- Scripts are **optional** unless referenced in docs or release checklists.
-- Prefer CLI surfaces when they exist (example: auth monitoring uses `clawdbot models status --check`).
-- Assume scripts are host‑specific; read them before running on a new machine.
+## 约定
 
-## Git hooks
+- 脚本是**可选的**，除非在文档或发布检查清单中被引用。
+- 当存在 CLI 接口时，请优先使用 CLI（例如：认证监控使用 `clawdbot models status --check`）。
+- 假设脚本是主机特定的；在新机器上运行之前请先阅读它们。
 
-- `scripts/setup-git-hooks.js`: best-effort setup for `core.hooksPath` when inside a git repo.
-- `scripts/format-staged.js`: pre-commit formatter for staged `src/` and `test/` files.
+## Git 钩子
 
-## Auth monitoring scripts
+- `scripts/setup-git-hooks.js`: 在 Git 仓库内时，尽力设置 `core.hooksPath`。
+- `scripts/format-staged.js`: 在提交前格式化已暂存的 `src/` 和 `test/` 文件。
 
-Auth monitoring scripts are documented here:
+## 认证监控脚本
+
+认证监控脚本的说明文档请参见：
 [/automation/auth-monitoring](/automation/auth-monitoring)
 
-## When adding scripts
+## 添加脚本时
 
-- Keep scripts focused and documented.
-- Add a short entry in the relevant doc (or create one if missing).
+- 保持脚本专注并加以文档说明。
+- 在相关文档中添加简短的条目（如果文档缺失，请创建一个）。

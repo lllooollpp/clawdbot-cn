@@ -970,6 +970,7 @@
           "channels/discord",
           "channels/slack",
           "channels/googlechat",
+          "channels/feishu",
           "channels/mattermost",
           "channels/signal",
           "channels/imessage",

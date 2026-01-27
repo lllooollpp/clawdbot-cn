@@ -200,3 +200,46 @@ export function removeConfigFormValue(
     state.configRaw = serializeConfigForm(base);
   }
 }
+
+export async function discoverModels(state: ConfigState, provider: string) {
+  if (!state.client || !state.connected || !state.configForm) return;
+
+  // Find the config for this provider
+  const modelsConfig = state.configForm.models as Record<string, any>;
+  if (!modelsConfig || !modelsConfig.providers) return;
+
+  const providerConfig = modelsConfig.providers[provider];
+  if (!providerConfig) return;
+
+  state.configSaving = true; // Use simple state for loading indicator
+  state.lastError = null;
+
+  try {
+    const res = await state.client.request("models.discover", {
+      provider,
+      apiKey: providerConfig.apiKey,
+      baseUrl: providerConfig.baseUrl,
+    });
+
+    if (res && Array.isArray(res.models) && res.models.length > 0) {
+      // Update the models list for this provider
+      // We merge them or replace? Dify replaces/updates.
+      // Let's replace for now, or maybe append new ones. 
+      // User likely wants the full list.
+      const existingModels = providerConfig.models ?? [];
+      const newModels = res.models;
+      
+      // Update the form
+      updateConfigFormValue(state, ["models", "providers", provider, "models"], newModels);
+      return { success: true, count: newModels.length };
+    } else {
+      state.lastError = "No models found or error during discovery.";
+      return { success: false, error: state.lastError };
+    }
+  } catch (err) {
+    state.lastError = String(err);
+    return { success: false, error: state.lastError };
+  } finally {
+    state.configSaving = false;
+  }
+}

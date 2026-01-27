@@ -89,3 +89,23 @@ export function isSensitivePath(path: Array<string | number>): boolean {
     key.endsWith("key")
   );
 }
+
+export function isUnsupportedPath(path: Array<string | number>, unsupported: Set<string>): boolean {
+  const key = pathKey(path);
+  if (unsupported.has(key)) return true;
+  const segments = key.split(".");
+  for (const entry of unsupported) {
+    if (!entry.includes("*")) continue;
+    const entrySegments = entry.split(".");
+    if (entrySegments.length !== segments.length) continue;
+    let match = true;
+    for (let i = 0; i < segments.length; i += 1) {
+      if (entrySegments[i] !== "*" && entrySegments[i] !== segments[i]) {
+        match = false;
+        break;
+      }
+    }
+    if (match) return true;
+  }
+  return false;
+}

@@ -227,6 +227,24 @@ export type IMessageStatus = {
   lastProbeAt?: number | null;
 };
 
+export type FeishuProbe = {
+  ok: boolean;
+  status?: number | null;
+  error?: string | null;
+  elapsedMs?: number | null;
+};
+
+export type FeishuStatus = {
+  configured: boolean;
+  appId?: string | null;
+  running: boolean;
+  lastStartAt?: number | null;
+  lastStopAt?: number | null;
+  lastError?: string | null;
+  probe?: FeishuProbe | null;
+  lastProbeAt?: number | null;
+};
+
 export type NostrProfile = {
   name?: string | null;
   displayName?: string | null;

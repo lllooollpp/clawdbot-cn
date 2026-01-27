@@ -7,17 +7,13 @@ read_when:
 
 # Brave Search API
 
-Clawdbot uses Brave Search as the default provider for `web_search`.
+Clawdbot 默认使用 Brave Search 作为 `web_search` 的提供者。
 
-## Get an API key
+## 获取 API 密钥
 
-1) Create a Brave Search API account at https://brave.com/search/api/
-2) In the dashboard, choose the **Data for Search** plan and generate an API key.
-3) Store the key in config (recommended) or set `BRAVE_API_KEY` in the Gateway environment.
-
-## Config example
-
-```json5
+1) 在 https://brave.com/search/api/ 创建一个 Brave Search API 账户。
+2) 在仪表板中，选择 **Data for Search** 计划并生成 API 密钥。
+3) 将密钥存储在配置文件中（推荐）或在 Gateway 环境中设置 `BRAVE_API_KEY`。```json5
 {
   tools: {
     web: {
@@ -31,10 +27,9 @@ Clawdbot uses Brave Search as the default provider for `web_search`.
   }
 }
 ```
+## 注意事项
 
-## Notes
+- AI 计划的数据 **不** 兼容 `web_search`。
+- Brave 提供免费层级以及付费计划；请查看 Brave API 门户以了解当前的限制。
 
-- The Data for AI plan is **not** compatible with `web_search`.
-- Brave provides a free tier plus paid plans; check the Brave API portal for current limits.
-
-See [Web tools](/tools/web) for the full web_search configuration.
+有关完整的 `web_search` 配置，请参阅 [网络工具](/tools/web)。

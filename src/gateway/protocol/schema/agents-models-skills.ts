@@ -54,6 +54,15 @@ export const ModelsListResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const ModelsDiscoverParamsSchema = Type.Object(
+  {
+    provider: NonEmptyString,
+    apiKey: NonEmptyString,
+    baseUrl: Type.Optional(Type.String()),
+  },
+  { additionalProperties: false },
+);
+
 export const SkillsStatusParamsSchema = Type.Object({}, { additionalProperties: false });
 
 export const SkillsBinsParamsSchema = Type.Object({}, { additionalProperties: false });

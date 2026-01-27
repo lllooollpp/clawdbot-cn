@@ -164,3 +164,51 @@ export async function setOpencodeZenApiKey(key: string, agentDir?: string) {
     agentDir: resolveAuthAgentDir(agentDir),
   });
 }
+
+export async function setDeepSeekApiKey(key: string, agentDir?: string) {
+  upsertAuthProfile({
+    profileId: "deepseek:default",
+    credential: {
+      type: "api_key",
+      provider: "deepseek",
+      key,
+    },
+    agentDir: resolveAuthAgentDir(agentDir),
+  });
+}
+
+export async function setSiliconFlowApiKey(key: string, agentDir?: string) {
+  upsertAuthProfile({
+    profileId: "siliconflow:default",
+    credential: {
+      type: "api_key",
+      provider: "siliconflow",
+      key,
+    },
+    agentDir: resolveAuthAgentDir(agentDir),
+  });
+}
+
+export async function setVolcengineApiKey(key: string, agentDir?: string) {
+  upsertAuthProfile({
+    profileId: "volcengine:default",
+    credential: {
+      type: "api_key",
+      provider: "volcengine",
+      key,
+    },
+    agentDir: resolveAuthAgentDir(agentDir),
+  });
+}
+
+export async function setBochaApiKey(key: string, agentDir?: string) {
+  upsertAuthProfile({
+    profileId: "bocha:default",
+    credential: {
+      type: "api_key",
+      provider: "bocha",
+      key,
+    },
+    agentDir: resolveAuthAgentDir(agentDir),
+  });
+}

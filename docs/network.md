@@ -5,47 +5,46 @@ read_when:
   - You are debugging local vs tailnet access or pairing
   - You want the canonical list of networking docs
 ---
-# Network hub
 
-This hub links the core docs for how Clawdbot connects, pairs, and secures
-devices across localhost, LAN, and tailnet.
+# 网络中继站
 
-## Core model
+此中继站链接了 Clawdbot 在本地主机、局域网（LAN）和 tailnet 上连接、配对和安全设备的核心文档。
 
-- [Gateway architecture](/concepts/architecture)
-- [Gateway protocol](/gateway/protocol)
-- [Gateway runbook](/gateway)
-- [Web surfaces + bind modes](/web)
+## 核心模型
 
-## Pairing + identity
+- [网关架构](/concepts/architecture)
+- [网关协议](/gateway/protocol)
+- [网关操作手册](/gateway)
+- [网络界面 + 绑定模式](/web)
 
-- [Pairing overview (DM + nodes)](/start/pairing)
-- [Gateway-owned node pairing](/gateway/pairing)
-- [Devices CLI (pairing + token rotation)](/cli/devices)
-- [Pairing CLI (DM approvals)](/cli/pairing)
+## 配对 + 身份验证
 
-Local trust:
-- Local connections (loopback or the gateway host’s own tailnet address) can be
-  auto‑approved for pairing to keep same‑host UX smooth.
-- Non‑local tailnet/LAN clients still require explicit pairing approval.
+- [配对概述（DM + 节点）](/start/pairing)
+- [网关拥有的节点配对](/gateway/pairing)
+- [设备 CLI（配对 + 令牌轮换）](/cli/devices)
+- [配对 CLI（DM 审批）](/cli/pairing)
 
-## Discovery + transports
+本地信任：
+- 本地连接（环回地址或网关主机自身的 tailnet 地址）可以自动批准配对，以保持同主机的用户体验流畅。
+- 非本地 tailnet/LAN 客户端仍需要显式的配对审批。
 
-- [Discovery & transports](/gateway/discovery)
+## 发现 + 传输方式
+
+- [发现与传输方式](/gateway/discovery)
 - [Bonjour / mDNS](/gateway/bonjour)
-- [Remote access (SSH)](/gateway/remote)
+- [远程访问（SSH）](/gateway/remote)
 - [Tailscale](/gateway/tailscale)
 
-## Nodes + transports
+## 节点 + 传输方式
 
-- [Nodes overview](/nodes)
-- [Bridge protocol (legacy nodes)](/gateway/bridge-protocol)
-- [Node runbook: iOS](/platforms/ios)
-- [Node runbook: Android](/platforms/android)
+- [节点概述](/nodes)
+- [桥接协议（旧版节点）](/gateway/bridge-protocol)
+- [节点操作手册：iOS](/platforms/ios)
+- [节点操作手册：Android](/platforms/android)
 
-## Security
+## 安全性
 
-- [Security overview](/gateway/security)
-- [Gateway config reference](/gateway/configuration)
-- [Troubleshooting](/gateway/troubleshooting)
-- [Doctor](/gateway/doctor)
+- [安全性概述](/gateway/security)
+- [网关配置参考](/gateway/configuration)
+- [故障排除](/gateway/troubleshooting)
+- [诊断工具](/gateway/doctor)

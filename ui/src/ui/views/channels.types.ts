@@ -3,6 +3,7 @@ import type {
     ChannelsStatusSnapshot,
     ConfigUiHints,
     DiscordStatus,
+    FeishuStatus,
     GoogleChatStatus,
     IMessageStatus,
     NostrProfile,
@@ -57,6 +58,7 @@ export type ChannelsChannelData = {
   slack?: SlackStatus | null;
   signal?: SignalStatus | null;
   imessage?: IMessageStatus | null;
+  feishu?: FeishuStatus | null;
   nostr?: NostrStatus | null;
   channelAccounts?: Record<string, ChannelAccountSnapshot[]> | null;
 };

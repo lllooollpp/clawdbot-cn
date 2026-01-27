@@ -7,25 +7,20 @@ read_when:
 
 # Perplexity Sonar
 
-Clawdbot can use Perplexity Sonar for the `web_search` tool. You can connect
-through Perplexity’s direct API or via OpenRouter.
+Clawdbot 可以使用 Perplexity Sonar 作为 `web_search` 工具。您可以通过 Perplexity 的直接 API 连接，也可以通过 OpenRouter 连接。
 
-## API options
+## API 选项
 
-### Perplexity (direct)
+### Perplexity（直接）
 
-- Base URL: https://api.perplexity.ai
-- Environment variable: `PERPLEXITY_API_KEY`
+- 基础 URL：https://api.perplexity.ai
+- 环境变量：`PERPLEXITY_API_KEY`
 
-### OpenRouter (alternative)
+### OpenRouter（替代方案）
 
-- Base URL: https://openrouter.ai/api/v1
-- Environment variable: `OPENROUTER_API_KEY`
-- Supports prepaid/crypto credits.
-
-## Config example
-
-```json5
+- 基础 URL：https://openrouter.ai/api/v1
+- 环境变量：`OPENROUTER_API_KEY`
+- 支持预付/加密货币积分。```json5
 {
   tools: {
     web: {
@@ -41,10 +36,7 @@ through Perplexity’s direct API or via OpenRouter.
   }
 }
 ```
-
-## Switching from Brave
-
-```json5
+## 从 Brave 切换```json5
 {
   tools: {
     web: {
@@ -59,21 +51,18 @@ through Perplexity’s direct API or via OpenRouter.
   }
 }
 ```
+如果同时设置了 `PERPLEXITY_API_KEY` 和 `OPENROUTER_API_KEY`，请设置 `tools.web.search.perplexity.baseUrl`（或 `tools.web.search.perplexity.apiKey`）以消除歧义。
 
-If both `PERPLEXITY_API_KEY` and `OPENROUTER_API_KEY` are set, set
-`tools.web.search.perplexity.baseUrl` (or `tools.web.search.perplexity.apiKey`)
-to disambiguate.
+如果没有设置基础 URL，Clawdbot 会根据 API 密钥来源选择一个默认值：
 
-If no base URL is set, Clawdbot chooses a default based on the API key source:
+- `PERPLEXITY_API_KEY` 或 `pplx-...` → 直接使用 Perplexity (`https://api.perplexity.ai`)
+- `OPENROUTER_API_KEY` 或 `sk-or-...` → 使用 OpenRouter (`https://openrouter.ai/api/v1`)
+- 未知的密钥格式 → 使用 OpenRouter（安全回退）
 
-- `PERPLEXITY_API_KEY` or `pplx-...` → direct Perplexity (`https://api.perplexity.ai`)
-- `OPENROUTER_API_KEY` or `sk-or-...` → OpenRouter (`https://openrouter.ai/api/v1`)
-- Unknown key formats → OpenRouter (safe fallback)
+## 模型
 
-## Models
+- `perplexity/sonar` — 快速问答 + 网络搜索
+- `perplexity/sonar-pro`（默认） — 多步骤推理 + 网络搜索
+- `perplexity/sonar-reasoning-pro` — 深度研究
 
-- `perplexity/sonar` — fast Q&A with web search
-- `perplexity/sonar-pro` (default) — multi-step reasoning + web search
-- `perplexity/sonar-reasoning-pro` — deep research
-
-See [Web tools](/tools/web) for the full web_search configuration.
+有关完整的 `web_search` 配置，请参见 [Web 工具](/tools/web)。

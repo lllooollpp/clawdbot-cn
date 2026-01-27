@@ -5,6 +5,7 @@ import {
   hintForPath,
   humanize,
   isSensitivePath,
+  isUnsupportedPath,
   pathKey,
   schemaType,
   type JsonSchema,
@@ -33,6 +34,7 @@ const icons = {
   minus: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>`,
   trash: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`,
   edit: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`,
+  refresh: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`,
 };
 
 export function renderNode(params: {
@@ -44,8 +46,9 @@ export function renderNode(params: {
   disabled: boolean;
   showLabel?: boolean;
   onPatch: (path: Array<string | number>, value: unknown) => void;
+  onDiscoverModels?: (provider: string) => void;
 }): TemplateResult | typeof nothing {
-  const { schema, value, path, hints, unsupported, disabled, onPatch } = params;
+  const { schema, value, path, hints, unsupported, disabled, onPatch, onDiscoverModels } = params;
   const showLabel = params.showLabel ?? true;
   const type = schemaType(schema);
   const hint = hintForPath(path, hints);
@@ -54,7 +57,7 @@ export function renderNode(params: {
   const help = hint?.help ?? schema.description;
   const key = pathKey(path);
 
-  if (unsupported.has(key)) {
+  if (isUnsupportedPath(path, unsupported)) {
     return html`<div class="cfg-field cfg-field--error">
       <div class="cfg-field__label">${label}</div>
       <div class="cfg-field__error">不支持的架构节点。请使用原生模式 (Raw)。</div>
@@ -378,13 +381,17 @@ function renderObject(params: {
   disabled: boolean;
   showLabel?: boolean;
   onPatch: (path: Array<string | number>, value: unknown) => void;
+  onDiscoverModels?: (provider: string) => void;
 }): TemplateResult {
-  const { schema, value, path, hints, unsupported, disabled, onPatch } = params;
+  const { schema, value, path, hints, unsupported, disabled, onPatch, onDiscoverModels } = params;
   const showLabel = params.showLabel ?? true;
   const hint = hintForPath(path, hints);
   const rawLabel = hint?.label ?? schema.title ?? String(path.at(-1) ?? "");
   const label = rawLabel === "undefined" || !rawLabel ? humanize(String(path.at(-1) ?? "")) : rawLabel;
   const help = hint?.help ?? schema.description;
+
+  const isModelProvider = path.length === 3 && path[0] === "models" && path[1] === "providers";
+  const providerKey = isModelProvider ? String(path[2]) : null;
 
   const fallback = value ?? schema.default;
   const obj = fallback && typeof fallback === "object" && !Array.isArray(fallback)
@@ -418,6 +425,7 @@ function renderObject(params: {
             unsupported,
             disabled,
             onPatch,
+            onDiscoverModels,
           })
         )}
         ${allowExtra ? renderMapField({
@@ -439,6 +447,22 @@ function renderObject(params: {
     <details class="cfg-object" open>
       <summary class="cfg-object__header">
         <span class="cfg-object__title">${label}</span>
+        ${providerKey ? html`
+          <button 
+            type="button" 
+            class="cfg-btn cfg-btn--sm cfg-btn--ghost"
+            style="margin-left: auto; margin-right: 8px; font-size: 11px; padding: 2px 6px;"
+            ?disabled=${disabled}
+            @click=${(e: Event) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onDiscoverModels?.(providerKey);
+            }}
+          >
+            <span style="display: inline-flex; width: 12px; height: 12px; margin-right: 4px;">${icons.refresh}</span>
+            获取模型列表
+          </button>
+        ` : nothing}
         <span class="cfg-object__chevron">${icons.chevronDown}</span>
       </summary>
       ${help ? html`<div class="cfg-object__help">${help}</div>` : nothing}
@@ -452,6 +476,7 @@ function renderObject(params: {
             unsupported,
             disabled,
             onPatch,
+            onDiscoverModels,
           })
         )}
         ${allowExtra ? renderMapField({
@@ -551,6 +576,7 @@ function renderArray(params: {
                   disabled,
                   showLabel: false,
                   onPatch,
+                  onDiscoverModels,
                 })}
               </div>
             </div>
@@ -660,6 +686,7 @@ function renderMapField(params: {
                         disabled,
                         showLabel: false,
                         onPatch,
+                        onDiscoverModels,
                       })}
                 </div>
                 <button

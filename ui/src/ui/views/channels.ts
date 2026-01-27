@@ -6,6 +6,7 @@ import type {
   ChannelUiMetaEntry,
   ChannelsStatusSnapshot,
   DiscordStatus,
+  FeishuStatus,
   GoogleChatStatus,
   IMessageStatus,
   NostrProfile,
@@ -44,6 +45,7 @@ export function renderChannels(props: ChannelsProps) {
   const slack = (channels?.slack ?? null) as SlackStatus | null;
   const signal = (channels?.signal ?? null) as SignalStatus | null;
   const imessage = (channels?.imessage ?? null) as IMessageStatus | null;
+  const feishu = (channels?.feishu ?? null) as FeishuStatus | null;
   const nostr = (channels?.nostr ?? null) as NostrStatus | null;
   const channelOrder = resolveChannelOrder(props.snapshot);
   const orderedChannels = channelOrder
@@ -68,6 +70,7 @@ export function renderChannels(props: ChannelsProps) {
           slack,
           signal,
           imessage,
+          feishu,
           nostr,
           channelAccounts: props.snapshot?.channelAccounts ?? null,
         }),
@@ -109,6 +112,7 @@ function resolveChannelOrder(snapshot: ChannelsStatusSnapshot | null): ChannelKe
     "slack",
     "signal",
     "imessage",
+    "feishu",
     "nostr",
   ];
 }

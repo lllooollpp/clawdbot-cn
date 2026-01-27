@@ -1,6 +1,6 @@
 {
-  "name": "clawdbot-cn",
-  "version": "1.0.0-cn",
+  "name": "clawdbot",
+  "version": "2026.1.25",
   "description": "Clawdbot 中文汉化版 - 支持智谱 GLM-4.7",
   "type": "module",
   "main": "dist/index.js",

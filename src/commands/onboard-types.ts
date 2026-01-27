@@ -23,6 +23,11 @@ export type AuthChoice =
   | "google-antigravity"
   | "google-gemini-cli"
   | "zai-api-key"
+  | "deepseek-api-key"
+  | "siliconflow-api-key"
+  | "volcengine-api-key"
+  | "bocha-api-key"
+  | "ollama"
   | "minimax-cloud"
   | "minimax"
   | "minimax-api"
@@ -65,6 +70,9 @@ export type OnboardOptions = {
   aiGatewayApiKey?: string;
   moonshotApiKey?: string;
   kimiCodeApiKey?: string;
+  deepseekApiKey?: string;
+  siliconflowApiKey?: string;
+  bochaApiKey?: string;
   geminiApiKey?: string;
   zaiApiKey?: string;
   minimaxApiKey?: string;

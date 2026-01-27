@@ -3,49 +3,45 @@ summary: "Top-level overview of Clawdbot, features, and purpose"
 read_when:
   - Introducing Clawdbot to newcomers
 ---
+
 # Clawdbot 🦞
 
-> *"EXFOLIATE! EXFOLIATE!"* — A space lobster, probably
+> *"去角质！去角质！"* — 一个外星龙虾，可能是
 
 <p align="center">
   <img src="whatsapp-clawd.jpg" alt="Clawdbot" width="420" />
 </p>
 
 <p align="center">
-  <strong>Any OS + WhatsApp/Telegram/Discord/iMessage gateway for AI agents (Pi).</strong><br />
-  Plugins add Mattermost and more.
-  Send a message, get an agent response — from your pocket.
+  <strong>任何操作系统 + 用于 AI 代理（Pi）的 WhatsApp/Telegram/Discord/iMessage 网关。</strong><br />
+  插件支持 Mattermost 等更多平台。
+  发送一条消息，获取代理的回复 —— 从你的口袋中。
 </p>
 
 <p align="center">
   <a href="https://github.com/clawdbot/clawdbot">GitHub</a> ·
-  <a href="https://github.com/clawdbot/clawdbot/releases">Releases</a> ·
-  <a href="/">Docs</a> ·
-  <a href="/start/clawd">Clawdbot assistant setup</a>
+  <a href="https://github.com/clawdbot/clawdbot/releases">发布版本</a> ·
+  <a href="/">文档</a> ·
+  <a href="/start/clawd">Clawdbot 助手设置</a>
 </p>
 
-Clawdbot bridges WhatsApp (via WhatsApp Web / Baileys), Telegram (Bot API / grammY), Discord (Bot API / channels.discord.js), and iMessage (imsg CLI) to coding agents like [Pi](https://github.com/badlogic/pi-mono). Plugins add Mattermost (Bot API + WebSocket) and more.
-Clawdbot also powers [Clawd](https://clawd.me), the space‑lobster assistant.
+Clawdbot 通过 WhatsApp Web / Baileys、Telegram（Bot API / grammY）、Discord（Bot API / channels.discord.js）、iMessage（imsg CLI）和 飞书（Feishu/Lark API）将 WhatsApp、Telegram、Discord、iMessage 和 飞书 连接到像 [Pi](https://github.com/badlogic/pi-mono) 这样的代码代理。插件支持 Mattermost（Bot API + WebSocket）等更多平台。
+Clawdbot 还为 [Clawd](https://clawd.me)（外星龙虾助手）提供支持。
 
-## Start here
+## 从这里开始
 
-- **New install from zero:** [Getting Started](/start/getting-started)
-- **Guided setup (recommended):** [Wizard](/start/wizard) (`clawdbot onboard`)
-- **Open the dashboard (local Gateway):** http://127.0.0.1:18789/ (or http://localhost:18789/)
+- **从零开始安装新版本：** [入门指南](/start/getting-started)
+- **引导式设置（推荐）：** [向导](/start/wizard) (`clawdbot onboard`)
+- **打开仪表盘（本地网关）：** http://127.0.0.1:18789/（或 http://localhost:18789/）
 
-If the Gateway is running on the same computer, that link opens the browser Control UI
-immediately. If it fails, start the Gateway first: `clawdbot gateway`.
+如果网关运行在同一台计算机上，该链接会立即打开浏览器控制界面。如果无法打开，请先启动网关：`clawdbot gateway`。
 
-## Dashboard (browser Control UI)
+## 仪表盘（浏览器控制界面）
 
-The dashboard is the browser Control UI for chat, config, nodes, sessions, and more.
-Local default: http://127.0.0.1:18789/
-Remote access: [Web surfaces](/web) and [Tailscale](/gateway/tailscale)
-
-## How it works
-
-```
-WhatsApp / Telegram / Discord / iMessage (+ plugins)
+仪表盘是用于聊天、配置、节点、会话等的浏览器控制界面。
+本地默认地址：http://127.0.0.1:18789/
+远程访问：[网络界面](/web) 和 [Tailscale](/gateway/tailscale)```
+WhatsApp / Telegram / Discord / iMessage / 飞书 (+ 插件)
         │
         ▼
   ┌───────────────────────────┐
@@ -62,45 +58,38 @@ WhatsApp / Telegram / Discord / iMessage (+ plugins)
               ├─ iOS node via Gateway WS + pairing
               └─ Android node via Gateway WS + pairing
 ```
+大多数操作都通过 **网关** (`clawdbot gateway`) 运行，这是一个单一的长期运行进程，负责管理通道连接和 WebSocket 控制平面。
 
-Most operations flow through the **Gateway** (`clawdbot gateway`), a single long-running process that owns channel connections and the WebSocket control plane.
+## 网络模型
 
-## Network model
+- **每个主机一个网关（推荐）**：它是唯一允许拥有 WhatsApp Web 会话的进程。如果你需要救援机器人或严格的隔离，可以运行多个网关，使用隔离的配置文件和端口；详见 [多个网关](/gateway/multiple-gateways)。
+- **回环优先**：网关的 WebSocket 默认使用 `ws://127.0.0.1:18789`。
+  - 向导现在默认会生成一个网关令牌（即使对于回环连接也如此）。
+  - 对于 Tailnet 访问，请运行 `clawdbot gateway --bind tailnet --token ...`（非回环绑定需要令牌）。
+- **节点**：连接到网关的 WebSocket（根据需要使用 LAN/Tailnet/SSH）；旧版 TCP 桥接已弃用/移除。
+- **Canvas 主机**：HTTP 文件服务器在 `canvasHost.port`（默认 `18793`），为节点的 WebViews 提供 `/__clawdbot__/canvas/`；详见 [网关配置](/gateway/configuration)（`canvasHost`）。
+- **远程使用**：通过 SSH 隧道或 Tailnet/VPN；详见 [远程访问](/gateway/remote) 和 [发现](/gateway/discovery)。
 
-- **One Gateway per host (recommended)**: it is the only process allowed to own the WhatsApp Web session. If you need a rescue bot or strict isolation, run multiple gateways with isolated profiles and ports; see [Multiple gateways](/gateway/multiple-gateways).
-- **Loopback-first**: Gateway WS defaults to `ws://127.0.0.1:18789`.
-  - The wizard now generates a gateway token by default (even for loopback).
-  - For Tailnet access, run `clawdbot gateway --bind tailnet --token ...` (token is required for non-loopback binds).
-- **Nodes**: connect to the Gateway WebSocket (LAN/tailnet/SSH as needed); legacy TCP bridge is deprecated/removed.
-- **Canvas host**: HTTP file server on `canvasHost.port` (default `18793`), serving `/__clawdbot__/canvas/` for node WebViews; see [Gateway configuration](/gateway/configuration) (`canvasHost`).
-- **Remote use**: SSH tunnel or tailnet/VPN; see [Remote access](/gateway/remote) and [Discovery](/gateway/discovery).
+## 特性（高级功能）
 
-## Features (high level)
+- 📱 **WhatsApp 集成** — 使用 Baileys 实现 WhatsApp Web 协议
+- ✈️ **Telegram 机器人** — 通过 grammY 实现私信 + 群组
+- 🎮 **Discord 机器人** — 通过 channels.discord.js 实现私信 + 频道
+- 🧩 **Mattermost 机器人（插件）** — 机器人令牌 + WebSocket 事件
+- 💬 **iMessage** — 本地 imsg CLI 集成（macOS）
+- 🤖 **代理桥接** — Pi（RPC 模式）支持工具流式传输
+- ⏱️ **流式传输 + 分块** — 块流式传输 + Telegram 草稿流式传输细节 ([/concepts/streaming](/concepts/streaming))
+- 🧠 **多代理路由** — 将提供者账户/对等方路由到隔离的代理（工作区 + 每代理会话）
+- 🔐 **订阅认证** — 通过 OAuth 实现 Anthropic（Claude Pro/Max） + OpenAI（ChatGPT/Codex）
+- 💬 **会话** — 直接聊天会合并为共享的 `main`（默认）；群组是隔离的
+- 👥 **群组聊天支持** — 默认基于@提及；所有者可以切换 `/activation always|mention`
+- 📎 **媒体支持** — 支持发送和接收图片、音频、文档
+- 🎤 **语音备忘录** — 可选的语音转文字钩子
+- 🖥️ **WebChat + macOS 应用** — 本地 UI + 菜单栏伴侣用于操作和语音唤醒
+- 📱 **iOS 节点** — 作为节点配对，并暴露一个 Canvas 表面
+- 📱 **Android 节点** — 作为节点配对，并暴露 Canvas + 聊天 + 摄像头
 
-- 📱 **WhatsApp Integration** — Uses Baileys for WhatsApp Web protocol
-- ✈️ **Telegram Bot** — DMs + groups via grammY
-- 🎮 **Discord Bot** — DMs + guild channels via channels.discord.js
-- 🧩 **Mattermost Bot (plugin)** — Bot token + WebSocket events
-- 💬 **iMessage** — Local imsg CLI integration (macOS)
-- 🤖 **Agent bridge** — Pi (RPC mode) with tool streaming
-- ⏱️ **Streaming + chunking** — Block streaming + Telegram draft streaming details ([/concepts/streaming](/concepts/streaming))
-- 🧠 **Multi-agent routing** — Route provider accounts/peers to isolated agents (workspace + per-agent sessions)
-- 🔐 **Subscription auth** — Anthropic (Claude Pro/Max) + OpenAI (ChatGPT/Codex) via OAuth
-- 💬 **Sessions** — Direct chats collapse into shared `main` (default); groups are isolated
-- 👥 **Group Chat Support** — Mention-based by default; owner can toggle `/activation always|mention`
-- 📎 **Media Support** — Send and receive images, audio, documents
-- 🎤 **Voice notes** — Optional transcription hook
-- 🖥️ **WebChat + macOS app** — Local UI + menu bar companion for ops and voice wake
-- 📱 **iOS node** — Pairs as a node and exposes a Canvas surface
-- 📱 **Android node** — Pairs as a node and exposes Canvas + Chat + Camera
-
-Note: legacy Claude/Codex/Gemini/Opencode paths have been removed; Pi is the only coding-agent path.
-
-## Quick start
-
-Runtime requirement: **Node ≥ 22**.
-
-```bash
+注意：旧版 Claude/Codex/Gemini/Opencode 路径已被移除；Pi 是唯一的编码代理路径。```bash
 # Recommended: global install (npm/pnpm)
 npm install -g clawdbot@latest
 # or: pnpm add -g clawdbot@latest
@@ -114,12 +103,7 @@ clawdbot channels login
 # Gateway runs via the service after onboarding; manual run is still possible:
 clawdbot gateway --port 18789
 ```
-
-Switching between npm and git installs later is easy: install the other flavor and run `clawdbot doctor` to update the gateway service entrypoint.
-
-From source (development):
-
-```bash
+在之后切换 npm 和 git 安装方式非常简单：安装另一种方式的版本，然后运行 `clawdbot doctor` 来更新网关服务的入口点。```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 pnpm install
@@ -127,33 +111,24 @@ pnpm ui:build # auto-installs UI deps on first run
 pnpm build
 clawdbot onboard --install-daemon
 ```
+如果你还没有全局安装，請從存儲庫中通過 `pnpm clawdbot ...` 進行入門步驟。
 
-If you don’t have a global install yet, run the onboarding step via `pnpm clawdbot ...` from the repo.
-
-Multi-instance quickstart (optional):
-
-```bash
+多實例快速入門（可選）：```bash
 CLAWDBOT_CONFIG_PATH=~/.clawdbot/a.json \
 CLAWDBOT_STATE_DIR=~/.clawdbot-a \
 clawdbot gateway --port 19001
 ```
-
-Send a test message (requires a running Gateway):
-
-```bash
+发送测试消息（需要运行中的网关）：```bash
 clawdbot message send --target +15555550123 --message "Hello from Clawdbot"
 ```
+## 配置（可选）
 
-## Configuration (optional)
+配置文件位于 `~/.clawdbot/clawdbot.json`。
 
-Config lives at `~/.clawdbot/clawdbot.json`.
+- 如果你 **什么也不做**，Clawdbot 将使用内置的 Pi 二进制文件以 RPC 模式运行，并为每个发送者启用会话。
+- 如果你想对其进行限制，可以从 `channels.whatsapp.allowFrom` 开始，并（对于群组）设置相关规则。
 
-- If you **do nothing**, Clawdbot uses the bundled Pi binary in RPC mode with per-sender sessions.
-- If you want to lock it down, start with `channels.whatsapp.allowFrom` and (for groups) mention rules.
-
-Example:
-
-```json5
+示例：```json5
 {
   channels: {
     whatsapp: {
@@ -164,61 +139,61 @@ Example:
   messages: { groupChat: { mentionPatterns: ["@clawd"] } }
 }
 ```
+## 文档
 
-## Docs
-
-- Start here:
-  - [Docs hubs (all pages linked)](/start/hubs)
-  - [Help](/help) ← *common fixes + troubleshooting*
-  - [Configuration](/gateway/configuration)
-  - [Configuration examples](/gateway/configuration-examples)
-  - [Slash commands](/tools/slash-commands)
-  - [Multi-agent routing](/concepts/multi-agent)
-  - [Updating / rollback](/install/updating)
-  - [Pairing (DM + nodes)](/start/pairing)
-  - [Nix mode](/install/nix)
-  - [Clawdbot assistant setup (Clawd)](/start/clawd)
-  - [Skills](/tools/skills)
-  - [Skills config](/tools/skills-config)
-  - [Workspace templates](/reference/templates/AGENTS)
-  - [RPC adapters](/reference/rpc)
-  - [Gateway runbook](/gateway)
-  - [Nodes (iOS/Android)](/nodes)
-  - [Web surfaces (Control UI)](/web)
-  - [Discovery + transports](/gateway/discovery)
-  - [Remote access](/gateway/remote)
-- Providers and UX:
-  - [WebChat](/web/webchat)
-  - [Control UI (browser)](/web/control-ui)
+- 从这里开始：
+  - [文档中心（所有页面链接）](/start/hubs)
+  - [帮助](/help) ← *常见修复 + 排除故障*
+  - [配置](/gateway/configuration)
+  - [配置示例](/gateway/configuration-examples)
+  - [斜杠命令](/tools/slash-commands)
+  - [多代理路由](/concepts/multi-agent)
+  - [更新 / 回滚](/install/updating)
+  - [配对（私聊 + 节点）](/start/pairing)
+  - [Nix 模式](/install/nix)
+  - [Clawdbot 助手设置（Clawd）](/start/clawd)
+  - [技能](/tools/skills)
+  - [技能配置](/tools/skills-config)
+  - [工作区模板](/reference/templates/AGENTS)
+  - [RPC 适配器](/reference/rpc)
+  - [网关操作手册](/gateway)
+  - [节点（iOS/Android）](/nodes)
+  - [网页界面（Control UI）](/web)
+  - [发现 + 传输方式](/gateway/discovery)
+  - [远程访问](/gateway/remote)
+- 提供商与用户体验：
+  - [网页聊天](/web/webchat)
+  - [Control UI（浏览器）](/web/control-ui)
   - [Telegram](/channels/telegram)
   - [Discord](/channels/discord)
-  - [Mattermost (plugin)](/channels/mattermost)
+  - [飞书 (Feishu/Lark)](/channels/feishu)
+  - [Mattermost（插件）](/channels/mattermost)
   - [iMessage](/channels/imessage)
-  - [Groups](/concepts/groups)
-  - [WhatsApp group messages](/concepts/group-messages)
-  - [Media: images](/nodes/images)
-  - [Media: audio](/nodes/audio)
-- Companion apps:
-  - [macOS app](/platforms/macos)
-  - [iOS app](/platforms/ios)
-  - [Android app](/platforms/android)
-  - [Windows (WSL2)](/platforms/windows)
-  - [Linux app](/platforms/linux)
-- Ops and safety:
-  - [Sessions](/concepts/session)
-  - [Cron jobs](/automation/cron-jobs)
-  - [Webhooks](/automation/webhook)
-  - [Gmail hooks (Pub/Sub)](/automation/gmail-pubsub)
-  - [Security](/gateway/security)
-  - [Troubleshooting](/gateway/troubleshooting)
+  - [群组](/concepts/groups)
+  - [WhatsApp 群消息](/concepts/group-messages)
+  - [媒体：图片](/nodes/images)
+  - [媒体：音频](/nodes/audio)
+- 配套应用：
+  - [macOS 应用](/platforms/macos)
+  - [iOS 应用](/platforms/ios)
+  - [Android 应用](/platforms/android)
+  - [Windows（WSL2）](/platforms/windows)
+  - [Linux 应用](/platforms/linux)
+- 运维与安全：
+  - [会话](/concepts/session)
+  - [定时任务](/automation/cron-jobs)
+  - [Webhook](/automation/webhook)
+  - [Gmail 钩子（Pub/Sub）](/automation/gmail-pubsub)
+  - [安全](/gateway/security)
+  - [故障排查](/gateway/troubleshooting)
 
-## The name
+## 名称
 
-**Clawdbot = CLAW + TARDIS** — because every space lobster needs a time-and-space machine.
+**Clawdbot = CLAW + TARDIS** — 因为每只空间龙虾都需要一台时空机器。
 
 ---
 
-*"We're all just playing with our own prompts."* — an AI, probably high on tokens
+*"我们都在玩弄自己的提示词。"* — 一个 AI，可能消耗了太多 Token
 
 ## 致谢
 
@@ -230,5 +205,4 @@ MIT 许可证 — 像深海里的龙虾一样自由 🦞
 
 ---
 
-*"我们都在玩转自己的提示词。"* — 某个可能消耗了太多 Token 的 AI
-
+*"我们都在玩弄自己的提示词。"* — 某个可能消耗了太多 Token 的 AI

@@ -1,5 +1,6 @@
 import type { ClawdbotConfig } from "../config/config.js";
 import { resolveDiscordAccount } from "../discord/accounts.js";
+import { resolveFeishuAccount } from "../feishu/accounts.js";
 import { resolveIMessageAccount } from "../imessage/accounts.js";
 import { resolveSignalAccount } from "../signal/accounts.js";
 import { resolveSlackAccount, resolveSlackReplyToMode } from "../slack/accounts.js";
@@ -13,6 +14,8 @@ import { requireActivePluginRegistry } from "../plugins/runtime.js";
 import {
   resolveDiscordGroupRequireMention,
   resolveDiscordGroupToolPolicy,
+  resolveFeishuGroupRequireMention,
+  resolveFeishuGroupToolPolicy,
   resolveGoogleChatGroupRequireMention,
   resolveGoogleChatGroupToolPolicy,
   resolveIMessageGroupRequireMention,
@@ -367,6 +370,33 @@ const DOCKS: Record<ChatChannelId, ChannelDock> = {
           hasRepliedRef,
         };
       },
+    },
+  },
+  feishu: {
+    id: "feishu",
+    capabilities: {
+      chatTypes: ["direct", "group"],
+      media: true,
+    },
+    outbound: { textChunkLimit: 4000 },
+    config: {
+      resolveAllowFrom: ({ cfg, accountId }) =>
+        (resolveFeishuAccount({ cfg, accountId }).config.allowFrom ?? []).map((entry) =>
+          String(entry),
+        ),
+      formatAllowFrom: ({ allowFrom }) =>
+        allowFrom.map((entry) => String(entry).trim()).filter(Boolean),
+    },
+    groups: {
+      resolveRequireMention: resolveFeishuGroupRequireMention,
+      resolveToolPolicy: resolveFeishuGroupToolPolicy,
+    },
+    threading: {
+      buildToolContext: ({ context, hasRepliedRef }) => ({
+        currentChannelId: context.To?.trim() || undefined,
+        currentThreadTs: context.ReplyToId,
+        hasRepliedRef,
+      }),
     },
   },
 };

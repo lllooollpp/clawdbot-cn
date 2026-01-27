@@ -5,25 +5,20 @@ read_when:
   - You are debugging missing API keys in the Gateway
   - You are documenting provider auth or deployment environments
 ---
-# Environment variables
 
-Clawdbot pulls environment variables from multiple sources. The rule is **never override existing values**.
+# 环境变量
 
-## Precedence (highest → lowest)
+Clawdbot 会从多个来源获取环境变量。规则是 **不要覆盖已有的值**。
 
-1) **Process environment** (what the Gateway process already has from the parent shell/daemon).
-2) **`.env` in the current working directory** (dotenv default; does not override).
-3) **Global `.env`** at `~/.clawdbot/.env` (aka `$CLAWDBOT_STATE_DIR/.env`; does not override).
-4) **Config `env` block** in `~/.clawdbot/clawdbot.json` (applied only if missing).
-5) **Optional login-shell import** (`env.shellEnv.enabled` or `CLAWDBOT_LOAD_SHELL_ENV=1`), applied only for missing expected keys.
+## 优先级（最高 → 最低）
 
-If the config file is missing entirely, step 4 is skipped; shell import still runs if enabled.
+1) **进程环境**（Gateway 进程从父 shell/daemon 中已有的环境变量）。
+2) **当前工作目录中的 `.env` 文件**（dotenv 默认方式；不会覆盖）。
+3) **全局的 `.env` 文件**，位于 `~/.clawdbot/.env`（即 `$CLAWDBOT_STATE_DIR/.env`；不会覆盖）。
+4) **配置文件中的 `env` 块**，位于 `~/.clawdbot/clawdbot.json`（仅在变量缺失时应用）。
+5) **可选的登录 shell 导入**（通过 `env.shellEnv.enabled` 或 `CLAWDBOT_LOAD_SHELL_ENV=1` 启用），仅在预期的键缺失时应用。
 
-## Config `env` block
-
-Two equivalent ways to set inline env vars (both are non-overriding):
-
-```json5
+如果配置文件完全缺失，步骤 4 将被跳过；但如果启用了 shell 导入，仍会执行。```json5
 {
   env: {
     OPENROUTER_API_KEY: "sk-or-...",
@@ -33,12 +28,9 @@ Two equivalent ways to set inline env vars (both are non-overriding):
   }
 }
 ```
+## Shell 环境导入
 
-## Shell env import
-
-`env.shellEnv` runs your login shell and imports only **missing** expected keys:
-
-```json5
+`env.shellEnv` 会运行您的登录 shell，并仅导入 **缺失** 的预期键：```json5
 {
   env: {
     shellEnv: {
@@ -48,16 +40,13 @@ Two equivalent ways to set inline env vars (both are non-overriding):
   }
 }
 ```
-
-Env var equivalents:
+环境变量对应项：
 - `CLAWDBOT_LOAD_SHELL_ENV=1`
 - `CLAWDBOT_SHELL_ENV_TIMEOUT_MS=15000`
 
-## Env var substitution in config
+## 在配置中使用环境变量替换
 
-You can reference env vars directly in config string values using `${VAR_NAME}` syntax:
-
-```json5
+你可以在配置字符串值中直接通过 `${VAR_NAME}` 语法引用环境变量：```json5
 {
   models: {
     providers: {
@@ -68,11 +57,10 @@ You can reference env vars directly in config string values using `${VAR_NAME}` 
   }
 }
 ```
+有关详细信息，请参阅[配置：环境变量替换](/gateway/configuration#env-var-substitution-in-config)。
 
-See [Configuration: Env var substitution](/gateway/configuration#env-var-substitution-in-config) for full details.
+## 相关内容
 
-## Related
-
-- [Gateway configuration](/gateway/configuration)
-- [FAQ: env vars and .env loading](/help/faq#env-vars-and-env-loading)
-- [Models overview](/concepts/models)
+- [网关配置](/gateway/configuration)
+- [常见问题：环境变量与.env加载](/help/faq#env-vars-and-env-loading)
+- [模型概述](/concepts/models)

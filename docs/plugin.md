@@ -4,119 +4,99 @@ read_when:
   - Adding or modifying plugins/extensions
   - Documenting plugin install or load rules
 ---
-# Plugins (Extensions)
 
-## Quick start (new to plugins?)
+# 插件（扩展）
 
-A plugin is just a **small code module** that extends Clawdbot with extra
-features (commands, tools, and Gateway RPC).
+## 快速入门（刚接触插件？）
 
-Most of the time, you’ll use plugins when you want a feature that’s not built
-into core Clawdbot yet (or you want to keep optional features out of your main
-install).
+插件只是一个 **小型代码模块**，用于扩展 Clawdbot 的功能（命令、工具和 Gateway RPC）。
 
-Fast path:
+大多数情况下，当你需要一些 Clawdbot 核心尚未内置的功能（或者你希望将可选功能从主安装中分离出来）时，会使用插件。
 
-1) See what’s already loaded:
+快速路径：
 
-```bash
+1) 查看哪些插件已加载：```bash
 clawdbot plugins list
 ```
-
-2) Install an official plugin (example: Voice Call):
-
-```bash
+2) 安装官方插件（例如：语音通话）：```bash
 clawdbot plugins install @clawdbot/voice-call
 ```
+3) 重启网关后，在 `plugins.entries.<id>.config` 下进行配置。
 
-3) Restart the Gateway, then configure under `plugins.entries.<id>.config`.
+有关具体插件的示例，请参阅 [语音通话](/plugins/voice-call)。
 
-See [Voice Call](/plugins/voice-call) for a concrete example plugin.
+## 可用插件（官方）
 
-## Available plugins (official)
-
-- Microsoft Teams is plugin-only as of 2026.1.15; install `@clawdbot/msteams` if you use Teams.
-- Memory (Core) — bundled memory search plugin (enabled by default via `plugins.slots.memory`)
-- Memory (LanceDB) — bundled long-term memory plugin (auto-recall/capture; set `plugins.slots.memory = "memory-lancedb"`)
-- [Voice Call](/plugins/voice-call) — `@clawdbot/voice-call`
-- [Zalo Personal](/plugins/zalouser) — `@clawdbot/zalouser`
+- Microsoft Teams 从 2026.1.15 版本起仅支持插件形式；如果使用 Teams，请安装 `@clawdbot/msteams`。
+- Memory（核心）— 内置的内存搜索插件（通过 `plugins.slots.memory` 默认启用）
+- Memory（LanceDB）— 内置的长期记忆插件（自动回忆/捕获；设置 `plugins.slots.memory = "memory-lancedb"`）
+- [语音通话](/plugins/voice-call) — `@clawdbot/voice-call`
+- [Zalo 个人](/plugins/zalouser) — `@clawdbot/zalouser`
 - [Matrix](/channels/matrix) — `@clawdbot/matrix`
 - [Nostr](/channels/nostr) — `@clawdbot/nostr`
 - [Zalo](/channels/zalo) — `@clawdbot/zalo`
 - [Microsoft Teams](/channels/msteams) — `@clawdbot/msteams`
-- Google Antigravity OAuth (provider auth) — bundled as `google-antigravity-auth` (disabled by default)
-- Gemini CLI OAuth (provider auth) — bundled as `google-gemini-cli-auth` (disabled by default)
-- Qwen OAuth (provider auth) — bundled as `qwen-portal-auth` (disabled by default)
-- Copilot Proxy (provider auth) — local VS Code Copilot Proxy bridge; distinct from built-in `github-copilot` device login (bundled, disabled by default)
+- Google Antigravity OAuth（提供方认证）— 内置为 `google-antigravity-auth`（默认禁用）
+- Gemini CLI OAuth（提供方认证）— 内置为 `google-gemini-cli-auth`（默认禁用）
+- Qwen OAuth（提供方认证）— 内置为 `qwen-portal-auth`（默认禁用）
+- Copilot 代理（提供方认证）— 本地 VS Code Copilot 代理桥接；与内置的 `github-copilot` 设备登录不同（内置，默认禁用）
 
-Clawdbot plugins are **TypeScript modules** loaded at runtime via jiti. **Config
-validation does not execute plugin code**; it uses the plugin manifest and JSON
-Schema instead. See [Plugin manifest](/plugins/manifest).
+Clawdbot 插件是 **TypeScript 模块**，通过 jiti 在运行时加载。**配置验证不会执行插件代码**；它使用插件的清单和 JSON Schema。详见 [插件清单](/plugins/manifest)。
 
-Plugins can register:
+插件可以注册以下内容：
 
-- Gateway RPC methods
-- Gateway HTTP handlers
-- Agent tools
-- CLI commands
-- Background services
-- Optional config validation
-- **Skills** (by listing `skills` directories in the plugin manifest)
-- **Auto-reply commands** (execute without invoking the AI agent)
+- 网关 RPC 方法
+- 网关 HTTP 处理器
+- 代理工具
+- CLI 命令
+- 后台服务
+- 可选的配置验证
+- **技能**（通过在插件清单中列出 `skills` 目录）
+- **自动回复命令**（无需调用 AI 代理即可执行）
 
-Plugins run **in‑process** with the Gateway, so treat them as trusted code.
-Tool authoring guide: [Plugin agent tools](/plugins/agent-tools).
+插件与网关 **在同一进程中运行**，因此请将它们视为可信代码。
+工具编写指南：[插件代理工具](/plugins/agent-tools)。
 
-## Runtime helpers
+## 运行时辅助函数
 
-Plugins can access selected core helpers via `api.runtime`. For telephony TTS:
-
-```ts
+插件可以通过 `api.runtime` 访问选定的核心辅助函数。对于电话语音合成（TTS）：```ts
 const result = await api.runtime.tts.textToSpeechTelephony({
   text: "Hello from Clawdbot",
   cfg: api.config,
 });
 ```
+注意事项：
+- 使用核心 `messages.tts` 配置（OpenAI 或 ElevenLabs）。
+- 返回 PCM 音频缓冲区 + 采样率。插件必须对音频进行重采样/编码以适应各提供方。
+- Edge TTS 不支持用于电话通信。
 
-Notes:
-- Uses core `messages.tts` configuration (OpenAI or ElevenLabs).
-- Returns PCM audio buffer + sample rate. Plugins must resample/encode for providers.
-- Edge TTS is not supported for telephony.
+## 发现与优先级
 
-## Discovery & precedence
+Clawdbot 按以下顺序进行扫描：
 
-Clawdbot scans, in order:
+1) 配置路径
+- `plugins.load.paths`（文件或目录）
 
-1) Config paths
-- `plugins.load.paths` (file or directory)
-
-2) Workspace extensions
+2) 工作区扩展
 - `<workspace>/.clawdbot/extensions/*.ts`
 - `<workspace>/.clawdbot/extensions/*/index.ts`
 
-3) Global extensions
+3) 全局扩展
 - `~/.clawdbot/extensions/*.ts`
 - `~/.clawdbot/extensions/*/index.ts`
 
-4) Bundled extensions (shipped with Clawdbot, **disabled by default**)
+4) 内置扩展（随 Clawdbot 一起提供，**默认禁用**）
 - `<clawdbot>/extensions/*`
 
-Bundled plugins must be enabled explicitly via `plugins.entries.<id>.enabled`
-or `clawdbot plugins enable <id>`. Installed plugins are enabled by default,
-but can be disabled the same way.
+内置插件必须通过 `plugins.entries.<id>.enabled` 或 `clawdbot plugins enable <id>` 显式启用。已安装的插件默认是启用的，但也可以通过相同的方式禁用。
 
-Each plugin must include a `clawdbot.plugin.json` file in its root. If a path
-points at a file, the plugin root is the file's directory and must contain the
-manifest.
+每个插件必须在其根目录中包含一个 `clawdbot.plugin.json` 文件。如果路径指向一个文件，则插件根目录是该文件所在的目录，并且必须包含此清单文件。
 
-If multiple plugins resolve to the same id, the first match in the order above
-wins and lower-precedence copies are ignored.
+如果多个插件解析为相同的 id，按照上述顺序第一个匹配的插件将被使用，后续优先级较低的副本将被忽略。
 
-### Package packs
+### 包装包
 
-A plugin directory may include a `package.json` with `clawdbot.extensions`:
-
-```json
+一个插件目录可能包含一个 `package.json` 文件，其中包含 `clawdbot.extensions` 字段：```json
 {
   "name": "my-pack",
   "clawdbot": {
@@ -124,21 +104,15 @@ A plugin directory may include a `package.json` with `clawdbot.extensions`:
   }
 }
 ```
+每个条目都会成为一个插件。如果包中列出了多个扩展，插件的 id 将会是 `name/<fileBase>`。
 
-Each entry becomes a plugin. If the pack lists multiple extensions, the plugin id
-becomes `name/<fileBase>`.
+如果你的插件引入了 npm 依赖，请在该目录中安装它们，以便 `node_modules` 可用（使用 `npm install` 或 `pnpm install`）。
 
-If your plugin imports npm deps, install them in that directory so
-`node_modules` is available (`npm install` / `pnpm install`).
+### 渠道目录元数据
 
-### Channel catalog metadata
+渠道插件可以通过 `clawdbot.channel` 广告引导信息，并通过 `clawdbot.install` 提供安装提示。这使得核心目录数据保持简洁。
 
-Channel plugins can advertise onboarding metadata via `clawdbot.channel` and
-install hints via `clawdbot.install`. This keeps the core catalog data-free.
-
-Example:
-
-```json
+示例：```json
 {
   "name": "@clawdbot/nextcloud-talk",
   "clawdbot": {
@@ -161,30 +135,21 @@ Example:
   }
 }
 ```
-
-Clawdbot can also merge **external channel catalogs** (for example, an MPM
-registry export). Drop a JSON file at one of:
+Clawdbot 还可以合并 **外部频道目录**（例如，MPM 注册表导出文件）。将 JSON 文件放入以下任意一个路径中：
 - `~/.clawdbot/mpm/plugins.json`
 - `~/.clawdbot/mpm/catalog.json`
 - `~/.clawdbot/plugins/catalog.json`
 
-Or point `CLAWDBOT_PLUGIN_CATALOG_PATHS` (or `CLAWDBOT_MPM_CATALOG_PATHS`) at
-one or more JSON files (comma/semicolon/`PATH`-delimited). Each file should
-contain `{ "entries": [ { "name": "@scope/pkg", "clawdbot": { "channel": {...}, "install": {...} } } ] }`.
+或者将 `CLAWDBOT_PLUGIN_CATALOG_PATHS`（或 `CLAWDBOT_MPM_CATALOG_PATHS`）指向一个或多个 JSON 文件（用逗号、分号或 `PATH` 分隔）。每个文件应包含 `{ "entries": [ { "name": "@scope/pkg", "clawdbot": { "channel": {...}, "install": {...} } } ] }`。
 
-## Plugin IDs
+## 插件 ID
 
-Default plugin ids:
+默认插件 ID：
 
-- Package packs: `package.json` `name`
-- Standalone file: file base name (`~/.../voice-call.ts` → `voice-call`)
+- 包含包：`package.json` 中的 `name`
+- 独立文件：文件基础名称（`~/.../voice-call.ts` → `voice-call`）
 
-If a plugin exports `id`, Clawdbot uses it but warns when it doesn’t match the
-configured id.
-
-## Config
-
-```json5
+如果插件导出了 `id`，Clawdbot 会使用它，但当它与配置的 ID 不匹配时会发出警告。```json5
 {
   plugins: {
     enabled: true,
@@ -197,30 +162,24 @@ configured id.
   }
 }
 ```
+字段：
+- `enabled`: 主开关（默认：true）
+- `allow`: 允许列表（可选）
+- `deny`: 拒绝列表（可选；拒绝优先）
+- `load.paths`: 额外的插件文件/目录
+- `entries.<id>`: 每个插件的开关 + 配置
 
-Fields:
-- `enabled`: master toggle (default: true)
-- `allow`: allowlist (optional)
-- `deny`: denylist (optional; deny wins)
-- `load.paths`: extra plugin files/dirs
-- `entries.<id>`: per‑plugin toggles + config
+配置更改 **需要重启网关**。
 
-Config changes **require a gateway restart**.
+验证规则（严格）：
+- 在 `entries`、`allow`、`deny` 或 `slots` 中出现的未知插件 ID 是 **错误**。
+- 未知的 `channels.<id>` 键是 **错误**，除非某个插件的清单声明了该通道 ID。
+- 插件配置使用嵌入在 `clawdbot.plugin.json` 中的 JSON Schema 进行验证（`configSchema`）。
+- 如果一个插件被禁用，其配置将被保留，并会发出 **警告**。
 
-Validation rules (strict):
-- Unknown plugin ids in `entries`, `allow`, `deny`, or `slots` are **errors**.
-- Unknown `channels.<id>` keys are **errors** unless a plugin manifest declares
-  the channel id.
-- Plugin config is validated using the JSON Schema embedded in
-  `clawdbot.plugin.json` (`configSchema`).
-- If a plugin is disabled, its config is preserved and a **warning** is emitted.
+## 插件槽位（互斥类别）
 
-## Plugin slots (exclusive categories)
-
-Some plugin categories are **exclusive** (only one active at a time). Use
-`plugins.slots` to select which plugin owns the slot:
-
-```json5
+某些插件类别是 **互斥的**（同一时间只能有一个激活）。使用 `plugins.slots` 来选择哪个插件拥有该槽位：```json5
 {
   plugins: {
     slots: {
@@ -229,26 +188,21 @@ Some plugin categories are **exclusive** (only one active at a time). Use
   }
 }
 ```
+如果多个插件声明了 `kind: "memory"`，只有被选中的那个会加载。其他插件会被禁用，并显示诊断信息。
 
-If multiple plugins declare `kind: "memory"`, only the selected one loads. Others
-are disabled with diagnostics.
+## 控制界面（schema + 标签）
 
-## Control UI (schema + labels)
+Control UI 使用 `config.schema`（JSON Schema + `uiHints`）来渲染更友好的表单。
 
-The Control UI uses `config.schema` (JSON Schema + `uiHints`) to render better forms.
+Clawdbot 在运行时根据发现的插件来增强 `uiHints`：
 
-Clawdbot augments `uiHints` at runtime based on discovered plugins:
-
-- Adds per-plugin labels for `plugins.entries.<id>` / `.enabled` / `.config`
-- Merges optional plugin-provided config field hints under:
+- 为 `plugins.entries.<id>` / `.enabled` / `.config` 添加每个插件的标签
+- 将可选的插件提供的配置字段提示合并到以下位置：
   `plugins.entries.<id>.config.<field>`
 
-If you want your plugin config fields to show good labels/placeholders (and mark secrets as sensitive),
-provide `uiHints` alongside your JSON Schema in the plugin manifest.
+如果你想让插件的配置字段显示良好的标签/占位符（并标记敏感信息），请在插件的清单中提供 `uiHints` 与 JSON Schema 一起使用。
 
-Example:
-
-```json
+示例：```json
 {
   "id": "my-plugin",
   "configSchema": {
@@ -265,10 +219,7 @@ Example:
   }
 }
 ```
-
-## CLI
-
-```bash
+## 命令行界面（CLI）```bash
 clawdbot plugins list
 clawdbot plugins info <id>
 clawdbot plugins install <path>                 # copy a local file/dir into ~/.clawdbot/extensions/<id>
@@ -283,52 +234,43 @@ clawdbot plugins enable <id>
 clawdbot plugins disable <id>
 clawdbot plugins doctor
 ```
+`plugins update` 仅适用于在 `plugins.installs` 下跟踪的 npm 安装。
 
-`plugins update` only works for npm installs tracked under `plugins.installs`.
+插件也可以注册自己的顶级命令（例如：`clawdbot voicecall`）。
 
-Plugins may also register their own top‑level commands (example: `clawdbot voicecall`).
+## 插件 API（概述）
 
-## Plugin API (overview)
+插件导出以下两种形式之一：
 
-Plugins export either:
+- 一个函数：`(api) => { ... }`
+- 一个对象：`{ id, name, configSchema, register(api) { ... } }`
 
-- A function: `(api) => { ... }`
-- An object: `{ id, name, configSchema, register(api) { ... } }`
+## 插件钩子
 
-## Plugin hooks
+插件可以自带钩子，并在运行时注册它们。这使得插件能够在不安装单独钩子包的情况下，打包事件驱动的自动化功能。
 
-Plugins can ship hooks and register them at runtime. This lets a plugin bundle
-event-driven automation without a separate hook pack install.
-
-### Example
-
-```
+### 示例```
 import { registerPluginHooksFromDir } from "clawdbot/plugin-sdk";
 
 export default function register(api) {
   registerPluginHooksFromDir(api, "./hooks");
 }
 ```
+注意事项：
+- 挂载目录遵循正常的挂载结构（`HOOK.md` + `handler.ts`）。
+- 仍然适用挂载的资格规则（操作系统/二进制文件/环境/配置要求）。
+- 插件管理的挂载会在 `clawdbot hooks list` 中以 `plugin:<id>` 的形式显示。
+- 你不能通过 `clawdbot hooks` 来启用或禁用由插件管理的挂载；而是应该启用或禁用相应的插件。
 
-Notes:
-- Hook directories follow the normal hook structure (`HOOK.md` + `handler.ts`).
-- Hook eligibility rules still apply (OS/bins/env/config requirements).
-- Plugin-managed hooks show up in `clawdbot hooks list` with `plugin:<id>`.
-- You cannot enable/disable plugin-managed hooks via `clawdbot hooks`; enable/disable the plugin instead.
+## 提供商插件（模型认证）
 
-## Provider plugins (model auth)
+插件可以注册 **模型提供商认证** 流程，使用户可以在 Clawdbot 内运行 OAuth 或 API 密钥设置（无需外部脚本）。
 
-Plugins can register **model provider auth** flows so users can run OAuth or
-API-key setup inside Clawdbot (no external scripts needed).
-
-Register a provider via `api.registerProvider(...)`. Each provider exposes one
-or more auth methods (OAuth, API key, device code, etc.). These methods power:
+通过 `api.registerProvider(...)` 注册一个提供商。每个提供商会暴露一个或多个认证方式（OAuth、API 密钥、设备代码等）。这些方式支持以下命令：
 
 - `clawdbot models auth login --provider <id> [--method <id>]`
 
-Example:
-
-```ts
+示例：```ts
 api.registerProvider({
   id: "acme",
   label: "AcmeAI",
@@ -359,20 +301,14 @@ api.registerProvider({
   ],
 });
 ```
+注意事项：
+- `run` 接收一个 `ProviderAuthContext`，其中包含 `prompter`、`runtime`、`openUrl` 和 `oauth.createVpsAwareHandlers` 等辅助函数。
+- 当你需要添加默认模型或提供者配置时，返回 `configPatch`。
+- 返回 `defaultModel` 以便 `--set-default` 可以更新代理的默认设置。
 
-Notes:
-- `run` receives a `ProviderAuthContext` with `prompter`, `runtime`,
-  `openUrl`, and `oauth.createVpsAwareHandlers` helpers.
-- Return `configPatch` when you need to add default models or provider config.
-- Return `defaultModel` so `--set-default` can update agent defaults.
+### 注册一个消息通道
 
-### Register a messaging channel
-
-Plugins can register **channel plugins** that behave like built‑in channels
-(WhatsApp, Telegram, etc.). Channel config lives under `channels.<id>` and is
-validated by your channel plugin code.
-
-```ts
+插件可以注册 **通道插件**，这些插件的行为类似于内置通道（如 WhatsApp、Telegram 等）。通道配置位于 `channels.<id>` 下，并由你的通道插件代码进行验证。```ts
 const myChannel = {
   id: "acmechat",
   meta: {
@@ -399,45 +335,42 @@ export default function (api) {
   api.registerChannel({ plugin: myChannel });
 }
 ```
+注意事项：
+- 将配置放在 `channels.<id>` 下（而不是 `plugins.entries`）。
+- `meta.label` 用于 CLI/UI 列表中的标签。
+- `meta.aliases` 用于规范化和 CLI 输入的备用 ID。
+- `meta.preferOver` 列出在同时配置时应跳过自动启用的频道 ID。
+- `meta.detailLabel` 和 `meta.systemImage` 用于 UI 显示更丰富的频道标签/图标。
 
-Notes:
-- Put config under `channels.<id>` (not `plugins.entries`).
-- `meta.label` is used for labels in CLI/UI lists.
-- `meta.aliases` adds alternate ids for normalization and CLI inputs.
-- `meta.preferOver` lists channel ids to skip auto-enable when both are configured.
-- `meta.detailLabel` and `meta.systemImage` let UIs show richer channel labels/icons.
+### 编写一个新的消息频道（逐步指南）
 
-### Write a new messaging channel (step‑by‑step)
+当你想要一个**新的聊天界面**（一个“消息频道”）时使用此方法，而不是模型提供者。
+模型提供者的文档位于 `/providers/*` 下。
 
-Use this when you want a **new chat surface** (a “messaging channel”), not a model provider.
-Model provider docs live under `/providers/*`.
+1) 选择一个 ID 和配置结构
+- 所有频道配置都位于 `channels.<id>` 下。
+- 对于多账号设置，建议使用 `channels.<id>.accounts.<accountId>`。
 
-1) Pick an id + config shape
-- All channel config lives under `channels.<id>`.
-- Prefer `channels.<id>.accounts.<accountId>` for multi‑account setups.
+2) 定义频道元数据
+- `meta.label`、`meta.selectionLabel`、`meta.docsPath`、`meta.blurb` 控制 CLI/UI 列表。
+- `meta.docsPath` 应指向一个文档页面，例如 `/channels/<id>`。
+- `meta.preferOver` 允许一个插件替换另一个频道（自动启用时会优先选择它）。
+- `meta.detailLabel` 和 `meta.systemImage` 用于 UI 显示详细文本/图标。
 
-2) Define the channel metadata
-- `meta.label`, `meta.selectionLabel`, `meta.docsPath`, `meta.blurb` control CLI/UI lists.
-- `meta.docsPath` should point at a docs page like `/channels/<id>`.
-- `meta.preferOver` lets a plugin replace another channel (auto-enable prefers it).
-- `meta.detailLabel` and `meta.systemImage` are used by UIs for detail text/icons.
+3) 实现必需的适配器
+- `config.listAccountIds` 和 `config.resolveAccount`
+- `capabilities`（聊天类型、媒体、线程等）
+- `outbound.deliveryMode` 和 `outbound.sendText`（用于基本发送）
 
-3) Implement the required adapters
-- `config.listAccountIds` + `config.resolveAccount`
-- `capabilities` (chat types, media, threads, etc.)
-- `outbound.deliveryMode` + `outbound.sendText` (for basic send)
+4) 按需添加可选适配器
+- `setup`（向导）、`security`（私信策略）、`status`（健康/诊断）
+- `gateway`（启动/停止/登录）、`mentions`（提及功能）、`threading`（线程支持）、`streaming`（流式传输）
+- `actions`（消息操作）、`commands`（原生命令行为）
 
-4) Add optional adapters as needed
-- `setup` (wizard), `security` (DM policy), `status` (health/diagnostics)
-- `gateway` (start/stop/login), `mentions`, `threading`, `streaming`
-- `actions` (message actions), `commands` (native command behavior)
-
-5) Register the channel in your plugin
+5) 在你的插件中注册该频道
 - `api.registerChannel({ plugin })`
 
-Minimal config example:
-
-```json5
+最小配置示例：```json5
 {
   channels: {
     acmechat: {
@@ -448,10 +381,7 @@ Minimal config example:
   }
 }
 ```
-
-Minimal channel plugin (outbound‑only):
-
-```ts
+最小化通道插件（仅出站）：```ts
 const plugin = {
   id: "acmechat",
   meta: {
@@ -481,27 +411,21 @@ export default function (api) {
   api.registerChannel({ plugin });
 }
 ```
+加载插件（扩展目录或 `plugins.load.paths`），然后重启网关，
+接着在你的配置中配置 `channels.<id>`。
 
-Load the plugin (extensions dir or `plugins.load.paths`), restart the gateway,
-then configure `channels.<id>` in your config.
+### 代理工具
 
-### Agent tools
+参见专用指南：[插件代理工具](/plugins/agent-tools)。
 
-See the dedicated guide: [Plugin agent tools](/plugins/agent-tools).
-
-### Register a gateway RPC method
-
-```ts
+### 注册网关 RPC 方法```ts
 export default function (api) {
   api.registerGatewayMethod("myplugin.status", ({ respond }) => {
     respond(true, { ok: true });
   });
 }
 ```
-
-### Register CLI commands
-
-```ts
+### 注册 CLI 命令```ts
 export default function (api) {
   api.registerCli(({ program }) => {
     program.command("mycmd").action(() => {
@@ -510,14 +434,9 @@ export default function (api) {
   }, { commands: ["mycmd"] });
 }
 ```
+### 注册自动回复命令
 
-### Register auto-reply commands
-
-Plugins can register custom slash commands that execute **without invoking the
-AI agent**. This is useful for toggle commands, status checks, or quick actions
-that don't need LLM processing.
-
-```ts
+插件可以注册自定义的斜杠命令，这些命令**无需调用AI代理**即可执行。这对于开关命令、状态检查或不需要LLM处理的快速操作非常有用。```ts
 export default function (api) {
   api.registerCommand({
     name: "mystatus",
@@ -528,27 +447,24 @@ export default function (api) {
   });
 }
 ```
+命令处理程序上下文：
 
-Command handler context:
+- `senderId`：发送者ID（如果可用）
+- `channel`：命令发送的频道
+- `isAuthorizedSender`：发送者是否为授权用户
+- `args`：命令后传递的参数（如果 `acceptsArgs: true`）
+- `commandBody`：完整的命令文本
+- `config`：当前的 Clawdbot 配置
 
-- `senderId`: The sender's ID (if available)
-- `channel`: The channel where the command was sent
-- `isAuthorizedSender`: Whether the sender is an authorized user
-- `args`: Arguments passed after the command (if `acceptsArgs: true`)
-- `commandBody`: The full command text
-- `config`: The current Clawdbot config
+命令选项：
 
-Command options:
+- `name`：命令名称（不带前缀 `/`）
+- `description`：在命令列表中显示的帮助文本
+- `acceptsArgs`：命令是否接受参数（默认：false）。如果为 false 且提供了参数，命令将不会匹配，消息会传递给其他处理程序
+- `requireAuth`：是否需要授权的发送者（默认：true）
+- `handler`：返回 `{ text: string }` 的函数（可以是异步的）
 
-- `name`: Command name (without the leading `/`)
-- `description`: Help text shown in command lists
-- `acceptsArgs`: Whether the command accepts arguments (default: false). If false and arguments are provided, the command won't match and the message falls through to other handlers
-- `requireAuth`: Whether to require authorized sender (default: true)
-- `handler`: Function that returns `{ text: string }` (can be async)
-
-Example with authorization and arguments:
-
-```ts
+带授权和参数的示例：```ts
 api.registerCommand({
   name: "setmode",
   description: "Set plugin mode",
@@ -561,18 +477,15 @@ api.registerCommand({
   },
 });
 ```
+注意事项：
+- 插件命令在内置命令和 AI 代理之前处理
+- 命令是全局注册的，在所有频道中都有效
+- 命令名称不区分大小写（`/MyStatus` 与 `/mystatus` 匹配）
+- 命令名称必须以字母开头，并且只能包含字母、数字、连字符和下划线
+- 保留命令名称（如 `help`、`status`、`reset` 等）不能被插件覆盖
+- 多个插件重复注册相同命令会导致诊断错误并失败
 
-Notes:
-- Plugin commands are processed **before** built-in commands and the AI agent
-- Commands are registered globally and work across all channels
-- Command names are case-insensitive (`/MyStatus` matches `/mystatus`)
-- Command names must start with a letter and contain only letters, numbers, hyphens, and underscores
-- Reserved command names (like `help`, `status`, `reset`, etc.) cannot be overridden by plugins
-- Duplicate command registration across plugins will fail with a diagnostic error
-
-### Register background services
-
-```ts
+### 注册后台服务```ts
 export default function (api) {
   api.registerService({
     id: "my-service",
@@ -581,58 +494,49 @@ export default function (api) {
   });
 }
 ```
+## 命名规范
 
-## Naming conventions
+- 网关方法：`pluginId.action`（例如：`voicecall.status`）
+- 工具：`snake_case`（例如：`voice_call`）
+- CLI 命令：使用 kebab 或 camel 命名，但要避免与核心命令冲突
 
-- Gateway methods: `pluginId.action` (example: `voicecall.status`)
-- Tools: `snake_case` (example: `voice_call`)
-- CLI commands: kebab or camel, but avoid clashing with core commands
+## 技能
 
-## Skills
+插件可以在仓库中附带一个技能文件（`skills/<name>/SKILL.md`）。
+通过 `plugins.entries.<id>.enabled`（或其他配置开关）启用它，并确保它存在于你的工作区/管理的技能位置中。
 
-Plugins can ship a skill in the repo (`skills/<name>/SKILL.md`).
-Enable it with `plugins.entries.<id>.enabled` (or other config gates) and ensure
-it’s present in your workspace/managed skills locations.
+## 发布（npm）
 
-## Distribution (npm)
+推荐的打包方式：
 
-Recommended packaging:
+- 主包：`clawdbot`（此仓库）
+- 插件：在 `@clawdbot/*` 下的独立 npm 包（例如：`@clawdbot/voice-call`）
 
-- Main package: `clawdbot` (this repo)
-- Plugins: separate npm packages under `@clawdbot/*` (example: `@clawdbot/voice-call`)
+发布规范：
 
-Publishing contract:
+- 插件的 `package.json` 必须包含 `clawdbot.extensions` 字段，指定一个或多个入口文件。
+- 入口文件可以是 `.js` 或 `.ts`（jiti 会在运行时加载 TS 文件）。
+- `clawdbot plugins install <npm-spec>` 使用 `npm pack` 打包，解压到 `~/.clawdbot/extensions/<id>/`，并自动在配置中启用。
+- 配置键的稳定性：作用域包会以 **非作用域** 的 ID 进行标准化处理，用于 `plugins.entries.*`。
 
-- Plugin `package.json` must include `clawdbot.extensions` with one or more entry files.
-- Entry files can be `.js` or `.ts` (jiti loads TS at runtime).
-- `clawdbot plugins install <npm-spec>` uses `npm pack`, extracts into `~/.clawdbot/extensions/<id>/`, and enables it in config.
-- Config key stability: scoped packages are normalized to the **unscoped** id for `plugins.entries.*`.
+## 示例插件：语音通话
 
-## Example plugin: Voice Call
+此仓库包含一个语音通话插件（支持 Twilio 或日志回退）：
 
-This repo includes a voice‑call plugin (Twilio or log fallback):
+- 源码：`extensions/voice-call`
+- 技能：`skills/voice-call`
+- CLI：`clawdbot voicecall start|status`
+- 工具：`voice_call`
+- RPC：`voicecall.start`, `voicecall.status`
+- 配置（Twilio）：`provider: "twilio"` + `twilio.accountSid/authToken/from`（可选 `statusCallbackUrl`, `twimlUrl`）
+- 配置（开发）：`provider: "log"`（无网络）
 
-- Source: `extensions/voice-call`
-- Skill: `skills/voice-call`
-- CLI: `clawdbot voicecall start|status`
-- Tool: `voice_call`
-- RPC: `voicecall.start`, `voicecall.status`
-- Config (twilio): `provider: "twilio"` + `twilio.accountSid/authToken/from` (optional `statusCallbackUrl`, `twimlUrl`)
-- Config (dev): `provider: "log"` (no network)
+有关设置和使用，请参见 [语音通话](/plugins/voice-call) 和 `extensions/voice-call/README.md`。
 
-See [Voice Call](/plugins/voice-call) and `extensions/voice-call/README.md` for setup and usage.
+## 安全注意事项
 
-## Safety notes
+插件在网关进程中运行。请将它们视为受信任的代码：
 
-Plugins run in-process with the Gateway. Treat them as trusted code:
-
-- Only install plugins you trust.
-- Prefer `plugins.allow` allowlists.
-- Restart the Gateway after changes.
-
-## Testing plugins
-
-Plugins can (and should) ship tests:
-
-- In-repo plugins can keep Vitest tests under `src/**` (example: `src/plugins/voice-call.plugin.test.ts`).
-- Separately published plugins should run their own CI (lint/build/test) and validate `clawdbot.extensions` points at the built entrypoint (`dist/index.js`).
+- 仅安装你信任的插件。
+- 优先使用 `plugins.allow` 允许列表。
+- 在更改后重启网关。

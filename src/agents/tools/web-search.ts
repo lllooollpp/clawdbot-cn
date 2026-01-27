@@ -17,11 +17,12 @@ import {
   writeCache,
 } from "./web-shared.js";
 
-const SEARCH_PROVIDERS = ["brave", "perplexity"] as const;
+const SEARCH_PROVIDERS = ["brave", "perplexity", "bocha"] as const;
 const DEFAULT_SEARCH_COUNT = 5;
 const MAX_SEARCH_COUNT = 10;
 
 const BRAVE_SEARCH_ENDPOINT = "https://api.search.brave.com/res/v1/web/search";
+const BOCHA_SEARCH_ENDPOINT = "https://api.bochaai.com/v1/web-search";
 const DEFAULT_PERPLEXITY_BASE_URL = "https://openrouter.ai/api/v1";
 const PERPLEXITY_DIRECT_BASE_URL = "https://api.perplexity.ai";
 const DEFAULT_PERPLEXITY_MODEL = "perplexity/sonar-pro";
@@ -115,9 +116,12 @@ function resolveSearchEnabled(params: { search?: WebSearchConfig; sandboxed?: bo
   return true;
 }
 
-function resolveSearchApiKey(search?: WebSearchConfig): string | undefined {
+function resolveSearchApiKey(search?: WebSearchConfig, provider: (typeof SEARCH_PROVIDERS)[number] = "brave"): string | undefined {
   const fromConfig =
     search && "apiKey" in search && typeof search.apiKey === "string" ? search.apiKey.trim() : "";
+  if (provider === "bocha") {
+    return fromConfig || (process.env.BOCHA_API_KEY ?? "").trim() || undefined;
+  }
   const fromEnv = (process.env.BRAVE_API_KEY ?? "").trim();
   return fromConfig || fromEnv || undefined;
 }
@@ -128,6 +132,13 @@ function missingSearchKeyPayload(provider: (typeof SEARCH_PROVIDERS)[number]) {
       error: "missing_perplexity_api_key",
       message:
         "web_search (perplexity) needs an API key. Set PERPLEXITY_API_KEY or OPENROUTER_API_KEY in the Gateway environment, or configure tools.web.search.perplexity.apiKey.",
+      docs: "https://docs.clawd.bot/tools/web",
+    };
+  }
+  if (provider === "bocha") {
+    return {
+      error: "missing_bocha_api_key",
+      message: `web_search (bocha) needs a Bocha Search API key (博查 🇨🇳). Run \`${formatCliCommand("clawdbot configure --section web")}\` to store it, or set BOCHA_API_KEY in the Gateway environment.`,
       docs: "https://docs.clawd.bot/tools/web",
     };
   }
@@ -144,6 +155,7 @@ function resolveSearchProvider(search?: WebSearchConfig): (typeof SEARCH_PROVIDE
       ? search.provider.trim().toLowerCase()
       : "";
   if (raw === "perplexity") return "perplexity";
+  if (raw === "bocha") return "bocha";
   if (raw === "brave") return "brave";
   return "brave";
 }
@@ -351,6 +363,47 @@ async function runWebSearch(params: {
     return payload;
   }
 
+  if (params.provider === "bocha") {
+    const res = await fetch(BOCHA_SEARCH_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${params.apiKey}`,
+      },
+      body: JSON.stringify({
+        query: params.query,
+        count: params.count,
+      }),
+      signal: withTimeout(undefined, params.timeoutSeconds * 1000),
+    });
+
+    if (!res.ok) {
+      const detail = await readResponseText(res);
+      throw new Error(`Bocha Search API error (${res.status}): ${detail || res.statusText}`);
+    }
+
+    const data = await res.json() as any;
+    // Bocha data structure: { data: { webPages: { value: [...] } } }
+    const results = data.data?.webPages?.value ?? [];
+    const mapped = results.map((entry: any) => ({
+      title: entry.name ?? "",
+      url: entry.url ?? "",
+      description: entry.snippet ?? "",
+      published: entry.datePublished ?? undefined,
+      siteName: resolveSiteName(entry.url ?? ""),
+    }));
+
+    const payload = {
+      query: params.query,
+      provider: params.provider,
+      count: mapped.length,
+      tookMs: Date.now() - start,
+      results: mapped,
+    };
+    writeCache(SEARCH_CACHE, cacheKey, payload, params.cacheTtlMs);
+    return payload;
+  }
+
   if (params.provider !== "brave") {
     throw new Error("Unsupported web search provider.");
   }
@@ -430,7 +483,7 @@ export function createWebSearchTool(options?: {
       const perplexityAuth =
         provider === "perplexity" ? resolvePerplexityApiKey(perplexityConfig) : undefined;
       const apiKey =
-        provider === "perplexity" ? perplexityAuth?.apiKey : resolveSearchApiKey(search);
+        provider === "perplexity" ? perplexityAuth?.apiKey : resolveSearchApiKey(search, provider);
 
       if (!apiKey) {
         return jsonResult(missingSearchKeyPayload(provider));

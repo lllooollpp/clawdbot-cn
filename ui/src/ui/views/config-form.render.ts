@@ -19,6 +19,7 @@ export type ConfigFormProps = {
   activeSection?: string | null;
   activeSubsection?: string | null;
   onPatch: (path: Array<string | number>, value: unknown) => void;
+  onDiscoverModels?: (provider: string) => void;
 };
 
 // SVG Icons for section cards (Lucide-style)
@@ -235,6 +236,7 @@ export function renderConfigForm(props: ConfigFormProps) {
                     disabled: props.disabled ?? false,
                     showLabel: false,
                     onPatch: props.onPatch,
+                    onDiscoverModels: props.onDiscoverModels,
                   })}
                 </div>
               </section>
@@ -267,6 +269,7 @@ export function renderConfigForm(props: ConfigFormProps) {
                     disabled: props.disabled ?? false,
                     showLabel: false,
                     onPatch: props.onPatch,
+                    onDiscoverModels: props.onDiscoverModels,
                   })}
                 </div>
               </section>

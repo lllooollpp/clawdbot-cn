@@ -21,6 +21,15 @@ import {
   applyOpencodeZenProviderConfig,
   applyOpenrouterConfig,
   applyOpenrouterProviderConfig,
+  applyDeepSeekConfig,
+  applyDeepSeekProviderConfig,
+  applySiliconFlowConfig,
+  applySiliconFlowProviderConfig,
+  applyVolcengineConfig,
+  applyVolcengineProviderConfig,
+  applyBochaConfig,
+  applyOllamaConfig,
+  applyDomesticMediaDefaults,
   applySyntheticConfig,
   applySyntheticProviderConfig,
   applyVeniceConfig,
@@ -31,6 +40,8 @@ import {
   KIMI_CODE_MODEL_REF,
   MOONSHOT_DEFAULT_MODEL_REF,
   OPENROUTER_DEFAULT_MODEL_REF,
+  DEEPSEEK_DEFAULT_MODEL_REF,
+  SILICONFLOW_DEFAULT_MODEL_REF,
   SYNTHETIC_DEFAULT_MODEL_REF,
   VENICE_DEFAULT_MODEL_REF,
   VERCEL_AI_GATEWAY_DEFAULT_MODEL_REF,
@@ -39,6 +50,10 @@ import {
   setMoonshotApiKey,
   setOpencodeZenApiKey,
   setOpenrouterApiKey,
+  setDeepSeekApiKey,
+  setSiliconFlowApiKey,
+  setVolcengineApiKey,
+  setBochaApiKey,
   setSyntheticApiKey,
   setVeniceApiKey,
   setVercelAiGatewayApiKey,
@@ -77,6 +92,16 @@ export async function applyAuthChoiceApiProviders(
       authChoice = "kimi-code-api-key";
     } else if (params.opts.tokenProvider === "google") {
       authChoice = "gemini-api-key";
+    } else if (params.opts.tokenProvider === "deepseek") {
+      authChoice = "deepseek-api-key";
+    } else if (params.opts.tokenProvider === "siliconflow") {
+      authChoice = "siliconflow-api-key";
+    } else if (params.opts.tokenProvider === "volcengine") {
+      authChoice = "volcengine-api-key";
+    } else if (params.opts.tokenProvider === "bocha") {
+      authChoice = "bocha-api-key";
+    } else if (params.opts.tokenProvider === "ollama") {
+      authChoice = "ollama";
     } else if (params.opts.tokenProvider === "zai") {
       authChoice = "zai-api-key";
     } else if (params.opts.tokenProvider === "synthetic") {
@@ -317,6 +342,228 @@ export async function applyAuthChoiceApiProviders(
       });
       nextConfig = applied.config;
       agentModelOverride = applied.agentModelOverride ?? agentModelOverride;
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
+  if (authChoice === "deepseek-api-key") {
+    let hasCredential = false;
+
+    if (!hasCredential && params.opts?.token && params.opts?.tokenProvider === "deepseek") {
+      await setDeepSeekApiKey(normalizeApiKeyInput(params.opts.token), params.agentDir);
+      hasCredential = true;
+    }
+
+    const envKey = resolveEnvApiKey("deepseek");
+    if (envKey) {
+      const useExisting = await params.prompter.confirm({
+        message: `Use existing DEEPSEEK_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        initialValue: true,
+      });
+      if (useExisting) {
+        await setDeepSeekApiKey(envKey.apiKey, params.agentDir);
+        hasCredential = true;
+      }
+    }
+    if (!hasCredential) {
+      const key = await params.prompter.text({
+        message: "Enter DeepSeek API key",
+        validate: validateApiKeyInput,
+      });
+      await setDeepSeekApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
+    }
+    nextConfig = applyAuthProfileConfig(nextConfig, {
+      profileId: "deepseek:default",
+      provider: "deepseek",
+      mode: "api_key",
+    });
+    nextConfig = applyDomesticMediaDefaults(nextConfig);
+    {
+      const applied = await applyDefaultModelChoice({
+        config: nextConfig,
+        setDefaultModel: params.setDefaultModel,
+        defaultModel: DEEPSEEK_DEFAULT_MODEL_REF,
+        applyDefaultConfig: applyDeepSeekConfig,
+        applyProviderConfig: applyDeepSeekProviderConfig,
+        noteDefault: DEEPSEEK_DEFAULT_MODEL_REF,
+        noteAgentModel,
+        prompter: params.prompter,
+      });
+      nextConfig = applied.config;
+      agentModelOverride = applied.agentModelOverride ?? agentModelOverride;
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
+  if (authChoice === "siliconflow-api-key") {
+    let hasCredential = false;
+
+    if (!hasCredential && params.opts?.token && params.opts?.tokenProvider === "siliconflow") {
+      await setSiliconFlowApiKey(normalizeApiKeyInput(params.opts.token), params.agentDir);
+      hasCredential = true;
+    }
+
+    const envKey = resolveEnvApiKey("siliconflow");
+    if (envKey) {
+      const useExisting = await params.prompter.confirm({
+        message: `Use existing SILICONFLOW_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        initialValue: true,
+      });
+      if (useExisting) {
+        await setSiliconFlowApiKey(envKey.apiKey, params.agentDir);
+        hasCredential = true;
+      }
+    }
+    if (!hasCredential) {
+      const key = await params.prompter.text({
+        message: "Enter SiliconFlow API key",
+        validate: validateApiKeyInput,
+      });
+      await setSiliconFlowApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
+    }
+    nextConfig = applyAuthProfileConfig(nextConfig, {
+      profileId: "siliconflow:default",
+      provider: "siliconflow",
+      mode: "api_key",
+    });
+    nextConfig = applyDomesticMediaDefaults(nextConfig);
+    {
+      const applied = await applyDefaultModelChoice({
+        config: nextConfig,
+        setDefaultModel: params.setDefaultModel,
+        defaultModel: SILICONFLOW_DEFAULT_MODEL_REF,
+        applyDefaultConfig: applySiliconFlowConfig,
+        applyProviderConfig: applySiliconFlowProviderConfig,
+        noteDefault: SILICONFLOW_DEFAULT_MODEL_REF,
+        noteAgentModel,
+        prompter: params.prompter,
+      });
+      nextConfig = applied.config;
+      agentModelOverride = applied.agentModelOverride ?? agentModelOverride;
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
+  if (authChoice === "volcengine-api-key") {
+    let hasCredential = false;
+
+    if (!hasCredential && params.opts?.token && params.opts?.tokenProvider === "volcengine") {
+      await setVolcengineApiKey(normalizeApiKeyInput(params.opts.token), params.agentDir);
+      hasCredential = true;
+    }
+
+    const envKey = resolveEnvApiKey("volcengine");
+    if (envKey) {
+      const useExisting = await params.prompter.confirm({
+        message: `Use existing VOLCENGINE_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        initialValue: true,
+      });
+      if (useExisting) {
+        await setVolcengineApiKey(envKey.apiKey, params.agentDir);
+        hasCredential = true;
+      }
+    }
+    if (!hasCredential) {
+      const key = await params.prompter.text({
+        message: "Enter Volcengine API key",
+        validate: validateApiKeyInput,
+      });
+      await setVolcengineApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
+    }
+    const modelId = await params.prompter.text({
+      message: "Enter Volcengine Endpoint ID (ep-xxxxxx)",
+      validate: (v) => (v?.startsWith("ep-") ? undefined : "Must start with ep-"),
+    });
+
+    nextConfig = applyAuthProfileConfig(nextConfig, {
+      profileId: "volcengine:default",
+      provider: "volcengine",
+      mode: "api_key",
+    });
+    nextConfig = applyDomesticMediaDefaults(nextConfig);
+    {
+      const applied = await applyDefaultModelChoice({
+        config: nextConfig,
+        setDefaultModel: params.setDefaultModel,
+        defaultModel: `volcengine/${modelId}`,
+        applyDefaultConfig: (cfg) => applyVolcengineConfig(cfg, { modelId: String(modelId) }),
+        applyProviderConfig: (cfg) => applyVolcengineProviderConfig(cfg, { modelId: String(modelId) }),
+        noteDefault: `volcengine/${modelId}`,
+        noteAgentModel,
+        prompter: params.prompter,
+      });
+      nextConfig = applied.config;
+      agentModelOverride = applied.agentModelOverride ?? agentModelOverride;
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
+  if (authChoice === "bocha-api-key") {
+    let hasCredential = false;
+    if (!hasCredential && params.opts?.token && params.opts?.tokenProvider === "bocha") {
+      await setBochaApiKey(normalizeApiKeyInput(params.opts.token), params.agentDir);
+      hasCredential = true;
+    }
+    const envKey = resolveEnvApiKey("bocha");
+    if (envKey) {
+      const useExisting = await params.prompter.confirm({
+        message: `Use existing BOCHA_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        initialValue: true,
+      });
+      if (useExisting) {
+        await setBochaApiKey(envKey.apiKey, params.agentDir);
+        hasCredential = true;
+      }
+    }
+    if (!hasCredential) {
+      const key = await params.prompter.text({
+        message: "Enter Bocha Search API key (博查 🇨🇳)",
+        validate: validateApiKeyInput,
+      });
+      await setBochaApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
+    }
+    nextConfig = applyBochaConfig(nextConfig);
+    nextConfig = applyDomesticMediaDefaults(nextConfig);
+    await params.prompter.note("Bocha Search configured as the primary web search provider.", "Search configured");
+    // Since Bocha is for search, we still need a reasoning model.
+    // If we don't have one, we default to DeepSeek as it's the best domestic alternative.
+    const hasDeepSeek = Boolean(resolveEnvApiKey("deepseek")) || Boolean(nextConfig.auth?.profiles?.["deepseek:default"]);
+    if (!hasDeepSeek) {
+        await params.prompter.note("Search configured. Now let's set up a reasoning model (DeepSeek recommended).", "Model Setup");
+        // We'll recurse or just transition to DeepSeek
+        return applyAuthChoiceApiProviders({ ...params, authChoice: "deepseek-api-key" });
+    }
+    return { config: nextConfig };
+  }
+
+  if (authChoice === "ollama") {
+    const baseUrl = await params.prompter.text({
+      message: "Enter Ollama base URL",
+      initialValue: "http://127.0.0.1:11434/v1",
+    });
+    const modelId = await params.prompter.text({
+      message: "Enter Ollama model name",
+      initialValue: "qwen2.5:7b-instruct",
+    });
+
+    const configParams = {
+      baseUrl: String(baseUrl).trim(),
+      modelId: String(modelId).trim(),
+    };
+
+    nextConfig = applyOllamaConfig(nextConfig, configParams);
+    const modelRef = `ollama/${configParams.modelId}`;
+    await params.prompter.note(
+      `Ollama configured with model ${configParams.modelId}.`,
+      "Local Model configured",
+    );
+
+    // Set as default if requested
+    if (params.setDefaultModel) {
+      nextConfig = applyOllamaConfig(nextConfig, configParams);
+    } else {
+      agentModelOverride = modelRef;
+      await noteAgentModel(modelRef);
     }
     return { config: nextConfig, agentModelOverride };
   }

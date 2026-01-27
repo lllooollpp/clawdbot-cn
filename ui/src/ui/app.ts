@@ -59,6 +59,12 @@ import {
   onPopState as onPopStateInternal,
 } from "./app-settings";
 import {
+  applyConfig as applyConfigInternal,
+  discoverModels as discoverModelsInternal,
+  loadConfig,
+  loadConfigSchema,
+} from "./controllers/config";
+import {
   handleAbortChat as handleAbortChatInternal,
   handleSendChat as handleSendChatInternal,
   removeQueuedMessage as removeQueuedMessageInternal,
@@ -445,6 +451,14 @@ export class ClawdbotApp extends LitElement {
       this.execApprovalError = `Exec approval failed: ${String(err)}`;
     } finally {
       this.execApprovalBusy = false;
+    }
+  }
+
+  async handleDiscoverModels(provider: string) {
+    if (!this.client) return;
+    const res = await discoverModelsInternal(this as any, provider);
+    if (res?.success) {
+      // success
     }
   }
 

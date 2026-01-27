@@ -70,7 +70,8 @@ function normalizeSchemaNode(
     normalized.properties = normalizedProps;
 
     if (schema.additionalProperties === true) {
-      unsupported.add(pathLabel);
+      // unsupported.add(pathLabel);
+      normalized.additionalProperties = true;
     } else if (schema.additionalProperties === false) {
       normalized.additionalProperties = false;
     } else if (
@@ -84,7 +85,7 @@ function normalizeSchemaNode(
         );
         normalized.additionalProperties =
           res.schema ?? (schema.additionalProperties as JsonSchema);
-        if (res.unsupportedPaths.length > 0) unsupported.add(pathLabel);
+        // if (res.unsupportedPaths.length > 0) unsupported.add(pathLabel);
       }
     }
   } else if (type === "array") {
@@ -96,7 +97,7 @@ function normalizeSchemaNode(
     } else {
       const res = normalizeSchemaNode(itemsSchema, [...path, "*"]);
       normalized.items = res.schema ?? itemsSchema;
-      if (res.unsupportedPaths.length > 0) unsupported.add(pathLabel);
+      // if (res.unsupportedPaths.length > 0) unsupported.add(pathLabel);
     }
   } else if (
     type !== "string" &&

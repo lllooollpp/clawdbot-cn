@@ -1,0 +1,4 @@
+﻿
+> clawdbot@2026.1.25 dev D:\workspace\clawdbot
+> node scripts/run-node.mjs "config" "schema"
+

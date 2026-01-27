@@ -37,6 +37,7 @@ export type ConfigProps = {
   onSave: () => void;
   onApply: () => void;
   onUpdate: () => void;
+  onDiscoverModels: (provider: string) => void;
 };
 
 // SVG Icons for sidebar (Lucide-style)
@@ -442,6 +443,7 @@ export function renderConfig(props: ConfigProps) {
                       disabled: props.loading || !props.formValue,
                       unsupportedPaths: analysis.unsupportedPaths,
                       onPatch: props.onFormPatch,
+                      onDiscoverModels: props.onDiscoverModels,
                       searchQuery: props.searchQuery,
                       activeSection: props.activeSection,
                       activeSubsection: effectiveSubsection,

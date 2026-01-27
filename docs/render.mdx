@@ -2,31 +2,28 @@
 title: Deploy on Render
 ---
 
-Deploy Clawdbot on Render using Infrastructure as Code. The included `render.yaml` Blueprint defines your entire stack declaratively, service, disk, environment variables, so you can deploy with a single click and version your infrastructure alongside your code.
+在 Render 上部署 Clawdbot，使用基础设施即代码（Infrastructure as Code）。包含的 `render.yaml` 蓝图以声明方式定义了你的整个堆栈，包括服务、磁盘、环境变量，你可以通过单击一次即可部署，并将基础设施与你的代码一起进行版本控制。
 
-## Prerequisites
+## 先决条件
 
-- A [Render account](https://render.com) (free tier available)
-- An API key from your preferred [model provider](/providers)
+- 一个 [Render 账户](https://render.com)（提供免费层级）
+- 从你偏好的 [模型提供者](/providers) 获取一个 API 密钥
 
-## Deploy with a Render Blueprint
+## 使用 Render 蓝图进行部署
 
-<a href="https://render.com/deploy?repo=https://github.com/clawdbot/clawdbot" target="_blank" rel="noreferrer">Deploy to Render</a>
+<a href="https://render.com/deploy?repo=https://github.com/clawdbot/clawdbot" target="_blank" rel="noreferrer">部署到 Render</a>
 
-Clicking this link will:
+点击此链接将执行以下操作：
 
-1. Create a new Render service from the `render.yaml` Blueprint at the root of this repo.
-2. Prompt you to set `SETUP_PASSWORD`
-3. Build the Docker image and deploy
+1. 从该仓库根目录的 `render.yaml` 蓝图创建一个新的 Render 服务。
+2. 提示你设置 `SETUP_PASSWORD`。
+3. 构建 Docker 镜像并进行部署。
 
-Once deployed, your service URL follows the pattern `https://<service-name>.onrender.com`.
+部署完成后，你的服务网址将遵循 `https://<service-name>.onrender.com` 的格式。
 
-## Understanding the Blueprint
+## 理解蓝图
 
-Render Blueprints are YAML files that define your infrastructure. The `render.yaml` in this
-repository configures everything needed to run Clawdbot:
-
-```yaml
+Render 蓝图是定义你基础设施的 YAML 文件。本仓库中的 `render.yaml` 配置了运行 Clawdbot 所需的一切：```yaml
 services:
   - type: web
     name: clawdbot
@@ -49,110 +46,93 @@ services:
       mountPath: /data
       sizeGB: 1
 ```
+使用的关键蓝图功能：
 
-Key Blueprint features used:
-
-| Feature | Purpose |
+| 功能 | 用途 |
 |---------|---------|
-| `runtime: docker` | Builds from the repo's Dockerfile |
-| `healthCheckPath` | Render monitors `/health` and restarts unhealthy instances |
-| `sync: false` | Prompts for value during deploy (secrets) |
-| `generateValue: true` | Auto-generates a cryptographically secure value |
-| `disk` | Persistent storage that survives redeploys |
+| `runtime: docker` | 从仓库的 Dockerfile 构建 |
+| `healthCheckPath` | 监控 `/health` 路径并重启不健康实例 |
+| `sync: false` | 部署时提示输入值（用于密钥） |
+| `generateValue: true` | 自动生成加密安全的值 |
+| `disk` | 持久化存储，可抵御重新部署 |
 
-## Choosing a plan
+## 选择一个计划
 
-| Plan | Spin-down | Disk | Best for |
+| 计划 | 空闲时关闭 | 存储 | 适合 |
 |------|-----------|------|----------|
-| Free | After 15 min idle | Not available | Testing, demos |
-| Starter | Never | 1GB+ | Personal use, small teams |
-| Standard+ | Never | 1GB+ | Production, multiple channels |
+| 免费版 | 空闲 15 分钟后 | 不可用 | 测试、演示 |
+| 入门版 | 永不关闭 | 1GB+ | 个人使用、小型团队 |
+| 标准版+ | 永不关闭 | 1GB+ | 生产环境、多渠道使用 |
 
-The Blueprint defaults to `starter`. To use free tier, change `plan: free` in your fork's
-`render.yaml` (but note: no persistent disk means config resets on each deploy).
+蓝图默认使用 `starter`。如需使用免费版，请在你 fork 的 `render.yaml` 中将 `plan: free`（但请注意：没有持久化存储，每次部署后配置都会重置）。
 
-## After deployment
+## 部署后
 
-### Complete the setup wizard
+### 完成设置向导
 
-1. Navigate to `https://<your-service>.onrender.com/setup`
-2. Enter your `SETUP_PASSWORD`
-3. Select a model provider and paste your API key
-4. Optionally configure messaging channels (Telegram, Discord, Slack)
-5. Click **Run setup**
+1. 导航到 `https://<your-service>.onrender.com/setup`
+2. 输入你的 `SETUP_PASSWORD`
+3. 选择一个模型提供者并粘贴你的 API 密钥
+4. 可选地配置消息渠道（Telegram、Discord、Slack）
+5. 点击 **运行设置**
 
-### Access the Control UI
+### 访问控制界面
 
-The web dashboard is available at `https://<your-service>.onrender.com/clawdbot`.
+Web 控制台位于 `https://<your-service>.onrender.com/clawdbot`。
 
-## Render Dashboard features
+## Render 控制台功能
 
-### Logs
+### 日志
 
-View real-time logs in **Dashboard → your service → Logs**. Filter by:
-- Build logs (Docker image creation)
-- Deploy logs (service startup)
-- Runtime logs (application output)
+在 **控制台 → 你的服务 → 日志** 中查看实时日志。可以按以下方式过滤：
+- 构建日志（Docker 镜像创建）
+- 部署日志（服务启动）
+- 运行时日志（应用程序输出）
 
-### Shell access
+### Shell 访问
 
-For debugging, open a shell session via **Dashboard → your service → Shell**. The persistent disk is mounted at `/data`.
+为了调试，可以通过 **控制台 → 你的服务 → Shell** 打开一个 shell 会话。持久化存储挂载在 `/data`。
 
-### Environment variables
+### 环境变量
 
-Modify variables in **Dashboard → your service → Environment**. Changes trigger an automatic redeploy.
+在 **控制台 → 你的服务 → 环境** 中修改变量。更改会触发自动重新部署。
 
-### Auto-deploy
+### 自动部署
 
-If you use the original Clawdbot repository, Render will not auto-deploy your Clawdbot. To update it, run a manual Blueprint sync from the dashboard.
+如果你使用的是原始 Clawdbot 仓库，Render 不会自动部署你的 Clawdbot。要更新它，请从控制台运行手动蓝图同步。
 
-## Custom domain
+## 自定义域名
 
-1. Go to **Dashboard → your service → Settings → Custom Domains**
-2. Add your domain
-3. Configure DNS as instructed (CNAME to `*.onrender.com`)
-4. Render provisions a TLS certificate automatically
+1. 进入 **控制台 → 你的服务 → 设置 → 自定义域名**
+2. 添加你的域名
+3. 按指示配置 DNS（CNAME 指向 `*.onrender.com`）
+4. Render 会自动提供 TLS 证书
 
-## Scaling
+## 扩展
 
-Render supports horizontal and vertical scaling:
+Render 支持横向和纵向扩展：
 
-- **Vertical**: Change the plan to get more CPU/RAM
-- **Horizontal**: Increase instance count (Standard plan and above)
+- **纵向扩展**：更改计划以获得更多 CPU/RAM
+- **横向扩展**：增加实例数量（标准计划及以上）
 
-For Clawdbot, vertical scaling is usually sufficient. Horizontal scaling requires sticky sessions or external state management.
-
-## Backups and migration
-
-Export your configuration and workspace at any time:
-
-```
+对于 Clawdbot，纵向扩展通常已足够。横向扩展需要使用粘性会话或外部状态管理。```
 https://<your-service>.onrender.com/setup/export
 ```
+这将下载一个便携式备份，您可以在任何 Clawdbot 主机上恢复。
 
-This downloads a portable backup you can restore on any Clawdbot host.
+## 故障排除
 
-## Troubleshooting
+### 服务无法启动
 
-### Service won't start
+检查 Render 仪表板中的部署日志。常见问题包括：
 
-Check the deploy logs in the Render Dashboard. Common issues:
+- 缺少 `SETUP_PASSWORD` —— 虽然 Blueprint 会提示您输入此值，但请确认它已正确设置
+- 端口不匹配 —— 确保 `PORT=8080` 与 Dockerfile 中暴露的端口一致
 
-- Missing `SETUP_PASSWORD` — the Blueprint prompts for this, but verify it's set
-- Port mismatch — ensure `PORT=8080` matches the Dockerfile's exposed port
+### 冷启动缓慢（免费计划）
 
-### Slow cold starts (free tier)
+免费计划的服务在 15 分钟无活动后会停止运行。在服务停止后，第一个请求可能需要几秒钟来启动容器。升级到 Starter 计划可实现始终在线。
 
-Free tier services spin down after 15 minutes of inactivity. The first request after spin-down takes a few seconds while the container starts. Upgrade to Starter plan for always-on.
+### 重新部署后数据丢失
 
-### Data loss after redeploy
-
-This happens on free tier (no persistent disk). Upgrade to a paid plan, or
-regularly export your config via `/setup/export`.
-
-### Health check failures
-
-Render expects a 200 response from `/health` within 30 seconds. If builds succeed but deploys fail, the service may be taking too long to start. Check:
-
-- Build logs for errors
-- Whether the container runs locally with `docker build && docker run`
+这在免费计划中会发生（没有持久化磁盘）。请升级到付费计划，或定期通过 `/setup/export` 导出您的配置。

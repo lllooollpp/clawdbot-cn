@@ -6,67 +6,57 @@ read_when:
   - Using /tts commands
 ---
 
-# Text-to-speech (TTS)
+# 文本转语音（TTS）
 
-Clawdbot can convert outbound replies into audio using ElevenLabs, OpenAI, or Edge TTS.
-It works anywhere Clawdbot can send audio; Telegram gets a round voice-note bubble.
+Clawdbot 可以使用 ElevenLabs、OpenAI 或 Edge TTS 将出站回复转换为音频。
+它可以在 Clawdbot 可以发送音频的任何地方工作；Telegram 会显示一个圆形的语音消息气泡。
 
-## Supported services
+## 支持的服务
 
-- **ElevenLabs** (primary or fallback provider)
-- **OpenAI** (primary or fallback provider; also used for summaries)
-- **Edge TTS** (primary or fallback provider; uses `node-edge-tts`, default when no API keys)
+- **ElevenLabs**（主要或备用提供者）
+- **OpenAI**（主要或备用提供者；也用于摘要）
+- **Edge TTS**（主要或备用提供者；使用 `node-edge-tts`，无 API 密钥时默认使用）
 
-### Edge TTS notes
+### Edge TTS 说明
 
-Edge TTS uses Microsoft Edge's online neural TTS service via the `node-edge-tts`
-library. It's a hosted service (not local), uses Microsoft’s endpoints, and does
-not require an API key. `node-edge-tts` exposes speech configuration options and
-output formats, but not all options are supported by the Edge service. citeturn2search0
+Edge TTS 通过 `node-edge-tts` 库使用 Microsoft Edge 的在线神经文本转语音服务。
+它是一个托管服务（非本地），使用 Microsoft 的端点，并且**不需要 API 密钥**。
+`node-edge-tts` 暴露了语音配置选项和输出格式，但并非所有选项都由 Edge 服务支持。citeturn2search0
 
-Because Edge TTS is a public web service without a published SLA or quota, treat it
-as best-effort. If you need guaranteed limits and support, use OpenAI or ElevenLabs.
-Microsoft's Speech REST API documents a 10‑minute audio limit per request; Edge TTS
-does not publish limits, so assume similar or lower limits. citeturn0search3
+由于 Edge TTS 是一个没有公开 SLA 或配额的公共服务，因此应视为尽力而为的服务。如果您需要保证的限制和支援，请使用 OpenAI 或 ElevenLabs。
+Microsoft 的 Speech REST API 文档中提到每请求的音频限制为 10 分钟；Edge TTS 没有公布限制，因此应假设其限制相似或更低。citeturn0search3
 
-## Optional keys
+## 可选的 API 密钥
 
-If you want OpenAI or ElevenLabs:
-- `ELEVENLABS_API_KEY` (or `XI_API_KEY`)
+如果您想使用 OpenAI 或 ElevenLabs：
+- `ELEVENLABS_API_KEY`（或 `XI_API_KEY`）
 - `OPENAI_API_KEY`
 
-Edge TTS does **not** require an API key. If no API keys are found, Clawdbot defaults
-to Edge TTS (unless disabled via `messages.tts.edge.enabled=false`).
+Edge TTS **不需要** API 密钥。如果没有找到 API 密钥，Clawdbot 默认会使用 Edge TTS（除非通过 `messages.tts.edge.enabled=false` 禁用）。
 
-If multiple providers are configured, the selected provider is used first and the others are fallback options.
-Auto-summary uses the configured `summaryModel` (or `agents.defaults.model.primary`),
-so that provider must also be authenticated if you enable summaries.
+如果配置了多个提供者，首先使用选定的提供者，其他提供者作为备用选项。
+自动摘要使用配置的 `summaryModel`（或 `agents.defaults.model.primary`），因此如果您启用了摘要功能，该提供者也必须经过认证。
 
-## Service links
+## 服务链接
 
-- [OpenAI Text-to-Speech guide](https://platform.openai.com/docs/guides/text-to-speech)
-- [OpenAI Audio API reference](https://platform.openai.com/docs/api-reference/audio)
-- [ElevenLabs Text to Speech](https://elevenlabs.io/docs/api-reference/text-to-speech)
-- [ElevenLabs Authentication](https://elevenlabs.io/docs/api-reference/authentication)
+- [OpenAI 文本转语音指南](https://platform.openai.com/docs/guides/text-to-speech)
+- [OpenAI 音频 API 参考](https://platform.openai.com/docs/api-reference/audio)
+- [ElevenLabs 文本转语音](https://elevenlabs.io/docs/api-reference/text-to-speech)
+- [ElevenLabs 身份验证](https://elevenlabs.io/docs/api-reference/authentication)
 - [node-edge-tts](https://github.com/SchneeHertz/node-edge-tts)
-- [Microsoft Speech output formats](https://learn.microsoft.com/azure/ai-services/speech-service/rest-text-to-speech#audio-outputs)
+- [Microsoft 语音输出格式](https://learn.microsoft.com/azure/ai-services/speech-service/rest-text-to-speech#audio-outputs)
 
-## Is it enabled by default?
+## 默认是否启用？
 
-No. Auto‑TTS is **off** by default. Enable it in config with
-`messages.tts.auto` or per session with `/tts always` (alias: `/tts on`).
+不。自动文本转语音（Auto-TTS）默认是**关闭**的。您可以通过配置 `messages.tts.auto` 或通过 `/tts always`（别名：`/tts on`）在会话中启用它。
 
-Edge TTS **is** enabled by default once TTS is on, and is used automatically
-when no OpenAI or ElevenLabs API keys are available.
+Edge TTS 在 TTS 启用后**默认是开启的**，并且在没有 OpenAI 或 ElevenLabs API 密钥时会自动使用。
 
-## Config
+## 配置
 
-TTS config lives under `messages.tts` in `clawdbot.json`.
-Full schema is in [Gateway configuration](/gateway/configuration).
-
-### Minimal config (enable + provider)
-
-```json5
+TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
+完整架构请参见 [网关配置](/gateway/configuration)。
+### 最小配置（启用 + 提供者）```json5
 {
   messages: {
     tts: {
@@ -76,10 +66,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### OpenAI primary with ElevenLabs fallback
-
-```json5
+### OpenAI 主要接口，ElevenLabs 作为备用接口```json5
 {
   messages: {
     tts: {
@@ -114,10 +101,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### Edge TTS primary (no API key)
-
-```json5
+### Edge TTS 主要功能（无需 API 密钥）```json5
 {
   messages: {
     tts: {
@@ -135,10 +119,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### Disable Edge TTS
-
-```json5
+### 禁用 Edge TTS```json5
 {
   messages: {
     tts: {
@@ -149,10 +130,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### Custom limits + prefs path
-
-```json5
+### 自定义限制 + 首选项路径```json5
 {
   messages: {
     tts: {
@@ -164,10 +142,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### Only reply with audio after an inbound voice note
-
-```json5
+### 仅在接收到语音消息后回复音频```json5
 {
   messages: {
     tts: {
@@ -176,10 +151,7 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-### Disable auto-summary for long replies
-
-```json5
+### 禁用长回复的自动摘要```json5
 {
   messages: {
     tts: {
@@ -188,79 +160,72 @@ Full schema is in [Gateway configuration](/gateway/configuration).
   }
 }
 ```
-
-Then run:
-
-```
+然后运行：```
 /tts summary off
 ```
+### 关于字段的说明
 
-### Notes on fields
-
-- `auto`: auto‑TTS mode (`off`, `always`, `inbound`, `tagged`).
-  - `inbound` only sends audio after an inbound voice note.
-  - `tagged` only sends audio when the reply includes `[[tts]]` tags.
-- `enabled`: legacy toggle (doctor migrates this to `auto`).
-- `mode`: `"final"` (default) or `"all"` (includes tool/block replies).
-- `provider`: `"elevenlabs"`, `"openai"`, or `"edge"` (fallback is automatic).
-- If `provider` is **unset**, Clawdbot prefers `openai` (if key), then `elevenlabs` (if key),
-  otherwise `edge`.
-- `summaryModel`: optional cheap model for auto-summary; defaults to `agents.defaults.model.primary`.
-  - Accepts `provider/model` or a configured model alias.
-- `modelOverrides`: allow the model to emit TTS directives (on by default).
-- `maxTextLength`: hard cap for TTS input (chars). `/tts audio` fails if exceeded.
-- `timeoutMs`: request timeout (ms).
-- `prefsPath`: override the local prefs JSON path (provider/limit/summary).
-- `apiKey` values fall back to env vars (`ELEVENLABS_API_KEY`/`XI_API_KEY`, `OPENAI_API_KEY`).
-- `elevenlabs.baseUrl`: override ElevenLabs API base URL.
+- `auto`: 自动-TTS 模式 (`off`, `always`, `inbound`, `tagged`)。
+  - `inbound` 仅在收到 inbound 语音消息后发送音频。
+  - `tagged` 仅在回复中包含 `[[tts]]` 标签时发送音频。
+- `enabled`: 旧版开关（医生会将其迁移到 `auto`）。
+- `mode`: `"final"`（默认）或 `"all"`（包括工具/块回复）。
+- `provider`: `"elevenlabs"`、`"openai"` 或 `"edge"`（如果未设置，会自动选择）。
+- 如果 `provider` **未设置**，Clawdbot 会优先使用 `openai`（如果存在 API 密钥），然后是 `elevenlabs`（如果存在 API 密钥），否则使用 `edge`。
+- `summaryModel`: 用于自动摘要的可选廉价模型；默认为 `agents.defaults.model.primary`。
+  - 接受 `provider/model` 或已配置的模型别名。
+- `modelOverrides`: 允许模型生成 TTS 指令（默认开启）。
+- `maxTextLength`: TTS 输入的硬性字符限制。如果超出此限制，`/tts audio` 将失败。
+- `timeoutMs`: 请求超时时间（毫秒）。
+- `prefsPath`: 覆盖本地 prefs JSON 路径（provider/limit/summary）。
+- `apiKey` 的值会回退到环境变量（`ELEVENLABS_API_KEY`/`XI_API_KEY`，`OPENAI_API_KEY`）。
+- `elevenlabs.baseUrl`: 覆盖 ElevenLabs API 的基础 URL。
 - `elevenlabs.voiceSettings`:
   - `stability`, `similarityBoost`, `style`: `0..1`
   - `useSpeakerBoost`: `true|false`
-  - `speed`: `0.5..2.0` (1.0 = normal)
+  - `speed`: `0.5..2.0`（1.0 = 正常速度）
 - `elevenlabs.applyTextNormalization`: `auto|on|off`
-- `elevenlabs.languageCode`: 2-letter ISO 639-1 (e.g. `en`, `de`)
-- `elevenlabs.seed`: integer `0..4294967295` (best-effort determinism)
-- `edge.enabled`: allow Edge TTS usage (default `true`; no API key).
-- `edge.voice`: Edge neural voice name (e.g. `en-US-MichelleNeural`).
-- `edge.lang`: language code (e.g. `en-US`).
-- `edge.outputFormat`: Edge output format (e.g. `audio-24khz-48kbitrate-mono-mp3`).
-  - See Microsoft Speech output formats for valid values; not all formats are supported by Edge.
-- `edge.rate` / `edge.pitch` / `edge.volume`: percent strings (e.g. `+10%`, `-5%`).
-- `edge.saveSubtitles`: write JSON subtitles alongside the audio file.
-- `edge.proxy`: proxy URL for Edge TTS requests.
-- `edge.timeoutMs`: request timeout override (ms).
+- `elevenlabs.languageCode`: 2 字母 ISO 639-1（例如 `en`, `de`）
+- `elevenlabs.seed`: 整数 `0..4294967295`（最佳努力的确定性）
+- `edge.enabled`: 允许使用 Edge TTS（默认为 `true`；无需 API 密钥）。
+- `edge.voice`: Edge 神经语音名称（例如 `en-US-MichelleNeural`）。
+- `edge.lang`: 语言代码（例如 `en-US`）。
+- `edge.outputFormat`: Edge 输出格式（例如 `audio-24khz-48kbitrate-mono-mp3`）。
+  - 请参阅 Microsoft Speech 输出格式以获取有效值；并非所有格式都支持 Edge。
+- `edge.rate` / `edge.pitch` / `edge.volume`: 百分比字符串（例如 `+10%`, `-5%`）。
+- `edge.saveSubtitles`: 与音频文件一起保存 JSON 字幕。
+- `edge.proxy`: Edge TTS 请求的代理 URL。
+- `edge.timeoutMs`: 请求超时时间的覆盖设置（毫秒）。
 
-## Model-driven overrides (default on)
+## 基于模型的覆盖（默认开启）
 
-By default, the model **can** emit TTS directives for a single reply.
-When `messages.tts.auto` is `tagged`, these directives are required to trigger audio.
+默认情况下，模型 **可以** 为单个回复生成 TTS 指令。
+当 `messages.tts.auto` 为 `tagged` 时，这些指令是触发音频的必要条件。
 
-When enabled, the model can emit `[[tts:...]]` directives to override the voice
-for a single reply, plus an optional `[[tts:text]]...[[/tts:text]]` block to
-provide expressive tags (laughter, singing cues, etc) that should only appear in
-the audio.
+当启用时，模型可以生成 `[[tts:...]]` 指令来覆盖单个回复的语音，还可以选择性地提供 `[[tts:text]]...[[/tts:text]]` 块来添加表达性标签（如笑声、唱歌提示等），这些标签只应在音频中出现。
 
-Example reply payload:
+示例回复内容：
+json
+"  ,根据输入  帮我翻译成中文，输出要md格式的； 
 
-```
+注意： ```md      ```  包裹起来；
+no_think
+``````
 Here you go.
 
 [[tts:provider=elevenlabs voiceId=pMsXgVXv3BLzUgSXRplE model=eleven_v3 speed=1.1]]
 [[tts:text]](laughs) Read the song once more.[[/tts:text]]
 ```
-
-Available directive keys (when enabled):
-- `provider` (`openai` | `elevenlabs` | `edge`)
-- `voice` (OpenAI voice) or `voiceId` (ElevenLabs)
-- `model` (OpenAI TTS model or ElevenLabs model id)
-- `stability`, `similarityBoost`, `style`, `speed`, `useSpeakerBoost`
-- `applyTextNormalization` (`auto|on|off`)
-- `languageCode` (ISO 639-1)
+可用的指令键（启用后）：
+- `provider`（`openai` | `elevenlabs` | `edge`）
+- `voice`（OpenAI 语音）或 `voiceId`（ElevenLabs）
+- `model`（OpenAI TTS 模型或 ElevenLabs 模型 ID）
+- `stability`、`similarityBoost`、`style`、`speed`、`useSpeakerBoost`
+- `applyTextNormalization`（`auto|on|off`）
+- `languageCode`（ISO 639-1）
 - `seed`
 
-Disable all model overrides:
-
-```json5
+禁用所有模型覆盖：```json5
 {
   messages: {
     tts: {
@@ -271,10 +236,7 @@ Disable all model overrides:
   }
 }
 ```
-
-Optional allowlist (disable specific overrides while keeping tags enabled):
-
-```json5
+可选的允许列表（在保持标签启用的同时禁用特定覆盖）：```json5
 {
   messages: {
     tts: {
@@ -287,52 +249,41 @@ Optional allowlist (disable specific overrides while keeping tags enabled):
   }
 }
 ```
+## 用户偏好设置
 
-## Per-user preferences
+斜杠命令会将本地覆盖写入 `prefsPath`（默认值：`~/.clawdbot/settings/tts.json`，可通过 `CLAWDBOT_TTS_PREFS` 或 `messages.tts.prefsPath` 覆盖）。
 
-Slash commands write local overrides to `prefsPath` (default:
-`~/.clawdbot/settings/tts.json`, override with `CLAWDBOT_TTS_PREFS` or
-`messages.tts.prefsPath`).
-
-Stored fields:
+存储的字段包括：
 - `enabled`
 - `provider`
-- `maxLength` (summary threshold; default 1500 chars)
-- `summarize` (default `true`)
+- `maxLength`（摘要阈值；默认 1500 个字符）
+- `summarize`（默认为 `true`）
 
-These override `messages.tts.*` for that host.
+这些设置会覆盖该主机的 `messages.tts.*`。
 
-## Output formats (fixed)
+## 输出格式（固定）
 
-- **Telegram**: Opus voice note (`opus_48000_64` from ElevenLabs, `opus` from OpenAI).
-  - 48kHz / 64kbps is a good voice-note tradeoff and required for the round bubble.
-- **Other channels**: MP3 (`mp3_44100_128` from ElevenLabs, `mp3` from OpenAI).
-  - 44.1kHz / 128kbps is the default balance for speech clarity.
-- **Edge TTS**: uses `edge.outputFormat` (default `audio-24khz-48kbitrate-mono-mp3`).
-  - `node-edge-tts` accepts an `outputFormat`, but not all formats are available
-    from the Edge service. citeturn2search0
-  - Output format values follow Microsoft Speech output formats (including Ogg/WebM Opus). citeturn1search0
-  - Telegram `sendVoice` accepts OGG/MP3/M4A; use OpenAI/ElevenLabs if you need
-    guaranteed Opus voice notes. citeturn1search1
-  - If the configured Edge output format fails, Clawdbot retries with MP3.
+- **Telegram**：Opus 语音消息（来自 ElevenLabs 的 `opus_48000_64`，来自 OpenAI 的 `opus`）。
+  - 48kHz / 64kbps 是一个良好的语音消息折中方案，并且是圆 bubble 所需的。
+- **其他频道**：MP3（来自 ElevenLabs 的 `mp3_44100_128`，来自 OpenAI 的 `mp3`）。
+  - 44.1kHz / 128kbps 是语音清晰度的默认平衡。
+- **Edge TTS**：使用 `edge.outputFormat`（默认为 `audio-24khz-48kbitrate-mono-mp3`）。
+  - `node-edge-tts` 接受一个 `outputFormat`，但并非所有格式都能从 Edge 服务中获得。citeturn2search0
+  - 输出格式的值遵循 Microsoft Speech 的输出格式（包括 Ogg/WebM Opus）。citeturn1search0
+  - Telegram 的 `sendVoice` 支持 OGG/MP3/M4A；如果需要保证 Opus 语音消息，请使用 OpenAI/ElevenLabs。citeturn1search1
+  - 如果配置的 Edge 输出格式失败，Clawdbot 会尝试使用 MP3。
 
-OpenAI/ElevenLabs formats are fixed; Telegram expects Opus for voice-note UX.
+OpenAI/ElevenLabs 的格式是固定的；Telegram 期望 Opus 以获得语音消息的用户体验。
 
-## Auto-TTS behavior
+## 自动 TTS 行为
 
-When enabled, Clawdbot:
-- skips TTS if the reply already contains media or a `MEDIA:` directive.
-- skips very short replies (< 10 chars).
-- summarizes long replies when enabled using `agents.defaults.model.primary` (or `summaryModel`).
-- attaches the generated audio to the reply.
+当启用时，Clawdbot：
+- 如果回复中已包含媒体或有 `MEDIA:` 指令，则跳过 TTS。
+- 跳过非常短的回复（少于 10 个字符）。
+- 当启用摘要功能时，使用 `agents.defaults.model.primary`（或 `summaryModel`）对长回复进行摘要。
+- 将生成的音频附加到回复中。
 
-If the reply exceeds `maxLength` and summary is off (or no API key for the
-summary model), audio
-is skipped and the normal text reply is sent.
-
-## Flow diagram
-
-```
+如果回复超过 `maxLength` 且摘要功能关闭（或没有摘要模型的 API 密钥），则跳过音频并发送正常的文本回复。```
 Reply -> TTS enabled?
   no  -> send text
   yes -> has media / MEDIA: / short?
@@ -344,16 +295,12 @@ Reply -> TTS enabled?
                             yes -> summarize (summaryModel or agents.defaults.model.primary)
                                       -> TTS -> attach audio
 ```
+## 斜杠命令用法
 
-## Slash command usage
+只有一个命令：`/tts`。
+有关启用详情，请参见 [斜杠命令](/tools/slash-commands)。
 
-There is a single command: `/tts`.
-See [Slash commands](/tools/slash-commands) for enablement details.
-
-Discord note: `/tts` is a built-in Discord command, so Clawdbot registers
-`/voice` as the native command there. Text `/tts ...` still works.
-
-```
+Discord 注意：`/tts` 是 Discord 内置的斜杠命令，因此 Clawdbot 在那里注册了 `/voice` 作为原生命令。`/tts ...` 的文本命令仍然有效。```
 /tts off
 /tts always
 /tts inbound
@@ -364,23 +311,20 @@ Discord note: `/tts` is a built-in Discord command, so Clawdbot registers
 /tts summary off
 /tts audio Hello from Clawdbot
 ```
+注意事项：
+- 命令需要经过授权的发送者（仍然适用允许列表/所有者规则）。
+- 需要启用 `commands.text` 或原生命令注册。
+- `off|always|inbound|tagged` 是会话级别的开关（`/tts on` 是 `/tts always` 的别名）。
+- `limit` 和 `summary` 存储在本地偏好设置中，而不是主配置文件中。
+- `/tts audio` 会生成一个一次性音频回复（不会切换 TTS 状态）。
 
-Notes:
-- Commands require an authorized sender (allowlist/owner rules still apply).
-- `commands.text` or native command registration must be enabled.
-- `off|always|inbound|tagged` are per‑session toggles (`/tts on` is an alias for `/tts always`).
-- `limit` and `summary` are stored in local prefs, not the main config.
-- `/tts audio` generates a one-off audio reply (does not toggle TTS on).
+## Agent 工具
 
-## Agent tool
+`tts` 工具将文本转换为语音，并返回 `MEDIA:` 路径。当结果与 Telegram 兼容时，该工具会包含 `[[audio_as_voice]]`，以便 Telegram 发送语音气泡。
 
-The `tts` tool converts text to speech and returns a `MEDIA:` path. When the
-result is Telegram-compatible, the tool includes `[[audio_as_voice]]` so
-Telegram sends a voice bubble.
+## 网关 RPC
 
-## Gateway RPC
-
-Gateway methods:
+网关方法：
 - `tts.status`
 - `tts.enable`
 - `tts.disable`

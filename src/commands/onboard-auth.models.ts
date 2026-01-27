@@ -20,6 +20,32 @@ export const KIMI_CODE_MAX_TOKENS = 32768;
 export const KIMI_CODE_HEADERS = { "User-Agent": "KimiCLI/0.77" } as const;
 export const KIMI_CODE_COMPAT = { supportsDeveloperRole: false } as const;
 
+export const ZAI_DEFAULT_MODEL_REF = "zai/glm-4.7";
+
+export const DEEPSEEK_BASE_URL = "https://api.deepseek.com";
+export const DEEPSEEK_DEFAULT_MODEL_ID = "deepseek-chat";
+export const DEEPSEEK_DEFAULT_MODEL_REF = `deepseek/${DEEPSEEK_DEFAULT_MODEL_ID}`;
+export const DEEPSEEK_DEFAULT_CONTEXT_WINDOW = 64000;
+export const DEEPSEEK_DEFAULT_MAX_TOKENS = 8192;
+
+export const SILICONFLOW_BASE_URL = "https://api.siliconflow.cn/v1";
+export const SILICONFLOW_DEFAULT_MODEL_ID = "deepseek-ai/DeepSeek-V3";
+export const SILICONFLOW_DEFAULT_MODEL_REF = `siliconflow/${SILICONFLOW_DEFAULT_MODEL_ID}`;
+export const SILICONFLOW_DEFAULT_CONTEXT_WINDOW = 32000;
+export const SILICONFLOW_DEFAULT_MAX_TOKENS = 4096;
+
+export const VOLCENGINE_BASE_URL = "https://ark.cn-beijing.volces.com/api/v3";
+export const VOLCENGINE_DEFAULT_MODEL_ID = "ep-xxxxxx"; // Placeholder for endpoint ID
+export const VOLCENGINE_DEFAULT_MODEL_REF = `volcengine/${VOLCENGINE_DEFAULT_MODEL_ID}`;
+export const VOLCENGINE_DEFAULT_CONTEXT_WINDOW = 128000;
+export const VOLCENGINE_DEFAULT_MAX_TOKENS = 4096;
+
+export const OLLAMA_BASE_URL = "http://127.0.0.1:11434/v1";
+export const OLLAMA_DEFAULT_MODEL_ID = "qwen2.5:7b-instruct";
+export const OLLAMA_DEFAULT_MODEL_REF = `ollama/${OLLAMA_DEFAULT_MODEL_ID}`;
+export const OLLAMA_DEFAULT_CONTEXT_WINDOW = 32000;
+export const OLLAMA_DEFAULT_MAX_TOKENS = 8192;
+
 // Pricing: MiniMax doesn't publish public rates. Override in models.json for accurate costs.
 export const MINIMAX_API_COST = {
   input: 15,
@@ -114,5 +140,55 @@ export function buildKimiCodeModelDefinition(): ModelDefinitionConfig {
     maxTokens: KIMI_CODE_MAX_TOKENS,
     headers: KIMI_CODE_HEADERS,
     compat: KIMI_CODE_COMPAT,
+  };
+}
+
+export function buildDeepSeekModelDefinition(): ModelDefinitionConfig {
+  return {
+    id: DEEPSEEK_DEFAULT_MODEL_ID,
+    name: "DeepSeek V3",
+    reasoning: false,
+    input: ["text"],
+    cost: { input: 1, output: 2, cacheRead: 0.1, cacheWrite: 0.1 },
+    contextWindow: DEEPSEEK_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: DEEPSEEK_DEFAULT_MAX_TOKENS,
+  };
+}
+
+export function buildSiliconFlowModelDefinition(): ModelDefinitionConfig {
+  return {
+    id: SILICONFLOW_DEFAULT_MODEL_ID,
+    name: "DeepSeek V3 (SiliconFlow)",
+    reasoning: false,
+    input: ["text"],
+    cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    contextWindow: SILICONFLOW_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: SILICONFLOW_DEFAULT_MAX_TOKENS,
+  };
+}
+
+export function buildVolcengineModelDefinition(modelId?: string): ModelDefinitionConfig {
+  const id = modelId ?? VOLCENGINE_DEFAULT_MODEL_ID;
+  return {
+    id,
+    name: `Volcengine (${id})`,
+    reasoning: false,
+    input: ["text"],
+    cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    contextWindow: VOLCENGINE_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: VOLCENGINE_DEFAULT_MAX_TOKENS,
+  };
+}
+
+export function buildOllamaModelDefinition(modelId?: string): ModelDefinitionConfig {
+  const id = modelId ?? OLLAMA_DEFAULT_MODEL_ID;
+  return {
+    id,
+    name: `Ollama (${id})`,
+    reasoning: false,
+    input: ["text"],
+    cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    contextWindow: OLLAMA_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: OLLAMA_DEFAULT_MAX_TOKENS,
   };
 }

@@ -251,6 +251,26 @@ export function resolveIMessageGroupToolPolicy(
   });
 }
 
+export function resolveFeishuGroupRequireMention(params: GroupMentionParams): boolean {
+  return resolveChannelGroupRequireMention({
+    cfg: params.cfg,
+    channel: "feishu",
+    groupId: params.groupId,
+    accountId: params.accountId,
+  });
+}
+
+export function resolveFeishuGroupToolPolicy(
+  params: GroupMentionParams,
+): GroupToolPolicyConfig | undefined {
+  return resolveChannelGroupToolsPolicy({
+    cfg: params.cfg,
+    channel: "feishu",
+    groupId: params.groupId,
+    accountId: params.accountId,
+  });
+}
+
 export function resolveDiscordGroupToolPolicy(
   params: GroupMentionParams,
 ): GroupToolPolicyConfig | undefined {

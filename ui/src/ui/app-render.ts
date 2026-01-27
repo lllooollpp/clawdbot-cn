@@ -534,6 +534,7 @@ export function renderApp(state: AppViewState) {
               onSave: () => saveConfig(state),
               onApply: () => applyConfig(state),
               onUpdate: () => runUpdate(state),
+              onDiscoverModels: (provider) => state.handleDiscoverModels(provider),
             })
           : nothing}
 

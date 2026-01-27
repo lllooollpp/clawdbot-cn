@@ -19,6 +19,20 @@ import {
 import {
   buildKimiCodeModelDefinition,
   buildMoonshotModelDefinition,
+  buildDeepSeekModelDefinition,
+  buildSiliconFlowModelDefinition,
+  buildVolcengineModelDefinition,
+  buildOllamaModelDefinition,
+  DEEPSEEK_BASE_URL,
+  DEEPSEEK_DEFAULT_MODEL_ID,
+  DEEPSEEK_DEFAULT_MODEL_REF,
+  SILICONFLOW_BASE_URL,
+  SILICONFLOW_DEFAULT_MODEL_ID,
+  SILICONFLOW_DEFAULT_MODEL_REF,
+  VOLCENGINE_BASE_URL,
+  VOLCENGINE_DEFAULT_MODEL_ID,
+  OLLAMA_BASE_URL,
+  OLLAMA_DEFAULT_MODEL_ID,
   KIMI_CODE_BASE_URL,
   KIMI_CODE_MODEL_ID,
   KIMI_CODE_MODEL_REF,
@@ -262,6 +276,331 @@ export function applyKimiCodeConfig(cfg: ClawdbotConfig): ClawdbotConfig {
             : undefined),
           primary: KIMI_CODE_MODEL_REF,
         },
+      },
+    },
+  };
+}
+
+export function applyDeepSeekProviderConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const models = { ...cfg.agents?.defaults?.models };
+  models[DEEPSEEK_DEFAULT_MODEL_REF] = {
+    ...models[DEEPSEEK_DEFAULT_MODEL_REF],
+    alias: models[DEEPSEEK_DEFAULT_MODEL_REF]?.alias ?? "DeepSeek V3",
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.deepseek;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildDeepSeekModelDefinition();
+  const hasDefaultModel = existingModels.some((model) => model.id === DEEPSEEK_DEFAULT_MODEL_ID);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+  const { apiKey: existingApiKey, ...existingProviderRest } = (existingProvider ?? {}) as Record<
+    string,
+    unknown
+  > as { apiKey?: string };
+  const resolvedApiKey = typeof existingApiKey === "string" ? existingApiKey : undefined;
+  const normalizedApiKey = resolvedApiKey?.trim();
+  providers.deepseek = {
+    ...existingProviderRest,
+    baseUrl: DEEPSEEK_BASE_URL,
+    api: "openai-completions",
+    ...(normalizedApiKey ? { apiKey: normalizedApiKey } : {}),
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applyDeepSeekConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const next = applyDeepSeekProviderConfig(cfg);
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: DEEPSEEK_DEFAULT_MODEL_REF,
+        },
+      },
+    },
+  };
+}
+
+export function applySiliconFlowProviderConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const models = { ...cfg.agents?.defaults?.models };
+  models[SILICONFLOW_DEFAULT_MODEL_REF] = {
+    ...models[SILICONFLOW_DEFAULT_MODEL_REF],
+    alias: models[SILICONFLOW_DEFAULT_MODEL_REF]?.alias ?? "DeepSeek V3 (SF)",
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.siliconflow;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildSiliconFlowModelDefinition();
+  const hasDefaultModel = existingModels.some((model) => model.id === SILICONFLOW_DEFAULT_MODEL_ID);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+  const { apiKey: existingApiKey, ...existingProviderRest } = (existingProvider ?? {}) as Record<
+    string,
+    unknown
+  > as { apiKey?: string };
+  const resolvedApiKey = typeof existingApiKey === "string" ? existingApiKey : undefined;
+  const normalizedApiKey = resolvedApiKey?.trim();
+  providers.siliconflow = {
+    ...existingProviderRest,
+    baseUrl: SILICONFLOW_BASE_URL,
+    api: "openai-completions",
+    ...(normalizedApiKey ? { apiKey: normalizedApiKey } : {}),
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applySiliconFlowConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const next = applySiliconFlowProviderConfig(cfg);
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: SILICONFLOW_DEFAULT_MODEL_REF,
+        },
+      },
+    },
+  };
+}
+
+export function applyVolcengineProviderConfig(
+  cfg: ClawdbotConfig,
+  params: { modelId?: string },
+): ClawdbotConfig {
+  const modelId = params.modelId || VOLCENGINE_DEFAULT_MODEL_ID;
+  const modelRef = `volcengine/${modelId}`;
+
+  const models = { ...cfg.agents?.defaults?.models };
+  models[modelRef] = {
+    ...models[modelRef],
+    alias: models[modelRef]?.alias ?? `Volcengine (${modelId})`,
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.volcengine;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildVolcengineModelDefinition(modelId);
+  const hasDefaultModel = existingModels.some((model) => model.id === modelId);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+
+  providers.volcengine = {
+    ...((existingProvider ?? {}) as Record<string, unknown>),
+    baseUrl: VOLCENGINE_BASE_URL,
+    api: "openai-completions",
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applyVolcengineConfig(cfg: ClawdbotConfig, params: { modelId?: string }): ClawdbotConfig {
+  const next = applyVolcengineProviderConfig(cfg, params);
+  const modelId = params.modelId || VOLCENGINE_DEFAULT_MODEL_ID;
+  const modelRef = `volcengine/${modelId}`;
+
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: modelRef,
+        },
+      },
+    },
+  };
+}
+
+export function applyBochaConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  return {
+    ...cfg,
+    tools: {
+      ...cfg.tools,
+      web: {
+        ...cfg.tools?.web,
+        search: {
+          ...cfg.tools?.web?.search,
+          provider: "bocha",
+        },
+      },
+    },
+  };
+}
+
+export function applyOllamaConfig(
+  cfg: ClawdbotConfig,
+  params: { baseUrl?: string; modelId?: string },
+): ClawdbotConfig {
+  const next = applyOllamaProviderConfig(cfg, params);
+  const modelId = params.modelId || OLLAMA_DEFAULT_MODEL_ID;
+  const modelRef = `ollama/${modelId}`;
+
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: modelRef,
+        },
+      },
+    },
+  };
+}
+
+export function applyOllamaProviderConfig(
+  cfg: ClawdbotConfig,
+  params: { baseUrl?: string; modelId?: string },
+): ClawdbotConfig {
+  const baseUrl = params.baseUrl || OLLAMA_BASE_URL;
+  const modelId = params.modelId || OLLAMA_DEFAULT_MODEL_ID;
+  const modelRef = `ollama/${modelId}`;
+
+  const models = { ...cfg.agents?.defaults?.models };
+  models[modelRef] = {
+    ...models[modelRef],
+    alias: models[modelRef]?.alias ?? `Ollama (${modelId})`,
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.ollama;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildOllamaModelDefinition(modelId);
+  const hasDefaultModel = existingModels.some((model) => model.id === modelId);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+
+  providers.ollama = {
+    ...((existingProvider ?? {}) as Record<string, unknown>),
+    baseUrl,
+    api: "openai-completions",
+    apiKey: "ollama", // Ollama doesn't need a key but we set one to satisfy validator
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applyDomesticMediaDefaults(cfg: ClawdbotConfig): ClawdbotConfig {
+  const models = [...(cfg.tools?.media?.models || [])];
+
+  // Add SiliconFlow for Audio if not present
+  if (
+    cfg.models?.providers?.siliconflow &&
+    !models.some((m) => m.provider === "siliconflow" && m.capabilities?.includes("audio"))
+  ) {
+    models.push({
+      provider: "siliconflow",
+      capabilities: ["audio"],
+    });
+  }
+
+  return {
+    ...cfg,
+    messages: {
+      ...cfg.messages,
+      tts: {
+        ...cfg.messages?.tts,
+        provider: "edge",
+        edge: {
+          ...cfg.messages?.tts?.edge,
+          voice: "zh-CN-XiaoxiaoNeural",
+          lang: "zh-CN",
+        },
+      },
+    },
+    tools: {
+      ...cfg.tools,
+      media: {
+        ...cfg.tools?.media,
+        models,
       },
     },
   };

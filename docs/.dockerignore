@@ -1,0 +1,10 @@
+.git
+.github
+scripts
+node_modules
+zh/zh
+**/*.log
+.DS_Store
+Dockerfile
+.dockerignore
+deploy.ps1

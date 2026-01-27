@@ -2,95 +2,95 @@
 title: Deploy on Railway
 ---
 
-Deploy Clawdbot on Railway with a one-click template and finish setup in your browser.
-This is the easiest “no terminal on the server” path: Railway runs the Gateway for you,
-and you configure everything via the `/setup` web wizard.
+在Railway上使用一键模板部署Clawdbot，并在浏览器中完成设置。
+这是最简单的“无需服务器终端”的路径：Railway会为你运行网关，
+并通过`/setup`的网页向导配置所有内容。
 
-## Quick checklist (new users)
+## 快速检查清单（新用户）
 
-1) Click **Deploy on Railway** (below).
-2) Add a **Volume** mounted at `/data`.
-3) Set the required **Variables** (at least `SETUP_PASSWORD`).
-4) Enable **HTTP Proxy** on port `8080`.
-5) Open `https://<your-railway-domain>/setup` and finish the wizard.
+1) 点击 **在Railway上部署**（如下所示）。
+2) 添加一个挂载在`/data`路径下的 **Volume**。
+3) 设置所需的 **变量**（至少包括`SETUP_PASSWORD`）。
+4) 在端口`8080`上启用 **HTTP代理**。
+5) 打开`https://<your-railway-domain>/setup`并完成向导。
 
-## One-click deploy
+## 一键部署
 
-<a href="https://railway.com/deploy/clawdbot-railway-template" target="_blank" rel="noreferrer">Deploy on Railway</a>
+<a href="https://railway.com/deploy/clawdbot-railway-template" target="_blank" rel="noreferrer">在Railway上部署</a>
 
-After deploy, find your public URL in **Railway → your service → Settings → Domains**.
+部署完成后，在 **Railway → 你的服务 → 设置 → 域名** 中找到你的公共URL。
 
-Railway will either:
-- give you a generated domain (often `https://<something>.up.railway.app`), or
-- use your custom domain if you attached one.
+Railway会：
+- 为你生成一个域名（通常是`https://<something>.up.railway.app`），或者
+- 如果你绑定了自定义域名，则使用你的自定义域名。
 
-Then open:
+然后打开：
 
-- `https://<your-railway-domain>/setup` — setup wizard (password protected)
-- `https://<your-railway-domain>/clawdbot` — Control UI
+- `https://<your-railway-domain>/setup` —— 设置向导（受密码保护）
+- `https://<your-railway-domain>/clawdbot` —— 控制界面
 
-## What you get
+## 你将获得
 
-- Hosted Clawdbot Gateway + Control UI
-- Web setup wizard at `/setup` (no terminal commands)
-- Persistent storage via Railway Volume (`/data`) so config/credentials/workspace survive redeploys
-- Backup export at `/setup/export` to migrate off Railway later
+- 托管的Clawdbot网关 + 控制界面
+- 网页设置向导位于`/setup`（无需终端命令）
+- 通过Railway Volume（`/data`）实现的持久化存储，因此配置/凭证/工作区在重新部署后仍会保留
+- `/setup/export` 处的备份导出功能，便于日后迁移到其他主机
 
-## Required Railway settings
+## 所需的Railway设置
 
-### Public Networking
+### 公共网络
 
-Enable **HTTP Proxy** for the service.
+为服务启用 **HTTP代理**。
 
-- Port: `8080`
+- 端口：`8080`
 
-### Volume (required)
+### Volume（必需）
 
-Attach a volume mounted at:
+挂载一个位于以下路径的Volume：
 
 - `/data`
 
-### Variables
+### 变量
 
-Set these variables on the service:
+在服务中设置以下变量：
 
-- `SETUP_PASSWORD` (required)
-- `PORT=8080` (required — must match the port in Public Networking)
-- `CLAWDBOT_STATE_DIR=/data/.clawdbot` (recommended)
-- `CLAWDBOT_WORKSPACE_DIR=/data/workspace` (recommended)
-- `CLAWDBOT_GATEWAY_TOKEN` (recommended; treat as an admin secret)
+- `SETUP_PASSWORD`（必需）
+- `PORT=8080`（必需 —— 必须与公共网络中的端口匹配）
+- `CLAWDBOT_STATE_DIR=/data/.clawdbot`（推荐）
+- `CLAWDBOT_WORKSPACE_DIR=/data/workspace`（推荐）
+- `CLAWDBOT_GATEWAY_TOKEN`（推荐；应视为管理员密钥）
 
-## Setup flow
+## 设置流程
 
-1) Visit `https://<your-railway-domain>/setup` and enter your `SETUP_PASSWORD`.
-2) Choose a model/auth provider and paste your key.
-3) (Optional) Add Telegram/Discord/Slack tokens.
-4) Click **Run setup**.
+1) 访问`https://<your-railway-domain>/setup`并输入你的`SETUP_PASSWORD`。
+2) 选择一个模型/认证提供者并粘贴你的密钥。
+3) （可选）添加Telegram/Discord/Slack的令牌。
+4) 点击 **运行设置**。
 
-If Telegram DMs are set to pairing, the setup wizard can approve the pairing code.
+如果Telegram的私信设置为配对模式，设置向导可以批准配对代码。
 
-## Getting chat tokens
+## 获取聊天令牌
 
-### Telegram bot token
+### Telegram机器人令牌
 
-1) Message `@BotFather` in Telegram
-2) Run `/newbot`
-3) Copy the token (looks like `123456789:AA...`)
-4) Paste it into `/setup`
+1) 在Telegram中给 `@BotFather` 发消息
+2) 运行 `/newbot`
+3) 复制令牌（看起来像 `123456789:AA...`）
+4) 将其粘贴到 `/setup`
 
-### Discord bot token
+### Discord机器人令牌
 
-1) Go to https://discord.com/developers/applications
-2) **New Application** → choose a name
-3) **Bot** → **Add Bot**
-4) **Enable MESSAGE CONTENT INTENT** under Bot → Privileged Gateway Intents (required or the bot will crash on startup)
-5) Copy the **Bot Token** and paste into `/setup`
-6) Invite the bot to your server (OAuth2 URL Generator; scopes: `bot`, `applications.commands`)
+1) 前往 https://discord.com/developers/applications
+2) 点击 **新建应用** → 选择一个名称
+3) 点击 **Bot** → **添加机器人**
+4) 在 **Bot → 高级网关意图** 下启用 **MESSAGE CONTENT INTENT**（机器人启动时如果未启用将崩溃）
+5) 复制 **机器人令牌** 并粘贴到 `/setup`
+6) 将机器人邀请到你的服务器（使用OAuth2 URL生成器；权限范围：`bot`, `applications.commands`）
 
-## Backups & migration
+## 备份与迁移
 
-Download a backup at:
+在以下位置下载备份：
 
 - `https://<your-railway-domain>/setup/export`
 
-This exports your Clawdbot state + workspace so you can migrate to another host without losing config or memory.
+此备份会导出你的Clawdbot状态和工作区，以便你迁移到其他主机时不会丢失配置或记忆。

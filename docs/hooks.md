@@ -4,104 +4,84 @@ read_when:
   - You want event-driven automation for /new, /reset, /stop, and agent lifecycle events
   - You want to build, install, or debug hooks
 ---
-# Hooks
 
-Hooks provide an extensible event-driven system for automating actions in response to agent commands and events. Hooks are automatically discovered from directories and can be managed via CLI commands, similar to how skills work in Clawdbot.
+# 钩子
 
-## Getting Oriented
+钩子为根据代理命令和事件自动执行操作提供了一个可扩展的事件驱动系统。钩子会自动从目录中被发现，并可以通过 CLI 命令进行管理，类似于 Clawdbot 中的技能。
 
-Hooks are small scripts that run when something happens. There are two kinds:
+## 入门指南
 
-- **Hooks** (this page): run inside the Gateway when agent events fire, like `/new`, `/reset`, `/stop`, or lifecycle events.
-- **Webhooks**: external HTTP webhooks that let other systems trigger work in Clawdbot. See [Webhook Hooks](/automation/webhook) or use `clawdbot webhooks` for Gmail helper commands.
-  
-Hooks can also be bundled inside plugins; see [Plugins](/plugin#plugin-hooks).
+钩子是当某些事件发生时运行的小脚本。有两种类型：
 
-Common uses:
-- Save a memory snapshot when you reset a session
-- Keep an audit trail of commands for troubleshooting or compliance
-- Trigger follow-up automation when a session starts or ends
-- Write files into the agent workspace or call external APIs when events fire
+- **钩子**（本页）：在代理事件触发时在网关内部运行，例如 `/new`、`/reset`、`/stop` 或生命周期事件。
+- **Webhook**：外部 HTTP Webhook，允许其他系统触发 Clawdbot 中的工作。参见 [Webhook 钩子](/automation/webhook) 或使用 `clawdbot webhooks` 命令来使用 Gmail 辅助命令。
 
-If you can write a small TypeScript function, you can write a hook. Hooks are discovered automatically, and you enable or disable them via the CLI.
+钩子也可以打包在插件中；参见 [插件](/plugin#plugin-hooks)。
 
-## Overview
+常见用途：
+- 在重置会话时保存内存快照
+- 为故障排除或合规性保留命令的审计日志
+- 在会话开始或结束时触发后续自动化操作
+- 在事件触发时将文件写入代理工作区或调用外部 API
 
-The hooks system allows you to:
-- Save session context to memory when `/new` is issued
-- Log all commands for auditing
-- Trigger custom automations on agent lifecycle events
-- Extend Clawdbot's behavior without modifying core code
+如果你能编写一个小型 TypeScript 函数，那你就能编写一个钩子。钩子会自动被发现，你也可以通过 CLI 启用或禁用它们。
 
-## Getting Started
+## 概览
 
-### Bundled Hooks
+钩子系统允许你：
+- 在发出 `/new` 命令时将会话上下文保存到内存中
+- 记录所有命令事件以供审计
+- 在代理生命周期事件上触发自定义自动化
+- 扩展 Clawdbot 的行为，而无需修改核心代码
 
-Clawdbot ships with four bundled hooks that are automatically discovered:
+## 快速开始
 
-- **💾 session-memory**: Saves session context to your agent workspace (default `~/clawd/memory/`) when you issue `/new`
-- **📝 command-logger**: Logs all command events to `~/.clawdbot/logs/commands.log`
-- **🚀 boot-md**: Runs `BOOT.md` when the gateway starts (requires internal hooks enabled)
-- **😈 soul-evil**: Swaps injected `SOUL.md` content with `SOUL_EVIL.md` during a purge window or by random chance
+### 内置钩子
 
-List available hooks:
+Clawdbot 默认提供了四个可自动发现的钩子：
 
-```bash
+- **💾 session-memory**：在发出 `/new` 命令时将会话上下文保存到你的代理工作区（默认为 `~/clawd/memory/`）
+- **📝 command-logger**：将所有命令事件记录到 `~/.clawdbot/logs/commands.log`
+- **🚀 boot-md**：在网关启动时运行 `BOOT.md`（需要启用内部钩子）
+- **😈 soul-evil**：在清理窗口期间或随机机会下，将注入的 `SOUL.md` 内容替换为 `SOUL_EVIL.md`
+
+列出可用的钩子：```bash
 clawdbot hooks list
 ```
-
-Enable a hook:
-
-```bash
+启用钩子：```bash
 clawdbot hooks enable session-memory
 ```
-
-Check hook status:
-
-```bash
+检查钩子状态：```bash
 clawdbot hooks check
 ```
-
-Get detailed information:
-
-```bash
+获取详细信息：```bash
 clawdbot hooks info session-memory
 ```
+### 上线流程
 
-### Onboarding
+在上线流程中（`clawdbot onboard`），您将被提示启用推荐的钩子（hooks）。向导会自动发现符合条件的钩子并将其展示以供选择。
 
-During onboarding (`clawdbot onboard`), you'll be prompted to enable recommended hooks. The wizard automatically discovers eligible hooks and presents them for selection.
+## 钩子发现
 
-## Hook Discovery
+钩子会从三个目录中自动发现（按优先级顺序）：
 
-Hooks are automatically discovered from three directories (in order of precedence):
+1. **工作区钩子**：`<workspace>/hooks/`（每个代理专属，优先级最高）
+2. **托管钩子**：`~/.clawdbot/hooks/`（用户安装的，可在所有工作区中共享）
+3. **内置钩子**：`<clawdbot>/dist/hooks/bundled/`（随 Clawdbot 一起提供）
 
-1. **Workspace hooks**: `<workspace>/hooks/` (per-agent, highest precedence)
-2. **Managed hooks**: `~/.clawdbot/hooks/` (user-installed, shared across workspaces)
-3. **Bundled hooks**: `<clawdbot>/dist/hooks/bundled/` (shipped with Clawdbot)
+托管钩子目录可以是一个 **单独的钩子** 或一个 **钩子包**（包目录）。
 
-Managed hook directories can be either a **single hook** or a **hook pack** (package directory).
-
-Each hook is a directory containing:
-
-```
+每个钩子是一个包含以下内容的目录：```
 my-hook/
 ├── HOOK.md          # Metadata + documentation
 └── handler.ts       # Handler implementation
 ```
+## 钩子包 (npm/archives)
 
-## Hook Packs (npm/archives)
-
-Hook packs are standard npm packages that export one or more hooks via `clawdbot.hooks` in
-`package.json`. Install them with:
-
-```bash
+钩子包是标准的 npm 包，它们通过 `package.json` 中的 `clawdbot.hooks` 导出一个或多个钩子。安装它们的方式为：```bash
 clawdbot hooks install <path-or-spec>
 ```
-
-Example `package.json`:
-
-```json
+示例 `package.json`:```json
 {
   "name": "@acme/my-hooks",
   "version": "0.1.0",
@@ -110,65 +90,56 @@ Example `package.json`:
   }
 }
 ```
+每个条目都指向一个包含 `HOOK.md` 和 `handler.ts`（或 `index.ts`）的钩子目录。
+钩子包可以包含依赖项；这些依赖项将在 `~/.clawdbot/hooks/<id>` 下安装。
 
-Each entry points to a hook directory containing `HOOK.md` and `handler.ts` (or `index.ts`).
-Hook packs can ship dependencies; they will be installed under `~/.clawdbot/hooks/<id>`.
+## 钩子结构
 
-## Hook Structure
+### HOOK.md 格式
 
-### HOOK.md Format
-
-The `HOOK.md` file contains metadata in YAML frontmatter plus Markdown documentation:
-
-```markdown
----
+`HOOK.md` 文件包含 YAML 前置信息以及 Markdown 格式的文档内容：---
 name: my-hook
-description: "Short description of what this hook does"
+description: "此钩子的作用的简短描述"
 homepage: https://docs.clawd.bot/hooks#my-hook
 metadata: {"clawdbot":{"emoji":"🔗","events":["command:new"],"requires":{"bins":["node"]}}}
 ---
 
-# My Hook
+# 我的钩子
 
-Detailed documentation goes here...
+详细的文档内容在此...
 
-## What It Does
+## 它的作用
 
-- Listens for `/new` commands
-- Performs some action
-- Logs the result
+- 监听 `/new` 命令
+- 执行一些操作
+- 记录结果
 
-## Requirements
+## 要求
 
-- Node.js must be installed
+- 必须安装 Node.js
 
-## Configuration
+## 配置
 
-No configuration needed.
-```
+无需配置。### 元数据字段
 
-### Metadata Fields
+`metadata.clawdbot` 对象支持以下字段：
 
-The `metadata.clawdbot` object supports:
+- **`emoji`**：用于 CLI 的显示表情符号（例如 `"💾"`）
+- **`events`**：要监听的事件数组（例如 `["command:new", "command:reset"]`）
+- **`export`**：要使用的命名导出（默认为 `"default"`）
+- **`homepage`**：文档的 URL
+- **`requires`**：可选的依赖项
+  - **`bins`**：PATH 中必需的二进制文件（例如 `["git", "node"]`）
+  - **`anyBins`**：至少需要存在其中一个二进制文件
+  - **`env`**：必需的环境变量
+  - **`config`**：必需的配置路径（例如 `["workspace.dir"]`）
+  - **`os`**：必需的操作平台（例如 `["darwin", "linux"]`）
+- **`always`**：绕过资格检查（布尔值）
+- **`install`**：安装方法（对于捆绑钩子：`[{"id":"bundled","kind":"bundled"}]`）
 
-- **`emoji`**: Display emoji for CLI (e.g., `"💾"`)
-- **`events`**: Array of events to listen for (e.g., `["command:new", "command:reset"]`)
-- **`export`**: Named export to use (defaults to `"default"`)
-- **`homepage`**: Documentation URL
-- **`requires`**: Optional requirements
-  - **`bins`**: Required binaries on PATH (e.g., `["git", "node"]`)
-  - **`anyBins`**: At least one of these binaries must be present
-  - **`env`**: Required environment variables
-  - **`config`**: Required config paths (e.g., `["workspace.dir"]`)
-  - **`os`**: Required platforms (e.g., `["darwin", "linux"]`)
-- **`always`**: Bypass eligibility checks (boolean)
-- **`install`**: Installation methods (for bundled hooks: `[{"id":"bundled","kind":"bundled"}]`)
+### 处理器实现
 
-### Handler Implementation
-
-The `handler.ts` file exports a `HookHandler` function:
-
-```typescript
+`handler.ts` 文件导出一个 `HookHandler` 函数：```typescript
 import type { HookHandler } from '../../src/hooks/hooks.js';
 
 const myHandler: HookHandler = async (event) => {
@@ -189,12 +160,9 @@ const myHandler: HookHandler = async (event) => {
 
 export default myHandler;
 ```
+#### 事件上下文
 
-#### Event Context
-
-Each event includes:
-
-```typescript
+每个事件包括：```typescript
 {
   type: 'command' | 'session' | 'agent' | 'gateway',
   action: string,              // e.g., 'new', 'reset', 'stop'
@@ -213,75 +181,62 @@ Each event includes:
   }
 }
 ```
+## 事件类型
 
-## Event Types
+### 命令事件
 
-### Command Events
+当代理命令被触发时：
 
-Triggered when agent commands are issued:
+- **`command`**: 所有命令事件（通用监听器）
+- **`command:new`**: 当发出 `/new` 命令时
+- **`command:reset`**: 当发出 `/reset` 命令时
+- **`command:stop`**: 当发出 `/stop` 命令时
 
-- **`command`**: All command events (general listener)
-- **`command:new`**: When `/new` command is issued
-- **`command:reset`**: When `/reset` command is issued
-- **`command:stop`**: When `/stop` command is issued
+### 代理事件
 
-### Agent Events
+- **`agent:bootstrap`**: 在工作区引导文件被注入之前（钩子可能会修改 `context.bootstrapFiles`）
 
-- **`agent:bootstrap`**: Before workspace bootstrap files are injected (hooks may mutate `context.bootstrapFiles`)
+### 网关事件
 
-### Gateway Events
+当网关启动时触发：
 
-Triggered when the gateway starts:
+- **`gateway:startup`**: 在通道启动并加载钩子之后
 
-- **`gateway:startup`**: After channels start and hooks are loaded
+### 工具结果钩子（插件 API）
 
-### Tool Result Hooks (Plugin API)
+这些钩子不是事件流监听器；它们允许插件在 Clawdbot 持久化工具结果之前同步调整这些结果。
 
-These hooks are not event-stream listeners; they let plugins synchronously adjust tool results before Clawdbot persists them.
+- **`tool_result_persist`**: 在工具结果被写入会话记录之前对其进行转换。必须是同步的；返回更新后的工具结果负载，或返回 `undefined` 以保持原样。参见 [代理循环](/concepts/agent-loop)。
 
-- **`tool_result_persist`**: transform tool results before they are written to the session transcript. Must be synchronous; return the updated tool result payload or `undefined` to keep it as-is. See [Agent Loop](/concepts/agent-loop).
+### 未来事件
 
-### Future Events
+计划中的事件类型：
 
-Planned event types:
+- **`session:start`**: 当新会话开始时
+- **`session:end`**: 当会话结束时
+- **`agent:error`**: 当代理遇到错误时
+- **`message:sent`**: 当消息被发送时
+- **`message:received`**: 当消息被接收时
 
-- **`session:start`**: When a new session begins
-- **`session:end`**: When a session ends
-- **`agent:error`**: When an agent encounters an error
-- **`message:sent`**: When a message is sent
-- **`message:received`**: When a message is received
+## 创建自定义钩子
 
-## Creating Custom Hooks
+### 1. 选择位置
 
-### 1. Choose Location
-
-- **Workspace hooks** (`<workspace>/hooks/`): Per-agent, highest precedence
-- **Managed hooks** (`~/.clawdbot/hooks/`): Shared across workspaces
-
-### 2. Create Directory Structure
-
-```bash
+- **工作区钩子** (`<workspace>/hooks/`): 每个代理专用，优先级最高
+- **托管钩子** (`~/.clawdbot/hooks/`): 跨工作区共享
+### 2. 创建目录结构```bash
 mkdir -p ~/.clawdbot/hooks/my-hook
 cd ~/.clawdbot/hooks/my-hook
 ```
-
-### 3. Create HOOK.md
-
-```markdown
----
+### 3. 创建 HOOK.md---
 name: my-hook
-description: "Does something useful"
+description: "做有用的事情"
 metadata: {"clawdbot":{"emoji":"🎯","events":["command:new"]}}
 ---
 
-# My Custom Hook
+# 我的自定义钩子
 
-This hook does something useful when you issue `/new`.
-```
-
-### 4. Create handler.ts
-
-```typescript
+当您发出 `/new` 命令时，此钩子会做有用的事情。### 4. 创建 handler.ts```typescript
 import type { HookHandler } from '../../src/hooks/hooks.js';
 
 const handler: HookHandler = async (event) => {
@@ -295,10 +250,7 @@ const handler: HookHandler = async (event) => {
 
 export default handler;
 ```
-
-### 5. Enable and Test
-
-```bash
+### 5. 启用与测试```bash
 # Verify hook is discovered
 clawdbot hooks list
 
@@ -310,12 +262,9 @@ clawdbot hooks enable my-hook
 # Trigger the event
 # Send /new via your messaging channel
 ```
+## 配置
 
-## Configuration
-
-### New Config Format (Recommended)
-
-```json
+### 新配置格式（推荐）```json
 {
   "hooks": {
     "internal": {
@@ -328,12 +277,9 @@ clawdbot hooks enable my-hook
   }
 }
 ```
+### 每个 Hook 的配置
 
-### Per-Hook Configuration
-
-Hooks can have custom configuration:
-
-```json
+Hook 可以有自定义配置：```json
 {
   "hooks": {
     "internal": {
@@ -350,12 +296,9 @@ Hooks can have custom configuration:
   }
 }
 ```
+### 额外目录
 
-### Extra Directories
-
-Load hooks from additional directories:
-
-```json
+从额外目录加载钩子：```json
 {
   "hooks": {
     "internal": {
@@ -367,12 +310,9 @@ Load hooks from additional directories:
   }
 }
 ```
+### 旧版配置格式（仍受支持）
 
-### Legacy Config Format (Still Supported)
-
-The old config format still works for backwards compatibility:
-
-```json
+旧版配置格式仍用于向后兼容：```json
 {
   "hooks": {
     "internal": {
@@ -388,14 +328,11 @@ The old config format still works for backwards compatibility:
   }
 }
 ```
+**迁移**: 使用基于发现的新系统来处理新钩子。遗留的处理器会在目录-based 钩子之后加载。
 
-**Migration**: Use the new discovery-based system for new hooks. Legacy handlers are loaded after directory-based hooks.
+## CLI 命令
 
-## CLI Commands
-
-### List Hooks
-
-```bash
+### 列出钩子```bash
 # List all hooks
 clawdbot hooks list
 
@@ -408,101 +345,77 @@ clawdbot hooks list --verbose
 # JSON output
 clawdbot hooks list --json
 ```
-
-### Hook Information
-
-```bash
+### 钩子信息```bash
 # Show detailed info about a hook
 clawdbot hooks info session-memory
 
 # JSON output
 clawdbot hooks info session-memory --json
 ```
-
-### Check Eligibility
-
-```bash
+### 检查资格```bash
 # Show eligibility summary
 clawdbot hooks check
 
 # JSON output
 clawdbot hooks check --json
 ```
-
-### Enable/Disable
-
-```bash
+### 启用/禁用```bash
 # Enable a hook
 clawdbot hooks enable session-memory
 
 # Disable a hook
 clawdbot hooks disable command-logger
 ```
-
-## Bundled Hooks
+## 内置钩子
 
 ### session-memory
 
-Saves session context to memory when you issue `/new`.
+当你发出 `/new` 命令时，将会话上下文保存到内存中。
 
-**Events**: `command:new`
+**事件**: `command:new`
 
-**Requirements**: `workspace.dir` must be configured
+**要求**: 必须配置 `workspace.dir`
 
-**Output**: `<workspace>/memory/YYYY-MM-DD-slug.md` (defaults to `~/clawd`)
+**输出**: `<workspace>/memory/YYYY-MM-DD-slug.md`（默认为 `~/clawd`）
 
-**What it does**:
-1. Uses the pre-reset session entry to locate the correct transcript
-2. Extracts the last 15 lines of conversation
-3. Uses LLM to generate a descriptive filename slug
-4. Saves session metadata to a dated memory file
+**它做了什么**:
+1. 使用预重置会话条目来定位正确的对话记录
+2. 提取最后 15 行对话内容
+3. 使用 LLM 生成一个描述性的文件名缩略词
+4. 将会话元数据保存到带有日期的内存文件中
 
-**Example output**:
+**示例输出**:# 会话：2026-01-16 14:30:00 UTC
 
-```markdown
-# Session: 2026-01-16 14:30:00 UTC
-
-- **Session Key**: agent:main:main
-- **Session ID**: abc123def456
-- **Source**: telegram
-```
-
-**Filename examples**:
+- **会话密钥**: agent:main:main
+- **会话ID**: abc123def456
+- **来源**: telegram**文件名示例**:
 - `2026-01-16-vendor-pitch.md`
 - `2026-01-16-api-design.md`
-- `2026-01-16-1430.md` (fallback timestamp if slug generation fails)
+- `2026-01-16-1430.md` (如果别名生成失败，则使用此回退时间戳)
 
-**Enable**:
-
-```bash
+**启用**:```bash
 clawdbot hooks enable session-memory
 ```
-
 ### command-logger
 
-Logs all command events to a centralized audit file.
+将所有命令事件记录到集中式的审计文件中。
 
-**Events**: `command`
+**事件**: `command`
 
-**Requirements**: None
+**要求**: 无
 
-**Output**: `~/.clawdbot/logs/commands.log`
+**输出**: `~/.clawdbot/logs/commands.log`
 
-**What it does**:
-1. Captures event details (command action, timestamp, session key, sender ID, source)
-2. Appends to log file in JSONL format
-3. Runs silently in the background
+**它的作用**:
+1. 捕获事件详情（命令操作、时间戳、会话密钥、发送者ID、来源）
+2. 以 JSONL 格式追加到日志文件中
+3. 在后台静默运行
 
-**Example log entries**:
-
-```jsonl
+**示例日志条目**:```jsonl
 {"timestamp":"2026-01-16T14:30:00.000Z","action":"new","sessionKey":"agent:main:main","senderId":"+1234567890","source":"telegram"}
 {"timestamp":"2026-01-16T15:45:22.000Z","action":"stop","sessionKey":"agent:main:main","senderId":"user@example.com","source":"whatsapp"}
 ```
-
-**View logs**:
-
-```bash
+**查看日志**：```bash
 # View recent commands
 tail -n 20 ~/.clawdbot/logs/commands.log
 
@@ -512,32 +425,23 @@ cat ~/.clawdbot/logs/commands.log | jq .
 # Filter by action
 grep '"action":"new"' ~/.clawdbot/logs/commands.log | jq .
 ```
-
-**Enable**:
-
-```bash
+**启用**：```bash
 clawdbot hooks enable command-logger
 ```
-
 ### soul-evil
 
-Swaps injected `SOUL.md` content with `SOUL_EVIL.md` during a purge window or by random chance.
+在清理窗口期间或随机机会下，将 `SOUL.md` 内容与 `SOUL_EVIL.md` 进行交换。
 
-**Events**: `agent:bootstrap`
+**事件**: `agent:bootstrap`
 
-**Docs**: [SOUL Evil Hook](/hooks/soul-evil)
+**文档**: [SOUL Evil Hook](/hooks/soul-evil)
 
-**Output**: No files written; swaps happen in-memory only.
+**输出**: 不写入任何文件；交换仅在内存中进行。
 
-**Enable**:
-
-```bash
+**启用**:```bash
 clawdbot hooks enable soul-evil
 ```
-
-**Config**:
-
-```json
+**配置**：```json
 {
   "hooks": {
     "internal": {
@@ -554,34 +458,28 @@ clawdbot hooks enable soul-evil
   }
 }
 ```
-
 ### boot-md
 
-Runs `BOOT.md` when the gateway starts (after channels start).
-Internal hooks must be enabled for this to run.
+在网关启动时运行 `BOOT.md`（在通道启动之后）。
+必须启用内部钩子才能运行此功能。
 
-**Events**: `gateway:startup`
+**事件**: `gateway:startup`
 
-**Requirements**: `workspace.dir` must be configured
+**要求**: 必须配置 `workspace.dir`
 
-**What it does**:
-1. Reads `BOOT.md` from your workspace
-2. Runs the instructions via the agent runner
-3. Sends any requested outbound messages via the message tool
+**它会做什么**:
+1. 从你的工作区读取 `BOOT.md`
+2. 通过代理运行器执行其中的指令
+3. 通过消息工具发送任何请求的出站消息
 
-**Enable**:
-
-```bash
+**启用**:```bash
 clawdbot hooks enable boot-md
 ```
+## 最佳实践
 
-## Best Practices
+### 保持处理函数快速
 
-### Keep Handlers Fast
-
-Hooks run during command processing. Keep them lightweight:
-
-```typescript
+钩子（Hooks）在命令处理期间运行。请保持它们轻量级：```typescript
 // ✓ Good - async work, returns immediately
 const handler: HookHandler = async (event) => {
   void processInBackground(event); // Fire and forget
@@ -593,12 +491,9 @@ const handler: HookHandler = async (event) => {
   await evenSlowerAPICall(event);
 };
 ```
+### 优雅地处理错误
 
-### Handle Errors Gracefully
-
-Always wrap risky operations:
-
-```typescript
+始终将高风险操作包裹在内：```typescript
 const handler: HookHandler = async (event) => {
   try {
     await riskyOperation(event);
@@ -608,12 +503,9 @@ const handler: HookHandler = async (event) => {
   }
 };
 ```
+### 尽早过滤事件
 
-### Filter Events Early
-
-Return early if the event isn't relevant:
-
-```typescript
+如果事件不相关，尽早返回：```typescript
 const handler: HookHandler = async (event) => {
   // Only handle 'new' commands
   if (event.type !== 'command' || event.action !== 'new') {
@@ -623,81 +515,57 @@ const handler: HookHandler = async (event) => {
   // Your logic here
 };
 ```
+### 使用特定的事件键
 
-### Use Specific Event Keys
-
-Specify exact events in metadata when possible:
-
-```yaml
+在可能的情况下，在元数据中指定具体的事件：```yaml
 metadata: {"clawdbot":{"events":["command:new"]}}  # Specific
 ```
-
-Rather than:
-
-```yaml
+而不是：```yaml
 metadata: {"clawdbot":{"events":["command"]}}      # General - more overhead
 ```
+## 调试
 
-## Debugging
+### 启用钩子日志
 
-### Enable Hook Logging
-
-The gateway logs hook loading at startup:
-
-```
+网关在启动时会记录钩子的加载情况：```
 Registered hook: session-memory -> command:new
 Registered hook: command-logger -> command
 Registered hook: boot-md -> gateway:startup
 ```
+### 检测发现
 
-### Check Discovery
-
-List all discovered hooks:
-
-```bash
+列出所有发现的钩子：```bash
 clawdbot hooks list --verbose
 ```
+### 检查注册
 
-### Check Registration
-
-In your handler, log when it's called:
-
-```typescript
+在你的处理程序中，记录其被调用时的日志：```typescript
 const handler: HookHandler = async (event) => {
   console.log('[my-handler] Triggered:', event.type, event.action);
   // Your logic
 };
 ```
+### 验证资格
 
-### Verify Eligibility
-
-Check why a hook isn't eligible:
-
-```bash
+检查为什么某个钩子不满足资格条件：```bash
 clawdbot hooks info my-hook
 ```
+查找输出中缺失的需求。
 
-Look for missing requirements in the output.
+## 测试
 
-## Testing
+### 网关日志
 
-### Gateway Logs
-
-Monitor gateway logs to see hook execution:
-
-```bash
+监控网关日志以查看钩子执行情况：```bash
 # macOS
 ./scripts/clawlog.sh -f
 
 # Other platforms
 tail -f ~/.clawdbot/gateway.log
 ```
+### 直接测试钩子
 
-### Test Hooks Directly
-
-Test your handlers in isolation:
-
-```typescript
+在隔离状态下测试您的处理程序：```typescript
 import { test } from 'vitest';
 import { createHookEvent } from './src/hooks/hooks.js';
 import myHandler from './hooks/my-hook/handler.js';
@@ -712,24 +580,19 @@ test('my handler works', async () => {
   // Assert side effects
 });
 ```
+## 架构
 
-## Architecture
+### 核心组件
 
-### Core Components
-
-- **`src/hooks/types.ts`**: Type definitions
-- **`src/hooks/workspace.ts`**: Directory scanning and loading
-- **`src/hooks/frontmatter.ts`**: HOOK.md metadata parsing
-- **`src/hooks/config.ts`**: Eligibility checking
-- **`src/hooks/hooks-status.ts`**: Status reporting
-- **`src/hooks/loader.ts`**: Dynamic module loader
-- **`src/cli/hooks-cli.ts`**: CLI commands
-- **`src/gateway/server-startup.ts`**: Loads hooks at gateway start
-- **`src/auto-reply/reply/commands-core.ts`**: Triggers command events
-
-### Discovery Flow
-
-```
+- **`src/hooks/types.ts`**: 类型定义
+- **`src/hooks/workspace.ts`**: 目录扫描与加载
+- **`src/hooks/frontmatter.ts`**: HOOK.md 元数据解析
+- **`src/hooks/config.ts`**: 资格检查
+- **`src/hooks/hooks-status.ts`**: 状态报告
+- **`src/hooks/loader.ts`**: 动态模块加载器
+- **`src/cli/hooks-cli.ts`**: CLI 命令
+- **`src/gateway/server-startup.ts`**: 网关启动时加载钩子
+- **`src/auto-reply/reply/commands-core.ts`**: 触发命令事件```
 Gateway startup
     ↓
 Scan directories (workspace → managed → bundled)
@@ -742,10 +605,7 @@ Load handlers from eligible hooks
     ↓
 Register handlers for events
 ```
-
-### Event Flow
-
-```
+### 事件流程```
 User sends /new
     ↓
 Command validation
@@ -758,73 +618,54 @@ Command processing continues
     ↓
 Session reset
 ```
+## 故障排除
 
-## Troubleshooting
+### 挂钩未被发现
 
-### Hook Not Discovered
-
-1. Check directory structure:
-   ```bash
+1. 检查目录结构：   ```bash
    ls -la ~/.clawdbot/hooks/my-hook/
    # Should show: HOOK.md, handler.ts
    ```
-
-2. Verify HOOK.md format:
-   ```bash
+2. 验证 HOOK.md 格式：   ```bash
    cat ~/.clawdbot/hooks/my-hook/HOOK.md
    # Should have YAML frontmatter with name and metadata
    ```
-
-3. List all discovered hooks:
-   ```bash
+3. 列出所有已发现的钩子：   ```bash
    clawdbot hooks list
    ```
+### 不符合资格的 Hook
 
-### Hook Not Eligible
-
-Check requirements:
-
-```bash
+检查要求：```bash
 clawdbot hooks info my-hook
 ```
+查找缺失项：
+- 二进制文件（检查 PATH）
+- 环境变量
+- 配置值
+- 操作系统兼容性
 
-Look for missing:
-- Binaries (check PATH)
-- Environment variables
-- Config values
-- OS compatibility
+### 钩子未执行
 
-### Hook Not Executing
-
-1. Verify hook is enabled:
-   ```bash
+1. 确认钩子已启用：   ```bash
    clawdbot hooks list
    # Should show ✓ next to enabled hooks
    ```
+2. 重启网关进程以重新加载钩子。
 
-2. Restart your gateway process so hooks reload.
-
-3. Check gateway logs for errors:
-   ```bash
+3. 检查网关日志中的错误：   ```bash
    ./scripts/clawlog.sh | grep hook
    ```
+### 处理器错误
 
-### Handler Errors
-
-Check for TypeScript/import errors:
-
-```bash
+检查 TypeScript/导入错误：```bash
 # Test import directly
 node -e "import('./path/to/handler.ts').then(console.log)"
 ```
+## 迁移指南
 
-## Migration Guide
+### 从旧版配置到发现
 
-### From Legacy Config to Discovery
-
-**Before**:
-
-```json
+**之前**：```json
 {
   "hooks": {
     "internal": {
@@ -839,30 +680,21 @@ node -e "import('./path/to/handler.ts').then(console.log)"
   }
 }
 ```
+**之后**：
 
-**After**:
-
-1. Create hook directory:
-   ```bash
+1. 创建钩子目录：   ```bash
    mkdir -p ~/.clawdbot/hooks/my-hook
    mv ./hooks/handlers/my-handler.ts ~/.clawdbot/hooks/my-hook/handler.ts
    ```
+2. 创建 HOOK.md：---
+name: my-hook
+description: "我的自定义钩子"
+metadata: {"clawdbot":{"emoji":"🎯","events":["command:new"]}}
+---
 
-2. Create HOOK.md:
-   ```markdown
-   ---
-   name: my-hook
-   description: "My custom hook"
-   metadata: {"clawdbot":{"emoji":"🎯","events":["command:new"]}}
-   ---
+# 我的钩子
 
-   # My Hook
-
-   Does something useful.
-   ```
-
-3. Update config:
-   ```json
+做些有用的事情。3. 更新配置：   ```json
    {
      "hooks": {
        "internal": {
@@ -874,23 +706,20 @@ node -e "import('./path/to/handler.ts').then(console.log)"
      }
    }
    ```
-
-4. Verify and restart your gateway process:
-   ```bash
+4. 验证并重启网关进程：   ```bash
    clawdbot hooks list
    # Should show: 🎯 my-hook ✓
    ```
+**迁移的优势**：
+- 自动发现
+- CLI 管理
+- 资格检查
+- 更好的文档
+- 一致的结构
 
-**Benefits of migration**:
-- Automatic discovery
-- CLI management
-- Eligibility checking
-- Better documentation
-- Consistent structure
+## 相关内容
 
-## See Also
-
-- [CLI Reference: hooks](/cli/hooks)
-- [Bundled Hooks README](https://github.com/clawdbot/clawdbot/tree/main/src/hooks/bundled)
-- [Webhook Hooks](/automation/webhook)
-- [Configuration](/gateway/configuration#hooks)
+- [CLI 参考：钩子](/cli/hooks)
+- [内置钩子 README](https://github.com/clawdbot/clawdbot/tree/main/src/hooks/bundled)
+- [Webhook 钩子](/automation/webhook)
+- [配置](/gateway/configuration#hooks)
