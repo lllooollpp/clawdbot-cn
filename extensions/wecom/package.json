@@ -1,0 +1,22 @@
+{
+  "name": "@clawdbot/extension-wecom",
+  "version": "1.0.0",
+  "description": "WeCom (Enterprise WeChat) channel extension for Clawdbot",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "fast-xml-parser": "^4.3.2"
+  },
+  "devDependencies": {
+    "clawdbot": "workspace:*"
+  },
+  "clawdbot": {
+    "plugin": {
+      "id": "wecom",
+      "name": "WeCom (企业微信)",
+      "description": "Enterprise WeChat (WeCom) integration",
+      "icon": "chat"
+    }
+  }
+}

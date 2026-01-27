@@ -791,3 +791,49 @@ export const FeishuConfigSchema = FeishuAccountSchema.extend({
     message: 'channels.feishu.dmPolicy="open" requires channels.feishu.allowFrom to include "*"',
   });
 });
+
+export const WeComGroupSchema = z
+  .object({
+    requireMention: z.boolean().optional(),
+    tools: ToolPolicySchema,
+    skills: z.array(z.string()).optional(),
+    enabled: z.boolean().optional(),
+    systemPrompt: z.string().optional(),
+  })
+  .strict();
+
+export const WeComAccountSchema = z
+  .object({
+    name: z.string().optional(),
+    enabled: z.boolean().optional(),
+    corpId: z.string().optional(),
+    agentId: z.string().optional(),
+    secret: z.string().optional(),
+    token: z.string().optional(),
+    encodingAesKey: z.string().optional(),
+    markdown: MarkdownConfigSchema,
+    dmPolicy: DmPolicySchema.optional().default("pairing"),
+    allowFrom: z.array(z.string()).optional(),
+    groupPolicy: GroupPolicySchema.optional().default("allowlist"),
+    groups: z.record(z.string(), WeComGroupSchema.optional()).optional(),
+    historyLimit: z.number().int().min(0).optional(),
+    dmHistoryLimit: z.number().int().min(0).optional(),
+    textChunkLimit: z.number().int().positive().optional(),
+    mediaMaxMb: z.number().positive().optional(),
+    heartbeat: ChannelHeartbeatVisibilitySchema,
+    webhookPath: z.string().optional(),
+  })
+  .strict();
+
+export const WeComConfigSchema = WeComAccountSchema.extend({
+  accounts: z.record(z.string(), WeComAccountSchema.optional()).optional(),
+  defaultAccount: z.string().optional(),
+}).superRefine((value, ctx) => {
+  requireOpenAllowFrom({
+    policy: value.dmPolicy,
+    allowFrom: value.allowFrom,
+    ctx,
+    path: ["allowFrom"],
+    message: 'channels.wecom.dmPolicy="open" requires channels.wecom.allowFrom to include "*"',
+  });
+});

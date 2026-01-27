@@ -2,6 +2,8 @@ title: "Clawdbot Docs"
 description: "A TypeScript/Node gateway + macOS/iOS/Android companions for WhatsApp (web) and Telegram (bot)."
 markdown: kramdown
 highlighter: rouge
+encoding: utf-8
+permalink: pretty
 
 # Keep GitHub Pages' default page URLs (e.g. /gateway.html). Many docs links
 # are written as relative *.md links and are rewritten during the build.

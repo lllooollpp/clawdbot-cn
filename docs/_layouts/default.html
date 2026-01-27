@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>
+      {% if page.url == "/" %}{{ site.title }}{% else %}{{ page.title | default: page.path | split: "/" | last | replace: ".md", "" }} · {{ site.title }}{% endif %}
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Fragment+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem("clawdbot:theme");
+          if (stored === "light" || stored === "dark") document.documentElement.dataset.theme = stored;
+        } catch {
+          // 忽略错误
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ "/assets/modern.css" | relative_url }}" />
+    <script defer src="{{ "/assets/theme.js" | relative_url }}"></script>
+  </head>
+
+  <body>
+    <div class="app-container">
+      <aside class="sidebar">
+        <a href="{{ "/" | relative_url }}" class="brand">
+          <img class="brand-logo" src="{{ "/assets/pixel-lobster.svg" | relative_url }}" alt="Logo">
+          <span class="brand-name">Clawdbot</span>
+        </a>
+
+        <nav class="nav-tree">
+          {% for group in site.data.navigation %}
+            <div class="nav-group">
+              <div class="nav-group-title">{{ group.group }}</div>
+              {% for page_name in group.pages %}
+                {% if page_name == "index" %}
+                  {% assign p_url = "/" %}
+                  {% assign p_path = "index.md" %}
+                {% else %}
+                  {% assign p_url = "/" | append: page_name | append: "/" %}
+                  {% assign p_path = page_name | append: ".md" %}
+                {% endif %}
+                
+                {% assign nav_page = site.pages | where: "path", p_path | first %}
+                
+                <a href="{{ p_url | relative_url }}" class="nav-link{% if page.url == p_url %} active{% endif %}">
+                  {{ nav_page.title | default: page_name | split: "/" | last | capitalize | replace: "-", " " }}
+                </a>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </nav>
+
+        <button class="theme-toggle-btn" data-theme-toggle>切换主题</button>
+      </aside>
+
+      <main class="main-content">
+        <article class="markdown-body">
+          {{ content }}
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

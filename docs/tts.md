@@ -206,15 +206,6 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
 
 示例回复内容：
 json
-"  ,根据输入  帮我翻译成中文，输出要md格式的； 
-
-注意： ```md      ```  包裹起来；
-no_think
-``````
-Here you go.
-
-[[tts:provider=elevenlabs voiceId=pMsXgVXv3BLzUgSXRplE model=eleven_v3 speed=1.1]]
-[[tts:text]](laughs) Read the song once more.[[/tts:text]]
 ```
 可用的指令键（启用后）：
 - `provider`（`openai` | `elevenlabs` | `edge`）

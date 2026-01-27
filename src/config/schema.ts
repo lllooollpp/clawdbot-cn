@@ -342,6 +342,15 @@ const FIELD_LABELS: Record<string, string> = {
   "channels.feishu.webhookPath": "Webhook 路径",
   "channels.feishu.dmPolicy": "私聊策略",
   "channels.feishu.groupPolicy": "群聊策略",
+  "channels.wecom": "企业微信 (WeCom)",
+  "channels.wecom.corpId": "企业 ID (CorpID)",
+  "channels.wecom.agentId": "应用 Agent ID",
+  "channels.wecom.secret": "应用 Secret",
+  "channels.wecom.token": "接收消息 Token",
+  "channels.wecom.encodingAesKey": "消息加解密 Key",
+  "channels.wecom.webhookPath": "Webhook 路径",
+  "channels.wecom.dmPolicy": "私聊策略",
+  "channels.wecom.groupPolicy": "群聊策略",
   "channels.imessage.cliPath": "iMessage CLI 路径",
   "plugins.enabled": "启用插件",
   "plugins.allow": "插件允许名单",
@@ -383,19 +392,14 @@ const FIELD_HELP: Record<string, string> = {
   "update.channel": '检查更新的目标渠道 ("stable", "beta" 或 "dev")。',
   "update.checkOnStart": "启动时自动检查更新 (默认: true)。",
   "gateway.remote.url": "远程网关连接地址 (支持 ws:// 或 wss://)。",
-  "gateway.remote.tlsFingerprint":
-    "远程网关的 SHA256 指纹，用于增强连接安全性。",
-  "gateway.remote.sshTarget":
-    "通过 SSH 建立网关隧道（格式: 用户@主机 或 用户@主机:端口）。",
+  "gateway.remote.tlsFingerprint": "远程网关的 SHA256 指纹，用于增强连接安全性。",
+  "gateway.remote.sshTarget": "通过 SSH 建立网关隧道（格式: 用户@主机 或 用户@主机:端口）。",
   "gateway.remote.sshIdentity": "可选的 SSH 私钥文件路径 (用于 ssh -i)。",
-  "agents.list.*.identity.avatar":
-    "智能体头像。支持本地路径、远程链接或 Base64 字符串。",
+  "agents.list.*.identity.avatar": "智能体头像。支持本地路径、远程链接或 Base64 字符串。",
   "gateway.auth.token": "网关通信令牌。非本地回环地址访问时必须设置。",
   "gateway.auth.password": "网关登录密码 (Tailscale Funnel 模式下必需)。",
-  "gateway.controlUi.basePath":
-    "控制台网页的访问前缀 (例如 /clawdbot)。",
-  "gateway.controlUi.allowInsecureAuth":
-    "允许通过非 HTTPS 环境进行登录 (仅支持 Token，不推荐)。",
+  "gateway.controlUi.basePath": "控制台网页的访问前缀 (例如 /clawdbot)。",
+  "gateway.controlUi.allowInsecureAuth": "允许通过非 HTTPS 环境进行登录 (仅支持 Token，不推荐)。",
   "gateway.http.endpoints.chatCompletions.enabled":
     "启用兼容 OpenAI 的 `/v1/chat/completions` 接口 (默认: false)。",
   "gateway.reload.mode": '配置重载策略 (推荐使用 "hybrid")。',
@@ -403,44 +407,29 @@ const FIELD_HELP: Record<string, string> = {
   "gateway.nodes.browser.mode":
     '网页节点路由模式 ("auto" 自动选择, "manual" 手动指定, "off" 禁用)。',
   "gateway.nodes.browser.node": "固定某个特定的网页节点 ID。",
-  "gateway.nodes.allowCommands":
-    "允许跨节点调用的自定义命令列表。",
-  "gateway.nodes.denyCommands":
-    "明文禁止的节点操作命令。",
+  "gateway.nodes.allowCommands": "允许跨节点调用的自定义命令列表。",
+  "gateway.nodes.denyCommands": "明文禁止的节点操作命令。",
   "nodeHost.browserProxy.enabled": "启用本地浏览器控制代理服务。",
-  "nodeHost.browserProxy.allowProfiles":
-    "允许通过代理公开的浏览器配置文件列表。",
-  "diagnostics.flags":
-    '诊断日志开关 (例如 ["telegram.http"])。支持通配符 *。',
-  "diagnostics.cacheTrace.enabled":
-    "记录智能体运行时的缓存追踪快照 (用于故障分析)。",
+  "nodeHost.browserProxy.allowProfiles": "允许通过代理公开的浏览器配置文件列表。",
+  "diagnostics.flags": '诊断日志开关 (例如 ["telegram.http"])。支持通配符 *。',
+  "diagnostics.cacheTrace.enabled": "记录智能体运行时的缓存追踪快照 (用于故障分析)。",
   "diagnostics.cacheTrace.filePath":
     "快照存储路径 (默认 $CLAWDBOT_STATE_DIR/logs/cache-trace.jsonl)。",
-  "diagnostics.cacheTrace.includeMessages":
-    "快照中是否包含消息原文 (默认: true)。",
+  "diagnostics.cacheTrace.includeMessages": "快照中是否包含消息原文 (默认: true)。",
   "diagnostics.cacheTrace.includePrompt": "快照中是否包含生成提示词 (默认: true)。",
   "diagnostics.cacheTrace.includeSystem": "快照中是否包含系统指令 (默认: true)。",
-  "tools.exec.applyPatch.enabled":
-    "启用代码补丁自动应用功能 (实验性)。",
-  "tools.exec.applyPatch.allowModels":
-    '允许应用补丁的模型 ID (例如 "gpt-4o")。',
-  "tools.exec.notifyOnExit":
-    "后台会话退出时在主渠道发送通知回复 (默认: true)。",
+  "tools.exec.applyPatch.enabled": "启用代码补丁自动应用功能 (实验性)。",
+  "tools.exec.applyPatch.allowModels": '允许应用补丁的模型 ID (例如 "gpt-4o")。',
+  "tools.exec.notifyOnExit": "后台会话退出时在主渠道发送通知回复 (默认: true)。",
   "tools.exec.pathPrepend": "运行命令时临时追加到环境变量 PATH 的目录。",
-  "tools.exec.safeBins":
-    "允许跨平台运行仅 stdin 的二进制文件，无需显式加入允许列表。",
-  "tools.message.allowCrossContextSend":
-    "旧版覆盖：允许所有服务商之间的跨上下文发送。",
+  "tools.exec.safeBins": "允许跨平台运行仅 stdin 的二进制文件，无需显式加入允许列表。",
+  "tools.message.allowCrossContextSend": "旧版覆盖：允许所有服务商之间的跨上下文发送。",
   "tools.message.crossContext.allowWithinProvider":
     "允许在同一个服务商内部向其他频道发送（默认：true）。",
-  "tools.message.crossContext.allowAcrossProviders":
-    "允许向不同服务商的频道发送（默认：false）。",
-  "tools.message.crossContext.marker.enabled":
-    "跨上下文发送时添加可见的来源标记（默认：true）。",
-  "tools.message.crossContext.marker.prefix":
-    '跨上下文标记的前缀文本（支持 "{channel}"）。',
-  "tools.message.crossContext.marker.suffix":
-    '跨上下文标记的后缀文本（支持 "{channel}"）。',
+  "tools.message.crossContext.allowAcrossProviders": "允许向不同服务商的频道发送（默认：false）。",
+  "tools.message.crossContext.marker.enabled": "跨上下文发送时添加可见的来源标记（默认：true）。",
+  "tools.message.crossContext.marker.prefix": '跨上下文标记的前缀文本（支持 "{channel}"）。',
+  "tools.message.crossContext.marker.suffix": '跨上下文标记的后缀文本（支持 "{channel}"）。',
   "tools.message.broadcast.enabled": "启用广播操作（默认：true）。",
   "tools.web.search.enabled": "启用 web_search 工具（需要特定的 API 密钥）。",
   "tools.web.search.provider": '搜索预测服务商 ("brave" 或 "perplexity")。',
@@ -452,8 +441,7 @@ const FIELD_HELP: Record<string, string> = {
     "Perplexity 或 OpenRouter API 密钥（备选：PERPLEXITY_API_KEY 或 OPENROUTER_API_KEY 环境变量）。",
   "tools.web.search.perplexity.baseUrl":
     "Perplexity 基础 URL（默认：https://openrouter.ai/api/v1 或 https://api.perplexity.ai）。",
-  "tools.web.search.perplexity.model":
-    'Perplexity 模型（默认："perplexity/sonar-pro"）。',
+  "tools.web.search.perplexity.model": 'Perplexity 模型（默认："perplexity/sonar-pro"）。',
   "tools.web.fetch.enabled": "启用 web_fetch 工具（轻量级 HTTP 抓取）。",
   "tools.web.fetch.maxChars": "web_fetch 返回的最大字符数（将被截断）。",
   "tools.web.fetch.timeoutSeconds": "web_fetch 请求的超时时间（秒）。",
@@ -468,45 +456,44 @@ const FIELD_HELP: Record<string, string> = {
     "Firecrawl 基础 URL（例如 https://api.firecrawl.dev 或自定义节点）。",
   "tools.web.fetch.firecrawl.onlyMainContent":
     "如果为 true，Firecrawl 仅返回主要内容（默认：true）。",
-  "tools.web.fetch.firecrawl.maxAgeMs":
-    "Firecrawl 缓存结果的最大有效期 (毫秒)。",
+  "tools.web.fetch.firecrawl.maxAgeMs": "Firecrawl 缓存结果的最大有效期 (毫秒)。",
   "tools.web.fetch.firecrawl.timeoutSeconds": "Firecrawl 请求的超时时间（秒）。",
-  "channels.slack.allowBots":
-    "允许机器人消息触发 Slack 回复（默认：false）。",
+  "channels.slack.allowBots": "允许机器人消息触发 Slack 回复（默认：false）。",
   "channels.slack.thread.historyScope":
     'Slack 线程历史的作用域 ("thread" 独立于线程；"channel" 重用频道历史)。',
   "channels.slack.thread.inheritParent":
     "如果为 true，Slack 线程会話将继承父频道的转录内容（默认：false）。",
-  "channels.mattermost.botToken":
-    "来自 Mattermost 系统控制台 -> 集成 -> 机器人账号的 Token。",
+  "channels.mattermost.botToken": "来自 Mattermost 系统控制台 -> 集成 -> 机器人账号的 Token。",
   "channels.feishu.appId": "飞书自建应用的 App ID。",
   "channels.feishu.appSecret": "飞书自建应用的 App Secret。",
   "channels.feishu.encryptKey": "可选：飞书事件订阅的 Encrypt Key (如果启用了加密)。",
-  "channels.feishu.verificationToken": "可选：飞书事件订阅的 Verification Token (用于验证请求来源)。",
+  "channels.feishu.verificationToken":
+    "可选：飞书事件订阅的 Verification Token (用于验证请求来源)。",
   "channels.feishu.webhookPath": "可选：飞书 Webhook 接收路径 (默认: /feishu/events)。",
-  "channels.mattermost.baseUrl":
-    "Mattermost 服务器的基础 URL（例如：https://chat.example.com）。",
+  "channels.wecom.corpId": "企业微信的 企业 ID (CorpID)。",
+  "channels.wecom.agentId": "企业微信自建应用的 Agent ID。",
+  "channels.wecom.secret": "企业微信自建应用的 Secret。",
+  "channels.wecom.token": "可选：用于接收企业微信回调消息的 Token。",
+  "channels.wecom.encodingAesKey": "可选：用于接收企业微信消息加解密的 EncodingAESKey。",
+  "channels.wecom.webhookPath": "可选：企业微信 Webhook 接收路径 (默认: /wecom/events)。",
+  "channels.mattermost.baseUrl": "Mattermost 服务器的基础 URL（例如：https://chat.example.com）。",
   "channels.mattermost.chatmode":
     '回复模式：被提及时回复 ("oncall")，触发字符 (">" 或 "!") 时回复 ("onchar")，或者回复每条消息 ("onmessage")。',
   "channels.mattermost.oncharPrefixes": 'onchar 模式下的触发前缀（默认：[">", "!"]）。',
-  "channels.mattermost.requireMention":
-    "在频道中响应前是否需要 @提及（默认：true）。",
+  "channels.mattermost.requireMention": "在频道中响应前是否需要 @提及（默认：true）。",
   "auth.profiles": "命名的身份验证配置文件（服务商 + 模式 + 可选邮箱）。",
   "auth.order": "每个服务商排序后的身份验证配置文件 ID（用于自动故障转移）。",
   "auth.cooldowns.billingBackoffHours":
     "当配置文件因计费或余额不足失败时的基础退避时间（小时）（默认：5）。",
-  "auth.cooldowns.billingBackoffHoursByProvider":
-    "不同服务商的可选计费退避时间覆盖（小时）。",
+  "auth.cooldowns.billingBackoffHoursByProvider": "不同服务商的可选计费退避时间覆盖（小时）。",
   "auth.cooldowns.billingMaxHours": "计费退避时间上限（小时）（默认：24）。",
   "auth.cooldowns.failureWindowHours": "退避计数器的失败窗口时间（小时）（默认：24）。",
   "agents.defaults.bootstrapMaxChars":
     "在截断前注入到系统提示词中的每个工作区引导文件的最大字符数（默认：20000）。",
-  "agents.defaults.repoRoot":
-    "系统提示词运行时行中显示的可选仓库根路径（覆盖自动检测）。",
+  "agents.defaults.repoRoot": "系统提示词运行时行中显示的可选仓库根路径（覆盖自动检测）。",
   "agents.defaults.envelopeTimezone":
     '消息信封的时区 ("utc", "local", "user" 或 IANA 时区字符串)。',
-  "agents.defaults.envelopeTimestamp":
-    '消息信封中是否包含绝对时间戳 ("on" 或 "off")。',
+  "agents.defaults.envelopeTimestamp": '消息信封中是否包含绝对时间戳 ("on" 或 "off")。',
   "agents.defaults.envelopeElapsed": '消息信封中是否包含经过的时间 ("on" 或 "off")。',
   "agents.defaults.models": "配置的模型目录（键为完整的 服务商/模型 ID）。",
   "agents.defaults.memorySearch":
@@ -523,8 +510,7 @@ const FIELD_HELP: Record<string, string> = {
     "远程 Embedding 的额外标头（将进行合并；远程覆盖 OpenAI 标头）。",
   "agents.defaults.memorySearch.remote.batch.enabled":
     "启用记忆 Embedding 的批量 API（OpenAI/Gemini；默认：true）。",
-  "agents.defaults.memorySearch.remote.batch.wait":
-    "索引时等待批量完成（默认：true）。",
+  "agents.defaults.memorySearch.remote.batch.wait": "索引时等待批量完成（默认：true）。",
   "agents.defaults.memorySearch.remote.batch.concurrency":
     "记忆索引的最大并发嵌入批量作业数（默认：2）。",
   "agents.defaults.memorySearch.remote.batch.pollIntervalMs":
@@ -543,8 +529,7 @@ const FIELD_HELP: Record<string, string> = {
     "Optional override path to sqlite-vec extension library (.dylib/.so/.dll).",
   "agents.defaults.memorySearch.query.hybrid.enabled":
     "为记忆启用混合 BM25 + 向量搜索 (默认: true)。",
-  "agents.defaults.memorySearch.query.hybrid.vectorWeight":
-    "合并结果时向量相似度的权重 (0-1)。",
+  "agents.defaults.memorySearch.query.hybrid.vectorWeight": "合并结果时向量相似度的权重 (0-1)。",
   "agents.defaults.memorySearch.query.hybrid.textWeight":
     "Merged weight for BM25 text relevance (0-1).",
   "agents.defaults.memorySearch.query.hybrid.candidateMultiplier":
@@ -553,8 +538,7 @@ const FIELD_HELP: Record<string, string> = {
     "在 SQLite 中缓存块 Embedding 以加速重新索引和频繁更新 (默认: true)。",
   "agents.defaults.memorySearch.cache.maxEntries":
     "Optional cap on cached embeddings (best-effort).",
-  "agents.defaults.memorySearch.sync.onSearch":
-    "懒加载同步：在搜索后根据变更调度重新索引。",
+  "agents.defaults.memorySearch.sync.onSearch": "懒加载同步：在搜索后根据变更调度重新索引。",
   "agents.defaults.memorySearch.sync.watch": "监听记忆文件更改 (chokidar)。",
   "agents.defaults.memorySearch.sync.sessions.deltaBytes":
     "在会话记录触发重新索引前所需的最小追加字节数（默认：100000）。",
@@ -565,23 +549,19 @@ const FIELD_HELP: Record<string, string> = {
   "plugins.deny": "可选的插件 ID 拒绝列表；拒绝优先于允许列表。",
   "plugins.load.paths": "要加载的其他插件文件或目录。",
   "plugins.slots": "选择哪些插件拥有独占插槽（例如：记忆插件）。",
-  "plugins.slots.memory":
-    '通过 ID 选择活动的记忆插件，或设为 "none" 以禁用记忆插件。',
+  "plugins.slots.memory": '通过 ID 选择活动的记忆插件，或设为 "none" 以禁用记忆插件。',
   "plugins.entries": "按插件 ID 指定的设置（启用/禁用 + 配置负载）。",
   "plugins.entries.*.enabled": "为此条目覆盖插件的启用/禁用设置（需要重启）。",
   "plugins.entries.*.config": "插件定义的配置负载（由插件提供架构）。",
-  "plugins.installs":
-    "CLI 管理的安装元数据（由 `clawdbot plugins update` 用于定位安装源）。",
+  "plugins.installs": "CLI 管理的安装元数据（由 `clawdbot plugins update` 用于定位安装源）。",
   "plugins.installs.*.source": '安装源 ("npm", "archive" 或 "path")。',
   "plugins.installs.*.spec": "安装时使用的原始 npm 规范（如果来源是 npm）。",
   "plugins.installs.*.sourcePath": "用于安装的原始存档或路径（如果有）。",
-  "plugins.installs.*.installPath":
-    "解析后的安装目录（通常为 ~/.clawdbot/extensions/<id>）。",
+  "plugins.installs.*.installPath": "解析后的安装目录（通常为 ~/.clawdbot/extensions/<id>）。",
   "plugins.installs.*.version": "安装时记录的版本号（如果有）。",
   "plugins.installs.*.installedAt": "最后一次安装/更新的 ISO 时间戳。",
   "agents.defaults.model.primary": "主模型 (provider/model).",
-  "agents.defaults.model.fallbacks":
-    "有序的回退模型 (服务商/模型)。用于主模型失败时。",
+  "agents.defaults.model.fallbacks": "有序的回退模型 (服务商/模型)。用于主模型失败时。",
   "agents.defaults.imageModel.primary":
     "可选的图像模型 (服务商/模型)，当主模型不支持图像输入时使用。",
   "agents.defaults.imageModel.fallbacks": "有序的回退图像模型 (服务商/模型)。",
@@ -589,15 +569,12 @@ const FIELD_HELP: Record<string, string> = {
   "agents.defaults.humanDelay.mode": '回复延迟风格 ("off", "natural", "custom")。',
   "agents.defaults.humanDelay.minMs": "自定义延迟的最小毫秒数 (默认: 800)。",
   "agents.defaults.humanDelay.maxMs": "自定义延迟的最大毫秒数 (默认: 2500)。",
-  "commands.native":
-    "在支持的频道 (Discord/Slack/Telegram) 中注册原生命令。",
-  "commands.nativeSkills":
-    "在支持的频道中注册原生技能命令 (用户可调用的技能)。",
+  "commands.native": "在支持的频道 (Discord/Slack/Telegram) 中注册原生命令。",
+  "commands.nativeSkills": "在支持的频道中注册原生技能命令 (用户可调用的技能)。",
   "commands.text": "允许解析文本命令 (仅限斜杠命令)。",
   "commands.bash":
     "允许 bash 聊天命令 (`!`; `/bash` 别名) 运行宿主机外壳命令 (默认: false; 需要 tools.elevated)。",
-  "commands.bashForegroundMs":
-    "bash 在后台运行前的等待时长 (默认: 2000; 0 表示立即转入后台)。",
+  "commands.bashForegroundMs": "bash 在后台运行前的等待时长 (默认: 2000; 0 表示立即转入后台)。",
   "commands.config": "允许 /config 聊天命令读写磁盘上的配置 (默认: false)。",
   "commands.debug": "允许 /debug 聊天命令进行仅限运行时的覆盖 (默认: false)。",
   "commands.restart": "允许 /restart 和 gateway 重启工具操作 (默认: false)。",
@@ -606,33 +583,21 @@ const FIELD_HELP: Record<string, string> = {
     '私聊会话作用域: "main" 保持连续性; "per-peer" 或 "per-channel-peer" 隔离私聊历史 (建议用于共享收件箱)。',
   "session.identityLinks":
     "将规范身份映射到带有服务商前缀的 Peer ID 以进行私聊会话链接 (例如: telegram:123456)。",
-  "channels.telegram.configWrites":
-    "允许 Telegram 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.slack.configWrites":
-    "允许 Slack 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.mattermost.configWrites":
-    "允许 Mattermost 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.discord.configWrites":
-    "允许 Discord 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.whatsapp.configWrites":
-    "允许 WhatsApp 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.signal.configWrites":
-    "允许 Signal 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.imessage.configWrites":
-    "允许 iMessage 响应频道事件/命令读写配置 (默认: true)。",
-  "channels.msteams.configWrites":
-    "允许 Microsoft Teams 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.telegram.configWrites": "允许 Telegram 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.slack.configWrites": "允许 Slack 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.mattermost.configWrites": "允许 Mattermost 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.discord.configWrites": "允许 Discord 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.whatsapp.configWrites": "允许 WhatsApp 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.signal.configWrites": "允许 Signal 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.imessage.configWrites": "允许 iMessage 响应频道事件/命令读写配置 (默认: true)。",
+  "channels.msteams.configWrites": "允许 Microsoft Teams 响应频道事件/命令读写配置 (默认: true)。",
   "channels.discord.commands.native": '覆盖 Discord 的原生命令 (布尔值或 "auto")。',
-  "channels.discord.commands.nativeSkills":
-    '覆盖 Discord 的原生技能命令 (布尔值或 "auto")。',
+  "channels.discord.commands.nativeSkills": '覆盖 Discord 的原生技能命令 (布尔值或 "auto")。',
   "channels.telegram.commands.native": '覆盖 Telegram 的原生命令 (布尔值或 "auto")。',
-  "channels.telegram.commands.nativeSkills":
-    '覆盖 Telegram 的原生技能命令 (布尔值或 "auto")。',
+  "channels.telegram.commands.nativeSkills": '覆盖 Telegram 的原生技能命令 (布尔值或 "auto")。',
   "channels.slack.commands.native": '覆盖 Slack 的原生命令 (布尔值或 "auto")。',
-  "channels.slack.commands.nativeSkills":
-    '覆盖 Slack 的原生技能命令 (布尔值或 "auto")。',
-  "session.agentToAgent.maxPingPongTurns":
-    "请求者与目标之间的最大往返回复次数 (0–5)。",
+  "channels.slack.commands.nativeSkills": '覆盖 Slack 的原生技能命令 (布尔值或 "auto")。',
+  "session.agentToAgent.maxPingPongTurns": "请求者与目标之间的最大往返回复次数 (0–5)。",
   "channels.telegram.customCommands":
     "额外的 Telegram 机器人菜单命令 (与原生命令合并; 冲突将被忽略)。",
   "messages.ackReaction": "用于确认收到消息的表情符号回应 (为空则禁用)。",
@@ -650,14 +615,11 @@ const FIELD_HELP: Record<string, string> = {
     '在 channels.telegram.streamMode="block" 时 Telegram 草稿更新块的目标最大大小 (默认: 800; 受限于 channels.telegram.textChunkLimit)。',
   "channels.telegram.draftChunk.breakPreference":
     "Telegram 草稿块的首选分断点 (paragraph | newline | sentence)。默认: paragraph。",
-  "channels.telegram.retry.attempts":
-    "Telegram API 调用失败时的最大重试次数 (默认: 3)。",
+  "channels.telegram.retry.attempts": "Telegram API 调用失败时的最大重试次数 (默认: 3)。",
   "channels.telegram.retry.minDelayMs": "Telegram API 调用重试的最小延迟 (毫秒)。",
-  "channels.telegram.retry.maxDelayMs":
-    "Telegram API 调用重试的最大延迟上限 (毫秒)。",
+  "channels.telegram.retry.maxDelayMs": "Telegram API 调用重试的最大延迟上限 (毫秒)。",
   "channels.telegram.retry.jitter": "应用于 Telegram 重试延迟的抖动因子 (0-1)。",
-  "channels.telegram.timeoutSeconds":
-    "Telegram API 请求超时秒数 (默认: 500)。",
+  "channels.telegram.timeoutSeconds": "Telegram API 请求超时秒数 (默认: 500)。",
   "channels.whatsapp.dmPolicy":
     '私聊访问控制 (建议使用 "pairing")。"open" 需要 channels.whatsapp.allowFrom=["*"]。',
   "channels.whatsapp.selfChatMode": "同机模式 (机器人使用你个人的 WhatsApp 号码)。",
@@ -671,23 +633,25 @@ const FIELD_HELP: Record<string, string> = {
     '私聊访问控制 (建议使用 "pairing")。"open" 需要 channels.bluebubbles.allowFrom=["*"]。',
   "channels.discord.dm.policy":
     '私聊访问控制 (建议使用 "pairing")。"open" 需要 channels.discord.dm.allowFrom=["*"]。',
-  "channels.discord.retry.attempts":
-    "Discord API 调用失败时的最大重试次数 (默认: 3)。",
+  "channels.discord.retry.attempts": "Discord API 调用失败时的最大重试次数 (默认: 3)。",
   "channels.discord.retry.minDelayMs": "Discord API 调用重试的最小延迟 (毫秒)。",
-  "channels.discord.retry.maxDelayMs":
-    "Discord API 调用重试的最大延迟上限 (毫秒)。",
+  "channels.discord.retry.maxDelayMs": "Discord API 调用重试的最大延迟上限 (毫秒)。",
   "channels.discord.retry.jitter": "应用于 Discord 重试延迟的抖动因子 (0-1)。",
   "channels.discord.maxLinesPerMessage": "单条 Discord 消息的最大行数 (默认: 17)。",
   "channels.slack.dm.policy":
     '私聊访问控制 (建议使用 "pairing")。"open" 需要 channels.slack.dm.allowFrom=["*"]。',
-  "models.mode": "模型配置的合并策略（'merge' 将新模型添加到默认列表中；'replace' 则完全替换默认列表）。",
-  "models.providers": "配置自定义 LLM 供应商。键名为供应商标识符（如 'openai', 'anthropic', 'zhipu' 等）。",
-  "models.providers.*.baseUrl": "API 服务的基础 URL。对于 OpenAI 兼容服务，应包含到 v1 或类似的末尾。",
+  "models.mode":
+    "模型配置的合并策略（'merge' 将新模型添加到默认列表中；'replace' 则完全替换默认列表）。",
+  "models.providers":
+    "配置自定义 LLM 供应商。键名为供应商标识符（如 'openai', 'anthropic', 'zhipu' 等）。",
+  "models.providers.*.baseUrl":
+    "API 服务的基础 URL。对于 OpenAI 兼容服务，应包含到 v1 或类似的末尾。",
   "models.providers.*.apiKey": "访问该供应商 API 时使用的密钥（不填则尝试从环境变量读取）。",
   "models.providers.*.models": "在此供应商下定义的一组模型及其能力。",
   "models.providers.*.models.*.id": "模型在 API 中的真实 ID（例如 'gpt-4o' 或 'glm-4-flash'）。",
   "models.providers.*.models.*.name": "在界面上显示的友好名称。",
-  "models.bedrockDiscovery.enabled": "是否自动探测并添加 AWS Bedrock 中已授权的模型（需要 AWS SDK 凭证）。",
+  "models.bedrockDiscovery.enabled":
+    "是否自动探测并添加 AWS Bedrock 中已授权的模型（需要 AWS SDK 凭证）。",
 };
 
 const FIELD_PLACEHOLDERS: Record<string, string> = {

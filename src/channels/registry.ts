@@ -13,6 +13,7 @@ export const CHAT_CHANNEL_ORDER = [
   "signal",
   "imessage",
   "feishu",
+  "wecom",
 ] as const;
 
 export type ChatChannelId = (typeof CHAT_CHANNEL_ORDER)[number];
@@ -108,6 +109,16 @@ const CHAT_CHANNEL_META: Record<ChatChannelId, ChannelMeta> = {
     docsLabel: "feishu",
     blurb: "可以通过飞书开放平台 Webhook 进行消息收发。",
     systemImage: "send",
+  },
+  wecom: {
+    id: "wecom",
+    label: "企业微信",
+    selectionLabel: "企业微信 (WeCom)",
+    detailLabel: "企业微信",
+    docsPath: "/channels/wecom",
+    docsLabel: "wecom",
+    blurb: "可以通过企业微信自建应用 Webhook 进行消息收发。",
+    systemImage: "bubble.left.and.bubble.right",
   },
 };
 

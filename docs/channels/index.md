@@ -15,9 +15,10 @@ Clawdbot 可以在你已有的任何聊天应用上与你交流。每个频道�
 - [WhatsApp](/channels/whatsapp) — 最受欢迎的；使用 Baileys 并需要二维码配对。  
 - [Telegram](/channels/telegram) — 通过 grammY 的 Bot API；支持群组。  
 - [Discord](/channels/discord) — Discord Bot API + 网关；支持服务器、频道和私信。  
-- [Feishu (飞书)](/channels/feishu) — 通过飞书开放平台 Webhook 集成；支持私信和群组。  
 - [Slack](/channels/slack) — Bolt SDK；工作区应用。  
 - [Google Chat](/channels/googlechat) — 通过 HTTP webhook 的 Google Chat API 应用。  
+- [飞书 (Feishu/Lark)](/channels/feishu) — 通过飞书自建应用集成。
+- [企业微信 (WeCom)](/channels/wecom) — 通过企业微信自建应用集成。
 - [Mattermost](/channels/mattermost) — Bot API + WebSocket；支持频道、群组和私信（插件，需单独安装）。  
 - [Signal](/channels/signal) — signal-cli；注重隐私。  
 - [BlueBubbles](/channels/bluebubbles) — **推荐用于 iMessage**；使用 BlueBubbles macOS 服务器的 REST API，支持完整功能（编辑、撤回、特效、表情、群组管理 — macOS 26 Tahoe 上的编辑功能目前存在问题）。  

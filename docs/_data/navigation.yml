@@ -1,0 +1,158 @@
+- group: 从这里开始
+  pages:
+    - start/getting-started
+    - start/onboarding
+    - start/wizard
+    - start/setup
+    - help
+    - gateway/configuration
+    - gateway/configuration-examples
+    - start/clawd
+    - start/showcase
+    - start/lore
+- group: 安装与更新
+  pages:
+    - install/docker
+    - install/nix
+    - install/updating
+    - install/bun
+- group: 核心概念
+  pages:
+    - concepts/architecture
+    - network
+    - concepts/agent
+    - concepts/agent-workspace
+    - concepts/memory
+    - concepts/agent-loop
+    - concepts/streaming
+    - concepts/multi-agent
+    - concepts/compaction
+    - concepts/session
+    - concepts/sessions
+    - concepts/session-pruning
+    - concepts/session-tool
+    - concepts/queue
+    - tools/slash-commands
+    - reference/rpc
+    - concepts/typebox
+    - concepts/timezone
+    - concepts/presence
+    - gateway/discovery
+    - gateway/bonjour
+    - concepts/channel-routing
+    - concepts/groups
+    - concepts/group-messages
+    - concepts/model-failover
+    - concepts/oauth
+- group: 提供商 + 入站通道
+  pages:
+    - channels
+    - providers/models
+    - channels/whatsapp
+    - channels/telegram
+    - channels/grammy
+    - channels/slack
+    - channels/discord
+    - channels/mattermost
+    - channels/signal
+    - channels/imessage
+    - channels/location
+    - web/webchat
+    - automation/webhook
+    - automation/gmail-pubsub
+- group: 网关 + 运维
+  pages:
+    - gateway
+    - gateway/pairing
+    - gateway/gateway-lock
+    - gateway/background-process
+    - gateway/health
+    - gateway/heartbeat
+    - gateway/doctor
+    - gateway/logging
+    - gateway/sandboxing
+    - web/dashboard
+    - web/control-ui
+    - gateway/remote
+    - gateway/remote-gateway-readme
+    - gateway/tailscale
+    - gateway/security
+    - gateway/troubleshooting
+- group: 工具 + 自动化
+  pages:
+    - tools
+    - prose
+    - cli
+    - tools/exec
+    - tools/elevated
+    - automation/cron-jobs
+    - automation/cron-vs-heartbeat
+    - tools/thinking
+    - concepts/models
+    - tools/subagents
+    - tools/agent-send
+    - tui
+    - tools/browser
+    - tools/browser-linux-troubleshooting
+    - automation/poll
+- group: 节点、媒体、语音
+  pages:
+    - nodes
+    - nodes/camera
+    - nodes/images
+    - nodes/audio
+    - nodes/location-command
+    - nodes/voicewake
+    - nodes/talk
+    - platforms
+    - platforms/macos
+    - platforms/ios
+    - platforms/android
+    - platforms/windows
+    - platforms/linux
+    - web
+- group: macOS配套应用（高级）
+  pages:
+    - platforms/mac/dev-setup
+    - platforms/mac/menu-bar
+    - platforms/mac/voicewake
+    - platforms/mac/voice-overlay
+    - platforms/mac/webchat
+    - platforms/mac/canvas
+    - platforms/mac/child-process
+    - platforms/mac/health
+    - platforms/mac/icon
+    - platforms/mac/logging
+    - platforms/mac/permissions
+    - platforms/mac/remote
+    - platforms/mac/signing
+    - platforms/mac/release
+    - platforms/mac/bundled-gateway
+    - platforms/mac/xpc
+    - platforms/mac/skills
+    - platforms/mac/peekaboo
+- group: 工作区 + 模板
+  pages:
+    - tools/skills
+    - tools/clawdhub
+    - tools/skills-config
+    - reference/AGENTS.default
+    - reference/templates/AGENTS
+    - reference/templates/BOOTSTRAP
+    - reference/templates/HEARTBEAT
+    - reference/templates/IDENTITY
+    - reference/templates/SOUL
+    - reference/templates/TOOLS
+    - reference/templates/USER
+- group: 实验（探索性）
+  pages:
+    - experiments/onboarding-config-protocol
+    - experiments/plans/cron-add-hardening
+    - experiments/plans/group-policy-hardening
+    - experiments/research/memory
+    - experiments/proposals/model-config
+- group: 测试 + 发布
+  pages:
+    - reference/test
+    - reference/RELEASING
+    - reference/device-models

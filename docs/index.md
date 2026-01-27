@@ -25,7 +25,7 @@ read_when:
   <a href="/start/clawd">Clawdbot 助手设置</a>
 </p>
 
-Clawdbot 通过 WhatsApp Web / Baileys、Telegram（Bot API / grammY）、Discord（Bot API / channels.discord.js）、iMessage（imsg CLI）和 飞书（Feishu/Lark API）将 WhatsApp、Telegram、Discord、iMessage 和 飞书 连接到像 [Pi](https://github.com/badlogic/pi-mono) 这样的代码代理。插件支持 Mattermost（Bot API + WebSocket）等更多平台。
+Clawdbot 通过 WhatsApp Web / Baileys、Telegram（Bot API / grammY）、Discord（Bot API / channels.discord.js）、iMessage（imsg CLI）、飞书（Feishu/Lark API）和 企业微信（WeCom API）将 WhatsApp、Telegram、Discord、iMessage、飞书 和 企业微信 连接到像 [Pi](https://github.com/badlogic/pi-mono) 这样的代码代理。插件支持 Mattermost（Bot API + WebSocket）等更多平台。
 Clawdbot 还为 [Clawd](https://clawd.me)（外星龙虾助手）提供支持。
 
 ## 从这里开始
@@ -167,6 +167,7 @@ clawdbot message send --target +15555550123 --message "Hello from Clawdbot"
   - [Telegram](/channels/telegram)
   - [Discord](/channels/discord)
   - [飞书 (Feishu/Lark)](/channels/feishu)
+  - [企业微信 (WeCom)](/channels/wecom)
   - [Mattermost（插件）](/channels/mattermost)
   - [iMessage](/channels/imessage)
   - [群组](/concepts/groups)

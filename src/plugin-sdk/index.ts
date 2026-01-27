@@ -87,6 +87,9 @@ export type {
   MSTeamsConfig,
   MSTeamsReplyStyle,
   MSTeamsTeamConfig,
+  WeComConfig,
+  WeComAccountConfig,
+  WeComGroupConfig,
 } from "../config/types.js";
 export {
   DiscordConfigSchema,
@@ -97,6 +100,7 @@ export {
   SlackConfigSchema,
   TelegramConfigSchema,
   FeishuConfigSchema,
+  WeComConfigSchema,
 } from "../config/zod-schema.providers-core.js";
 export { WhatsAppConfigSchema } from "../config/zod-schema.providers-whatsapp.js";
 export {
@@ -370,6 +374,14 @@ export {
   resolveFeishuAccount,
 } from "../feishu/accounts.js";
 export type { ResolvedFeishuAccount } from "../feishu/types.js";
+
+// Channel: WeCom
+export {
+  listWeComAccountIds,
+  resolveDefaultWeComAccountId,
+  resolveWeComAccount,
+} from "../wecom/accounts.js";
+export type { ResolvedWeComAccount } from "../wecom/types.js";
 
 // Media utilities
 export { loadWebMedia, type WebMediaResult } from "../web/media.js";
