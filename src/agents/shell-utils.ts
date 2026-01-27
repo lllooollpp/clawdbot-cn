@@ -4,7 +4,7 @@ import path from "node:path";
 
 export function getShellConfig(): { shell: string; args: string[] } {
   if (process.platform === "win32") {
-    // Default to cmd.exe on Windows for better compatibility with tool-generated 
+    // Default to cmd.exe on Windows for better compatibility with tool-generated
     // commands that often use cmd-style chaining ( &&, ||, 2>nul).
     // The previous PowerShell default caused ParserErrors for these bash/cmd-isms.
     return {

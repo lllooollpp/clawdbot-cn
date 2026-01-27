@@ -487,7 +487,8 @@ export async function applyAuthChoiceApiProviders(
         setDefaultModel: params.setDefaultModel,
         defaultModel: `volcengine/${modelId}`,
         applyDefaultConfig: (cfg) => applyVolcengineConfig(cfg, { modelId: String(modelId) }),
-        applyProviderConfig: (cfg) => applyVolcengineProviderConfig(cfg, { modelId: String(modelId) }),
+        applyProviderConfig: (cfg) =>
+          applyVolcengineProviderConfig(cfg, { modelId: String(modelId) }),
         noteDefault: `volcengine/${modelId}`,
         noteAgentModel,
         prompter: params.prompter,
@@ -524,14 +525,22 @@ export async function applyAuthChoiceApiProviders(
     }
     nextConfig = applyBochaConfig(nextConfig);
     nextConfig = applyDomesticMediaDefaults(nextConfig);
-    await params.prompter.note("Bocha Search configured as the primary web search provider.", "Search configured");
+    await params.prompter.note(
+      "Bocha Search configured as the primary web search provider.",
+      "Search configured",
+    );
     // Since Bocha is for search, we still need a reasoning model.
     // If we don't have one, we default to DeepSeek as it's the best domestic alternative.
-    const hasDeepSeek = Boolean(resolveEnvApiKey("deepseek")) || Boolean(nextConfig.auth?.profiles?.["deepseek:default"]);
+    const hasDeepSeek =
+      Boolean(resolveEnvApiKey("deepseek")) ||
+      Boolean(nextConfig.auth?.profiles?.["deepseek:default"]);
     if (!hasDeepSeek) {
-        await params.prompter.note("Search configured. Now let's set up a reasoning model (DeepSeek recommended).", "Model Setup");
-        // We'll recurse or just transition to DeepSeek
-        return applyAuthChoiceApiProviders({ ...params, authChoice: "deepseek-api-key" });
+      await params.prompter.note(
+        "Search configured. Now let's set up a reasoning model (DeepSeek recommended).",
+        "Model Setup",
+      );
+      // We'll recurse or just transition to DeepSeek
+      return applyAuthChoiceApiProviders({ ...params, authChoice: "deepseek-api-key" });
     }
     return { config: nextConfig };
   }

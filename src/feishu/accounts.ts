@@ -18,7 +18,9 @@ export function listFeishuAccountIds(cfg: ClawdbotConfig): string[] {
 
 export function resolveDefaultFeishuAccountId(cfg: ClawdbotConfig): string {
   const feishu = cfg.channels?.feishu;
-  return feishu?.accounts ? Object.keys(feishu.accounts)[0] ?? DEFAULT_ACCOUNT_ID : DEFAULT_ACCOUNT_ID;
+  return feishu?.accounts
+    ? (Object.keys(feishu.accounts)[0] ?? DEFAULT_ACCOUNT_ID)
+    : DEFAULT_ACCOUNT_ID;
 }
 
 export function resolveFeishuAccount(params: {
@@ -46,7 +48,11 @@ export function resolveFeishuAccount(params: {
   }
 
   const appId = (account as any).appId || process.env.FEISHU_APP_ID;
-  const appIdSource = (account as any).appId ? "config" : process.env.FEISHU_APP_ID ? "env" : "none";
+  const appIdSource = (account as any).appId
+    ? "config"
+    : process.env.FEISHU_APP_ID
+      ? "env"
+      : "none";
 
   return {
     accountId: targetId,

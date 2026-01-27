@@ -454,7 +454,10 @@ export function applyVolcengineProviderConfig(
   };
 }
 
-export function applyVolcengineConfig(cfg: ClawdbotConfig, params: { modelId?: string }): ClawdbotConfig {
+export function applyVolcengineConfig(
+  cfg: ClawdbotConfig,
+  params: { modelId?: string },
+): ClawdbotConfig {
   const next = applyVolcengineProviderConfig(cfg, params);
   const modelId = params.modelId || VOLCENGINE_DEFAULT_MODEL_ID;
   const modelRef = `volcengine/${modelId}`;

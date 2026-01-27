@@ -42,7 +42,13 @@ const AUTH_CHOICE_GROUP_DEFS: {
     value: "domestic",
     label: "Domestic / Local Alternatives (国内优先 🇨🇳)",
     hint: "DeepSeek, SiliconFlow, Volcengine, Bocha, Ollama",
-    choices: ["deepseek-api-key", "siliconflow-api-key", "volcengine-api-key", "bocha-api-key", "ollama"],
+    choices: [
+      "deepseek-api-key",
+      "siliconflow-api-key",
+      "volcengine-api-key",
+      "bocha-api-key",
+      "ollama",
+    ],
   },
   {
     value: "openai",

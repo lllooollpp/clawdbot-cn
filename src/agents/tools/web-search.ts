@@ -116,7 +116,10 @@ function resolveSearchEnabled(params: { search?: WebSearchConfig; sandboxed?: bo
   return true;
 }
 
-function resolveSearchApiKey(search?: WebSearchConfig, provider: (typeof SEARCH_PROVIDERS)[number] = "brave"): string | undefined {
+function resolveSearchApiKey(
+  search?: WebSearchConfig,
+  provider: (typeof SEARCH_PROVIDERS)[number] = "brave",
+): string | undefined {
   const fromConfig =
     search && "apiKey" in search && typeof search.apiKey === "string" ? search.apiKey.trim() : "";
   if (provider === "bocha") {
@@ -382,7 +385,7 @@ async function runWebSearch(params: {
       throw new Error(`Bocha Search API error (${res.status}): ${detail || res.statusText}`);
     }
 
-    const data = await res.json() as any;
+    const data = (await res.json()) as any;
     // Bocha data structure: { data: { webPages: { value: [...] } } }
     const results = data.data?.webPages?.value ?? [];
     const mapped = results.map((entry: any) => ({

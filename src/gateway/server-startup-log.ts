@@ -34,12 +34,9 @@ export function logGatewayStartup(params: {
       consoleMessage: `listening on ${scheme}://${formatHost(primaryHost)}:${params.port} (PID ${process.pid})`,
     },
   );
-  params.log.info(
-    `主面板地址: ${httpScheme}://${formatHost(primaryHost)}:${params.port}`,
-    {
-      consoleMessage: `主面板地址: ${chalk.cyanBright(`${httpScheme}://${formatHost(primaryHost)}:${params.port}`)}`,
-    },
-  );
+  params.log.info(`主面板地址: ${httpScheme}://${formatHost(primaryHost)}:${params.port}`, {
+    consoleMessage: `主面板地址: ${chalk.cyanBright(`${httpScheme}://${formatHost(primaryHost)}:${params.port}`)}`,
+  });
   for (const host of hosts.slice(1)) {
     params.log.info(`listening on ${scheme}://${formatHost(host)}:${params.port}`);
   }
