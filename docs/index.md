@@ -220,21 +220,15 @@ Example:
 
 *"We're all just playing with our own prompts."* — an AI, probably high on tokens
 
-## Credits
+## 致谢
 
-- **Peter Steinberger** ([@steipete](https://twitter.com/steipete)) — Creator, lobster whisperer
-- **Mario Zechner** ([@badlogicc](https://twitter.com/badlogicgames)) — Pi creator, security pen-tester
-- **Clawd** — The space lobster who demanded a better name
+本项目基于开源社区的努力成果进行汉化和改进。感谢所有在上游项目中做出贡献的开发者。
 
-## Core Contributors
+## 许可证
 
-- **Maxim Vovshin** (@Hyaxia, 36747317+Hyaxia@users.noreply.github.com) — Blogwatcher skill
-- **Nacho Iacovino** (@nachoiacovino, nacho.iacovino@gmail.com) — Location parsing (Telegram + WhatsApp)
-
-## License
-
-MIT — Free as a lobster in the ocean 🦞
+MIT 许可证 — 像深海里的龙虾一样自由 🦞
 
 ---
 
-*"We're all just playing with our own prompts."* — An AI, probably high on tokens
+*"我们都在玩转自己的提示词。"* — 某个可能消耗了太多 Token 的 AI
+

@@ -49,7 +49,8 @@ export function renderNode(params: {
   const showLabel = params.showLabel ?? true;
   const type = schemaType(schema);
   const hint = hintForPath(path, hints);
-  const label = hint?.label ?? schema.title ?? humanize(String(path.at(-1)));
+  const rawLabel = hint?.label ?? schema.title ?? String(path.at(-1) ?? "");
+  const label = rawLabel === "undefined" || !rawLabel ? humanize(String(path.at(-1) ?? "")) : rawLabel;
   const help = hint?.help ?? schema.description;
   const key = pathKey(path);
 
@@ -381,7 +382,8 @@ function renderObject(params: {
   const { schema, value, path, hints, unsupported, disabled, onPatch } = params;
   const showLabel = params.showLabel ?? true;
   const hint = hintForPath(path, hints);
-  const label = hint?.label ?? schema.title ?? humanize(String(path.at(-1)));
+  const rawLabel = hint?.label ?? schema.title ?? String(path.at(-1) ?? "");
+  const label = rawLabel === "undefined" || !rawLabel ? humanize(String(path.at(-1) ?? "")) : rawLabel;
   const help = hint?.help ?? schema.description;
 
   const fallback = value ?? schema.default;

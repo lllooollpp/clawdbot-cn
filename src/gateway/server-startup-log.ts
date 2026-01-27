@@ -23,12 +23,22 @@ export function logGatewayStartup(params: {
     consoleMessage: `agent model: ${chalk.whiteBright(modelRef)}`,
   });
   const scheme = params.tlsEnabled ? "wss" : "ws";
+  const httpScheme = params.tlsEnabled ? "https" : "http";
   const formatHost = (host: string) => (host.includes(":") ? `[${host}]` : host);
   const hosts =
     params.bindHosts && params.bindHosts.length > 0 ? params.bindHosts : [params.bindHost];
   const primaryHost = hosts[0] ?? params.bindHost;
   params.log.info(
     `listening on ${scheme}://${formatHost(primaryHost)}:${params.port} (PID ${process.pid})`,
+    {
+      consoleMessage: `listening on ${scheme}://${formatHost(primaryHost)}:${params.port} (PID ${process.pid})`,
+    },
+  );
+  params.log.info(
+    `主面板地址: ${httpScheme}://${formatHost(primaryHost)}:${params.port}`,
+    {
+      consoleMessage: `主面板地址: ${chalk.cyanBright(`${httpScheme}://${formatHost(primaryHost)}:${params.port}`)}`,
+    },
   );
   for (const host of hosts.slice(1)) {
     params.log.info(`listening on ${scheme}://${formatHost(host)}:${params.port}`);

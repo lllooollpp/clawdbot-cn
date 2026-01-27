@@ -144,8 +144,9 @@ function warnIfConfigFromFuture(cfg: ClawdbotConfig, logger: Pick<typeof console
   if (cmp === null) return;
   if (cmp < 0) {
     logger.warn(
-      `Config was last written by a newer Clawdbot (${touched}); current version is ${VERSION}.`,
+      `\n⚠️  警告: 配置文件是由较新版本的 Clawdbot (v${touched}) 写入的；当前版本为 v${VERSION}。`,
     );
+    logger.warn(`系统将尝试继续运行，但如果遇到配置丢失或不兼容的情况，建议备份并重置配置文件。\n`);
   }
 }
 

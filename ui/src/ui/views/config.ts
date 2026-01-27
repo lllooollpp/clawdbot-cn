@@ -75,20 +75,20 @@ const sidebarIcons = {
 
 // Section definitions
 const SECTIONS: Array<{ key: string; label: string }> = [
-  { key: "env", label: "环境" },
-  { key: "update", label: "更新" },
-  { key: "agents", label: "智能体" },
+  { key: "models", label: "大模型" },
   { key: "auth", label: "身份验证" },
+  { key: "agents", label: "智能体" },
   { key: "channels", label: "渠道" },
+  { key: "env", label: "环境" },
+  { key: "gateway", label: "网关" },
+  { key: "skills", label: "技能" },
+  { key: "tools", label: "工具" },
   { key: "messages", label: "消息" },
   { key: "commands", label: "命令" },
   { key: "hooks", label: "钩子" },
-  { key: "skills", label: "技能" },
-  { key: "tools", label: "工具" },
-  { key: "gateway", label: "网关" },
+  { key: "update", label: "更新" },
   { key: "wizard", label: "设置向导" },
   { key: "ui", label: "界面" },
-  { key: "models", label: "模型" },
   { key: "logging", label: "日志" },
 ];
 
