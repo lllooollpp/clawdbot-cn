@@ -1,39 +1,46 @@
-import type { WeComAccountConfig, WeComConfig } from "../config/types.js";
+import type { WeComAccountConfig, WeComConfig, ClawdbotConfig } from "../config/types.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../routing/session-key.js";
 import type { ResolvedWeComAccount } from "./types.js";
 
-export function listWeComAccountIds(cfg: WeComConfig): string[] {
+function getWeComConfig(cfg: ClawdbotConfig): WeComConfig {
+  return cfg.channels?.wecom ?? ({} as WeComConfig);
+}
+
+export function listWeComAccountIds(cfg: ClawdbotConfig): string[] {
+  const wecom = getWeComConfig(cfg);
   const ids = new Set<string>();
-  if (cfg.corpId) ids.add(DEFAULT_ACCOUNT_ID);
-  if (cfg.accounts) {
-    for (const id of Object.keys(cfg.accounts)) {
+  if (wecom.corpId) ids.add(DEFAULT_ACCOUNT_ID);
+  if (wecom.accounts) {
+    for (const id of Object.keys(wecom.accounts)) {
       ids.add(normalizeAccountId(id));
     }
   }
   return Array.from(ids);
 }
 
-export function resolveDefaultWeComAccountId(cfg: WeComConfig): string {
-  if (cfg.defaultAccount) return normalizeAccountId(cfg.defaultAccount);
-  if (cfg.corpId) return DEFAULT_ACCOUNT_ID;
-  if (cfg.accounts) {
-    const ids = Object.keys(cfg.accounts);
+export function resolveDefaultWeComAccountId(cfg: ClawdbotConfig): string {
+  const wecom = getWeComConfig(cfg);
+  if (wecom.defaultAccount) return normalizeAccountId(wecom.defaultAccount);
+  if (wecom.corpId) return DEFAULT_ACCOUNT_ID;
+  if (wecom.accounts) {
+    const ids = Object.keys(wecom.accounts);
     if (ids.length > 0) return normalizeAccountId(ids[0]);
   }
   return DEFAULT_ACCOUNT_ID;
 }
 
 export function resolveWeComAccount(params: {
-  cfg: WeComConfig;
-  accountId?: string;
+  cfg: ClawdbotConfig;
+  accountId?: string | null;
 }): ResolvedWeComAccount {
   const accountId = normalizeAccountId(
     params.accountId ?? resolveDefaultWeComAccountId(params.cfg),
   );
-  const base = params.cfg.accounts?.[accountId];
+  const wecom = getWeComConfig(params.cfg);
+  const base = wecom.accounts?.[accountId];
 
   const merged: WeComAccountConfig = {
-    ...params.cfg,
+    ...wecom,
     ...base,
   };
 
@@ -46,7 +53,7 @@ export function resolveWeComAccount(params: {
     secret: merged.secret ?? "",
     token: merged.token ?? "",
     encodingAesKey: merged.encodingAesKey ?? "",
-    markdown: merged.markdown ?? { mode: "slack" },
+    markdown: merged.markdown ?? { tables: "off" },
     dmPolicy: merged.dmPolicy ?? "pairing",
     allowFrom: merged.allowFrom ?? [],
     groupPolicy: merged.groupPolicy ?? "allowlist",

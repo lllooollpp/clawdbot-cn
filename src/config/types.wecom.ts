@@ -39,5 +39,6 @@ export interface WeComAccountConfig {
 }
 
 export interface WeComConfig extends WeComAccountConfig {
+  defaultAccount?: string;
   accounts?: Record<string, WeComAccountConfig>;
 }

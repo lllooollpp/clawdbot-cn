@@ -2,5 +2,11 @@
   "id": "wecom",
   "name": "企业微信 (WeCom)",
   "description": "企业微信 (WeCom) 渠道插件",
-  "entry": "index.ts"
+  "entry": "index.ts",
+  "channels": ["wecom"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
 }

@@ -6,6 +6,7 @@ import { resolveSignalAccount } from "../signal/accounts.js";
 import { resolveSlackAccount, resolveSlackReplyToMode } from "../slack/accounts.js";
 import { buildSlackThreadingToolContext } from "../slack/threading-tool-context.js";
 import { resolveTelegramAccount } from "../telegram/accounts.js";
+import { resolveWeComAccount } from "../wecom/accounts.js";
 import { normalizeAccountId } from "../routing/session-key.js";
 import { normalizeE164 } from "../utils.js";
 import { resolveWhatsAppAccount } from "../web/accounts.js";
@@ -24,6 +25,8 @@ import {
   resolveSlackGroupToolPolicy,
   resolveTelegramGroupRequireMention,
   resolveTelegramGroupToolPolicy,
+  resolveWeComGroupRequireMention,
+  resolveWeComGroupToolPolicy,
   resolveWhatsAppGroupRequireMention,
   resolveWhatsAppGroupToolPolicy,
 } from "./plugins/group-mentions.js";
@@ -390,6 +393,31 @@ const DOCKS: Record<ChatChannelId, ChannelDock> = {
     groups: {
       resolveRequireMention: resolveFeishuGroupRequireMention,
       resolveToolPolicy: resolveFeishuGroupToolPolicy,
+    },
+    threading: {
+      buildToolContext: ({ context, hasRepliedRef }) => ({
+        currentChannelId: context.To?.trim() || undefined,
+        currentThreadTs: context.ReplyToId,
+        hasRepliedRef,
+      }),
+    },
+  },
+  wecom: {
+    id: "wecom",
+    capabilities: {
+      chatTypes: ["direct", "group"],
+      media: true,
+    },
+    outbound: { textChunkLimit: 2000 },
+    config: {
+      resolveAllowFrom: ({ cfg, accountId }) =>
+        (resolveWeComAccount({ cfg, accountId }).allowFrom ?? []).map((entry) => String(entry)),
+      formatAllowFrom: ({ allowFrom }) =>
+        allowFrom.map((entry) => String(entry).trim()).filter(Boolean),
+    },
+    groups: {
+      resolveRequireMention: resolveWeComGroupRequireMention,
+      resolveToolPolicy: resolveWeComGroupToolPolicy,
     },
     threading: {
       buildToolContext: ({ context, hasRepliedRef }) => ({
