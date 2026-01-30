@@ -1,6 +1,6 @@
 {
     "name":  "clawdbot-desktop",
-    "version":  "1.0.2",
+    "version":  "1.0.3",
     "description":  "Clawdbot Desktop App for Cross-Platform Support",
     "type":  "module",
     "main":  "./out/main/index.js",
@@ -28,7 +28,10 @@
                                       "output":  "dist"
                                   },
                   "win":  {
-                              "target":  ["nsis", "msi"],
+                              "target":  [
+                                             "nsis",
+                                             "msi"
+                                         ],
                               "artifactName":  "${productName}-Setup-${version}.${ext}"
                           },
                   "mac":  {
