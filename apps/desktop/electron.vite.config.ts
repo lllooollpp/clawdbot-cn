@@ -4,14 +4,22 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({
-      exclude: ['openclaw', '@clack/prompts', '@clack/core', 'picocolors', 'chalk'],
-      include: ['qrcode-terminal']
-    })],
+    plugins: [externalizeDepsPlugin()],
     build: {
       lib: {
         entry: resolve('src/main/index.ts'),
         formats: ['es']
+      },
+      rollupOptions: {
+        external: [
+          'openclaw',
+          'qrcode-terminal',
+          'node-llama-cpp',
+          '@napi-rs/canvas',
+          'sharp',
+          'sqlite-vec',
+          '@lydell/node-pty'
+        ]
       }
     }
   },
