@@ -279,9 +279,15 @@ importers:
       '@lydell/node-pty':
         specifier: 1.2.0-beta.3
         version: 1.2.0-beta.3
+      chalk:
+        specifier: ^5.3.0
+        version: 5.6.2
       openclaw:
         specifier: workspace:*
         version: link:../..
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
       sharp:
         specifier: ^0.34.5
         version: 0.34.5

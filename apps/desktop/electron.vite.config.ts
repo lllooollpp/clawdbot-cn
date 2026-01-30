@@ -4,7 +4,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
+    plugins: [externalizeDepsPlugin({
+      exclude: ['openclaw', '@clack/prompts', '@clack/core', 'picocolors', 'chalk']
+    })],
     build: {
       lib: {
         entry: resolve('src/main/index.ts'),
