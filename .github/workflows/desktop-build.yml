@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: blacksmith-4vcpu-windows-2025
@@ -45,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifact
+      - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: clawdbot-desktop-windows
@@ -53,7 +56,6 @@ jobs:
           if-no-files-found: error
 
   build-macos:
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -88,9 +90,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Artifact
+      - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: clawdbot-desktop-macos
           path: apps/desktop/dist/*.dmg
           if-no-files-found: error
+
+  release:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: clawdbot-desktop-windows
+          path: ./dist
+
+      - name: Download macOS Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: clawdbot-desktop-macos
+          path: ./dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./dist/*.exe
+            ./dist/*.dmg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
