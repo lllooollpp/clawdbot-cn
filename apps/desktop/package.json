@@ -1,6 +1,6 @@
 {
     "name":  "openclaw-desktop",
-    "version":  "1.0.7",
+    "version":  "1.0.5",
     "description":  "OpenClaw Desktop App for Cross-Platform Support",
     "type":  "module",
     "main":  "./out/main/index.js",
