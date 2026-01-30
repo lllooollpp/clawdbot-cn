@@ -17,9 +17,7 @@
                     "build":  "npm run typecheck \u0026\u0026 electron-vite build",
                     "postinstall":  "electron-builder install-app-deps",
                     "build:unpack":  "npm run build \u0026\u0026 electron-builder --dir",
-                    "build:win":  "npm run build \u0026\u0026 electron-builder --win",
-                    "build:mac":  "npm run build \u0026\u0026 electron-builder --mac",
-                    "build:linux":  "npm run build \u0026\u0026 electron-builder --linux"
+                    "build:win":  "npm run build \u0026\u0026 electron-builder --win"
                 },
     "build":  {
                   "appId":  "com.clawdbot.desktop",
@@ -33,11 +31,6 @@
                                              "msi"
                                          ],
                               "artifactName":  "${productName}-Setup-${version}.${ext}"
-                          },
-                  "mac":  {
-                              "target":  "dmg",
-                              "category":  "public.app-category.productivity",
-                              "artifactName":  "${productName}-${version}.${ext}"
                           },
                   "nsis":  {
                                "oneClick":  true,

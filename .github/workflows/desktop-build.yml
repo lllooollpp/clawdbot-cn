@@ -57,51 +57,9 @@ jobs:
             apps/desktop/dist/*.msi
           if-no-files-found: error
 
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.x
-          cache: 'pnpm'
-
-      - name: Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@10.23.0 --activate
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts=false
-
-      - name: Build UI
-        run: pnpm ui:build
-
-      - name: Build Core
-        run: pnpm build
-
-      - name: Build Desktop (macOS)
-        run: |
-          cd apps/desktop
-          pnpm run build:mac
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: clawdbot-desktop-macos
-          path: apps/desktop/dist/*.dmg
-          if-no-files-found: error
-
   release:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
-    needs: [build-windows, build-macos]
+    needs: [build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download Windows Artifact
@@ -110,19 +68,12 @@ jobs:
           name: clawdbot-desktop-windows
           path: ./dist
 
-      - name: Download macOS Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: clawdbot-desktop-macos
-          path: ./dist
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             ./dist/*.exe
             ./dist/*.msi
-            ./dist/*.dmg
           draft: false
           prerelease: false
         env:
