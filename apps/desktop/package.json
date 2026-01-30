@@ -41,7 +41,6 @@
                            },
                   "msi":  {
                               "perMachine":  true,
-                              "allowElevation":  true,
                               "upgradeCode":  "56610f7a-5b77-534e-9044-cba3681d4f8b"
                           },
                   "files":  [
