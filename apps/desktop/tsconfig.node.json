@@ -3,6 +3,10 @@
   "include": ["src/main/**/*", "src/preload/**/*", "electron.vite.config.ts"],
   "compilerOptions": {
     "composite": true,
-    "types": ["electron-vite/node"]
+    "types": ["electron-vite/node"],
+    "baseUrl": ".",
+    "paths": {
+      "clawdbot/*": ["../../src/*"]
+    }
   }
 }

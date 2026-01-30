@@ -1,5 +1,5 @@
 import { app, shell, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
-import { join, dirname } from 'path'
+import { join } from 'path'
 import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -9,6 +9,7 @@ import { runCli } from 'clawdbot/cli/run-main.js'
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
+let isAppQuitting = false
 
 async function startGateway(): Promise<void> {
   const stateDir = app.getPath('userData')
@@ -142,7 +143,7 @@ function createWindow(): void {
 
   // Handle window close to hide to tray
   mainWindow.on('close', (event) => {
-    if (!app.isQuitting) {
+    if (!isAppQuitting) {
       event.preventDefault()
       mainWindow?.hide()
     }
@@ -158,7 +159,7 @@ function createTray(): void {
     { label: 'Show Clawdbot', click: () => mainWindow?.show() },
     { type: 'separator' },
     { label: 'Quit', click: () => {
-      app.isQuitting = true
+      isAppQuitting = true
       app.quit()
     }}
   ])
