@@ -1,10 +1,10 @@
 {
-    "name":  "clawdbot-desktop",
-    "version":  "1.0.5",
-    "description":  "Clawdbot Desktop App for Cross-Platform Support",
+    "name":  "openclaw-desktop",
+    "version":  "1.0.6",
+    "description":  "OpenClaw Desktop App for Cross-Platform Support",
     "type":  "module",
     "main":  "./out/main/index.js",
-    "author":  "Clawdbot",
+    "author":  "OpenClaw",
     "license":  "MIT",
     "scripts":  {
                     "format":  "prettier --write .",
@@ -14,14 +14,14 @@
                     "typecheck":  "npm run typecheck:node \u0026\u0026 npm run typecheck:web",
                     "start":  "electron-vite preview",
                     "dev":  "electron-vite dev",
-                    "build":  "npm run typecheck \u0026\u0026 electron-vite build",
+                    "build":  "electron-vite build",
                     "postinstall":  "electron-builder install-app-deps",
                     "build:unpack":  "npm run build \u0026\u0026 electron-builder --dir",
                     "build:win":  "npm run build \u0026\u0026 electron-builder --win"
                 },
     "build":  {
-                  "appId":  "com.clawdbot.desktop",
-                  "productName":  "Clawdbot",
+                  "appId":  "com.openclaw.desktop",
+                  "productName":  "OpenClaw",
                   "directories":  {
                                       "output":  "dist"
                                   },
@@ -30,6 +30,7 @@
                                              "nsis",
                                              "msi"
                                          ],
+                              "icon":  "resources/icon.png",
                               "artifactName":  "${productName}-Setup-${version}.${ext}"
                           },
                   "nsis":  {
@@ -53,7 +54,7 @@
     "devDependencies":  {
                             "@electron-toolkit/eslint-config-ts":  "^2.0.0",
                             "@electron-toolkit/tsconfig":  "^1.0.1",
-                            "@types/node":  "^20.12.7",
+                            "@types/node":  "^22.0.0",
                             "@vitejs/plugin-react":  "^4.2.1",
                             "electron":  "^30.0.1",
                             "electron-builder":  "^24.13.3",

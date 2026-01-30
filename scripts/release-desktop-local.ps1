@@ -18,21 +18,35 @@ $env:HTTP_PROXY = "http://127.0.0.1:10810"
 
 # 2. Update version numbers
 Write-Host "Updating version numbers..." -ForegroundColor Yellow
-$RootPkg = Get-Content "package.json" | ConvertFrom-Json
-$RootPkg.version = $PureVersion
-$RootPkg | ConvertTo-Json -Depth 10 | Set-Content "package.json"
+$PureVersion = $Version.Substring(1)
 
-$DesktopPkg = Get-Content "apps/desktop/package.json" | ConvertFrom-Json
-$DesktopPkg.version = $PureVersion
-$DesktopPkg | ConvertTo-Json -Depth 10 | Set-Content "apps/desktop/package.json"
+# Function to update JSON file while preserving formatting
+function Update-JsonVersion($Path, $NewVersion) {
+    if (Test-Path $Path) {
+        $Json = Get-Content $Path -Raw | ConvertFrom-Json
+        $Json.version = $NewVersion
+        # Use depth to ensure all nested objects are preserved
+        $JsonContent = $Json | ConvertTo-Json -Depth 100
+        # Ensure we write as UTF8 without BOM to keep Node happy
+        [System.IO.File]::WriteAllText((Get-Item $Path).FullName, $JsonContent)
+    }
+}
+
+Update-JsonVersion "package.json" $PureVersion
+Update-JsonVersion "apps/desktop/package.json" $PureVersion
 
 # 3. Local build process
+Write-Host "Cleaning dist folder..." -ForegroundColor Yellow
+Remove-Item -Recurse -Force apps/desktop/dist -ErrorAction SilentlyContinue
+
 Write-Host "Running local build (Core & UI)..." -ForegroundColor Yellow
 pnpm build
 pnpm ui:build
 
 Write-Host "Packaging Electron (Windows)..." -ForegroundColor Yellow
 cd apps/desktop
+# Set debugging flag for electron-builder to see where it gets stuck
+$env:DEBUG = "electron-builder"
 pnpm run build:win
 cd ../..
 
@@ -54,4 +68,4 @@ if ($LASTEXITCODE -ne 0) {
 
 gh release create $Version apps/desktop/dist/*.exe apps/desktop/dist/*.msi --title "Clawdbot $Version" --notes "Local build release."
 
-Write-Host "Success! Check your release at: https://github.com/lllooollpp/clawdbot-cn/releases" -ForegroundColor Green
+Write-Host "Success! Check your release at: https://github.com/lllooollpp/openclaw-cn/releases" -ForegroundColor Green
