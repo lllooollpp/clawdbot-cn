@@ -28,7 +28,7 @@
                                       "output":  "dist"
                                   },
                   "win":  {
-                              "target":  "nsis",
+                              "target":  ["nsis", "msi"],
                               "artifactName":  "${productName}-Setup-${version}.${ext}"
                           },
                   "mac":  {
