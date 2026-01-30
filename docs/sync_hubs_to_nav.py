@@ -17,22 +17,21 @@ for line in lines:
         continue
     
     # Match list items - [Title](Path)
-    item_match = re.match(r'^\s*-\s*\[.+\]\((.+)\)', line)
+    item_match = re.match(r'^\s*-\s*\[(.+?)\]\((.+?)\)', line)
     if item_match and current_group:
-        path = item_match.group(1).strip()
+        title = item_match.group(1).strip()
+        path = item_match.group(2).strip()
         
-        # Skip external or non-markdown links for the sidebar
-        if path.startswith('http') or not path.startswith('/'):
-            if path == '/':
-                page_name = "index"
-            else:
-                continue
+        # Skip external links for the sidebar unless they are local/special
+        if path.startswith('http') and '127.0.0.1' not in path:
+            continue
+            
+        if path == '/':
+            page_url = "/"
         else:
-            # Convert /start/getting-started to start/getting-started
-            page_name = path.strip('/')
+            page_url = path if path.startswith('/') else '/' + path
         
-        if page_name and page_name not in current_group["pages"]:
-            current_group["pages"].append(page_name)
+        current_group["pages"].append({"title": title, "url": page_url})
 
 # Ensure _data directory exists
 os.makedirs('_data', exist_ok=True)
@@ -44,9 +43,10 @@ for g in navigation:
     yaml_output += f"- group: {g['group']}\n"
     yaml_output += "  pages:\n"
     for p in g["pages"]:
-        yaml_output += f"    - {p}\n"
+        yaml_output += f"    - title: \"{p['title']}\"\n"
+        yaml_output += f"      url: \"{p['url']}\"\n"
 
 with open('_data/navigation.yml', 'w', encoding='utf-8') as f:
     f.write(yaml_output)
 
-print("Navigation updated based on hubs.md")
+print("Navigation updated based on hubs.md with Chinese titles")

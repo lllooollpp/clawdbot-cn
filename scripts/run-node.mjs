@@ -5,6 +5,10 @@ import path from "node:path";
 import process from "node:process";
 
 const args = process.argv.slice(2);
+if (args.length === 0) {
+  // Default to gateway run --force if no command provided
+  args.push("gateway", "run", "--force");
+}
 const env = { ...process.env };
 const cwd = process.cwd();
 const compiler = env.CLAWDBOT_TS_COMPILER === "tsc" ? "tsc" : "tsgo";

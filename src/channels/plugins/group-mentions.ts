@@ -7,7 +7,7 @@ import type { DiscordConfig } from "../../config/types.js";
 import type { GroupToolPolicyConfig } from "../../config/types.tools.js";
 import { resolveSlackAccount } from "../../slack/accounts.js";
 
-type GroupMentionParams = {
+export type GroupMentionParams = {
   cfg: ClawdbotConfig;
   groupId?: string | null;
   groupChannel?: string | null;
@@ -266,6 +266,26 @@ export function resolveFeishuGroupToolPolicy(
   return resolveChannelGroupToolsPolicy({
     cfg: params.cfg,
     channel: "feishu",
+    groupId: params.groupId,
+    accountId: params.accountId,
+  });
+}
+
+export function resolveWeComGroupRequireMention(params: GroupMentionParams): boolean {
+  return resolveChannelGroupRequireMention({
+    cfg: params.cfg,
+    channel: "wecom",
+    groupId: params.groupId,
+    accountId: params.accountId,
+  });
+}
+
+export function resolveWeComGroupToolPolicy(
+  params: GroupMentionParams,
+): GroupToolPolicyConfig | undefined {
+  return resolveChannelGroupToolsPolicy({
+    cfg: params.cfg,
+    channel: "wecom",
     groupId: params.groupId,
     accountId: params.accountId,
   });

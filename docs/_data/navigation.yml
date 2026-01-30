@@ -1,158 +1,298 @@
 - group: 从这里开始
   pages:
-    - start/getting-started
-    - start/onboarding
-    - start/wizard
-    - start/setup
-    - help
-    - gateway/configuration
-    - gateway/configuration-examples
-    - start/clawd
-    - start/showcase
-    - start/lore
+    - title: "索引"
+      url: "/"
+    - title: "入门指南"
+      url: "/start/getting-started"
+    - title: "入门"
+      url: "/start/onboarding"
+    - title: "向导"
+      url: "/start/wizard"
+    - title: "设置"
+      url: "/start/setup"
+    - title: "仪表板（本地网关）"
+      url: "/http://127.0.0.1:18789/"
+    - title: "帮助"
+      url: "/help"
+    - title: "配置"
+      url: "/gateway/configuration"
+    - title: "配置示例"
+      url: "/gateway/configuration-examples"
+    - title: "Clawdbot 助手（Clawd）"
+      url: "/start/clawd"
+    - title: "展示"
+      url: "/start/showcase"
+    - title: "背景故事"
+      url: "/start/lore"
 - group: 安装与更新
   pages:
-    - install/docker
-    - install/nix
-    - install/updating
-    - install/bun
+    - title: "Docker"
+      url: "/install/docker"
+    - title: "Nix"
+      url: "/install/nix"
+    - title: "更新 / 回滚"
+      url: "/install/updating"
+    - title: "Bun 工作流（实验性）"
+      url: "/install/bun"
 - group: 核心概念
   pages:
-    - concepts/architecture
-    - network
-    - concepts/agent
-    - concepts/agent-workspace
-    - concepts/memory
-    - concepts/agent-loop
-    - concepts/streaming
-    - concepts/multi-agent
-    - concepts/compaction
-    - concepts/session
-    - concepts/sessions
-    - concepts/session-pruning
-    - concepts/session-tool
-    - concepts/queue
-    - tools/slash-commands
-    - reference/rpc
-    - concepts/typebox
-    - concepts/timezone
-    - concepts/presence
-    - gateway/discovery
-    - gateway/bonjour
-    - concepts/channel-routing
-    - concepts/groups
-    - concepts/group-messages
-    - concepts/model-failover
-    - concepts/oauth
+    - title: "架构"
+      url: "/concepts/architecture"
+    - title: "网络中心"
+      url: "/network"
+    - title: "代理运行时"
+      url: "/concepts/agent"
+    - title: "代理工作区"
+      url: "/concepts/agent-workspace"
+    - title: "内存"
+      url: "/concepts/memory"
+    - title: "代理循环"
+      url: "/concepts/agent-loop"
+    - title: "流式传输 + 分块"
+      url: "/concepts/streaming"
+    - title: "多代理路由"
+      url: "/concepts/multi-agent"
+    - title: "压缩"
+      url: "/concepts/compaction"
+    - title: "会话"
+      url: "/concepts/session"
+    - title: "会话（别名）"
+      url: "/concepts/sessions"
+    - title: "会话清理"
+      url: "/concepts/session-pruning"
+    - title: "会话工具"
+      url: "/concepts/session-tool"
+    - title: "队列"
+      url: "/concepts/queue"
+    - title: "斜杠命令"
+      url: "/tools/slash-commands"
+    - title: "RPC 适配器"
+      url: "/reference/rpc"
+    - title: "TypeBox 模式"
+      url: "/concepts/typebox"
+    - title: "时区处理"
+      url: "/concepts/timezone"
+    - title: "存在状态"
+      url: "/concepts/presence"
+    - title: "发现 + 传输"
+      url: "/gateway/discovery"
+    - title: "Bonjour"
+      url: "/gateway/bonjour"
+    - title: "频道路由"
+      url: "/concepts/channel-routing"
+    - title: "组"
+      url: "/concepts/groups"
+    - title: "组消息"
+      url: "/concepts/group-messages"
+    - title: "模型故障转移"
+      url: "/concepts/model-failover"
+    - title: "OAuth"
+      url: "/concepts/oauth"
 - group: 提供商 + 入站通道
   pages:
-    - channels
-    - providers/models
-    - channels/whatsapp
-    - channels/telegram
-    - channels/grammy
-    - channels/slack
-    - channels/discord
-    - channels/mattermost
-    - channels/signal
-    - channels/imessage
-    - channels/location
-    - web/webchat
-    - automation/webhook
-    - automation/gmail-pubsub
+    - title: "聊天频道中心"
+      url: "/channels"
+    - title: "模型提供商中心"
+      url: "/providers/models"
+    - title: "WhatsApp"
+      url: "/channels/whatsapp"
+    - title: "Telegram"
+      url: "/channels/telegram"
+    - title: "Telegram（grammY 说明）"
+      url: "/channels/grammy"
+    - title: "Slack"
+      url: "/channels/slack"
+    - title: "Discord"
+      url: "/channels/discord"
+    - title: "Mattermost"
+      url: "/channels/mattermost"
+    - title: "Signal"
+      url: "/channels/signal"
+    - title: "iMessage"
+      url: "/channels/imessage"
+    - title: "位置解析"
+      url: "/channels/location"
+    - title: "WebChat"
+      url: "/web/webchat"
+    - title: "Webhook"
+      url: "/automation/webhook"
+    - title: "Gmail Pub/Sub"
+      url: "/automation/gmail-pubsub"
 - group: 网关 + 运维
   pages:
-    - gateway
-    - gateway/pairing
-    - gateway/gateway-lock
-    - gateway/background-process
-    - gateway/health
-    - gateway/heartbeat
-    - gateway/doctor
-    - gateway/logging
-    - gateway/sandboxing
-    - web/dashboard
-    - web/control-ui
-    - gateway/remote
-    - gateway/remote-gateway-readme
-    - gateway/tailscale
-    - gateway/security
-    - gateway/troubleshooting
+    - title: "网关操作手册"
+      url: "/gateway"
+    - title: "网关配对"
+      url: "/gateway/pairing"
+    - title: "网关锁定"
+      url: "/gateway/gateway-lock"
+    - title: "后台进程"
+      url: "/gateway/background-process"
+    - title: "健康状态"
+      url: "/gateway/health"
+    - title: "心跳"
+      url: "/gateway/heartbeat"
+    - title: "诊断"
+      url: "/gateway/doctor"
+    - title: "日志"
+      url: "/gateway/logging"
+    - title: "沙箱"
+      url: "/gateway/sandboxing"
+    - title: "仪表板"
+      url: "/web/dashboard"
+    - title: "控制界面"
+      url: "/web/control-ui"
+    - title: "远程访问"
+      url: "/gateway/remote"
+    - title: "远程网关 README"
+      url: "/gateway/remote-gateway-readme"
+    - title: "Tailscale"
+      url: "/gateway/tailscale"
+    - title: "安全性"
+      url: "/gateway/security"
+    - title: "故障排除"
+      url: "/gateway/troubleshooting"
 - group: 工具 + 自动化
   pages:
-    - tools
-    - prose
-    - cli
-    - tools/exec
-    - tools/elevated
-    - automation/cron-jobs
-    - automation/cron-vs-heartbeat
-    - tools/thinking
-    - concepts/models
-    - tools/subagents
-    - tools/agent-send
-    - tui
-    - tools/browser
-    - tools/browser-linux-troubleshooting
-    - automation/poll
+    - title: "工具概览"
+      url: "/tools"
+    - title: "OpenProse"
+      url: "/prose"
+    - title: "CLI参考"
+      url: "/cli"
+    - title: "执行工具"
+      url: "/tools/exec"
+    - title: "提升模式"
+      url: "/tools/elevated"
+    - title: "定时任务"
+      url: "/automation/cron-jobs"
+    - title: "定时任务 vs 心跳"
+      url: "/automation/cron-vs-heartbeat"
+    - title: "思考 + 详细模式"
+      url: "/tools/thinking"
+    - title: "模型"
+      url: "/concepts/models"
+    - title: "子代理"
+      url: "/tools/subagents"
+    - title: "代理发送CLI"
+      url: "/tools/agent-send"
+    - title: "终端UI"
+      url: "/tui"
+    - title: "浏览器控制"
+      url: "/tools/browser"
+    - title: "浏览器（Linux故障排除）"
+      url: "/tools/browser-linux-troubleshooting"
+    - title: "轮询"
+      url: "/automation/poll"
 - group: 节点、媒体、语音
   pages:
-    - nodes
-    - nodes/camera
-    - nodes/images
-    - nodes/audio
-    - nodes/location-command
-    - nodes/voicewake
-    - nodes/talk
-    - platforms
-    - platforms/macos
-    - platforms/ios
-    - platforms/android
-    - platforms/windows
-    - platforms/linux
-    - web
+    - title: "节点概览"
+      url: "/nodes"
+    - title: "摄像头"
+      url: "/nodes/camera"
+    - title: "图像"
+      url: "/nodes/images"
+    - title: "音频"
+      url: "/nodes/audio"
+    - title: "位置命令"
+      url: "/nodes/location-command"
+    - title: "语音唤醒"
+      url: "/nodes/voicewake"
+    - title: "说话模式"
+      url: "/nodes/talk"
+    - title: "平台概览"
+      url: "/platforms"
+    - title: "macOS"
+      url: "/platforms/macos"
+    - title: "iOS"
+      url: "/platforms/ios"
+    - title: "Android"
+      url: "/platforms/android"
+    - title: "Windows (WSL2)"
+      url: "/platforms/windows"
+    - title: "Linux"
+      url: "/platforms/linux"
+    - title: "网页界面"
+      url: "/web"
 - group: macOS配套应用（高级）
   pages:
-    - platforms/mac/dev-setup
-    - platforms/mac/menu-bar
-    - platforms/mac/voicewake
-    - platforms/mac/voice-overlay
-    - platforms/mac/webchat
-    - platforms/mac/canvas
-    - platforms/mac/child-process
-    - platforms/mac/health
-    - platforms/mac/icon
-    - platforms/mac/logging
-    - platforms/mac/permissions
-    - platforms/mac/remote
-    - platforms/mac/signing
-    - platforms/mac/release
-    - platforms/mac/bundled-gateway
-    - platforms/mac/xpc
-    - platforms/mac/skills
-    - platforms/mac/peekaboo
+    - title: "macOS开发环境设置"
+      url: "/platforms/mac/dev-setup"
+    - title: "macOS菜单栏"
+      url: "/platforms/mac/menu-bar"
+    - title: "macOS语音唤醒"
+      url: "/platforms/mac/voicewake"
+    - title: "macOS语音覆盖"
+      url: "/platforms/mac/voice-overlay"
+    - title: "macOS WebChat"
+      url: "/platforms/mac/webchat"
+    - title: "macOS Canvas"
+      url: "/platforms/mac/canvas"
+    - title: "macOS子进程"
+      url: "/platforms/mac/child-process"
+    - title: "macOS健康"
+      url: "/platforms/mac/health"
+    - title: "macOS图标"
+      url: "/platforms/mac/icon"
+    - title: "macOS日志"
+      url: "/platforms/mac/logging"
+    - title: "macOS权限"
+      url: "/platforms/mac/permissions"
+    - title: "macOS远程"
+      url: "/platforms/mac/remote"
+    - title: "macOS签名"
+      url: "/platforms/mac/signing"
+    - title: "macOS发布"
+      url: "/platforms/mac/release"
+    - title: "macOS网关（launchd）"
+      url: "/platforms/mac/bundled-gateway"
+    - title: "macOS XPC"
+      url: "/platforms/mac/xpc"
+    - title: "macOS技能"
+      url: "/platforms/mac/skills"
+    - title: "macOS Peekaboo"
+      url: "/platforms/mac/peekaboo"
 - group: 工作区 + 模板
   pages:
-    - tools/skills
-    - tools/clawdhub
-    - tools/skills-config
-    - reference/AGENTS.default
-    - reference/templates/AGENTS
-    - reference/templates/BOOTSTRAP
-    - reference/templates/HEARTBEAT
-    - reference/templates/IDENTITY
-    - reference/templates/SOUL
-    - reference/templates/TOOLS
-    - reference/templates/USER
+    - title: "技能"
+      url: "/tools/skills"
+    - title: "ClawdHub"
+      url: "/tools/clawdhub"
+    - title: "技能配置"
+      url: "/tools/skills-config"
+    - title: "默认AGENTS"
+      url: "/reference/AGENTS.default"
+    - title: "模板: AGENTS"
+      url: "/reference/templates/AGENTS"
+    - title: "模板: BOOTSTRAP"
+      url: "/reference/templates/BOOTSTRAP"
+    - title: "模板: HEARTBEAT"
+      url: "/reference/templates/HEARTBEAT"
+    - title: "模板: IDENTITY"
+      url: "/reference/templates/IDENTITY"
+    - title: "模板: SOUL"
+      url: "/reference/templates/SOUL"
+    - title: "模板: TOOLS"
+      url: "/reference/templates/TOOLS"
+    - title: "模板: USER"
+      url: "/reference/templates/USER"
 - group: 实验（探索性）
   pages:
-    - experiments/onboarding-config-protocol
-    - experiments/plans/cron-add-hardening
-    - experiments/plans/group-policy-hardening
-    - experiments/research/memory
-    - experiments/proposals/model-config
+    - title: "入门配置协议"
+      url: "/experiments/onboarding-config-protocol"
+    - title: "定时任务加固笔记"
+      url: "/experiments/plans/cron-add-hardening"
+    - title: "组策略加固笔记"
+      url: "/experiments/plans/group-policy-hardening"
+    - title: "研究：内存"
+      url: "/experiments/research/memory"
+    - title: "模型配置探索"
+      url: "/experiments/proposals/model-config"
 - group: 测试 + 发布
   pages:
-    - reference/test
-    - reference/RELEASING
-    - reference/device-models
+    - title: "测试"
+      url: "/reference/test"
+    - title: "发布检查清单"
+      url: "/reference/RELEASING"
+    - title: "设备型号"
+      url: "/reference/device-models"

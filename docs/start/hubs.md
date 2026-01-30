@@ -1,4 +1,4 @@
----
+![1769527607879](image/hubs/1769527607879.png)![1769527610390](image/hubs/1769527610390.png)![1769527618095](image/hubs/1769527618095.png)---
 summary: "Hubs that link to every Clawdbot doc"
 read_when:
   - You want a complete map of the documentation

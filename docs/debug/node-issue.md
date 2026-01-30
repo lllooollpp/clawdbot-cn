@@ -9,19 +9,6 @@ read_when:
 
 ## 摘要
 使用 Node 运行 Clawdbot 时，通过 `tsx` 启动失败，报错信息为：
-"  ,根据输入  帮我翻译成中文，输出要md格式的； 
-
-注意：
-md
-  包裹起来；
-"  ,根据输入  帮我翻译成中文，输出要md格式的； 
-
-注意：
-md      ```  包裹起来；
-"  ,根据输入  帮我翻译成中文，输出要md格式的； 
-
-注意： ```md      ```  包裹起来；
-````````````
 [clawdbot] Failed to start CLI: TypeError: __name is not a function
     at createSubsystemLogger (.../src/logging/subsystem.ts:203:25)
     at .../src/agents/auth-profiles/constants.ts:25:20

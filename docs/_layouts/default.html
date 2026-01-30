@@ -40,19 +40,10 @@
           {% for group in site.data.navigation %}
             <div class="nav-group">
               <div class="nav-group-title">{{ group.group }}</div>
-              {% for page_name in group.pages %}
-                {% if page_name == "index" %}
-                  {% assign p_url = "/" %}
-                  {% assign p_path = "index.md" %}
-                {% else %}
-                  {% assign p_url = "/" | append: page_name | append: "/" %}
-                  {% assign p_path = page_name | append: ".md" %}
-                {% endif %}
-                
-                {% assign nav_page = site.pages | where: "path", p_path | first %}
-                
-                <a href="{{ p_url | relative_url }}" class="nav-link{% if page.url == p_url %} active{% endif %}">
-                  {{ nav_page.title | default: page_name | split: "/" | last | capitalize | replace: "-", " " }}
+              {% for nav_item in group.pages %}
+                {% assign p_url = nav_item.url | relative_url %}
+                <a href="{{ p_url }}" class="nav-link{% if page.url == nav_item.url %} active{% endif %}">
+                  {{ nav_item.title }}
                 </a>
               {% endfor %}
             </div>
