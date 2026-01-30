@@ -1,6 +1,6 @@
 {
     "name":  "clawdbot-desktop",
-    "version":  "1.0.0",
+    "version":  "1.0.2",
     "description":  "Clawdbot Desktop App for Cross-Platform Support",
     "type":  "module",
     "main":  "./out/main/index.js",
