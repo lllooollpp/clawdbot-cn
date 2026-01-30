@@ -5,7 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin({
-      exclude: ['openclaw', '@clack/prompts', '@clack/core', 'picocolors', 'chalk']
+      exclude: ['openclaw', '@clack/prompts', '@clack/core', 'picocolors', 'chalk'],
+      include: ['qrcode-terminal']
     })],
     build: {
       lib: {
