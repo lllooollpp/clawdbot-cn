@@ -1,4 +1,4 @@
-# 🦞 Clawdbot — 个人 AI 助手
+# 🦞 OpenClaw — 个人 AI 助手
 
 桌面端：
 
@@ -7,7 +7,7 @@
 
 app端：
 <p align="center">
-  <img src="https://raw.githubusercontent.com/clawdbot/clawdbot/main/docs/whatsapp-clawd.jpg" alt="Clawdbot" width="400">
+  <img src="https://raw.githubusercontent.com/openclaw-cn/openclaw-cn/main/docs/whatsapp-clawd.jpg" alt="OpenClaw" width="400">
 </p>
 web端：
 <p align="center">
@@ -19,24 +19,24 @@ web端：
 </p>
 
 <p align="center">
-  <a href="https://github.com/clawdbot/clawdbot/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/clawdbot/clawdbot/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
-  <a href="https://github.com/clawdbot/clawdbot/releases"><img src="https://img.shields.io/github/v/release/clawdbot/clawdbot?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
-  <a href="https://deepwiki.com/clawdbot/clawdbot"><img src="https://img.shields.io/badge/DeepWiki-clawdbot-111111?style=for-the-badge" alt="DeepWiki"></a>
+  <a href="https://github.com/openclaw-cn/openclaw-cn/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/openclaw-cn/openclaw-cn/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
+  <a href="https://github.com/openclaw-cn/openclaw-cn/releases"><img src="https://img.shields.io/github/v/release/openclaw-cn/openclaw-cn?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
+  <a href="https://deepwiki.com/openclaw-cn/openclaw-cn"><img src="https://img.shields.io/badge/DeepWiki-openclaw-111111?style=for-the-badge" alt="DeepWiki"></a>
   <a href="https://discord.gg/clawd"><img src="https://img.shields.io/discord/1456350064065904867?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" alt="Discord"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
 </p>
 
-**Clawdbot** 是一个你可以在自己设备上运行的*个人 AI 助手*。
+**OpenClaw** 是一个你可以在自己设备上运行的*个人 AI 助手*。
 它通过你常用的渠道回复你（WhatsApp、Telegram、Slack、Discord、Google Chat、Signal、iMessage、Microsoft Teams、飞书、WebChat），以及扩展渠道如 BlueBubbles、Matrix、Zalo 和 Zalo Personal。它可以在 macOS/iOS/Android 上说话和聆听，并可以渲染你控制的实时 Canvas。Gateway 只是控制平面——产品是助手。
 
 如果你想要一个感觉本地、快速、始终在线的个人单用户助手，这就是它。现在提供 **Desktop App (Win/macOS/Linux)**，让你无需命令行即可快速开启。
 
-[网站](https://clawdbot.com) · [文档](http://101.35.228.254/) · [入门](./docs/start/getting-started.md) · [桌面端](./docs/install/desktop.md) · [更新](./docs/install/updating.md) · [展示](./docs/start/showcase.md) · [FAQ](./docs/start/faq.md) · [向导](./docs/start/wizard.md) · [Nix](https://github.com/clawdbot/nix-clawdbot) · [Docker](./docs/install/docker.md) · [Discord](https://discord.gg/clawd)
+[网站](https://openclaw.cn) · [文档](http://101.35.228.254/) · [入门](./docs/start/getting-started.md) · [桌面端](./docs/install/desktop.md) · [更新](./docs/install/updating.md) · [展示](./docs/start/showcase.md) · [FAQ](./docs/start/faq.md) · [向导](./docs/start/wizard.md) · [Docker](./docs/install/docker.md) · [Discord](https://discord.gg/openclaw)
 
 首选设置：
 
-1. **Desktop App (推荐)**：下载并运行 [Clawdbot Desktop](./docs/install/desktop.md)，这是最简单跨平台 GUI 体验，支持 **Windows、macOS 和 Linux**。
-2. **CLI 向导**：运行入门向导（`clawdbot onboard`）。它会引导你完成 Gateway、Workspace、Channels 和 Skills。CLI 向导推荐在 **macOS、Linux 和 Windows (通过 WSL2)** 上工作。
+1. **Desktop App (推荐)**：下载并运行 [OpenClaw Desktop](./docs/install/desktop.md)，这是最简单跨平台 GUI 体验，支持 **Windows、macOS 和 Linux**。
+2. **CLI 向导**：运行入门向导（`openclaw onboard`）。它会引导你完成 Gateway、Workspace、Channels 和 Skills。CLI 向导推荐在 **macOS、Linux 和 Windows (通过 WSL2)** 上工作。
 
 支持 npm、pnpm 或 bun。
 新安装？从这里开始：[入门](./docs/start/getting-started.md)

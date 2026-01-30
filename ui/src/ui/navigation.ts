@@ -177,7 +177,7 @@ export function subtitleForTab(tab: Tab) {
     case "chat":
       return "直接与网关对话以进行快速干预。";
     case "config":
-      return "安全编辑 ~/.clawdbot/clawdbot.json。";
+      return "安全编辑 ~/.openclaw/openclaw.json。";
     case "debug":
       return "网关快照、事件和手动 RPC 调用。";
     case "logs":

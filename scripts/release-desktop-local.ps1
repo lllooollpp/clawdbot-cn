@@ -12,10 +12,6 @@ if ($Version -notmatch "^v\d+\.\d+\.\d+$") {
 $PureVersion = $Version.Substring(1)
 Write-Host "Starting local build and release for: $Version" -ForegroundColor Cyan
 
-# Set proxy
-$env:HTTPS_PROXY = "http://127.0.0.1:10810"
-$env:HTTP_PROXY = "http://127.0.0.1:10810"
-
 # 2. Update version numbers
 Write-Host "Updating version numbers..." -ForegroundColor Yellow
 $PureVersion = $Version.Substring(1)
@@ -54,18 +50,21 @@ cd ../..
 Write-Host "Committing and tagging..." -ForegroundColor Yellow
 git add .
 git commit -m "chore: release $Version (local build)" --no-verify
-git tag $Version
-git -c http.proxy=http://127.0.0.1:10810 push origin main --tags
+git tag $Version -f
+
+# 尝试推送，如果失败则输出警告
+Write-Host "Trying to push to GitHub..." -ForegroundColor Yellow
+git push origin main --tags -f
 
 # 5. GH Release
 Write-Host "Uploading to GitHub Releases..." -ForegroundColor Yellow
 # 检查 gh cli 是否登录
 gh auth status
-if ($LASTEXITCODE -ne 0) {
-    Write-Error "GitHub CLI 未登录，请先运行 'gh auth login'"
-    exit 1
+$isAuth = $LASTEXITCODE
+if ($isAuth -ne 0) {
+    Write-Warning "GitHub CLI Not Logged In. Artifacts are in apps/desktop/dist/."
+} else {
+    gh release create $Version apps/desktop/dist/*.exe apps/desktop/dist/*.msi --title "OpenClaw $Version" --notes "Local build release."
 }
 
-gh release create $Version apps/desktop/dist/*.exe apps/desktop/dist/*.msi --title "Clawdbot $Version" --notes "Local build release."
-
-Write-Host "Success! Check your release at: https://github.com/lllooollpp/openclaw-cn/releases" -ForegroundColor Green
+Write-Host "Done! Artifacts are in apps/desktop/dist/" -ForegroundColor Green

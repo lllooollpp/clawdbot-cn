@@ -1,7 +1,7 @@
 {
     "name":  "openclaw",
-    "version":  "1.0.6",
-    "description":  "OpenClaw 娑擃厽鏋冨Ч澶婂閻?- 閺€顖涘瘮閺呴缚姘?GLM-4.7",
+    "version":  "1.0.7",
+    "description":  "OpenClaw 濞戞搩鍘介弸鍐ㄐф径濠傤嚙闁?- 闁衡偓椤栨稑鐦柡鍛寸細濮?GLM-4.7",
     "type":  "module",
     "main":  "dist/index.js",
     "exports":  {

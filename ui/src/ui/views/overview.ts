@@ -43,8 +43,8 @@ export function renderOverview(props: OverviewProps) {
         <div class="muted" style="margin-top: 8px;">
           此网关需要身份验证。请添加令牌或密码，然后点击“连接”。
           <div style="margin-top: 6px;">
-            <span class="mono">clawdbot dashboard --no-open</span> → 获取带令牌的 URL<br />
-            <span class="mono">clawdbot doctor --generate-gateway-token</span> → 设置令牌
+            <span class="mono">openclaw dashboard --no-open</span> → 获取带令牌的 URL<br />
+            <span class="mono">openclaw doctor --generate-gateway-token</span> → 设置令牌
           </div>
           <div style="margin-top: 6px;">
             <a
@@ -62,7 +62,7 @@ export function renderOverview(props: OverviewProps) {
     return html`
       <div class="muted" style="margin-top: 8px;">
         身份验证失败。请通过
-        <span class="mono">clawdbot dashboard --no-open</span> 重新复制带令牌的 URL，或者更新令牌，然后点击“连接”。
+        <span class="mono">openclaw dashboard --no-open</span> 重新复制带令牌的 URL，或者更新令牌，然后点击“连接”。
         <div style="margin-top: 6px;">
           <a
             class="session-link"
