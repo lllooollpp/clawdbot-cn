@@ -1,6 +1,7 @@
 packages:
   - .
   - ui
+  - apps/*
   - extensions/*
 
 onlyBuiltDependencies:
@@ -11,3 +12,4 @@ onlyBuiltDependencies:
   - esbuild
   - protobufjs
   - sharp
+  - electron

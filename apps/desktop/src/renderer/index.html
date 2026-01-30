@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clawdbot Desktop</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: http://127.0.0.1:18789" />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: #1e1e1e;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        text-align: center;
+      }
+      .status {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #333;
+      }
+      iframe {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- By default, we show a loading screen and then redirect to the gateway dashboard -->
+    <div id="root">
+      <div class="container">
+        <h1>Clawdbot Gateway</h1>
+        <p>Starting services...</p>
+        <div class="status" id="status">Connecting to http://127.0.0.1:18789...</div>
+      </div>
+    </div>
+    
+    <script>
+      const statusEl = document.getElementById('status');
+      const checkGateway = async () => {
+        try {
+          const res = await fetch('http://127.0.0.1:18789/health');
+          if (res.ok) {
+            window.location.href = 'http://127.0.0.1:18789';
+          }
+        } catch (e) {
+          // Keep waiting
+        }
+      };
+      setInterval(checkGateway, 1000);
+    </script>
+  </body>
+</html>

@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
+    "./cli/run-main.js": "./dist/cli/run-main.js",
     "./plugin-sdk": "./dist/plugin-sdk/index.js",
     "./plugin-sdk/*": "./dist/plugin-sdk/*"
   },
@@ -104,6 +105,9 @@
     "android:install": "cd apps/android && ./gradlew :app:installDebug",
     "android:run": "cd apps/android && ./gradlew :app:installDebug && adb shell am start -n com.clawdbot.android/.MainActivity",
     "android:test": "cd apps/android && ./gradlew :app:testDebugUnitTest",
+    "desktop:dev": "pnpm --dir apps/desktop dev",
+    "desktop:build": "pnpm --dir apps/desktop build",
+    "desktop:win": "pnpm --dir apps/desktop build:win",
     "mac:restart": "bash scripts/restart-mac.sh",
     "mac:package": "bash scripts/package-mac-app.sh",
     "mac:open": "open dist/Clawdbot.app",
@@ -243,7 +247,10 @@
       "@sinclair/typebox": "0.34.47",
       "hono": "4.11.4",
       "tar": "7.5.4"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "electron"
+    ]
   },
   "vitest": {
     "coverage": {

@@ -1,0 +1,96 @@
+name: Desktop Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-windows:
+    runs-on: blacksmith-4vcpu-windows-2025
+    env:
+      NODE_OPTIONS: --max-old-space-size=6144
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.23.0 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts=false
+
+      - name: Build UI
+        run: pnpm ui:build
+
+      - name: Build Core
+        run: pnpm build
+
+      - name: Build Desktop (Windows)
+        run: |
+          cd apps/desktop
+          npm run build:win
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clawdbot-desktop-windows
+          path: apps/desktop/dist/*.exe
+          if-no-files-found: error
+
+  build-macos:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.23.0 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts=false
+
+      - name: Build UI
+        run: pnpm ui:build
+
+      - name: Build Core
+        run: pnpm build
+
+      - name: Build Desktop (macOS)
+        run: |
+          cd apps/desktop
+          npm run build:mac
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clawdbot-desktop-macos
+          path: apps/desktop/dist/*.dmg
+          if-no-files-found: error

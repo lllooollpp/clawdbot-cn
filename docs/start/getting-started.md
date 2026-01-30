@@ -9,13 +9,16 @@ read_when:
 
 目标：尽可能快速地从 **零** → **第一个可工作的聊天**（使用合理的默认设置）。
 
-推荐路径：使用 **CLI 入门向导** (`clawdbot onboard`)。它将设置：
-- 模型/认证（推荐使用 OAuth）
-- 网关设置
-- 通道（WhatsApp/Telegram/Discord/Mattermost（插件）/...）
-- 默认配对设置（安全的私聊）
-- 工作区初始化 + 技能
-- 可选的后台服务
+推荐路径：
+
+1.  **Desktop App (推荐)**: 下载并运行 [Clawdbot Desktop](/install/desktop)。这是最简单的图形化路径，支持 Windows、macOS 和 Linux。
+2.  **CLI 入门向导**: 运行 `clawdbot onboard`。它将设置：
+    - 模型/认证（推荐使用 OAuth）
+    - 网关设置
+    - 通道（WhatsApp/Telegram/Discord/Mattermost（插件）/...）
+    - 默认配对设置（安全的私聊）
+    - 工作区初始化 + 技能
+    - 可选的后台服务
 
 如果你想查看更深入的参考页面，请跳转到：[向导](/start/wizard)，[设置](/start/setup)，[配对](/start/pairing)，[安全](/gateway/security)。
 

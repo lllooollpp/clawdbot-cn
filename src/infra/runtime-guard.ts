@@ -66,6 +66,7 @@ export function assertSupportedRuntime(
   runtime: RuntimeEnv = defaultRuntime,
   details: RuntimeDetails = detectRuntime(),
 ): void {
+  if (process.versions?.electron) return;
   if (runtimeSatisfies(details)) return;
 
   const versionLabel = details.version ?? "unknown";
