@@ -300,6 +300,9 @@ importers:
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
+      sisteransi:
+        specifier: ^1.0.5
+        version: 1.0.5
       sqlite-vec:
         specifier: 0.1.7-alpha.2
         version: 0.1.7-alpha.2
