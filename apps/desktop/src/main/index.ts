@@ -4,8 +4,8 @@ import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
-// Import Clawdbot logic
-import { runCli } from 'clawdbot/cli/run-main.js'
+// Import OpenClaw logic
+import { runCli } from 'openclaw/cli/run-main.js'
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -13,7 +13,7 @@ let isAppQuitting = false
 
 async function startGateway(): Promise<void> {
   const stateDir = app.getPath('userData')
-  const configPath = join(stateDir, 'clawdbot.json')
+  const configPath = join(stateDir, 'openclaw.json')
 
   // Ensure config directory exists
   if (!fs.existsSync(stateDir)) {
@@ -22,7 +22,7 @@ async function startGateway(): Promise<void> {
 
   // Double-check: Create a minimal config if none exists to satisfy the "mode=local" check
   if (!fs.existsSync(configPath)) {
-    console.log('[Clawdbot] Initializing default config at:', configPath)
+    console.log('[OpenClaw] Initializing default config at:', configPath)
     const defaultConfig = {
       gateway: {
         mode: 'local',
@@ -70,22 +70,22 @@ async function startGateway(): Promise<void> {
     '--force'
   ]
   
-  console.log('[Clawdbot] Starting gateway with args:', gatewayArgs)
-  console.log('[Clawdbot] State directory:', process.env.CLAWDBOT_STATE_DIR)
+  console.log('[OpenClaw] Starting gateway with args:', gatewayArgs)
+  console.log('[OpenClaw] State directory:', process.env.CLAWDBOT_STATE_DIR)
   
   try {
     // Run CLI in the background. We don't await because it's a long-running server.
     runCli(gatewayArgs).catch(err => {
-      console.error('[Clawdbot] Background runCli error:', err)
+      console.error('[OpenClaw] Background runCli error:', err)
     })
-    console.log('[Clawdbot] Gateway initialization triggered')
+    console.log('[OpenClaw] Gateway initialization triggered')
 
     // Poll for gateway readiness to load the UI
     const checkGatewayReady = async (): Promise<void> => {
       try {
         const response = await fetch('http://127.0.0.1:18789/health')
         if (response.ok) {
-          console.log('[Clawdbot] Gateway is ready, loading dashboard')
+          console.log('[OpenClaw] Gateway is ready, loading dashboard')
           mainWindow?.loadURL('http://127.0.0.1:18789')
           return
         }
@@ -96,12 +96,12 @@ async function startGateway(): Promise<void> {
     }
     checkGatewayReady()
   } catch (error) {
-    console.error('[Clawdbot] Failed to start gateway:', error)
+    console.error('[OpenClaw] Failed to start gateway:', error)
   }
 }
 
 function createWindow(): void {
-  console.log('[Clawdbot] Creating window...')
+  console.log('[OpenClaw] Creating window...')
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -115,7 +115,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    console.log('[Clawdbot] Window ready to show')
+    console.log('[OpenClaw] Window ready to show')
     mainWindow?.show()
     mainWindow?.focus() // Force focus
   })
@@ -123,7 +123,7 @@ function createWindow(): void {
   // Fallback if ready-to-show doesn't fire
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {
-      console.log('[Clawdbot] ready-to-show timeout, forcing show')
+      console.log('[OpenClaw] ready-to-show timeout, forcing show')
       mainWindow.show()
     }
   }, 5000)
@@ -156,7 +156,7 @@ function createTray(): void {
   tray = new Tray(trayIcon.resize({ width: 16, height: 16 }))
   
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show Clawdbot', click: () => mainWindow?.show() },
+    { label: 'Show OpenClaw', click: () => mainWindow?.show() },
     { type: 'separator' },
     { label: 'Quit', click: () => {
       isAppQuitting = true
@@ -164,14 +164,14 @@ function createTray(): void {
     }}
   ])
 
-  tray.setToolTip('Clawdbot Gateway')
+  tray.setToolTip('OpenClaw Gateway')
   tray.setContextMenu(contextMenu)
   tray.on('double-click', () => mainWindow?.show())
 }
 
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.clawdbot.app')
+  electronApp.setAppUserModelId('com.openclaw.desktop')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

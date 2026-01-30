@@ -264,28 +264,43 @@ importers:
 
   apps/desktop:
     dependencies:
+      '@clack/core':
+        specifier: ^0.3.4
+        version: 0.3.5
+      '@clack/prompts':
+        specifier: ^0.11.0
+        version: 0.11.0
       '@electron-toolkit/preload':
         specifier: ^3.0.0
         version: 3.0.2(electron@30.5.1)
       '@electron-toolkit/utils':
         specifier: ^3.0.0
         version: 3.0.0(electron@30.5.1)
-      clawdbot:
+      '@lydell/node-pty':
+        specifier: 1.2.0-beta.3
+        version: 1.2.0-beta.3
+      openclaw:
         specifier: workspace:*
         version: link:../..
+      sharp:
+        specifier: ^0.34.5
+        version: 0.34.5
+      sqlite-vec:
+        specifier: 0.1.7-alpha.2
+        version: 0.1.7-alpha.2
     devDependencies:
       '@electron-toolkit/eslint-config-ts':
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.57.1)(typescript@5.9.3)
       '@electron-toolkit/tsconfig':
         specifier: ^1.0.1
-        version: 1.0.1(@types/node@20.19.30)
+        version: 1.0.1(@types/node@22.19.7)
       '@types/node':
-        specifier: ^20.12.7
-        version: 20.19.30
+        specifier: ^22.0.0
+        version: 22.19.7
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.7.0(vite@5.4.21(@types/node@20.19.30)(lightningcss@1.30.2))
+        version: 4.7.0(vite@5.4.21(@types/node@22.19.7)(lightningcss@1.30.2))
       electron:
         specifier: ^30.0.1
         version: 30.5.1
@@ -294,7 +309,7 @@ importers:
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3)
       electron-vite:
         specifier: ^2.1.0
-        version: 2.3.0(vite@5.4.21(@types/node@20.19.30)(lightningcss@1.30.2))
+        version: 2.3.0(vite@5.4.21(@types/node@22.19.7)(lightningcss@1.30.2))
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
@@ -312,7 +327,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^5.2.8
-        version: 5.4.21(@types/node@20.19.30)(lightningcss@1.30.2)
+        version: 5.4.21(@types/node@22.19.7)(lightningcss@1.30.2)
 
   extensions/bluebubbles: {}
 
@@ -362,7 +377,7 @@ importers:
         specifier: ^1.40.4
         version: 1.56.1
     devDependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -376,7 +391,7 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
     devDependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -384,7 +399,7 @@ importers:
 
   extensions/line:
     devDependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -410,7 +425,7 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -418,7 +433,7 @@ importers:
 
   extensions/memory-core:
     dependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -445,12 +460,12 @@ importers:
       '@microsoft/agents-hosting-extensions-teams':
         specifier: ^1.2.2
         version: 1.2.2
-      clawdbot:
-        specifier: workspace:*
-        version: link:../..
       express:
         specifier: ^5.2.1
         version: 5.2.1
+      openclaw:
+        specifier: workspace:*
+        version: link:../..
       proper-lockfile:
         specifier: ^4.1.2
         version: 4.1.2
@@ -459,12 +474,12 @@ importers:
 
   extensions/nostr:
     dependencies:
-      clawdbot:
-        specifier: workspace:*
-        version: link:../..
       nostr-tools:
         specifier: ^2.20.0
         version: 2.20.0(typescript@5.9.3)
+      openclaw:
+        specifier: workspace:*
+        version: link:../..
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -507,7 +522,7 @@ importers:
         specifier: ^4.3.2
         version: 4.5.3
     devDependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -515,7 +530,7 @@ importers:
 
   extensions/zalo:
     dependencies:
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
       undici:
@@ -527,7 +542,7 @@ importers:
       '@sinclair/typebox':
         specifier: 0.34.47
         version: 0.34.47
-      clawdbot:
+      openclaw:
         specifier: workspace:*
         version: link:../..
 
@@ -950,6 +965,9 @@ packages:
 
   '@cacheable/utils@2.3.3':
     resolution: {integrity: sha512-JsXDL70gQ+1Vc2W/KUFfkAJzgb4puKwwKehNLuB+HrNKWf91O736kGfxn4KujXCCSuh6mRRL4XEB0PkAFjWS0A==}
+
+  '@clack/core@0.3.5':
+    resolution: {integrity: sha512-5cfhQNH+1VQ2xLQlmzXMqUoiaH0lRBq9/CLW9lTyMbuKLC3+xEK01tHVvyut++mLOn5urSHmkm6I0Lg9MaJSTQ==}
 
   '@clack/core@0.5.0':
     resolution: {integrity: sha512-p3y0FIOwaYRUPRcMO7+dlmLh8PSRcrjuTndsiA0WAFbWES0mLZlrjVoBRZ9DzkPFJZG6KGkJmoEAY0ZcVWTkow==}
@@ -3073,6 +3091,9 @@ packages:
 
   '@types/node@20.19.30':
     resolution: {integrity: sha512-WJtwWJu7UdlvzEAUm484QNg5eAoq5QR08KDNx7g45Usrs2NtOPiX8ugDqmKdXkyL03rBqU5dYNYVQetEpBHq2g==}
+
+  '@types/node@22.19.7':
+    resolution: {integrity: sha512-MciR4AKGHWl7xwxkBa6xUGxQJ4VBOmPTF7sL+iGzuahOFaO0jHCsuEfS80pan1ef4gWId1oWOweIhrDEYLuaOw==}
 
   '@types/node@24.10.9':
     resolution: {integrity: sha512-ne4A0IpG3+2ETuREInjPNhUGis1SFjv1d5asp8MzEAGtOZeTeHVDOYqOgqfhvseqg/iXty2hjBf1zAOb7RNiNw==}
@@ -7806,6 +7827,11 @@ snapshots:
       hashery: 1.4.0
       keyv: 5.6.0
 
+  '@clack/core@0.3.5':
+    dependencies:
+      picocolors: 1.1.1
+      sisteransi: 1.0.5
+
   '@clack/core@0.5.0':
     dependencies:
       picocolors: 1.1.1
@@ -7855,9 +7881,9 @@ snapshots:
     dependencies:
       electron: 30.5.1
 
-  '@electron-toolkit/tsconfig@1.0.1(@types/node@20.19.30)':
+  '@electron-toolkit/tsconfig@1.0.1(@types/node@22.19.7)':
     dependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.7
 
   '@electron-toolkit/utils@3.0.0(electron@30.5.1)':
     dependencies:
@@ -9890,7 +9916,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.2.0
       '@types/keyv': 3.1.4
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
       '@types/responselike': 1.0.3
 
   '@types/chai@5.2.3':
@@ -9943,7 +9969,7 @@ snapshots:
 
   '@types/fs-extra@9.0.13':
     dependencies:
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
 
   '@types/http-cache-semantics@4.2.0': {}
 
@@ -9956,7 +9982,7 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
 
   '@types/linkify-it@5.0.0': {}
 
@@ -9981,6 +10007,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/node@22.19.7':
+    dependencies:
+      undici-types: 6.21.0
+
   '@types/node@24.10.9':
     dependencies:
       undici-types: 7.16.0
@@ -9991,7 +10021,7 @@ snapshots:
 
   '@types/plist@3.0.5':
     dependencies:
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
       xmlbuilder: 15.1.1
     optional: true
 
@@ -10007,7 +10037,7 @@ snapshots:
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
 
   '@types/retry@0.12.0': {}
 
@@ -10044,7 +10074,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 25.0.10
+      '@types/node': 22.19.7
     optional: true
 
   '@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)':
@@ -10177,7 +10207,7 @@ snapshots:
       browser-or-node: 1.3.0
       core-js: 3.48.0
 
-  '@vitejs/plugin-react@4.7.0(vite@5.4.21(@types/node@20.19.30)(lightningcss@1.30.2))':
+  '@vitejs/plugin-react@4.7.0(vite@5.4.21(@types/node@22.19.7)(lightningcss@1.30.2))':
     dependencies:
       '@babel/core': 7.28.6
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.6)
@@ -10185,7 +10215,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 5.4.21(@types/node@20.19.30)(lightningcss@1.30.2)
+      vite: 5.4.21(@types/node@22.19.7)(lightningcss@1.30.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -11209,7 +11239,7 @@ snapshots:
 
   electron-to-chromium@1.5.282: {}
 
-  electron-vite@2.3.0(vite@5.4.21(@types/node@20.19.30)(lightningcss@1.30.2)):
+  electron-vite@2.3.0(vite@5.4.21(@types/node@22.19.7)(lightningcss@1.30.2)):
     dependencies:
       '@babel/core': 7.28.6
       '@babel/plugin-transform-arrow-functions': 7.27.1(@babel/core@7.28.6)
@@ -11217,7 +11247,7 @@ snapshots:
       esbuild: 0.21.5
       magic-string: 0.30.21
       picocolors: 1.1.1
-      vite: 5.4.21(@types/node@20.19.30)(lightningcss@1.30.2)
+      vite: 5.4.21(@types/node@22.19.7)(lightningcss@1.30.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -14050,13 +14080,13 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.3.0
 
-  vite@5.4.21(@types/node@20.19.30)(lightningcss@1.30.2):
+  vite@5.4.21(@types/node@22.19.7)(lightningcss@1.30.2):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.5.6
       rollup: 4.55.3
     optionalDependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.7
       fsevents: 2.3.3
       lightningcss: 1.30.2
 

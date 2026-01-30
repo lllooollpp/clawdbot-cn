@@ -7,7 +7,7 @@
     "@larksuiteoapi/node-sdk": "^1.40.4"
   },
   "devDependencies": {
-    "clawdbot": "workspace:*"
+    "openclaw": "workspace:*"
   },
   "clawdbot": {
     "extensions": [

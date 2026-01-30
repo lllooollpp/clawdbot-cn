@@ -49,7 +49,12 @@
     "dependencies":  {
                          "@electron-toolkit/preload":  "^3.0.0",
                          "@electron-toolkit/utils":  "^3.0.0",
-                         "clawdbot":  "workspace:*"
+                         "@clack/core":  "^0.3.4",
+                         "@clack/prompts":  "^0.11.0",
+                         "@lydell/node-pty":  "1.2.0-beta.3",
+                         "sharp":  "^0.34.5",
+                         "sqlite-vec":  "0.1.7-alpha.2",
+                         "openclaw":  "workspace:*"
                      },
     "devDependencies":  {
                             "@electron-toolkit/eslint-config-ts":  "^2.0.0",

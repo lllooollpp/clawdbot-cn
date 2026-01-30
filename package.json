@@ -1,7 +1,7 @@
 {
     "name":  "openclaw",
     "version":  "1.0.7",
-    "description":  "OpenClaw 濞戞搩鍘介弸鍐ㄐф径濠傤嚙闁?- 闁衡偓椤栨稑鐦柡鍛寸細濮?GLM-4.7",
+    "description":  "OpenClaw 鐠恒劌閽╅崣鎵秹閸?- 閸╄桨绨?GLM-4",
     "type":  "module",
     "main":  "dist/index.js",
     "exports":  {
@@ -11,7 +11,7 @@
                     "./plugin-sdk/*":  "./dist/plugin-sdk/*"
                 },
     "bin":  {
-                "clawdbot":  "dist/entry.js"
+                "openclaw":  "dist/entry.js"
             },
     "files":  [
                   "dist/acp/**",
