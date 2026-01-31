@@ -15,6 +15,22 @@ let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
 let isAppQuitting = false
 
+function findNodeBin(): string {
+  if (process.env.CLAWDBOT_NODE_BIN) return process.env.CLAWDBOT_NODE_BIN
+  const pathEnv = process.env.PATH ?? ''
+  const parts = pathEnv.split(process.platform === 'win32' ? ';' : ':')
+  const candidates = process.platform === 'win32' ? ['node.exe', 'node'] : ['node']
+  for (const dir of parts) {
+    const trimmed = dir.trim()
+    if (!trimmed) continue
+    for (const name of candidates) {
+      const full = join(trimmed, name)
+      if (fs.existsSync(full)) return full
+    }
+  }
+  return 'node'
+}
+
 async function startGateway(): Promise<void> {
   const stateDir = app.getPath('userData')
   const configPath = join(stateDir, 'openclaw.json')
@@ -64,7 +80,7 @@ async function startGateway(): Promise<void> {
   process.env.CLAWDBOT_NO_RESPAWN = '1'
   
   const workspaceRoot = resolve(__dirname, '../../../..')
-  const nodeBin = process.env.CLAWDBOT_NODE_BIN ?? 'node'
+  const nodeBin = findNodeBin()
   const gatewayArgs = [
     nodeBin,
     '--import',
@@ -90,6 +106,9 @@ async function startGateway(): Promise<void> {
       env: process.env,
       stdio: 'inherit',
       windowsHide: true
+    })
+    child.on('error', (err) => {
+      console.error('[OpenClaw] Failed to spawn gateway process:', err)
     })
     child.on('exit', (code, signal) => {
       if (signal) {
