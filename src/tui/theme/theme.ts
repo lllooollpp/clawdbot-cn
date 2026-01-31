@@ -66,7 +66,7 @@ export const theme = {
   accentSoft: fg(palette.accentSoft),
   success: fg(palette.success),
   error: fg(palette.error),
-  header: (text: string) => chalk.bold(fg(palette.accent)(text)),
+  header: (text: string) => baseChalk.bold(fg(palette.accent)(text)),
   system: fg(palette.systemText),
   userBg: bg(palette.userBg),
   userText: fg(palette.userText),
@@ -76,14 +76,14 @@ export const theme = {
   toolSuccessBg: bg(palette.toolSuccessBg),
   toolErrorBg: bg(palette.toolErrorBg),
   border: fg(palette.border),
-  bold: (text: string) => chalk.bold(text),
-  italic: (text: string) => chalk.italic(text),
+  bold: (text: string) => baseChalk.bold(text),
+  italic: (text: string) => baseChalk.italic(text),
 };
 
 export const markdownTheme: MarkdownTheme = {
-  heading: (text) => chalk.bold(fg(palette.accent)(text)),
+  heading: (text) => baseChalk.bold(fg(palette.accent)(text)),
   link: (text) => fg(palette.link)(text),
-  linkUrl: (text) => chalk.dim(text),
+  linkUrl: (text) => baseChalk.dim(text),
   code: (text) => fg(palette.code)(text),
   codeBlock: (text) => fg(palette.code)(text),
   codeBlockBorder: (text) => fg(palette.codeBorder)(text),
@@ -91,16 +91,16 @@ export const markdownTheme: MarkdownTheme = {
   quoteBorder: (text) => fg(palette.quoteBorder)(text),
   hr: (text) => fg(palette.border)(text),
   listBullet: (text) => fg(palette.accentSoft)(text),
-  bold: (text) => chalk.bold(text),
-  italic: (text) => chalk.italic(text),
-  strikethrough: (text) => chalk.strikethrough(text),
-  underline: (text) => chalk.underline(text),
+  bold: (text) => baseChalk.bold(text),
+  italic: (text) => baseChalk.italic(text),
+  strikethrough: (text) => baseChalk.strikethrough(text),
+  underline: (text) => baseChalk.underline(text),
   highlightCode,
 };
 
 export const selectListTheme: SelectListTheme = {
   selectedPrefix: (text) => fg(palette.accent)(text),
-  selectedText: (text) => chalk.bold(fg(palette.accent)(text)),
+  selectedText: (text) => baseChalk.bold(fg(palette.accent)(text)),
   description: (text) => fg(palette.dim)(text),
   scrollInfo: (text) => fg(palette.dim)(text),
   noMatch: (text) => fg(palette.dim)(text),
@@ -113,7 +113,7 @@ export const filterableSelectListTheme = {
 
 export const settingsListTheme: SettingsListTheme = {
   label: (text, selected) =>
-    selected ? chalk.bold(fg(palette.accent)(text)) : fg(palette.text)(text),
+    selected ? baseChalk.bold(fg(palette.accent)(text)) : fg(palette.text)(text),
   value: (text, selected) => (selected ? fg(palette.accentSoft)(text) : fg(palette.dim)(text)),
   description: (text) => fg(palette.systemText)(text),
   cursor: fg(palette.accent)("→ "),
@@ -127,11 +127,11 @@ export const editorTheme: EditorTheme = {
 
 export const searchableSelectListTheme: SearchableSelectListTheme = {
   selectedPrefix: (text) => fg(palette.accent)(text),
-  selectedText: (text) => chalk.bold(fg(palette.accent)(text)),
+  selectedText: (text) => baseChalk.bold(fg(palette.accent)(text)),
   description: (text) => fg(palette.dim)(text),
   scrollInfo: (text) => fg(palette.dim)(text),
   noMatch: (text) => fg(palette.dim)(text),
   searchPrompt: (text) => fg(palette.accentSoft)(text),
   searchInput: (text) => fg(palette.text)(text),
-  matchHighlight: (text) => chalk.bold(fg(palette.accent)(text)),
+  matchHighlight: (text) => baseChalk.bold(fg(palette.accent)(text)),
 };
