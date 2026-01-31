@@ -79,9 +79,14 @@ function getGitPaths(args, repoRoot) {
 }
 
 function formatFiles(repoRoot, oxfmt, files) {
+  const useShell =
+    process.platform === "win32" &&
+    typeof oxfmt.command === "string" &&
+    oxfmt.command.toLowerCase().endsWith(".cmd");
   const result = spawnSync(oxfmt.command, ["--write", ...oxfmt.args, ...files], {
     cwd: repoRoot,
     stdio: "inherit",
+    shell: useShell,
   });
   return result.status === 0;
 }

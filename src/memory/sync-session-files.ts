@@ -1,5 +1,3 @@
-import type { DatabaseSync } from "node:sqlite";
-
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type { SessionFileEntry } from "./session-files.js";
 import {
@@ -19,7 +17,7 @@ type ProgressState = {
 
 export async function syncSessionFiles(params: {
   agentId: string;
-  db: DatabaseSync;
+  db: any;
   needsFullReindex: boolean;
   progress?: ProgressState;
   batchEnabled: boolean;

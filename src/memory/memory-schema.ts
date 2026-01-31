@@ -1,7 +1,5 @@
-import type { DatabaseSync } from "node:sqlite";
-
 export function ensureMemoryIndexSchema(params: {
-  db: DatabaseSync;
+  db: any;
   embeddingCacheTable: string;
   ftsTable: string;
   ftsEnabled: boolean;
@@ -83,7 +81,7 @@ export function ensureMemoryIndexSchema(params: {
 }
 
 function ensureColumn(
-  db: DatabaseSync,
+  db: any,
   table: "files" | "chunks",
   column: string,
   definition: string,

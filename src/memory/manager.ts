@@ -2,7 +2,6 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { DatabaseSync } from "node:sqlite";
 import chokidar, { type FSWatcher } from "chokidar";
 
 import { resolveAgentDir, resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
@@ -138,7 +137,7 @@ export class MemoryIndexManager {
   private batchFailureLastError?: string;
   private batchFailureLastProvider?: string;
   private batchFailureLock: Promise<void> = Promise.resolve();
-  private db: DatabaseSync;
+  private db: any;
   private readonly sources: Set<MemorySource>;
   private providerKey: string;
   private readonly cache: { enabled: boolean; maxEntries?: number };
@@ -663,19 +662,19 @@ export class MemoryIndexManager {
     return { sql: ` AND ${column} IN (${placeholders})`, params: sources };
   }
 
-  private openDatabase(): DatabaseSync {
+  private openDatabase(): any {
     const dbPath = resolveUserPath(this.settings.store.path);
     return this.openDatabaseAtPath(dbPath);
   }
 
-  private openDatabaseAtPath(dbPath: string): DatabaseSync {
+  private openDatabaseAtPath(dbPath: string): any {
     const dir = path.dirname(dbPath);
     ensureDir(dir);
     const { DatabaseSync } = requireNodeSqlite();
     return new DatabaseSync(dbPath, { allowExtension: this.settings.store.vector.enabled });
   }
 
-  private seedEmbeddingCache(sourceDb: DatabaseSync): void {
+  private seedEmbeddingCache(sourceDb: any): void {
     if (!this.cache.enabled) return;
     try {
       const rows = sourceDb

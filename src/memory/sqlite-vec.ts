@@ -1,7 +1,5 @@
-import type { DatabaseSync } from "node:sqlite";
-
 export async function loadSqliteVecExtension(params: {
-  db: DatabaseSync;
+  db: any;
   extensionPath?: string;
 }): Promise<{ ok: boolean; extensionPath?: string; error?: string }> {
   try {

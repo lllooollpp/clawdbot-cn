@@ -1,11 +1,15 @@
 import { app, shell, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
-import { join } from 'path'
+import { join, dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
+import { spawn } from 'child_process'
+
+console.log('[OpenClaw] Electron version:', process.versions.electron)
+console.log('[OpenClaw] Node version:', process.versions.node)
+
 import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-
-// Import OpenClaw logic
-import { runCli } from 'openclaw/cli/run-main.js'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const icon = fileURLToPath(new URL('../../resources/icon.png', import.meta.url))
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -59,13 +63,19 @@ async function startGateway(): Promise<void> {
   process.env.CLAWDBOT_SKIP_UPDATE_CHECK = '1'
   process.env.CLAWDBOT_NO_RESPAWN = '1'
   
+  const workspaceRoot = resolve(__dirname, '../../../..')
+  const nodeBin = process.env.CLAWDBOT_NODE_BIN ?? 'node'
   const gatewayArgs = [
-    process.execPath, 
-    'clawdbot', 
-    'gateway', 
-    'run', 
-    '--bind', 'loopback', 
-    '--port', '18789', 
+    nodeBin,
+    '--import',
+    'tsx',
+    'src/entry.ts',
+    'gateway',
+    'run',
+    '--bind',
+    'loopback',
+    '--port',
+    '18789',
     '--allow-unconfigured',
     '--force'
   ]
@@ -74,9 +84,21 @@ async function startGateway(): Promise<void> {
   console.log('[OpenClaw] State directory:', process.env.CLAWDBOT_STATE_DIR)
   
   try {
-    // Run CLI in the background. We don't await because it's a long-running server.
-    runCli(gatewayArgs).catch(err => {
-      console.error('[OpenClaw] Background runCli error:', err)
+    // Run CLI in a separate Node process to avoid Electron's Node runtime.
+    const child = spawn(gatewayArgs[0], gatewayArgs.slice(1), {
+      cwd: workspaceRoot,
+      env: process.env,
+      stdio: 'inherit',
+      windowsHide: true
+    })
+    child.on('exit', (code, signal) => {
+      if (signal) {
+        console.error('[OpenClaw] Gateway process exited with signal:', signal)
+        return
+      }
+      if (code && code !== 0) {
+        console.error('[OpenClaw] Gateway process exited with code:', code)
+      }
     })
     console.log('[OpenClaw] Gateway initialization triggered')
 
@@ -109,7 +131,7 @@ function createWindow(): void {
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/index.mjs'),
       sandbox: false
     }
   })

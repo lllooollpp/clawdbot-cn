@@ -1,5 +1,3 @@
-import type { DatabaseSync } from "node:sqlite";
-
 import { truncateUtf16Safe } from "../utils.js";
 import { cosineSimilarity, parseEmbedding } from "./internal.js";
 
@@ -19,7 +17,7 @@ export type SearchRowResult = {
 };
 
 export async function searchVector(params: {
-  db: DatabaseSync;
+  db: any;
   vectorTable: string;
   providerModel: string;
   queryVec: number[];
@@ -36,9 +34,9 @@ export async function searchVector(params: {
         `SELECT c.id, c.path, c.start_line, c.end_line, c.text,\n` +
           `       c.source,\n` +
           `       vec_distance_cosine(v.embedding, ?) AS dist\n` +
-          `  FROM ${params.vectorTable} v\n` +
+          `  FROM \${params.vectorTable} v\n` +
           `  JOIN chunks c ON c.id = v.id\n` +
-          ` WHERE c.model = ?${params.sourceFilterVec.sql}\n` +
+          ` WHERE c.model = ?\${params.sourceFilterVec.sql}\n` +
           ` ORDER BY dist ASC\n` +
           ` LIMIT ?`,
       )
@@ -93,7 +91,7 @@ export async function searchVector(params: {
 }
 
 export function listChunks(params: {
-  db: DatabaseSync;
+  db: any;
   providerModel: string;
   sourceFilter: { sql: string; params: SearchSource[] };
 }): Array<{
@@ -109,7 +107,7 @@ export function listChunks(params: {
     .prepare(
       `SELECT id, path, start_line, end_line, text, embedding, source\n` +
         `  FROM chunks\n` +
-        ` WHERE model = ?${params.sourceFilter.sql}`,
+        ` WHERE model = ?\${params.sourceFilter.sql}`,
     )
     .all(params.providerModel, ...params.sourceFilter.params) as Array<{
     id: string;
@@ -133,7 +131,7 @@ export function listChunks(params: {
 }
 
 export async function searchKeyword(params: {
-  db: DatabaseSync;
+  db: any;
   ftsTable: string;
   providerModel: string;
   query: string;
@@ -150,9 +148,9 @@ export async function searchKeyword(params: {
   const rows = params.db
     .prepare(
       `SELECT id, path, source, start_line, end_line, text,\n` +
-        `       bm25(${params.ftsTable}) AS rank\n` +
-        `  FROM ${params.ftsTable}\n` +
-        ` WHERE ${params.ftsTable} MATCH ? AND model = ?${params.sourceFilter.sql}\n` +
+        `       bm25(\${params.ftsTable}) AS rank\n` +
+        `  FROM \${params.ftsTable}\n` +
+        ` WHERE \${params.ftsTable} MATCH ? AND model = ?\${params.sourceFilter.sql}\n` +
         ` ORDER BY rank ASC\n` +
         ` LIMIT ?`,
     )

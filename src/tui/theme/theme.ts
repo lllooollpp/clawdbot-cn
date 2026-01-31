@@ -4,7 +4,7 @@ import type {
   SelectListTheme,
   SettingsListTheme,
 } from "@mariozechner/pi-tui";
-import chalk from "chalk";
+import { baseChalk } from "./chalk.js";
 import { highlight, supportsLanguage } from "cli-highlight";
 import type { SearchableSelectListTheme } from "../components/searchable-select-list.js";
 import { createSyntaxTheme } from "./syntax-theme.js";
@@ -33,8 +33,8 @@ const palette = {
   success: "#7DD3A5",
 };
 
-const fg = (hex: string) => (text: string) => chalk.hex(hex)(text);
-const bg = (hex: string) => (text: string) => chalk.bgHex(hex)(text);
+const fg = (hex: string) => (text: string) => baseChalk.hex(hex)(text);
+const bg = (hex: string) => (text: string) => baseChalk.bgHex(hex)(text);
 
 const syntaxTheme = createSyntaxTheme(fg(palette.code));
 
