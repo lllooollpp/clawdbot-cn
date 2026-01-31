@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>OpenClaw Desktop</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: http://127.0.0.1:18789" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: http://127.0.0.1:18789" />
     <style>
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -91,6 +91,8 @@
 
       if (window.api && typeof window.api.onGatewayLog === 'function') {
         window.api.onGatewayLog((line) => appendLog(line));
+      } else {
+        appendLog('[OpenClaw] Log bridge not available yet.')
       }
       loadBufferedLogs();
       const checkGateway = async () => {
