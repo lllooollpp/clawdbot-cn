@@ -1,8 +1,15 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { exposeElectronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  getGatewayLogBuffer: () => ipcRenderer.invoke('gateway-log-buffer'),
+  onGatewayLog: (listener: (line: string) => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, line: string) => listener(line)
+    ipcRenderer.on('gateway-log', handler)
+    return () => ipcRenderer.removeListener('gateway-log', handler)
+  }
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

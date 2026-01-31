@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
+import { app, shell, BrowserWindow, Tray, Menu, nativeImage, ipcMain } from 'electron'
 import { join, dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { spawn } from 'child_process'
@@ -14,6 +14,19 @@ const icon = fileURLToPath(new URL('../../resources/icon.png', import.meta.url))
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
 let isAppQuitting = false
+const gatewayLogBuffer: string[] = []
+const maxGatewayLogLines = 300
+
+function sendGatewayLog(line: string): void {
+  gatewayLogBuffer.push(line)
+  if (gatewayLogBuffer.length > maxGatewayLogLines) {
+    gatewayLogBuffer.splice(0, gatewayLogBuffer.length - maxGatewayLogLines)
+  }
+  if (!mainWindow || mainWindow.isDestroyed()) return
+  mainWindow.webContents.send('gateway-log', line)
+}
+
+ipcMain.handle('gateway-log-buffer', () => gatewayLogBuffer.slice())
 
 function findNodeBin(): string {
   if (process.env.CLAWDBOT_NODE_BIN) return process.env.CLAWDBOT_NODE_BIN
@@ -98,25 +111,46 @@ async function startGateway(): Promise<void> {
   
   console.log('[OpenClaw] Starting gateway with args:', gatewayArgs)
   console.log('[OpenClaw] State directory:', process.env.CLAWDBOT_STATE_DIR)
+  sendGatewayLog(`[OpenClaw] Starting gateway with args: ${gatewayArgs.join(' ')}`)
+  sendGatewayLog(`[OpenClaw] State directory: ${process.env.CLAWDBOT_STATE_DIR ?? ''}`)
   
   try {
     // Run CLI in a separate Node process to avoid Electron's Node runtime.
     const child = spawn(gatewayArgs[0], gatewayArgs.slice(1), {
       cwd: workspaceRoot,
       env: process.env,
-      stdio: 'inherit',
+      stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true
+    })
+    child.stdout?.on('data', (data) => {
+      const text = data.toString('utf-8')
+      process.stdout.write(text)
+      text
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .forEach((line) => sendGatewayLog(line))
+    })
+    child.stderr?.on('data', (data) => {
+      const text = data.toString('utf-8')
+      process.stderr.write(text)
+      text
+        .split(/\r?\n/)
+        .filter(Boolean)
+        .forEach((line) => sendGatewayLog(line))
     })
     child.on('error', (err) => {
       console.error('[OpenClaw] Failed to spawn gateway process:', err)
+      sendGatewayLog(`[OpenClaw] Failed to spawn gateway process: ${String(err)}`)
     })
     child.on('exit', (code, signal) => {
       if (signal) {
         console.error('[OpenClaw] Gateway process exited with signal:', signal)
+        sendGatewayLog(`[OpenClaw] Gateway process exited with signal: ${signal}`)
         return
       }
       if (code && code !== 0) {
         console.error('[OpenClaw] Gateway process exited with code:', code)
+        sendGatewayLog(`[OpenClaw] Gateway process exited with code: ${code}`)
       }
     })
     console.log('[OpenClaw] Gateway initialization triggered')

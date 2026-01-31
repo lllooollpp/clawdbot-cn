@@ -25,6 +25,26 @@
         border-radius: 5px;
         background-color: #333;
       }
+      .logs {
+        margin-top: 16px;
+        width: min(720px, 90vw);
+        max-height: 240px;
+        overflow: auto;
+        text-align: left;
+        background: #141414;
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        padding: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        color: #d0d0d0;
+        white-space: pre-wrap;
+      }
+      .log-line {
+        opacity: 0.9;
+      }
       iframe {
         width: 100vw;
         height: 100vh;
@@ -39,11 +59,40 @@
         <h1>OpenClaw Gateway</h1>
         <p>Starting services...</p>
         <div class="status" id="status">Connecting to http://127.0.0.1:18789...</div>
+        <div class="logs" id="logs" aria-live="polite"></div>
       </div>
     </div>
     
     <script>
       const statusEl = document.getElementById('status');
+      const logsEl = document.getElementById('logs');
+      const maxLines = 200;
+      const lines = [];
+
+      const appendLog = (line) => {
+        if (!line) return;
+        lines.push(line);
+        if (lines.length > maxLines) lines.splice(0, lines.length - maxLines);
+        logsEl.innerHTML = lines.map(l => `<div class="log-line">${l}</div>`).join('');
+        logsEl.scrollTop = logsEl.scrollHeight;
+      };
+
+      const loadBufferedLogs = async () => {
+        if (!window.api || typeof window.api.getGatewayLogBuffer !== 'function') return;
+        try {
+          const buffered = await window.api.getGatewayLogBuffer();
+          if (Array.isArray(buffered)) {
+            buffered.forEach((line) => appendLog(line));
+          }
+        } catch (err) {
+          // ignore
+        }
+      };
+
+      if (window.api && typeof window.api.onGatewayLog === 'function') {
+        window.api.onGatewayLog((line) => appendLog(line));
+      }
+      loadBufferedLogs();
       const checkGateway = async () => {
         try {
           const res = await fetch('http://127.0.0.1:18789/health');
