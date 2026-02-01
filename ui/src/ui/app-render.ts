@@ -113,6 +113,7 @@ export function renderApp(state: AppViewState) {
       onboardingWizardDraft: state.onboardingWizardDraft,
       onWizardStart: () => void state.handleOnboardingStart(),
       onWizardNext: () => void state.handleOnboardingNext(),
+      onWizardBack: () => void state.handleOnboardingBack(),
       onWizardCancel: () => void state.handleOnboardingCancel(),
       onWizardDraftChange: (value) => state.handleOnboardingDraftChange(value),
       onReconnect: () => state.connect(),

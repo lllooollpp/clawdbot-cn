@@ -201,6 +201,7 @@ export type AppViewState = {
   handleDiscoverModels: (provider: string) => Promise<void>;
   handleOnboardingStart: () => Promise<void>;
   handleOnboardingNext: () => Promise<void>;
+  handleOnboardingBack: () => Promise<void>;
   handleOnboardingCancel: () => Promise<void>;
   handleOnboardingDraftChange: (value: unknown) => void;
   handleOnboardingExit: () => void;

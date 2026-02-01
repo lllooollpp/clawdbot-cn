@@ -50,3 +50,10 @@ export class WizardCancelledError extends Error {
     this.name = "WizardCancelledError";
   }
 }
+
+export class WizardBackError extends Error {
+  constructor() {
+    super("wizard back");
+    this.name = "WizardBackError";
+  }
+}

@@ -16,6 +16,7 @@ export type WizardStep = {
   placeholder?: string;
   sensitive?: boolean;
   executor?: "gateway" | "client";
+  supportsBack?: boolean;
 };
 
 export type WizardSessionStatus = "running" | "done" | "cancelled" | "error";
@@ -128,6 +129,25 @@ export async function advanceWizard(state: WizardState, value?: unknown) {
     const result = (await state.client.request("wizard.next", {
       sessionId,
       answer: { stepId: step.id, value },
+    })) as WizardNextResult;
+    applyWizardNextResult(state, result);
+  } catch (err) {
+    state.onboardingWizardError = String(err);
+  } finally {
+    state.onboardingWizardBusy = false;
+  }
+}
+
+export async function backWizard(state: WizardState) {
+  if (!state.client || !state.connected) return;
+  const sessionId = state.onboardingWizardSessionId;
+  if (!sessionId) return;
+  state.onboardingWizardBusy = true;
+  state.onboardingWizardError = null;
+  try {
+    const result = (await state.client.request("wizard.next", {
+      sessionId,
+      back: true,
     })) as WizardNextResult;
     applyWizardNextResult(state, result);
   } catch (err) {

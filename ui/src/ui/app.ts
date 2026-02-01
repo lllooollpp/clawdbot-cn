@@ -66,6 +66,7 @@ import {
 } from "./controllers/config";
 import {
   advanceWizard,
+  backWizard,
   cancelWizard,
   startWizard,
   type WizardSessionStatus,
@@ -366,6 +367,10 @@ export class ClawdbotApp extends LitElement {
 
   async handleOnboardingNext() {
     await advanceWizard(this, this.onboardingWizardDraft);
+  }
+
+  async handleOnboardingBack() {
+    await backWizard(this);
   }
 
   async handleOnboardingCancel() {

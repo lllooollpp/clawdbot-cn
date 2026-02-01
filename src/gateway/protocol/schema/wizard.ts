@@ -22,6 +22,7 @@ export const WizardNextParamsSchema = Type.Object(
   {
     sessionId: NonEmptyString,
     answer: Type.Optional(WizardAnswerSchema),
+    back: Type.Optional(Type.Boolean()),
   },
   { additionalProperties: false },
 );
@@ -68,6 +69,7 @@ export const WizardStepSchema = Type.Object(
     placeholder: Type.Optional(Type.String()),
     sensitive: Type.Optional(Type.Boolean()),
     executor: Type.Optional(Type.Union([Type.Literal("gateway"), Type.Literal("client")])),
+    supportsBack: Type.Optional(Type.Boolean()),
   },
   { additionalProperties: false },
 );

@@ -11,6 +11,7 @@ export type OnboardingViewState = {
   onboardingWizardDraft: unknown;
   onWizardStart: () => void;
   onWizardNext: () => void;
+  onWizardBack: () => void;
   onWizardCancel: () => void;
   onWizardDraftChange: (value: unknown) => void;
   onReconnect: () => void;
@@ -167,6 +168,13 @@ function renderWizardStep(state: OnboardingViewState, step: WizardStep) {
         <button class="btn" @click=${() => state.onWizardCancel()} ?disabled=${state.onboardingWizardBusy}>
           取消
         </button>
+        ${step.supportsBack
+          ? html`
+              <button class="btn" @click=${() => state.onWizardBack()} ?disabled=${state.onboardingWizardBusy}>
+                上一步
+              </button>
+            `
+          : nothing}
         <button class="btn primary" @click=${() => state.onWizardNext()} ?disabled=${!canContinue}>
           继续
         </button>
