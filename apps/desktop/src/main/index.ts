@@ -30,10 +30,33 @@ function sendGatewayLog(line: string): void {
     if (!isGatewayReady) {
       console.log('[OpenClaw] Gateway detected as ready via logs')
       isGatewayReady = true
+      
+      let tokenValue = ''
+      try {
+        const stateDir = app.getPath('userData')
+        const configPath = join(stateDir, 'openclaw.json')
+        console.log('[OpenClaw] Reading token from config path:', configPath)
+        if (fs.existsSync(configPath)) {
+          const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+          tokenValue = configData.gateway?.auth?.token || ''
+          console.log('[OpenClaw] Token from config:', tokenValue ? `${tokenValue.slice(0, 6)}...` : '(empty)')
+          console.log('[OpenClaw] Config gateway.auth:', JSON.stringify(configData.gateway?.auth || {}))
+        } else {
+          console.log('[OpenClaw] Config file does not exist yet')
+        }
+      } catch (e) {
+        console.warn('[OpenClaw] Failed to read token from config for URL:', e)
+      }
+
       setTimeout(() => {
-        const url = isOnboardingNeeded
-          ? 'http://127.0.0.1:18789?onboarding=1'
-          : 'http://127.0.0.1:18789'
+        let url = 'http://127.0.0.1:18789'
+        if (isOnboardingNeeded) {
+          url += '?onboarding=1'
+        }
+        if (tokenValue) {
+          url += (url.includes('?') ? '&' : '?') + `token=${tokenValue}`
+        }
+        console.log('[OpenClaw] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
         mainWindow?.loadURL(url)
       }, 500)
     }
@@ -185,9 +208,27 @@ async function startGateway(): Promise<void> {
   // We must rely solely on the ELECTRON_RUN_AS_NODE environment variable.
   const runAsNodeArgs: string[] = [] 
   
+  // Read token from config file to pass to gateway
+  let gatewayToken: string | undefined
+  try {
+    if (fs.existsSync(configPath)) {
+      const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+      gatewayToken = configData?.gateway?.auth?.token
+      console.log('[OpenClaw] Gateway token from config:', gatewayToken ? `${gatewayToken.slice(0, 8)}...` : 'not set')
+    }
+  } catch (err) {
+    console.warn('[OpenClaw] Failed to read gateway token from config:', err)
+  }
+  
+  // Build gateway arguments with token if available
+  const baseGatewayArgs = ['gateway', 'run', '--bind', 'loopback', '--port', '18789', '--allow-unconfigured', '--force']
+  if (gatewayToken) {
+    baseGatewayArgs.push('--token', gatewayToken)
+  }
+  
   const gatewayArgs = (entryPath.endsWith('.js') || entryPath.endsWith('.cjs'))
-    ? [...runAsNodeArgs, entryPath, 'gateway', 'run', '--bind', 'loopback', '--port', '18789', '--allow-unconfigured', '--force']
-    : [...runAsNodeArgs, '--import', 'tsx', entryPath, 'gateway', 'run', '--bind', 'loopback', '--port', '18789', '--allow-unconfigured', '--force']
+    ? [...runAsNodeArgs, entryPath, ...baseGatewayArgs]
+    : [...runAsNodeArgs, '--import', 'tsx', entryPath, ...baseGatewayArgs]
 
   // Don't use asar path for cwd, it causes spawn ENOENT on Windows
   const spawnCwd = isPackaged ? dirname(process.execPath) : workspaceRoot
@@ -260,9 +301,25 @@ async function startGateway(): Promise<void> {
         if (response.status < 500) {
           console.log('[OpenClaw] Gateway is ready via health check, status:', response.status)
           isGatewayReady = true
+
+          let tokenValue = ''
+          try {
+            console.log('[OpenClaw] Token: Reading from config path:', configPath)
+            console.log('[OpenClaw] Token: Config exists:', fs.existsSync(configPath))
+            if (fs.existsSync(configPath)) {
+              const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+              tokenValue = configData.gateway?.auth?.token || ''
+              console.log('[OpenClaw] Token: gateway.auth =', JSON.stringify(configData.gateway?.auth || {}))
+              console.log('[OpenClaw] Token: value =', tokenValue ? `${tokenValue.slice(0, 8)}...` : '(empty)')
+            }
+          } catch (e) {
+            console.warn('[OpenClaw] Failed to read token from config for URL:', e)
+          }
+
           const url = isOnboardingNeeded
-            ? 'http://127.0.0.1:18789?onboarding=1'
-            : 'http://127.0.0.1:18789'
+            ? `http://127.0.0.1:18789?onboarding=1${tokenValue ? `&token=${tokenValue}` : ''}`
+            : `http://127.0.0.1:18789${tokenValue ? `?token=${tokenValue}` : ''}`
+          console.log('[OpenClaw] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
           mainWindow?.loadURL(url)
           return
         }

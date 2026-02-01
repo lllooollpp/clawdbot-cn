@@ -64,10 +64,7 @@ export async function finalizeOnboardingWizard(options: FinalizeOnboardingOption
   const systemdAvailable =
     process.platform === "linux" ? await isSystemdUserServiceAvailable() : true;
   if (process.platform === "linux" && !systemdAvailable) {
-    await prompter.note(
-      "Systemd 用户服务不可用。将跳过驻留检查和系统服务安装。",
-      "Systemd",
-    );
+    await prompter.note("Systemd 用户服务不可用。将跳过驻留检查和系统服务安装。", "Systemd");
   }
 
   if (process.platform === "linux" && systemdAvailable) {
@@ -118,10 +115,7 @@ export async function finalizeOnboardingWizard(options: FinalizeOnboardingOption
             initialValue: opts.daemonRuntime ?? DEFAULT_GATEWAY_DAEMON_RUNTIME,
           })) as GatewayDaemonRuntime);
     if (flow === "quickstart") {
-      await prompter.note(
-        "快速启动使用 Node 来运行网关服务 (稳定且受支持)。",
-        "网关服务运行时",
-      );
+      await prompter.note("快速启动使用 Node 来运行网关服务 (稳定且受支持)。", "网关服务运行时");
     }
     const service = resolveGatewayService();
     const loaded = await service.isLoaded({ env: process.env });
@@ -183,9 +177,7 @@ export async function finalizeOnboardingWizard(options: FinalizeOnboardingOption
       } catch (err) {
         installError = err instanceof Error ? err.message : String(err);
       } finally {
-        progress.stop(
-          installError ? "网关服务安装失败。" : "网关服务安装成功。",
-        );
+        progress.stop(installError ? "网关服务安装失败。" : "网关服务安装成功。");
       }
       if (installError) {
         await prompter.note(`网关服务安装失败：${installError}`, "网关");
@@ -383,9 +375,7 @@ export async function finalizeOnboardingWizard(options: FinalizeOnboardingOption
   }
 
   await prompter.note(
-    ["请备份您的智能体工作区。", "文档: http://101.35.228.254/concepts/agent-workspace"].join(
-      "\n",
-    ),
+    ["请备份您的智能体工作区。", "文档: http://101.35.228.254/concepts/agent-workspace"].join("\n"),
     "工作区备份",
   );
 
@@ -460,10 +450,7 @@ export async function finalizeOnboardingWizard(options: FinalizeOnboardingOption
     "联网搜索 (可选)",
   );
 
-  await prompter.note(
-    '后续操作： https://clawd.bot/showcase ("大家在用它做什么")。',
-    "后续操作",
-  );
+  await prompter.note('后续操作： https://clawd.bot/showcase ("大家在用它做什么")。', "后续操作");
 
   await prompter.outro(
     controlUiOpened

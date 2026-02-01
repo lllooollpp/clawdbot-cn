@@ -130,10 +130,7 @@ export async function runOnboardingWizard(
     })) as "quickstart" | "advanced");
 
   if (opts.mode === "remote" && flow === "quickstart") {
-    await prompter.note(
-      "快速启动仅支持本地网关。正在切换到手动模式。",
-      "快速启动",
-    );
+    await prompter.note("快速启动仅支持本地网关。正在切换到手动模式。", "快速启动");
     flow = "advanced";
   }
 
@@ -286,9 +283,7 @@ export async function runOnboardingWizard(
             {
               value: "local",
               label: "本地网关 (在此机器上运行)",
-              hint: localProbe.ok
-                ? `网关可达 (${localUrl})`
-                : `未检测到网关 (${localUrl})`,
+              hint: localProbe.ok ? `网关可达 (${localUrl})` : `未检测到网关 (${localUrl})`,
             },
             {
               value: "remote",

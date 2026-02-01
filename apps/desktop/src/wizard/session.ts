@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 
-import { WizardCancelledError, type WizardProgress, type WizardPrompter } from "./prompts.js";
+import { WizardCancelledError, WizardBackError, type WizardProgress, type WizardPrompter } from "./prompts.js";
 
 export type WizardStepOption = {
   value: unknown;
@@ -8,16 +8,35 @@ export type WizardStepOption = {
   hint?: string;
 };
 
+export type WizardFormField = {
+  key: string;
+  label: string;
+  type: "text" | "password" | "confirm" | "select";
+  initialValue?: unknown;
+  placeholder?: string;
+  options?: WizardStepOption[];
+};
+
 export type WizardStep = {
   id: string;
-  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action";
+  type:
+    | "note"
+    | "select"
+    | "text"
+    | "confirm"
+    | "multiselect"
+    | "progress"
+    | "action"
+    | "form";
   title?: string;
   message?: string;
   options?: WizardStepOption[];
+  fields?: WizardFormField[];
   initialValue?: unknown;
   placeholder?: string;
   sensitive?: boolean;
   executor?: "gateway" | "client";
+  supportsBack?: boolean;
 };
 
 export type WizardSessionStatus = "running" | "done" | "cancelled" | "error";
@@ -136,6 +155,15 @@ class WizardSessionPrompter implements WizardPrompter {
     return value;
   }
 
+  async input(params: {
+    message: string;
+    initialValue?: string;
+    placeholder?: string;
+    validate?: (value: string) => string | undefined;
+  }): Promise<string> {
+    return this.text(params);
+  }
+
   async confirm(params: { message: string; initialValue?: boolean }): Promise<boolean> {
     const res = await this.prompt({
       type: "confirm",
@@ -144,6 +172,21 @@ class WizardSessionPrompter implements WizardPrompter {
       executor: "client",
     });
     return Boolean(res);
+  }
+
+  async form(params: {
+    title: string;
+    message?: string;
+    fields: WizardFormField[];
+  }): Promise<Record<string, unknown>> {
+    const res = await this.prompt({
+      type: "form",
+      title: params.title,
+      message: params.message,
+      fields: params.fields,
+      executor: "client",
+    });
+    return (res as Record<string, unknown>) ?? {};
   }
 
   progress(_label: string): WizardProgress {
@@ -167,6 +210,9 @@ export class WizardSession {
   private answerDeferred = new Map<string, Deferred<unknown>>();
   private status: WizardSessionStatus = "running";
   private error: string | undefined;
+
+  private history: Array<{ step: Omit<WizardStep, "id">; answer: unknown }> = [];
+  private replayIndex = 0;
 
   constructor(private runner: (prompter: WizardPrompter) => Promise<void>) {
     const prompter = new WizardSessionPrompter(this);
@@ -218,19 +264,31 @@ export class WizardSession {
   }
 
   private async run(prompter: WizardPrompter) {
-    try {
-      await this.runner(prompter);
-      this.status = "done";
-    } catch (err) {
-      if (err instanceof WizardCancelledError) {
-        this.status = "cancelled";
-        this.error = err.message;
-      } else {
-        this.status = "error";
-        this.error = String(err);
+    while (this.status === "running") {
+      try {
+        await this.runner(prompter);
+        this.status = "done";
+        break;
+      } catch (err) {
+        if (err instanceof WizardBackError) {
+          this.replayIndex = 0;
+          this.currentStep = null;
+          this.answerDeferred.clear();
+          continue;
+        }
+        if (err instanceof WizardCancelledError) {
+          this.status = "cancelled";
+          this.error = err.message;
+        } else {
+          this.status = "error";
+          this.error = String(err);
+        }
+        break;
+      } finally {
+        if (this.status !== "running") {
+          this.resolveStep(null);
+        }
       }
-    } finally {
-      this.resolveStep(null);
     }
   }
 
@@ -238,10 +296,44 @@ export class WizardSession {
     if (this.status !== "running") {
       throw new Error("wizard: session not running");
     }
+
+    if (this.replayIndex < this.history.length) {
+      const entry = this.history[this.replayIndex++];
+      step.supportsBack = this.replayIndex > 1;
+      return entry.answer;
+    }
+
+    step.supportsBack = this.history.length > 0;
+
     this.pushStep(step);
     const deferred = createDeferred<unknown>();
     this.answerDeferred.set(step.id, deferred);
-    return await deferred.promise;
+    const answer = await deferred.promise;
+
+    if (step.type !== "progress") {
+      this.history.push({ step, answer });
+      this.replayIndex++;
+    }
+
+    return answer;
+  }
+
+  async back(): Promise<void> {
+    if (this.status !== "running") return;
+    if (this.history.length === 0) return;
+
+    // Pop the last TWO items because the current step being waited for is NOT in history yet,
+    // OR it IS if we just finished it.
+    // Actually, if we are waiting for an answer, the current step is NOT in history.
+    // So we pop ONE item from history to go back to the PREVIOUS step.
+    this.history.pop();
+
+    for (const [, deferred] of this.answerDeferred) {
+      deferred.reject(new WizardBackError());
+    }
+    this.answerDeferred.clear();
+    this.currentStep = null;
+    this.resolveStep(null);
   }
 
   private resolveStep(step: WizardStep | null) {

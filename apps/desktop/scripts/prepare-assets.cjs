@@ -68,7 +68,25 @@ const srcFolders = [
   'sessions',
   'providers',
   'utils',
-  'gateway'
+  'gateway',
+  'cli',
+  'process',
+  'markdown',
+  'commands',
+  'pairing',
+  'security',
+  'tts',
+  'tui',
+  'browser',
+  'canvas-host',
+  'cron',
+  'daemon',
+  'link-understanding',
+  'macos',
+  'media-understanding',
+  'node-host',
+  'acp',
+  'docs'
 ];
 
 console.log(' - core source folders');
@@ -81,7 +99,7 @@ for (const folder of srcFolders) {
 }
 
 // Support files
-const srcFiles = ['utils.ts', 'runtime.ts', 'index.ts', 'version.ts', 'logger.ts', 'globals.ts', 'entry.ts'];
+const srcFiles = ['utils.ts', 'runtime.ts', 'index.ts', 'version.ts', 'logger.ts', 'globals.ts', 'entry.ts', 'logging.ts', 'polls.ts', 'channel-web.ts'];
 for (const file of srcFiles) {
   const src = path.join(rootDir, 'src', file);
   const dest = path.join(desktopDir, 'src', file);
@@ -98,6 +116,14 @@ if (fs.existsSync(uiSrc)) {
   copyDir(uiSrc, uiDest);
 } else {
   console.warn('[OpenClaw] Warning: dist/control-ui not found, dashboard will be missing!');
+}
+
+// Documentation templates
+const docsSrc = path.join(rootDir, 'docs');
+const docsDest = path.join(desktopDir, 'docs');
+if (fs.existsSync(docsSrc)) {
+  console.log(' - docs templates');
+  copyDir(docsSrc, docsDest);
 }
 
 console.log('[OpenClaw] Assets prepared.');

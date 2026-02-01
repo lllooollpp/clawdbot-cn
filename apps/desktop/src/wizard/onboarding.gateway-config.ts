@@ -150,9 +150,7 @@ export async function configureGatewayForOnboarding(
   let tailscaleResetOnExit = flow === "quickstart" ? quickstartGateway.tailscaleResetOnExit : false;
   if (tailscaleMode !== "off" && flow !== "quickstart") {
     await prompter.note(
-      ["文档:", "http://101.35.228.254/gateway/tailscale", "http://101.35.228.254/web"].join(
-        "\n",
-      ),
+      ["文档:", "http://101.35.228.254/gateway/tailscale", "http://101.35.228.254/web"].join("\n"),
       "Tailscale",
     );
     tailscaleResetOnExit = Boolean(
@@ -168,7 +166,10 @@ export async function configureGatewayForOnboarding(
   // - Auth off only allowed for bind=loopback.
   // - Funnel requires password auth.
   if (tailscaleMode !== "off" && bind !== "loopback") {
-    await prompter.note("Tailscale 要求 bind=loopback。已自动调整绑定为本地回环 (loopback)。", "提示");
+    await prompter.note(
+      "Tailscale 要求 bind=loopback。已自动调整绑定为本地回环 (loopback)。",
+      "提示",
+    );
     bind = "loopback";
     customBindHost = undefined;
   }
