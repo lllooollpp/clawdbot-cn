@@ -41,6 +41,13 @@ pnpm ui:build
 
 Write-Host "Packaging Electron (Windows)..." -ForegroundColor Yellow
 cd apps/desktop
+# Use local Electron cache/mirror to avoid re-downloading when possible.
+if (-not $env:ELECTRON_CACHE) {
+    $env:ELECTRON_CACHE = "$env:LOCALAPPDATA\electron\Cache"
+}
+if (-not $env:ELECTRON_MIRROR) {
+    $env:ELECTRON_MIRROR = "https://npmmirror.com/mirrors/electron/"
+}
 # Set debugging flag for electron-builder to see where it gets stuck
 $env:DEBUG = "electron-builder"
 pnpm run build:win

@@ -10,7 +10,7 @@ read_when:
 管理网关调度器的定时任务（cron jobs）。
 
 相关：
-- 定时任务：[定时任务](/automation/cron-jobs)
+- 定时任务：[定时任务](/automation/cron-jobs.md)
 
 提示：运行 `clawdbot cron --help` 以查看完整的命令列表。
 
@@ -18,7 +18,11 @@ read_when:
 
 在不更改消息的情况下更新交付设置：
 bash
-clawdbot cron edit <job-id> --deliver --channel telegram --to "123456789"``````
-为孤立任务禁用交付：```bash
+clawdbot cron edit <job-id> --deliver --channel telegram --to "123456789"
+```
+为孤立任务禁用交付：
+```bash
 clawdbot cron edit <job-id> --no-deliver
+```
+
 ```

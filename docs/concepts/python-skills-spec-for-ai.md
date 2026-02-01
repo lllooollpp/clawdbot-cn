@@ -1,3 +1,7 @@
+---
+summary: "Python Skills Spec For Ai documentation"
+---
+
 # 技术对接文档：Python 版 Skills 系统的核心逻辑实现
 
 这份文档旨在指导编程模型（AI）基于 Clawdbot 的架构，在 Python 项目中复现 **Skills (技能) 系统**。

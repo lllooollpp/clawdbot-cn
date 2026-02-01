@@ -49,10 +49,15 @@
 }
 
 .shell--onboarding {
+  grid-template-columns: 0 minmax(0, 1fr);
   grid-template-rows: 0 1fr;
 }
 
 .shell--onboarding .topbar {
+  display: none;
+}
+
+.shell--onboarding .nav {
   display: none;
 }
 
@@ -424,6 +429,74 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.onboarding-content {
+  padding: 32px 20px 48px;
+}
+
+.onboarding-container {
+  max-width: 880px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.onboarding-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 4px 0;
+}
+
+.onboarding-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-strong);
+}
+
+.onboarding-sub {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.onboarding-card {
+  display: grid;
+  gap: 16px;
+}
+
+.onboarding-step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.onboarding-step-body {
+  display: grid;
+  gap: 12px;
+}
+
+.onboarding-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.onboarding-options .list-meta {
+  min-width: 120px;
+  text-align: right;
+}
+
+.onboarding-message {
+  white-space: pre-line;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 :root[data-theme="light"] .content {

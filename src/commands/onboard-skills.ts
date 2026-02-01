@@ -20,7 +20,7 @@ function formatSkillHint(skill: {
   const desc = skill.description?.trim();
   const installLabel = skill.install[0]?.label?.trim();
   const combined = desc && installLabel ? `${desc} — ${installLabel}` : desc || installLabel;
-  if (!combined) return "install";
+  if (!combined) return "安装";
   const maxLen = 90;
   return combined.length > maxLen ? `${combined.slice(0, maxLen - 1)}…` : combined;
 }
@@ -60,15 +60,15 @@ export async function setupSkills(
 
   await prompter.note(
     [
-      `Eligible: ${eligible.length}`,
-      `Missing requirements: ${missing.length}`,
-      `Blocked by allowlist: ${blocked.length}`,
+      `符合条件的: ${eligible.length}`,
+      `缺失要求的: ${missing.length}`,
+      `被白名单拦截的: ${blocked.length}`,
     ].join("\n"),
-    "Skills status",
+    "技能状态",
   );
 
   const shouldConfigure = await prompter.confirm({
-    message: "Configure skills now? (recommended)",
+    message: "现在配置技能吗？（推荐）",
     initialValue: true,
   });
   if (!shouldConfigure) return cfg;
@@ -76,28 +76,28 @@ export async function setupSkills(
   if (needsBrewPrompt) {
     await prompter.note(
       [
-        "Many skill dependencies are shipped via Homebrew.",
-        "Without brew, you'll need to build from source or download releases manually.",
+        "许多技能依赖项通过 Homebrew 分发。",
+        "如果没有 brew，您将需要手动从源码构建或下载发布版本。",
       ].join("\n"),
-      "Homebrew recommended",
+      "推荐使用 Homebrew",
     );
     const showBrewInstall = await prompter.confirm({
-      message: "Show Homebrew install command?",
+      message: "显示 Homebrew 安装命令？",
       initialValue: true,
     });
     if (showBrewInstall) {
       await prompter.note(
         [
-          "Run:",
+          "运行：",
           '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
         ].join("\n"),
-        "Homebrew install",
+        "Homebrew 安装",
       );
     }
   }
 
   const nodeManager = (await prompter.select({
-    message: "Preferred node manager for skill installs",
+    message: "技能安装的首选 Node 管理器",
     options: resolveNodeManagerOptions(),
   })) as "npm" | "pnpm" | "bun";
 
@@ -117,12 +117,12 @@ export async function setupSkills(
   );
   if (installable.length > 0) {
     const toInstall = await prompter.multiselect({
-      message: "Install missing skill dependencies",
+      message: "安装缺失的技能依赖项",
       options: [
         {
           value: "__skip__",
-          label: "Skip for now",
-          hint: "Continue without installing dependencies",
+          label: "现在跳过",
+          hint: "继续而不安装依赖项",
         },
         ...installable.map((skill) => ({
           value: skill.name,
@@ -138,7 +138,7 @@ export async function setupSkills(
       if (!target || target.install.length === 0) continue;
       const installId = target.install[0]?.id;
       if (!installId) continue;
-      const spin = prompter.progress(`Installing ${name}…`);
+      const spin = prompter.progress(`正在安装 ${name}…`);
       const result = await installSkill({
         workspaceDir,
         skillName: target.name,
@@ -146,17 +146,15 @@ export async function setupSkills(
         config: next,
       });
       if (result.ok) {
-        spin.stop(`Installed ${name}`);
+        spin.stop(`已安装 ${name}`);
       } else {
         const code = result.code == null ? "" : ` (exit ${result.code})`;
         const detail = summarizeInstallFailure(result.message);
-        spin.stop(`Install failed: ${name}${code}${detail ? ` — ${detail}` : ""}`);
+        spin.stop(`安装失败: ${name}${code}${detail ? ` — ${detail}` : ""}`);
         if (result.stderr) runtime.log(result.stderr.trim());
         else if (result.stdout) runtime.log(result.stdout.trim());
-        runtime.log(
-          `Tip: run \`${formatCliCommand("clawdbot doctor")}\` to review skills + requirements.`,
-        );
-        runtime.log("Docs: https://docs.clawd.bot/skills");
+        runtime.log(`提示：运行 \`${formatCliCommand("clawdbot doctor")}\` 来检查技能和要求。`);
+        runtime.log("文档：http://101.35.228.254/skills");
       }
     }
   }
@@ -164,14 +162,14 @@ export async function setupSkills(
   for (const skill of missing) {
     if (!skill.primaryEnv || skill.missing.env.length === 0) continue;
     const wantsKey = await prompter.confirm({
-      message: `Set ${skill.primaryEnv} for ${skill.name}?`,
+      message: `是否为 ${skill.name} 设置 ${skill.primaryEnv}？`,
       initialValue: false,
     });
     if (!wantsKey) continue;
     const apiKey = String(
       await prompter.text({
-        message: `Enter ${skill.primaryEnv}`,
-        validate: (value) => (value?.trim() ? undefined : "Required"),
+        message: `请输入 ${skill.primaryEnv}`,
+        validate: (value) => (value?.trim() ? undefined : "必填"),
       }),
     );
     next = upsertSkillEntry(next, skill.skillKey, { apiKey: apiKey.trim() });

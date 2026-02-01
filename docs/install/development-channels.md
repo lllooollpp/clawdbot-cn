@@ -24,9 +24,10 @@ bash
 clawdbot update --channel stable
 clawdbot update --channel beta
 clawdbot update --channel dev
-``````
+```
 - `stable`/`beta` 查看最新的匹配标签（通常是同一个标签）。
-- `dev` 切换到 `main` 并基于上游进行变基（rebase）。```bash
+- `dev` 切换到 `main` 并基于上游进行变基（rebase）。
+```bash
 clawdbot update --channel stable
 clawdbot update --channel beta
 clawdbot update --channel dev
@@ -63,3 +64,4 @@ Beta 和 dev 版本可能**不包含** macOS 应用程序的发布版本。这�
 
 - 仍然可以发布 git 标签和 npm dist-tag。
 - 在发布说明或变更日志中明确指出“此 beta 版本不包含 macOS 构建”。
+```

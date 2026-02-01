@@ -53,10 +53,11 @@ json5
     }
   }
 }
-``````
+```
 ### MiniMax M2.1 作为备用（Opus 为主）
 
-**最适合:** 将 Opus 4.5 作为主用，备用使用 MiniMax M2.1。```json5
+**最适合:** 将 Opus 4.5 作为主用，备用使用 MiniMax M2.1。
+```json5
 {
   env: { MINIMAX_API_KEY: "sk-..." },
   agents: {
@@ -109,7 +110,7 @@ json5
     }
   }
 }
-``````
+```
 ## 通过 `clawdbot configure` 进行配置
 
 使用交互式配置向导来设置 MiniMax，而无需编辑 JSON 文件：
@@ -134,7 +135,7 @@ json5
 - 编程计划使用 API：`https://api.minimaxi.com/v1/api/openplatform/coding_plan/remains`（需要编程计划密钥）。
 - 如果需要精确的费用跟踪，请更新 `models.json` 中的定价值。
 - MiniMax 编程计划推荐链接（10% 折扣）：https://platform.minimax.io/subscribe/coding-plan?code=DbXJTRClnb&source=link
-- 有关提供者规则，请参阅 [/concepts/model-providers](/concepts/model-providers)。
+- 有关提供者规则，请参阅 [/concepts/model-providers](/concepts/model-providers.md)。
 - 使用 `clawdbot models list` 和 `clawdbot models set minimax/MiniMax-M2.1` 来切换模型。
 
 ## 故障排除
@@ -151,6 +152,7 @@ json5
 - `minimax/MiniMax-M2.1`
 - `minimax/MiniMax-M2.1-lightning`
 
-然后重新检查：```bash
+然后重新检查：
+```bash
 clawdbot models list
 ```

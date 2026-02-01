@@ -22,7 +22,7 @@ export function normalizeApiKeyInput(raw: string): string {
 }
 
 export const validateApiKeyInput = (value: string) =>
-  normalizeApiKeyInput(value).length > 0 ? undefined : "Required";
+  normalizeApiKeyInput(value).length > 0 ? undefined : "必填";
 
 export function formatApiKeyPreview(
   raw: string,

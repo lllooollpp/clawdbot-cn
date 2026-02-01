@@ -16,8 +16,9 @@ bash
 clawdbot onboard --auth-choice opencode-zen
 # 或者非交互式方式
 clawdbot onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
-``````
-## 配置片段```json5
+```
+## 配置片段
+```json5
 {
   env: { OPENCODE_API_KEY: "sk-..." },
   agents: { defaults: { model: { primary: "opencode/claude-opus-4-5" } } }
@@ -28,3 +29,4 @@ clawdbot onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
 - 同样支持 `OPENCODE_ZEN_API_KEY`。
 - 您需要登录 Zen，添加账单信息，并复制您的 API 密钥。
 - OpenCode Zen 按请求计费；请查看 OpenCode 仪表板以获取详细信息。
+```

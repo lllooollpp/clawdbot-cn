@@ -23,8 +23,9 @@ Clawdbot 是一个用于 **Pi** 代理的 WhatsApp + Telegram + Discord + iMessa
 bash
 npm install -g clawdbot@latest
 # 或：pnpm add -g clawdbot@latest
-``````
-来自源代码（开发版）：```bash
+```
+来自源代码（开发版）：
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 pnpm install
@@ -48,19 +49,21 @@ Your Phone (personal)          Second Phone (assistant)
                               │  (clawdbot)      │
                               │    Pi agent     │
                               └─────────────────┘
-``````
+```
 如果你将个人 WhatsApp 与 Clawdbot 连接，那么所有发给你的消息都会变成“代理输入”。这通常不是你想要的。
 
 ## 5 分钟快速入门
 
-1) 配对 WhatsApp Web（显示二维码；使用助理手机扫描）：```bash
+1) 配对 WhatsApp Web（显示二维码；使用助理手机扫描）：
+```bash
 clawdbot channels login
 ```
 2) 启动网关（保持运行）：
 bash
 clawdbot gateway --port 18789
-``````
-3) 在 `~/.clawdbot/clawdbot.json` 中添加一个最小配置：```json5
+```
+3) 在 `~/.clawdbot/clawdbot.json` 中添加一个最小配置：
+```json5
 {
   channels: { whatsapp: { allowFrom: ["+15555550123"] } }
 }
@@ -78,8 +81,8 @@ Clawd 会从其工作空间目录中读取操作说明和“记忆”。
 提示：将此文件夹视为 Clawd 的“记忆”，并将其设为一个 git 仓库（最好是私有的），以便备份你的 `AGENTS.md` 和记忆文件。如果已安装 git，全新工作空间会自动初始化。
 bash
 clawdbot setup
-``````完整的工作区布局 + 备份指南：[Agent 工作区](/concepts/agent-workspace)  
-记忆工作流：[记忆](/concepts/memory)  
+```完整的工作区布局 + 备份指南：[Agent 工作区](/concepts/agent-workspace.md)  
+记忆工作流：[记忆](/concepts/memory.md)  
 
 可选：通过 `agents.defaults.workspace` 选择不同的工作区（支持 `~`）。
 json5
@@ -88,8 +91,9 @@ json5
     workspace: "~/clawd"
   }
 }
-``````
-如果您已经从仓库中自行发送工作区文件，可以完全禁用引导文件的创建：```json5
+```
+如果您已经从仓库中自行发送工作区文件，可以完全禁用引导文件的创建：
+```json5
 {
   agent: {
     skipBootstrap: true
@@ -138,7 +142,7 @@ json5
     }
   }
 }
-``````
+```
 ## 会话与内存
 
 - 会话文件：`~/.clawdbot/agents/<agentId>/sessions/{{SessionId}}.jsonl`
@@ -155,7 +159,8 @@ json5
 - 如果 `HEARTBEAT.md` 存在但实际上是空的（只有空行和如 `# Heading` 的 markdown 标题），Clawdbot 会跳过心跳以节省 API 调用。
 - 如果文件不存在，心跳仍然会运行，模型会自行决定如何处理。
 - 如果代理回复 `HEARTBEAT_OK`（可选地带有简短的填充文本；详见 `agents.defaults.heartbeat.ackMaxChars`），Clawdbot 会抑制该心跳的外发通知。
-- 心跳会执行完整的代理流程——更短的间隔会消耗更多的 token。```json5
+- 心跳会执行完整的代理流程——更短的间隔会消耗更多的 token。
+```json5
 {
   agent: {
     heartbeat: { every: "30m" }
@@ -173,10 +178,11 @@ json5
 
 Here’s the screenshot.
 MEDIA:/tmp/screenshot.png
-``````
+```
 Clawdbot 会提取这些内容，并将它们作为媒体与文本一起发送。
 
-## 操作检查清单```bash
+## 操作检查清单
+```bash
 clawdbot status          # local status (creds, sessions, queued events)
 clawdbot status --all    # full diagnosis (read-only, pasteable)
 clawdbot status --deep   # adds gateway health probes (Telegram + Discord)
@@ -186,12 +192,13 @@ clawdbot health --json   # gateway health snapshot (WS)
 
 ## 下一步操作
 
-- WebChat: [WebChat](/web/webchat)
-- 网关操作: [网关操作手册](/gateway)
-- 定时任务 + 唤醒: [定时任务](/automation/cron-jobs)
-- macOS 菜单栏伴侣应用: [Clawdbot macOS 应用](/platforms/macos)
-- iOS 节点应用: [iOS 应用](/platforms/ios)
-- Android 节点应用: [Android 应用](/platforms/android)
-- Windows 状态: [Windows（WSL2）](/platforms/windows)
-- Linux 状态: [Linux 应用](/platforms/linux)
-- 安全性: [安全](/gateway/security)
+- WebChat: [WebChat](/web/webchat.md)
+- 网关操作: [网关操作手册](/gateway/index.md)
+- 定时任务 + 唤醒: [定时任务](/automation/cron-jobs.md)
+- macOS 菜单栏伴侣应用: [Clawdbot macOS 应用](/platforms/macos.md)
+- iOS 节点应用: [iOS 应用](/platforms/ios.md)
+- Android 节点应用: [Android 应用](/platforms/android.md)
+- Windows 状态: [Windows（WSL2）](/platforms/windows.md)
+- Linux 状态: [Linux 应用](/platforms/linux.md)
+- 安全性: [安全](/gateway/security.md)
+```

@@ -17,7 +17,9 @@ macOS 菜单栏应用将 WebChat UI 作为原生 SwiftUI 视图嵌入。它连�
 - 自动打开用于测试：
 bash
   dist/Clawdbot.app/Contents/MacOS/Clawdbot --webchat
-  ```  ```
+  
+```  
+```
 - 日志：`./scripts/clawlog.sh`（子系统 `com.clawdbot`，分类 `WebChatSwiftUI`）。
 
 ## 它是如何连接的

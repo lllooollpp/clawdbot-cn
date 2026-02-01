@@ -23,12 +23,12 @@ export function buildTokenProfileId(params: { provider: string; name: string }):
 
 export function validateAnthropicSetupToken(raw: string): string | undefined {
   const trimmed = raw.trim();
-  if (!trimmed) return "Required";
+  if (!trimmed) return "必填";
   if (!trimmed.startsWith(ANTHROPIC_SETUP_TOKEN_PREFIX)) {
-    return `Expected token starting with ${ANTHROPIC_SETUP_TOKEN_PREFIX}`;
+    return `预期令牌以 ${ANTHROPIC_SETUP_TOKEN_PREFIX} 开头`;
   }
   if (trimmed.length < ANTHROPIC_SETUP_TOKEN_MIN_LENGTH) {
-    return "Token looks too short; paste the full setup-token";
+    return "令牌看起来太短，请粘贴完整的 setup-token";
   }
   return undefined;
 }

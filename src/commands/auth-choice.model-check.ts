@@ -50,7 +50,7 @@ export async function warnIfModelConfigLooksOff(
     );
     if (!known) {
       warnings.push(
-        `Model not found: ${ref.provider}/${ref.model}. Update agents.defaults.model or run /models list.`,
+        `未找到模型：${ref.provider}/${ref.model}。请更新 agents.defaults.model 或运行 /models list。`,
       );
     }
   }
@@ -60,21 +60,19 @@ export async function warnIfModelConfigLooksOff(
   const envKey = resolveEnvApiKey(ref.provider);
   const customKey = getCustomProviderApiKey(config, ref.provider);
   if (!hasProfile && !envKey && !customKey) {
-    warnings.push(
-      `No auth configured for provider "${ref.provider}". The agent may fail until credentials are added.`,
-    );
+    warnings.push(`提供商 "${ref.provider}" 未配置认证。在添加凭据之前，代理可能会运行失败。`);
   }
 
   if (ref.provider === "openai") {
     const hasCodex = listProfilesForProvider(store, "openai-codex").length > 0;
     if (hasCodex) {
       warnings.push(
-        `Detected OpenAI Codex OAuth. Consider setting agents.defaults.model to ${OPENAI_CODEX_DEFAULT_MODEL}.`,
+        `检测到 OpenAI Codex OAuth。考虑将 agents.defaults.model 设置为 ${OPENAI_CODEX_DEFAULT_MODEL}。`,
       );
     }
   }
 
   if (warnings.length > 0) {
-    await prompter.note(warnings.join("\n"), "Model check");
+    await prompter.note(warnings.join("\n"), "模型检查");
   }
 }

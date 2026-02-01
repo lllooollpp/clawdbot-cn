@@ -1,3 +1,7 @@
+---
+summary: "Skills Python Dev Spec documentation"
+---
+
 # Skills 架构 (Python 版) 开发规范
 
 ## 实现目标

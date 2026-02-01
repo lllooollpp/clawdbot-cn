@@ -22,8 +22,9 @@ read_when:
 你可以 **无需任何配置** 就使用 Claude Code CLI（Clawdbot 内置了默认配置）。
 bash
 clawdbot agent --message "hi" --model claude-cli/opus-4.5
-`````````
-Codex CLI 也可以开箱即用：```bash
+```
+Codex CLI 也可以开箱即用：
+```bash
 clawdbot agent --message "hi" --model codex-cli/gpt-5.2-codex
 ```
 如果您的网关在 launchd/systemd 下运行且 PATH 变量最小，请仅添加命令路径：
@@ -38,12 +39,14 @@ json5
       }
     }
   }
-}``````
+}
+```
 就是这样。不需要密钥，也不需要在CLI之外进行额外的认证配置。
 
 ## 作为备用方案使用
 
-将CLI后端添加到你的备用列表中，仅在主模型失败时运行：```json5
+将CLI后端添加到你的备用列表中，仅在主模型失败时运行：
+```json5
 {
   agents: {
     defaults: {
@@ -67,7 +70,8 @@ json5
 
 每个条目都通过 **provider id**（例如 `claude-cli`、`my-cli`）进行键控。
 provider id 将成为您模型引用的左侧部分：
-<provider>/<model>```
+<provider>/<model>
+```
 {
   agents: {
     defaults: {
@@ -97,7 +101,8 @@ provider id 将成为您模型引用的左侧部分：
       }
     }
   }
-}```
+}
+```
 ## 它是如何工作的
 
 1) **根据提供者前缀（`claude-cli/...`）选择一个后端**。
@@ -117,7 +122,8 @@ provider id 将成为您模型引用的左侧部分：
 - `sessionMode`:
   - `always`: 总是发送一个会话 ID（如果没有存储过，则生成一个新的 UUID）。
   - `existing`: 仅在之前已存储会话 ID 时发送。
-  - `none`: 永不发送会话 ID。```json5
+  - `none`: 永不发送会话 ID。
+```json5
 imageArg: "--image",
 imageMode: "repeat"
 ```

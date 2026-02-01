@@ -14,10 +14,12 @@ clawdbot config get browser.executablePath
 clawdbot config set browser.executablePath "/usr/bin/google-chrome"
 clawdbot config set agents.defaults.heartbeat.every "2h"
 clawdbot config set agents.list[0].tools.exec.node "node-id-or-name"
-clawdbot config unset tools.web.search.apiKey``````
+clawdbot config unset tools.web.search.apiKey
+```
 ## 路径
 
-路径使用点符号或方括号符号：```bash
+路径使用点符号或方括号符号：
+```bash
 clawdbot config get agents.defaults.workspace
 clawdbot config get agents.list[0].id
 ```
@@ -34,5 +36,5 @@ bash
 clawdbot config set agents.defaults.heartbeat.every "0m"
 clawdbot config set gateway.port 19001 --json
 clawdbot config set channels.whatsapp.groups '["*"]' --json
-``````
+```
 "重启网关以应用更改。"

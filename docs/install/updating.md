@@ -14,12 +14,14 @@ Clawdbot 正在快速开发中（预“1.0”版本）。将更新视为部署�
 推荐的更新方式是重新从网站运行安装程序。它会检测已有的安装，进行就地升级，并在需要时运行 `clawdbot doctor`。
 bash
 curl -fsSL https://clawd.bot/install.sh | bash
-``````
+```
 注意事项：
 - 如果你不想再次运行引导向导，请添加 `--no-onboard`。
-- 对于 **源码安装**，使用：  ```bash
+- 对于 **源码安装**，使用：  
+```bash
   curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git --no-onboard
-  ```
+  
+```
 安装程序仅在仓库干净时会执行 `git pull --rebase`。
 - 对于 **全局安装**，脚本内部使用 `npm install -g clawdbot@latest`。
 
@@ -37,33 +39,36 @@ curl -fsSL https://clawd.bot/install.sh | bash
 选择一种全局安装方式进行更新：
 bash
 npm i -g clawdbot@latest
-``````
+```
 ```md
-pnpm add -g clawdbot@latest```
+pnpm add -g clawdbot@latest
+```
 我们**不**建议在 Gateway 运行时（WhatsApp/Telegram 的问题）中使用 Bun。
 
-要切换更新渠道（通过 git + npm 安装）：```bash
+要切换更新渠道（通过 git + npm 安装）：
+```bash
 clawdbot update --channel beta
 clawdbot update --channel dev
 clawdbot update --channel stable
 ```
 使用 `--tag <dist-tag|version>` 进行一次性的安装标签/版本。
 
-有关频道语义和更新日志，请参阅 [开发通道](/install/development-channels)。
+有关频道语义和更新日志，请参阅 [开发通道](/install/development-channels.md)。
 
 注意：在 npm 安装时，网关会在启动时记录一个更新提示（检查当前频道标签）。可通过 `update.checkOnStart: false` 禁用。
 bash
 clawdbot doctor
 clawdbot gateway restart
 clawdbot health
-``````
+```
 注意事项：
 - 如果你的网关是以服务形式运行的，建议使用 `clawdbot gateway restart` 而不是终止进程ID。
 - 如果你固定在某个特定版本上，请参见下方的“回滚 / 固定版本”部分。
 
 ## 更新 (`clawdbot update`)
 
-对于 **源码安装**（git checkout），建议使用：```bash
+对于 **源码安装**（git checkout），建议使用：
+```bash
 clawdbot update
 ```
 它运行一个相对安全的更新流程：
@@ -85,8 +90,9 @@ Control UI 提供了 **Update & Restart** 功能（RPC: `update.run`）。它会
 如果变基失败，网关将中止并重启，但不会应用更新。
 bash
 clawdbot update
-``````
-手册（大致等同）：```bash
+```
+手册（大致等同）：
+```bash
 git pull
 pnpm install
 pnpm build
@@ -113,7 +119,7 @@ Doctor 是“安全更新”命令。它故意很无聊：修复 + 迁移 + 警�
 - 检测并迁移旧版网关服务（launchd/systemd；旧版 schtasks）到当前的 Clawdbot 服务。
 - 在 Linux 上，确保 systemd 用户持久化（以便网关在退出登录后仍能运行）。
 
-详情：[Doctor](/gateway/doctor)
+详情：[Doctor](/gateway/doctor.md)
 
 ## 启动 / 停止 / 重启网关
 
@@ -124,20 +130,21 @@ clawdbot gateway stop
 clawdbot gateway restart
 clawdbot gateway --port 18789
 clawdbot logs --follow
-``````
+```
 如果您的系统有监督服务：
 - macOS launchd (应用捆绑的 LaunchAgent): `launchctl kickstart -k gui/$UID/com.clawdbot.gateway`（如果设置了 `<profile>`，请使用 `com.clawdbot.<profile>`）
 - Linux systemd 用户服务: `systemctl --user restart clawdbot-gateway[-<profile>].service`
 - Windows (WSL2): `systemctl --user restart clawdbot-gateway[-<profile>].service`
   - `launchctl`/`systemctl` 仅在服务已安装时有效；否则请运行 `clawdbot gateway install`。
 
-运行手册 + 精确的服务标签：[网关运行手册](/gateway)
+运行手册 + 精确的服务标签：[网关运行手册](/gateway/index.md)
 
 ## 回滚 / 固定版本（当出现问题时）
 
 ### 固定版本（全局安装）
 
-安装一个已知良好的版本（将 `<version>` 替换为上一个正常工作的版本）：```bash
+安装一个已知良好的版本（将 `<version>` 替换为上一个正常工作的版本）：
+```bash
 npm i -g clawdbot@<version>
 ```
 "
@@ -148,10 +155,11 @@ pnpm add -g clawdbot@<version>提示：要查看当前发布的版本，请运�
 bash
 clawdbot doctor
 clawdbot gateway restart
-``````
+```
 ### 按日期固定（pin）提交
 
-从某个日期选择一个提交（例如：“2026-01-01 时 main 分支的状态”）：```bash
+从某个日期选择一个提交（例如：“2026-01-01 时 main 分支的状态”）：
+```bash
 git fetch origin
 git checkout "$(git rev-list -n 1 --before=\"2026-01-01\" origin/main)"
 ```
@@ -159,13 +167,16 @@ git checkout "$(git rev-list -n 1 --before=\"2026-01-01\" origin/main)"
 bash  
 pnpm install  
 pnpm build  
-clawdbot gateway restart```
-如果你想要返回到最新的后续内容：```bash
+clawdbot gateway restart
+```
+如果你想要返回到最新的后续内容：
+```bash
 git checkout main
 git pull
 ```
 ## 如果你遇到了问题
 
 - 再次运行 `clawdbot doctor` 并仔细阅读输出内容（通常会告诉你如何解决）。
-- 检查：[故障排除](/gateway/troubleshooting)
+- 检查：[故障排除](/gateway/troubleshooting.md)
 - 在 Discord 上提问：https://channels.discord.gg/clawd
+```

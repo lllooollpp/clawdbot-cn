@@ -17,7 +17,7 @@ read_when:
 ## 先决条件（从源代码安装）
 - Node `>=22`
 - `pnpm`
-- Docker（可选；仅用于容器化设置/端到端测试 —— 请参见 [Docker](/install/docker)）
+- Docker（可选；仅用于容器化设置/端到端测试 —— 请参见 [Docker](/install/docker.md)）
 
 ## 定制策略（避免更新带来影响）
 
@@ -29,8 +29,9 @@ read_when:
 一次性初始化：
 bash
 clawdbot setup
-``````
-从仓库内部使用本地 CLI 入口：```bash
+```
+从仓库内部使用本地 CLI 入口：
+```bash
 clawdbot setup
 ```
 如果尚未进行全局安装，请通过 `pnpm clawdbot setup` 运行。
@@ -43,8 +44,9 @@ clawdbot setup
 4) 链接设备（例如：WhatsApp）：
 bash
 clawdbot channels login
-``````
-5) 健全性检查：```bash
+```
+5) 健全性检查：
+```bash
 clawdbot health
 ```
 如果您的版本中没有提供引导流程：
@@ -59,8 +61,9 @@ clawdbot health
 如果您也希望使用开发版的 macOS 应用：
 bash
 ./scripts/restart-mac.sh
-``````
-### 1) 启动开发网关```bash
+```
+### 1) 启动开发网关
+```bash
 pnpm install
 pnpm gateway:watch
 ```
@@ -79,7 +82,7 @@ pnpm gateway:watch
 - 或通过 CLI 验证：
 bash
 clawdbot health
-``````
+```
 ### 常见的陷阱（Footguns）
 - **端口错误：** 网关 WS 默认使用 `ws://127.0.0.1:18789`；请确保应用和 CLI 使用相同的端口。
 - **状态存储位置：**
@@ -94,16 +97,17 @@ clawdbot health
 
 ## Linux（systemd 用户服务）
 
-Linux 安装使用的是 systemd **用户服务**。默认情况下，systemd 在用户注销或空闲时会停止用户服务，这会导致网关关闭。引导过程会尝试为你启用 linger 功能（可能会提示输入 sudo 密码）。如果仍然未启用，请运行：```bash
+Linux 安装使用的是 systemd **用户服务**。默认情况下，systemd 在用户注销或空闲时会停止用户服务，这会导致网关关闭。引导过程会尝试为你启用 linger 功能（可能会提示输入 sudo 密码）。如果仍然未启用，请运行：
+```bash
 sudo loginctl enable-linger $USER
 ```
 对于始终运行或多人使用的服务器，考虑使用 **系统** 服务而不是用户服务（不需要持久化）。
-有关 systemd 的说明，请参阅 [网关运行手册](/gateway)。
+有关 systemd 的说明，请参阅 [网关运行手册](/gateway/index.md)。
 
 ## 相关文档
 
-- [网关运行手册](/gateway)（标志、监督、端口）
-- [网关配置](/gateway/configuration)（配置模式 + 示例）
-- [Discord](/channels/discord) 和 [Telegram](/channels/telegram)（回复标签 + replyToMode 设置）
-- [Clawdbot 助手设置](/start/clawd)
-- [macOS 应用](/platforms/macos)（网关生命周期）
+- [网关运行手册](/gateway/index.md)（标志、监督、端口）
+- [网关配置](/gateway/configuration.md)（配置模式 + 示例）
+- [Discord](/channels/discord.md) 和 [Telegram](/channels/telegram.md)（回复标签 + replyToMode 设置）
+- [Clawdbot 助手设置](/start/clawd.md)
+- [macOS 应用](/platforms/macos.md)（网关生命周期）

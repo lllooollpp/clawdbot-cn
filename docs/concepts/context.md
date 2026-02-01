@@ -25,7 +25,7 @@ read_when:
 - `/usage tokens` → 在正常回复的末尾添加每条回复的令牌使用情况。
 - `/compact` → 将较旧的对话历史浓缩为一个简洁的条目，以腾出窗口空间。
 
-另见：[斜杠命令](/tools/slash-commands)，[令牌使用与成本](/token-use)，[压缩](/concepts/compaction)。
+另见：[斜杠命令](/tools/slash-commands.md)，[令牌使用与成本](/token-use.md)，[压缩](/concepts/compaction.md)。
 
 ## 示例输出
 
@@ -69,7 +69,7 @@ Top tools (schema size):
 - browser: 9,812 chars (~2,453 tok)
 - exec: 6,240 chars (~1,560 tok)
 … (+N more tools)
-``````
+```
 ## 什么是计入上下文窗口的内容
 
 模型接收到的所有内容都会被计入，包括：
@@ -90,7 +90,7 @@ Top tools (schema size):
 - 运行时元数据（主机/操作系统/模型/思考过程）。
 - 在 **项目上下文** 下注入的工作区启动文件。
 
-详细说明：[系统提示](/concepts/system-prompt)。
+详细说明：[系统提示](/concepts/system-prompt.md)。
 
 ## 注入的工作区文件（项目上下文）
 
@@ -128,7 +128,7 @@ Top tools (schema size):
   - 正常消息中的内联指令作为每条消息的提示。
 - **内联快捷方式**（仅允许白名单发送者）：某些 `/...` 令牌在正常消息中可以立即执行（例如：“hey /status”），并在模型看到剩余文本前被移除。
 
-详情：[斜杠命令](/tools/slash-commands)。
+详情：[斜杠命令](/tools/slash-commands.md)。
 
 ## 会话、压缩和修剪（哪些内容会保留）
 
@@ -137,7 +137,7 @@ Top tools (schema size):
 - **压缩** 会将摘要保留在转录中，并保留最近的消息。
 - **修剪** 会从 *内存中的提示* 中移除旧的工具结果，但不会重写转录内容。
 
-文档：[会话](/concepts/session)，[压缩](/concepts/compaction)，[会话清理](/concepts/session-pruning)。
+文档：[会话](/concepts/session.md)，[压缩](/concepts/compaction.md)，[会话清理](/concepts/session-pruning.md)。
 
 ## `/context` 实际报告的内容
 
@@ -146,3 +146,4 @@ Top tools (schema size):
 - `System prompt (estimate)` = 当没有运行报告存在时（或通过不生成报告的 CLI 后端运行时）实时计算的。
 
 无论如何，它都会报告大小和主要贡献者；它**不会**转储完整的系统提示或工具模式。
+```

@@ -19,14 +19,15 @@ status: active
 
 认证配置文件是 **按智能体区分** 的。每个智能体从其自身的配置中读取数据。
 
-~/.clawdbot/agents/<agentId>/agent/auth-profiles.json``````
+~/.clawdbot/agents/<agentId>/agent/auth-profiles.json
+```
 主要代理凭据**不会**自动共享。不要在多个代理之间重复使用 `agentDir`（这会导致认证/会话冲突）。如果你想共享凭据，请将 `auth-profiles.json` 复制到其他代理的 `agentDir` 中。
 
-每个工作区的技能是**按代理分配**的，共享技能可以从 `~/.clawdbot/skills` 获取。参见 [技能：按代理 vs 共享](/tools/skills#per-agent-vs-shared-skills)。
+每个工作区的技能是**按代理分配**的，共享技能可以从 `~/.clawdbot/skills` 获取。参见 [技能：按代理 vs 共享](/tools/skills.md#per-agent-vs-shared-skills)。
 
 网关可以同时托管**一个代理**（默认）或**多个代理**。
 
-**工作区说明：** 每个代理的工作区是**默认的当前工作目录**，而不是一个硬隔离的沙箱。相对路径会在工作区内解析，但绝对路径可以访问主机上的其他位置，除非启用了沙箱功能。参见 [沙箱](/gateway/sandboxing)。
+**工作区说明：** 每个代理的工作区是**默认的当前工作目录**，而不是一个硬隔离的沙箱。相对路径会在工作区内解析，但绝对路径可以访问主机上的其他位置，除非启用了沙箱功能。参见 [沙箱](/gateway/sandboxing.md)。
 
 ## 路径（快速一览）
 
@@ -47,14 +48,16 @@ status: active
 
 ## 代理助手
 
-使用代理向导来添加一个新的隔离代理：```bash
+使用代理向导来添加一个新的隔离代理：
+```bash
 clawdbot agents add work
 ```
 然后添加 `bindings`（或者让向导来添加）以路由传入的消息。
 
 验证方式如下：
 bash
-clawdbot agents list --bindings``````
+clawdbot agents list --bindings
+```
 ## 多个代理 = 多个人，多个个性
 
 使用 **多个代理** 时，每个 `agentId` 会成为一个 **完全隔离的个性角色**：
@@ -71,7 +74,8 @@ clawdbot agents list --bindings``````
 
 重要说明：私信会合并到代理的 **主会话密钥** 中，因此实现真正的隔离需要 **每人一个代理**。
 
-示例：```json5
+示例：
+```json5
 {
   agents: {
     list: [
@@ -93,7 +97,7 @@ clawdbot agents list --bindings``````
 ```
 ## 注意事项：
 - DM 访问控制是 **针对 WhatsApp 账户全局的**（配对/允许列表），而不是针对每个代理。
-- 对于共享群组，将群组绑定到一个代理，或使用 [广播群组](/broadcast-groups)。
+- 对于共享群组，将群组绑定到一个代理，或使用 [广播群组](/broadcast-groups.md)。
 
 ## 路由规则（消息如何选择代理）
 
@@ -175,10 +179,11 @@ js
     },
   },
 }
-`````````
+```
 ## 示例：WhatsApp 日常聊天 + Telegram 深度工作
 
-按渠道拆分：将 WhatsApp 路由到快速日常代理，将 Telegram 路由到 Opus 代理。```json5
+按渠道拆分：将 WhatsApp 路由到快速日常代理，将 Telegram 路由到 Opus 代理。
+```json5
 {
   agents: {
     list: [
@@ -221,12 +226,14 @@ json5
     { agentId: "opus", match: { channel: "whatsapp", peer: { kind: "dm", id: "+15551234567" } } },
     { agentId: "chat", match: { channel: "whatsapp" } }
   ]
-}``````
+}
+```
 Peer bindings always win, so keep them above the channel-wide rule.
 
 ## 家庭代理绑定到 WhatsApp 群组
 
-将专用的家庭代理绑定到一个 WhatsApp 群组，设置提及限制和更严格的工具策略：```json5
+将专用的家庭代理绑定到一个 WhatsApp 群组，设置提及限制和更严格的工具策略：
+```json5
 {
   agents: {
     list: [
@@ -298,7 +305,7 @@ js
     ],
   },
 }
-`````````
+```
 注意：`setupCommand` 位于 `sandbox.docker` 下，并在容器创建时运行一次。
 当解析的作用域为 `"shared"` 时，针对每个代理的 `sandbox.docker.*` 覆盖将被忽略。
 
@@ -311,4 +318,5 @@ js
 如果需要按代理设置边界，请使用 `agents.list[].tools` 来拒绝 `exec`。
 对于分组目标，使用 `agents.list[].groupChat.mentionPatterns` 以确保 @提及 正确映射到目标代理。
 
-有关详细示例，请参见 [多代理沙箱与工具](/multi-agent-sandbox-tools)。
+有关详细示例，请参见 [多代理沙箱与工具](/multi-agent-sandbox-tools.md)。
+```

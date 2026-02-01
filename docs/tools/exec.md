@@ -52,7 +52,7 @@ json5
     }
   }
 }
-``````
+```
 ### PATH 处理
 
 - `host=gateway`：将你的登录 shell 的 `PATH` 合并到执行环境中（除非执行调用已经设置了 `env.PATH`）。守护进程本身仍然使用最小的 `PATH` 运行：
@@ -61,7 +61,8 @@ json5
 - `host=sandbox`：在容器内运行 `sh -lc`（登录 shell），因此 `/etc/profile` 可能会重置 `PATH`。Clawdbot 在加载 profile 后会将 `env.PATH` 添加到前面；`tools.exec.pathPrepend` 在此处也适用。
 - `host=node`：仅将你传递的环境变量覆盖发送到节点。只有在执行调用已经设置了 `env.PATH` 时，`tools.exec.pathPrepend` 才会生效。无头节点主机仅在 `PATH` 前缀包含节点主机的 `PATH` 时才接受 `PATH`（不进行替换）。macOS 节点会完全忽略 `PATH` 的覆盖。
   
-按代理绑定节点（在配置中使用代理列表的索引）：```bash
+按代理绑定节点（在配置中使用代理列表的索引）：
+```bash
 clawdbot config get agents.list
 clawdbot config set agents.list[0].tools.exec.node "node-id-or-name"
 ```
@@ -75,24 +76,27 @@ clawdbot config set agents.list[0].tools.exec.node "node-id-or-name"
 示例：
 
 /exec host=gateway security=allowlist ask=on-miss node=mac-1
-```"```
+```"
+```
 ## 执行审批（配套应用 / 节点主机）
 
 沙盒代理可以在网关或节点主机上运行 `exec` 命令之前，要求每次请求的审批。
-有关策略、允许列表和用户界面流程，请参见 [执行审批](/tools/exec-approvals)。
+有关策略、允许列表和用户界面流程，请参见 [执行审批](/tools/exec-approvals.md)。
 
 当需要审批时，exec 工具会立即返回
 `status: "approval-pending"` 和一个审批 ID。一旦获得批准（或被拒绝/超时），
 网关会发出系统事件（`Exec finished` / `Exec denied`）。如果命令在 `tools.exec.approvalRunningNoticeMs` 之后仍在运行，
-将发出一次 `Exec running` 的通知。```json
+将发出一次 `Exec running` 的通知。
+```json
 {"tool":"exec","command":"ls -la"}
 ```
 背景 + 投票：
 json
 {"tool":"exec","command":"npm run build","yieldMs":1000}
 {"tool":"process","action":"poll","sessionId":"<id>"}
-``````
-发送键（tmux 风格）：```json
+```
+发送键（tmux 风格）：
+```json
 {"tool":"process","action":"send-keys","sessionId":"<id>","keys":["Enter"]}
 {"tool":"process","action":"send-keys","sessionId":"<id>","keys":["C-c"]}
 {"tool":"process","action":"send-keys","sessionId":"<id>","keys":["Up","Up","Enter"]}
@@ -100,8 +104,9 @@ json
 提交（仅发送 CR）：
 json
 {"tool":"process","action":"submit","sessionId":"<id>"}
-``````
-Paste (bracketed by default):```json
+```
+Paste (bracketed by default):
+```json
 {"tool":"process","action":"paste","sessionId":"<id>","text":"line1\nline2\n"}
 ```
 ## apply_patch（实验性）
@@ -116,7 +121,7 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 仅适用于 OpenAI/OpenAI Codex 模型。
 - 工具策略仍然适用；`allow: ["exec"]` 隐含允许 `apply_patch`。

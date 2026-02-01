@@ -26,7 +26,8 @@ Clawdbot 通过 swift-log（默认使用统一日志）将 macOS 应用日志进
 ## 为 Clawdbot（com.clawdbot）启用隐私关闭模式
 - 首先将 plist 文件写入临时文件，然后以 root 权限原子化安装：
 bash
-sudo defaults write /Library/Preferences/Logging/Subsystems/com.clawdbot privacy -string "off"``````bash
+sudo defaults write /Library/Preferences/Logging/Subsystems/com.clawdbot privacy -string "off"
+```bash
 cat <<'EOF' >/tmp/com.clawdbot.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

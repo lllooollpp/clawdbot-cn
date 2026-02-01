@@ -1,3 +1,7 @@
+---
+summary: "Wecom documentation"
+---
+
 ```markdown
 ---
 summary: "企业微信 (WeCom) 渠道集成：设置、Webhook、私信、群组、加密和消息接收。"

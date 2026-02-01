@@ -58,8 +58,9 @@ bash
 ssh user@gateway-host
 # 或使用 IP 地址
 ssh user@192.168.x.x
-``````
-## 3）系统设置```bash
+```
+## 3）系统设置
+```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
 
@@ -78,10 +79,11 @@ sudo apt install -y nodejs
 # 验证安装
 node --version  # 应显示 v22.x.x
 npm --version
-``````
+```
 ## 5) 添加交换空间（对于 2GB 或更少内存非常重要）
 
-交换空间可以防止内存不足导致的崩溃：```bash
+交换空间可以防止内存不足导致的崩溃：
+```bash
 # Create 2GB swap file
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
@@ -100,8 +102,9 @@ sudo sysctl -p
 ### 选项 A：标准安装（推荐）
 bash
 curl -fsSL https://clawd.bot/install.sh | bash
-``````
-### 选项 B：可修改安装（适用于动手实验）```bash
+```
+### 选项 B：可修改安装（适用于动手实验）
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 npm install
@@ -113,14 +116,15 @@ npm link
 ## 7）运行引导流程
 bash
 clawdbot onboard --install-daemon
-``````
+```
 跟随向导：
 1. **网关模式:** 本地
 2. **认证方式:** 推荐使用API密钥（OAuth在无头Pi上可能不太稳定）
 3. **频道:** Telegram是最容易上手的
 4. **守护进程:** 是（systemd）
 
-## 8) 验证安装```bash
+## 8) 验证安装
+```bash
 # Check status
 clawdbot status
 
@@ -139,8 +143,9 @@ ssh -L 18789:localhost:18789 user@gateway-host
 
 # 然后在浏览器中打开
 open http://localhost:18789
-``````
-或者使用 Tailscale 实现始终在线的访问：```bash
+```
+或者使用 Tailscale 实现始终在线的访问：
+```bash
 # On the Pi
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
@@ -159,17 +164,18 @@ SD 卡速度较慢且容易磨损。使用 USB SSD 可显著提升性能：
 bash
 # 检查是否从 USB 启动
 lsblk
-``````
+```
 参见 [Pi USB 启动指南](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#usb-mass-storage-boot) 进行设置。
 
-### 降低内存使用```bash
+## 降低内存使用
+```bash
 # Disable GPU memory allocation (headless)
 echo 'gpu_mem=16' | sudo tee -a /boot/config.txt
 
 # Disable Bluetooth if not needed
 sudo systemctl disable bluetooth
 ```
-### 监控资源
+## 监控资源
 # 检查内存
 free -h
 
@@ -177,7 +183,8 @@ free -h
 vcgencmd measure_temp
 
 # 实时监控
-htop```
+htop
+```
 ---
 
 ## ARM 特定说明
@@ -194,7 +201,8 @@ htop```
 | gog (Gmail CLI) | ⚠️ | 请检查是否有 ARM 版本的发布 |
 | Chromium (浏览器) | ✅ | `sudo apt install chromium-browser` |
 
-如果某个技能无法运行，请检查其二进制文件是否有 ARM 版本的构建。许多 Go/Rust 工具都有；但有些可能没有。```bash
+如果某个技能无法运行，请检查其二进制文件是否有 ARM 版本的构建。许多 Go/Rust 工具都有；但有些可能没有。
+```bash
 uname -m
 # Should show: aarch64 (64-bit) not armv7l (32-bit)
 ```
@@ -214,14 +222,15 @@ json
     }
   }
 }
-``````
+```
 **不要尝试在树莓派上运行本地LLM** —— 即使是小型模型也会太慢。让Claude/GPT来处理繁重的任务。
 
 ---
 
 ## 开机自动启动
 
-首次设置向导会自动配置，但可以进行验证：```bash
+首次设置向导会自动配置，但可以进行验证：
+```bash
 # Check service is enabled
 sudo systemctl is-enabled clawdbot
 
@@ -240,14 +249,15 @@ free -h
 
 # 添加更多交换空间（参见步骤5）
 # 或减少在树莓派上运行的服务
-``````
-### 运行缓慢
+```
+## 运行缓慢
 
 - 使用 USB SSD 替代 SD 卡
 - 禁用不使用的服务：`sudo systemctl disable cups bluetooth avahi-daemon`
 - 检查 CPU 降频情况：`vcgencmd get_throttled`（应返回 `0x0`）
 
-### 服务无法启动```bash
+### 服务无法启动
+```bash
 # Check logs
 journalctl -u clawdbot --no-pager -n 100
 
@@ -256,7 +266,7 @@ cd ~/clawdbot  # if using hackable install
 npm run build
 sudo systemctl restart clawdbot
 ```
-### ARM 二进制文件问题
+## ARM 二进制文件问题
 
 如果一个程序报错为 "exec format error"：
 1. 检查该二进制文件是否有 ARM64 版本
@@ -272,7 +282,7 @@ sudo iwconfig wlan0 power off
 
 # 设置为永久生效
 echo 'wireless-power off' | sudo tee -a /etc/network/interfaces
-``````
+```
 ---
 
 ## 成本对比
@@ -292,8 +302,8 @@ echo 'wireless-power off' | sudo tee -a /etc/network/interfaces
 
 ## 相关内容
 
-- [Linux 指南](/platforms/linux) — 通用 Linux 设置
-- [DigitalOcean 指南](/platforms/digitalocean) — 云替代方案
-- [Hetzner 指南](/platforms/hetzner) — Docker 设置
-- [Tailscale](/gateway/tailscale) — 远程访问
-- [节点](/nodes) — 将你的笔记本电脑/手机与 Pi 网关配对
+- [Linux 指南](/platforms/linux.md) — 通用 Linux 设置
+- [DigitalOcean 指南](/platforms/digitalocean.md) — 云替代方案
+- [Hetzner 指南](/platforms/hetzner.md) — Docker 设置
+- [Tailscale](/gateway/tailscale.md) — 远程访问
+- [节点](/nodes/index.md) — 将你的笔记本电脑/手机与 Pi 网关配对

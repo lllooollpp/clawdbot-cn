@@ -13,20 +13,24 @@ Nextcloud Talk 作为插件提供，并不包含在核心安装中。
 
 通过 CLI 安装（npm 仓库）：
 bash
-clawdbot plugins install @clawdbot/nextcloud-talk``````
-本地签出（当从 git 仓库运行时）：```bash
+clawdbot plugins install @clawdbot/nextcloud-talk
+```
+本地签出（当从 git 仓库运行时）：
+```bash
 clawdbot plugins install ./extensions/nextcloud-talk
 ```
 如果在配置/引导过程中选择了 Nextcloud Talk，并且检测到 git 检出，  
 Clawdbot 将会自动提供本地安装路径。
 
-详情：[插件](/plugin)
+详情：[插件](/plugin.md)
 
 ## 快速设置（初学者）
 1) 安装 Nextcloud Talk 插件。  
-2) 在您的 Nextcloud 服务器上，创建一个机器人：```bash
+2) 在您的 Nextcloud 服务器上，创建一个机器人：
+```bash
 ./occ talk:bot:install "Clawdbot" "<shared-secret>" "<webhook-url>" --feature reaction
-```   ```
+```   
+```
 3) 在目标房间中启用机器人。
 4) 配置 Clawdbot：
    - 配置项：`channels.nextcloud-talk.baseUrl` + `channels.nextcloud-talk.botSecret`
@@ -45,7 +49,7 @@ json5
     }
   }
 }
-``````
+```
 ## 注意事项
 - 机器人不能主动发起私信（DM）。用户必须先向机器人发送消息。
 - Webhook 的 URL 必须能被网关访问；如果在代理后面，请设置 `webhookPublicUrl`。
@@ -72,7 +76,7 @@ json5
     }
   }
 }
-``````
+```
 - 如果要禁用所有房间，请保持 allowlist 为空，或设置 `channels.nextcloud-talk.groupPolicy="disabled"`。
 
 ## 功能支持情况
@@ -86,7 +90,7 @@ json5
 | 原生命令 | 不支持 |
 
 ## 配置参考（Nextcloud Talk）
-完整配置：[配置](/gateway/configuration)
+完整配置：[配置](/gateway/configuration.md)
 
 提供者选项：
 - `channels.nextcloud-talk.enabled`: 启用/禁用频道。

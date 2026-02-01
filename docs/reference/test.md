@@ -6,7 +6,7 @@ read_when:
 
 # 测试
 
-- 完整的测试套件（测试用例、实时测试、Docker）：[测试](/testing)
+- 完整的测试套件（测试用例、实时测试、Docker）：[测试](/testing.md)
 
 - `pnpm test:force`：终止任何占用默认控制端口的残留网关进程，然后运行完整的 Vitest 测试套件，并使用隔离的网关端口，以避免服务器测试与正在运行的实例发生冲突。当之前的网关运行占用了端口 18789 时使用此命令。
 - `pnpm test:coverage`：使用 V8 覆盖率运行 Vitest。全局阈值为 70% 的行/分支/函数/语句覆盖率。覆盖范围排除了集成密集型入口点（CLI 配置、网关/Telegram 桥接、webchat 静态服务器），以将目标集中在可进行单元测试的逻辑上。
@@ -24,11 +24,15 @@ read_when:
 
 最近一次运行（2025-12-31，20 次运行）：
 - minimax 中位数 1279ms（最小 1114，最大 2431）
-- opus 中位数 2454ms（最小 1224，最大 3170）```
+- opus 中位数 2454ms（最小 1224，最大 3170）
+```
 此脚本通过伪终端驱动交互式向导，验证配置/工作区/会话文件，然后启动网关并运行 `clawdbot health`。
 
 ## QR码导入烟雾测试（Docker）
 
-确保在 Docker 中 `qrcode-terminal` 能在 Node 22+ 环境下正常加载：```bash
+确保在 Docker 中 `qrcode-terminal` 能在 Node 22+ 环境下正常加载：
+```bash
 pnpm test:docker:qr
+```
+
 ```

@@ -14,9 +14,9 @@ Clawdbot 使用一个单一的代理工作区目录（`agents.defaults.workspace
 
 推荐：如果缺少 `~/.clawdbot/clawdbot.json`，请使用 `clawdbot setup` 来创建并初始化工作区文件。
 
-完整的工作区结构 + 备份指南：[代理工作区](/concepts/agent-workspace)
+完整的工作区结构 + 备份指南：[代理工作区](/concepts/agent-workspace.md)
 
-如果启用了 `agents.defaults.sandbox`，非主会话可以通过 `agents.defaults.sandbox.workspaceRoot` 下的会话级工作区进行覆盖（参见 [网关配置](/gateway/configuration)）。
+如果启用了 `agents.defaults.sandbox`，非主会话可以通过 `agents.defaults.sandbox.workspaceRoot` 下的会话级工作区进行覆盖（参见 [网关配置](/gateway/configuration.md)）。
 
 ## 引导文件（注入）
 
@@ -39,7 +39,7 @@ Clawdbot 使用一个单一的代理工作区目录（`agents.defaults.workspace
 要完全禁用引导文件的创建（用于预填充的工作区），请设置：
 json5
 { agent: { skipBootstrap: true } }
-`````````
+```
 ```md
 ## 内置工具
 
@@ -52,7 +52,7 @@ Clawdbot 从三个位置加载技能（在名称冲突时，工作区的技能�
 - 管理/本地：`~/.clawdbot/skills`
 - 工作区：`<workspace>/skills`
 
-技能可以受配置/环境变量控制（参见 [网关配置](/gateway/configuration) 中的 `skills`）。
+技能可以受配置/环境变量控制（参见 [网关配置](/gateway/configuration.md) 中的 `skills`）。
 
 ## p-mono 集成
 
@@ -74,7 +74,7 @@ Clawdbot 重用了 p-mono 代码库的一部分（模型/工具），但 **会�
 当队列模式为 `steer` 时，传入的消息会被注入到当前运行中。
 在 **每次工具调用之后** 会检查队列；如果存在排队的消息，则跳过当前助手消息的剩余工具调用（工具结果会报错 "Skipped due to queued user message."），然后在下一次助手响应前注入排队的用户消息。
 
-当队列模式为 `followup` 或 `collect` 时，传入的消息会被保留，直到当前轮次结束，然后以排队的内容启动一个新的代理轮次。有关模式 + 去抖/限制行为的更多信息，请参见 [队列](/concepts/queue)。
+当队列模式为 `followup` 或 `collect` 时，传入的消息会被保留，直到当前轮次结束，然后以排队的内容启动一个新的代理轮次。有关模式 + 去抖/限制行为的更多信息，请参见 [队列](/concepts/queue.md)。
 
 块流式传输会在块完成时立即发送；它 **默认关闭**（`agents.defaults.blockStreamingDefault: "off"`）。
 可以通过 `agents.defaults.blockStreamingBreak` 调整边界（`text_end` 与 `message_end`；默认为 `text_end`）。
@@ -82,7 +82,7 @@ Clawdbot 重用了 p-mono 代码库的一部分（模型/工具），但 **会�
 使用 `agents.defaults.blockStreamingCoalesce` 合并流式分片以减少单行垃圾信息（基于空闲状态在发送前合并）。
 非 Telegram 通道需要显式设置 `*.blockStreaming: true` 以启用块回复。
 工具摘要的详细信息会在工具启动时发出（无去抖）；当可用时，通过代理事件控制 UI 流式输出工具结果。
-更多细节：[流式传输 + 分片](/concepts/streaming)。
+更多细节：[流式传输 + 分片](/concepts/streaming.md)。
 
 ## 模型引用
 
@@ -100,4 +100,4 @@ Clawdbot 重用了 p-mono 代码库的一部分（模型/工具），但 **会�
 
 ---
 
-*下一步：[群组聊天](/concepts/group-messages)* 🦞
+*下一步：[群组聊天](/concepts/group-messages.md)* 🦞

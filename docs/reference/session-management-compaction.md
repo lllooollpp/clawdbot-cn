@@ -19,10 +19,10 @@ read_when:
 - **静默维护**（例如不应产生用户可见输出的内存写入）
 
 如果你想先获得一个更高层次的概述，请从以下内容开始：
-- [/concepts/session](/concepts/session)
-- [/concepts/compaction](/concepts/compaction)
-- [/concepts/session-pruning](/concepts/session-pruning)
-- [/reference/transcript-hygiene](/reference/transcript-hygiene)
+- [/concepts/session](/concepts/session.md)
+- [/concepts/compaction](/concepts/compaction.md)
+- [/concepts/session-pruning](/concepts/session-pruning.md)
+- [/reference/transcript-hygiene](/reference/transcript-hygiene.md)
 
 ---
 
@@ -75,7 +75,7 @@ Clawdbot通过`src/config/sessions.ts`解析这些路径。
 - 定时任务：`cron:<job.id>`
 - 网络钩子：`hook:<uuid>`（除非被覆盖）
 
-规范规则在 [/concepts/session](/concepts/session) 中有详细说明。
+规范规则在 [/concepts/session](/concepts/session.md) 中有详细说明。
 
 ---
 
@@ -138,7 +138,7 @@ Clawdbot **故意不**“修复”对话记录；网关使用 `SessionManager` �
 - 上下文窗口来自模型目录（可以通过配置覆盖）。
 - 存储中的 `contextTokens` 是运行时的估计/报告值；不要将其视为严格的保证。
 
-有关更多信息，请参见 [/token-use](/token-use)。
+有关更多信息，请参见 [/token-use](/token-use.md)。
 
 ---
 
@@ -150,7 +150,7 @@ Clawdbot **故意不**“修复”对话记录；网关使用 `SessionManager` �
 - 压缩后的摘要
 - `firstKeptEntryId` 之后的消息
 
-压缩是 **持久化的**（不同于会话修剪）。请参见 [/concepts/session-pruning](/concepts/session-pruning)。
+压缩是 **持久化的**（不同于会话修剪）。请参见 [/concepts/session-pruning](/concepts/session-pruning.md)。
 
 ---
 
@@ -182,7 +182,7 @@ json5
     keepRecentTokens: 20000
   }
 }
-``````
+```
 Clawdbot 还对嵌入式运行设置了安全下限：
 
 - 如果 `compaction.reserveTokens < reserveTokensFloor`，Clawdbot 会将其提升。
@@ -240,7 +240,7 @@ Clawdbot 使用的是 **预阈值刷新** 方法：
 - 每个压缩周期只运行一次刷新（记录在 `sessions.json` 中）。
 - 仅对嵌入式 Pi 会话运行刷新（CLI 后端会跳过）。
 - 当会话工作区为只读时（`workspaceAccess: "ro"` 或 `"none"`）会跳过刷新。
-- 有关工作区文件结构和写入模式，请参阅 [Memory](/concepts/memory)。
+- 有关工作区文件结构和写入模式，请参阅 [Memory](/concepts/memory.md)。
 
 Pi 还在扩展 API 中暴露了 `session_before_compact` 钩子，但目前 Clawdbot 的刷新逻辑是在网关端实现的。
 
@@ -248,10 +248,11 @@ Pi 还在扩展 API 中暴露了 `session_before_compact` 钩子，但目前 Cla
 
 ## 排查问题清单
 
-- 会话密钥错误？从 [/concepts/session](/concepts/session) 开始，并确认 `/status` 中的 `sessionKey`。
+- 会话密钥错误？从 [/concepts/session](/concepts/session.md) 开始，并确认 `/status` 中的 `sessionKey`。
 - 存储与转录不匹配？确认 `clawdbot status` 中的网关主机和存储路径。
 - 压缩日志过多？检查以下内容：
   - 模型上下文窗口（太小）
   - 压缩设置（`reserveTokens` 设置过高可能导致早期压缩）
   - 工具结果膨胀：启用/调整会话修剪
 - 静默回合泄露？确认回复以 `NO_REPLY`（精确的标记）开头，并且你使用的是包含流式抑制修复的版本。
+```

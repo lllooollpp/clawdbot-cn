@@ -10,11 +10,13 @@ read_when:
 用于广域发现的 DNS 工具（Tailscale + CoreDNS）。目前专注于 macOS + Homebrew CoreDNS。
 
 相关：
-- 网关发现：[Discovery](/gateway/discovery)
-- 广域发现配置：[Configuration](/gateway/configuration)
+- 网关发现：[Discovery](/gateway/discovery.md)
+- 广域发现配置：[Configuration](/gateway/configuration.md)
 
 ## 安装
 bash
 clawdbot dns setup
-clawdbot dns setup --apply``````
+clawdbot dns setup --apply
+```
 "
+```

@@ -24,18 +24,20 @@ GitHub Copilot 是 GitHub 的 AI 编程助手。它为您的 GitHub 账户和计
 使用 GitHub Copilot 作为模型提供者 (`github-copilot`)。登录命令会运行 GitHub 设备流程，保存认证配置文件，并更新您的配置以使用该配置文件。
 bash
 clawdbot models auth login-github-copilot
-``````
+```
 您将被提示访问一个网址并输入一次性验证码。请保持终端打开直到操作完成。
 
-### 可选标志```bash
+### 可选标志
+```bash
 clawdbot models auth login-github-copilot --profile-id github-copilot:work
 clawdbot models auth login-github-copilot --yes
 ```
 ## 设置默认模型
 bash
 clawdbot models set github-copilot/gpt-4o
-``````
-### 配置片段```json5
+```
+### 配置片段
+```json5
 {
   agents: { defaults: { model: { primary: "github-copilot/gpt-4o" } } }
 }

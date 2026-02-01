@@ -212,3 +212,15 @@ export async function setBochaApiKey(key: string, agentDir?: string) {
     agentDir: resolveAuthAgentDir(agentDir),
   });
 }
+
+export async function setZhipuApiKey(key: string, agentDir?: string) {
+  upsertAuthProfile({
+    profileId: "zhipu:default",
+    credential: {
+      type: "api_key",
+      provider: "zhipu",
+      key,
+    },
+    agentDir: resolveAuthAgentDir(agentDir),
+  });
+}

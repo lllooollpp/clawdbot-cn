@@ -43,7 +43,7 @@ json
   "mode": "whileUsing | always",
   "precise": true | false
 }
-`````````json
+```json
 {
   "timeoutMs": 10000,
   "maxAgeMs": 15000,
@@ -60,7 +60,8 @@ json
   "timestamp": "2026-01-03T12:34:56.000Z",
   "isPrecise": true,
   "source": "gps|wifi|cell|unknown"
-}```
+}
+```
 错误代码（稳定代码）：
 - `LOCATION_DISABLED`: 位置选择器已关闭。
 - `LOCATION_PERMISSION_REQUIRED`: 请求模式缺少权限。
@@ -93,3 +94,4 @@ json
 - 使用期间： “仅当 Clawdbot 打开时可用。”
 - 始终允许： “允许后台位置。需要系统权限。”
 - 精准定位： “使用精确的 GPS 位置。关闭以共享大致位置。”
+```

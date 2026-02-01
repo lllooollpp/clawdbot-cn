@@ -29,8 +29,9 @@ clawdbot --profile main gateway --port 18789
 # 救援
 clawdbot --profile rescue setup
 clawdbot --profile rescue gateway --port 19001
-``````
-按配置文件服务：```bash
+```
+按配置文件服务：
+```bash
 clawdbot --profile main gateway install
 clawdbot --profile rescue gateway install
 ```
@@ -63,7 +64,7 @@ clawdbot --profile rescue onboard
 
 # 如果在配置过程中未自动安装服务
 clawdbot --profile rescue gateway install
-``````
+```
 ## 端口映射（派生）
 
 基础端口 = `gateway.port`（或 `CLAWDBOT_GATEWAY_PORT` / `--port`）。
@@ -81,7 +82,8 @@ clawdbot --profile rescue gateway install
 - 如果你需要显式的 CDP 端口，请为每个实例设置 `browser.profiles.<name>.cdpPort`。
 - 远程 Chrome：使用 `browser.profiles.<name>.cdpUrl`（每个配置文件，每个实例）。
 
-## 手动环境变量示例```bash
+## 手动环境变量示例
+```bash
 CLAWDBOT_CONFIG_PATH=~/.clawdbot/main.json \
 CLAWDBOT_STATE_DIR=~/.clawdbot-main \
 clawdbot gateway --port 18789
@@ -93,4 +95,4 @@ clawdbot gateway --port 19001
 ## 快速检查
 clawdbot --profile main status
 clawdbot --profile rescue status
-clawdbot --profile rescue browser status```
+clawdbot --profile rescue browser status

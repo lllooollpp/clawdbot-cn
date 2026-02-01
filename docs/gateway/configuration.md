@@ -16,7 +16,7 @@ Clawdbot 会从 `~/.clawdbot/clawdbot.json` 读取一个可选的 **JSON5** 配�
 - 调整内置代理的默认值（`agents.defaults`）和会话行为（`session`）
 - 设置每个代理的身份（`agents.list[].identity`）
 
-> **刚开始配置？** 查看 [配置示例](/gateway/configuration-examples) 指南，获取完整的示例和详细说明！
+> **刚开始配置？** 查看 [配置示例](/gateway/configuration-examples.md) 指南，获取完整的示例和详细说明！
 
 ## 严格配置验证
 
@@ -47,7 +47,7 @@ clawdbot gateway call config.apply --params '{
   "sessionKey": "agent:main:whatsapp:dm:+15555550123",
   "restartDelayMs": 1000
 }'
-``````
+```
 ## 部分更新（RPC）
 
 使用 `config.patch` 将部分更新合并到现有配置中，而不会覆盖不相关的键。它采用 JSON 合并补丁语义：
@@ -64,7 +64,8 @@ clawdbot gateway call config.apply --params '{
 - `note`（可选）— 要包含在重启标记中的备注
 - `restartDelayMs`（可选）— 重启前的延迟时间（默认 2000 毫秒）
 
-示例：```bash
+示例：
+```bash
 clawdbot gateway call config.get --params '{}' # capture payload.hash
 clawdbot gateway call config.patch --params '{
   "raw": "{\\n  channels: { telegram: { groups: { \\"*\\": { requireMention: false } } } }\\n}\\n",
@@ -79,8 +80,9 @@ json5
   agents: { defaults: { workspace: "~/clawd" } },
   channels: { whatsapp: { allowFrom: ["+15555550123"] } }
 }
-``````
-使用以下命令一次性构建默认镜像：```bash
+```
+使用以下命令一次性构建默认镜像：
+```bash
 scripts/sandbox-setup.sh
 ```
 ## 自我聊天模式（推荐用于群组控制）
@@ -105,13 +107,14 @@ json5
     }
   }
 }
-``````
+```
 ## 配置包含 (`$include`)
 
 使用 `$include` 指令将配置拆分为多个文件。这在以下情况下非常有用：
 - 组织大型配置（例如，按客户划分的代理定义）
 - 在不同环境中共享通用设置
-- 将敏感配置单独保存```json5
+- 将敏感配置单独保存
+```json5
 // ~/.clawdbot/clawdbot.json
 {
   gateway: { port: 18789 },
@@ -149,10 +152,11 @@ json5
   "$include": "./base.json5",   // { a: 1, b: 2 }
   b: 99                          // 结果：{ a: 1, b: 99 }
 }
-``````
+```
 ### 嵌套包含
 
-被包含的文件本身也可以包含 `$include` 指令（最多支持 10 层嵌套）：```json5
+被包含的文件本身也可以包含 `$include` 指令（最多支持 10 层嵌套）：
+```json5
 // clients/mueller.json5
 {
   agents: { "$include": "./mueller/agents.json5" },
@@ -168,12 +172,13 @@ json5
 { "$include": "./sub/config.json5" }      // 相对路径
 { "$include": "/etc/clawdbot/base.json5" } // 绝对路径
 { "$include": "../shared/common.json5" }   // 父目录
-``````
+```
 ### 错误处理
 
 - **文件缺失**：显示清晰的错误信息及解析后的路径
 - **解析错误**：显示哪个包含的文件失败了
-- **循环包含**：检测并报告包含链```json5
+- **循环包含**：检测并报告包含链
+```json5
 // ~/.clawdbot/clawdbot.json
 {
   gateway: { port: 18789, auth: { token: "secret" } },
@@ -203,12 +208,14 @@ json5
 [
   { id: "mueller-transcribe", workspace: "~/clients/mueller/transcribe" },
   { id: "mueller-docs", workspace: "~/clients/mueller/docs" }
-]```
+]
+```
 ```md
 // ~/.clawdbot/clients/mueller/broadcast.json5
 {
   "120363403215116621@g.us": ["mueller-transcribe", "mueller-docs"]
-}```
+}
+```
 ## 常见选项
 
 ### 环境变量 + `.env`
@@ -221,7 +228,8 @@ Clawdbot 从父进程（shell、launchd/systemd、CI 等）中读取环境变量
 
 这两个 `.env` 文件都不会覆盖已有的环境变量。
 
-你也可以在配置中直接提供环境变量。这些变量仅在进程环境变量中缺少该键时才会被应用（遵循相同的非覆盖规则）：```json5
+你也可以在配置中直接提供环境变量。这些变量仅在进程环境变量中缺少该键时才会被应用（遵循相同的非覆盖规则）：
+```json5
 {
   env: {
     OPENROUTER_API_KEY: "sk-or-...",
@@ -231,7 +239,7 @@ Clawdbot 从父进程（shell、launchd/systemd、CI 等）中读取环境变量
   }
 }
 ```
-请参阅 [/environment](/environment) 以获取完整的优先级和来源信息。
+请参阅 [/environment](/environment.md) 以获取完整的优先级和来源信息。
 
 ### `env.shellEnv`（可选）
 
@@ -246,14 +254,15 @@ json5
     }
   }
 }
-``````
+```
 环境变量对应值：
 - `CLAWDBOT_LOAD_SHELL_ENV=1`
 - `CLAWDBOT_SHELL_ENV_TIMEOUT_MS=15000`
 
 ### 配置中的环境变量替换
 
-你可以在任何配置字符串值中直接通过 `${VAR_NAME}` 语法引用环境变量。变量会在配置加载时进行替换，替换发生在验证之前。```json5
+你可以在任何配置字符串值中直接通过 `${VAR_NAME}` 语法引用环境变量。变量会在配置加载时进行替换，替换发生在验证之前。
+```json5
 {
   models: {
     providers: {
@@ -284,13 +293,13 @@ json5
     }
   }
 }
-``````
+```
 ### 认证存储（OAuth + API 密钥）
 
 Clawdbot 会将 **每个代理** 的认证配置（OAuth + API 密钥）存储在：
 - `<agentDir>/auth-profiles.json`（默认路径：`~/.clawdbot/agents/<agentId>/agent/auth-profiles.json`）
 
-另请参阅：[/concepts/oauth](/concepts/oauth)
+另请参阅：[/concepts/oauth](/concepts/oauth.md)
 
 旧版 OAuth 导入：
 - `~/.clawdbot/credentials/oauth.json`（或 `$CLAWDBOT_STATE_DIR/credentials/oauth.json`）
@@ -315,7 +324,8 @@ Clawdbot 还会自动将外部 CLI 的 OAuth 令牌同步到 `auth-profiles.json
 
 ### `auth`
 
-认证配置的可选元数据。这 **不会** 存储敏感信息；它将配置文件 ID 映射到提供者 + 模式（以及可选的邮箱），并定义用于故障转移的提供者轮换顺序。```json5
+认证配置的可选元数据。这 **不会** 存储敏感信息；它将配置文件 ID 映射到提供者 + 模式（以及可选的邮箱），并定义用于故障转移的提供者轮换顺序。
+```json5
 {
   auth: {
     profiles: {
@@ -358,10 +368,11 @@ json5
     ]
   }
 }
-``````
+```
 ### `wizard`
 
-由 CLI 向导（`onboard`、`configure`、`doctor`）编写的元数据。```json5
+由 CLI 向导（`onboard`、`configure`、`doctor`）编写的元数据。
+```json5
 {
   wizard: {
     lastRunAt: "2026-01-01T00:00:00.000Z",
@@ -397,7 +408,7 @@ json5
     ]
   }
 }
-``````
+```
 ### `channels.whatsapp.dmPolicy`
 
 控制如何处理 WhatsApp 私人聊天（DM）：
@@ -416,7 +427,8 @@ json5
 
 可以触发 WhatsApp 自动回复的 E.164 电话号码白名单（**仅限 DM**）。
 如果为空且 `channels.whatsapp.dmPolicy="pairing"`，未知发件人将收到一个配对码。
-对于群组，请使用 `channels.whatsapp.groupPolicy` + `channels.whatsapp.groupAllowFrom`。```json5
+对于群组，请使用 `channels.whatsapp.groupPolicy` + `channels.whatsapp.groupAllowFrom`。
+```json5
 {
   channels: {
     whatsapp: {
@@ -442,10 +454,11 @@ json5
     whatsapp: { sendReadReceipts: false }
   }
 }
-``````
+```
 ### `channels.whatsapp.accounts`（多账号）
 
-在一个网关中运行多个 WhatsApp 账号：```json5
+在一个网关中运行多个 WhatsApp 账号：
+```json5
 {
   channels: {
     whatsapp: {
@@ -485,7 +498,7 @@ json5
     }
   }
 }
-``````
+```
 说明：
 - `default` 在 `accountId` 被省略时使用（CLI + 路由）。
 - 环境令牌仅适用于 **默认** 账户。
@@ -500,7 +513,8 @@ json5
 **提及类型：**
 - **Metadata 提及**：平台原生的 @ 提及（例如 WhatsApp 的点击提及功能）。在 WhatsApp 自己聊天模式下会被忽略（参见 `channels.whatsapp.allowFrom`）。
 - **文本模式**：在 `agents.list[].groupChat.mentionPatterns` 中定义的正则表达式模式。无论是否处于自己聊天模式都会被检查。
-- @提醒限制仅在可以检测到提及的情况下生效（原生提及或至少一个 `mentionPattern`）。```json5
+- @提醒限制仅在可以检测到提及的情况下生效（原生提及或至少一个 `mentionPattern`）。
+```json5
 {
   messages: {
     groupChat: { historyLimit: 50 }
@@ -528,7 +542,7 @@ json5
     }
   }
 }
-``````
+```
 优先级顺序：
 1. 按用户覆盖：`channels.<provider>.dms[userId].historyLimit`
 2. 供应商默认值：`channels.<provider>.dmHistoryLimit`
@@ -536,7 +550,8 @@ json5
 
 支持的供应商：`telegram`、`whatsapp`、`discord`、`slack`、`signal`、`imessage`、`msteams`。
 
-按代理覆盖（设置时具有优先级，即使为 `[]`）：```json5
+按代理覆盖（设置时具有优先级，即使为 `[]`）：
+```json5
 {
   agents: {
     list: [
@@ -570,10 +585,11 @@ json5
     ]
   }
 }
-``````
+```
 ### 每个频道的组策略
 
-使用 `channels.*.groupPolicy` 来控制是否接受组/房间消息：```json5
+使用 `channels.*.groupPolicy` 来控制是否接受组/房间消息：
+```json5
 {
   channels: {
     whatsapp: {
@@ -675,7 +691,7 @@ json5
 - **只读工具 + 工作区**
 - **无文件系统访问**（仅限消息/会话工具）
 
-有关优先级和更多示例，请参见 [多代理沙箱与工具](/multi-agent-sandbox-tools)。{
+有关优先级和更多示例，请参见 [多代理沙箱与工具](/multi-agent-sandbox-tools.md)。{
   agents: {
     list: [
       {
@@ -685,8 +701,10 @@ json5
       }
     ]
   }
-}```
-只读工具 + 只读工作区：```json5
+}
+```
+只读工具 + 只读工作区：
+```json5
 {
   agents: {
     list: [
@@ -728,8 +746,9 @@ json5
     ]
   }
 }
-``````
-示例：两个 WhatsApp 账户 → 两个代理：```json5
+```
+示例：两个 WhatsApp 账户 → 两个代理：
+```json5
 {
   agents: {
     list: [
@@ -763,10 +782,11 @@ json5
     }
   }
 }
-``````
+```
 ### `messages.queue`
 
-控制当代理运行已经激活时，传入消息的行为。```json5
+控制当代理运行已经激活时，传入消息的行为。
+```json5
 {
   messages: {
     queue: {
@@ -821,7 +841,7 @@ json5
     useAccessGroups: true   // 为命令强制执行访问组允许列表/策略
   }
 }
-``````
+```
 注意事项：
 - 文本命令必须作为**独立**消息发送，并使用前缀 `/`（不支持纯文本别名）。
 - `commands.text: false` 会禁用对聊天消息中命令的解析。
@@ -839,7 +859,8 @@ json5
 ### `web`（WhatsApp 网页频道运行时）
 
 WhatsApp 通过网关的网页频道（Baileys Web）运行。当存在已链接的会话时，会自动启动。
-设置 `web.enabled: false` 可以默认保持关闭状态。```json5
+设置 `web.enabled: false` 可以默认保持关闭状态。
+```json5
 {
   web: {
     enabled: true,
@@ -911,17 +932,18 @@ json5
     }
   }
 }
-``````
+```
 流式传输说明：
 - 使用 Telegram 的 `sendMessageDraft`（草稿气泡，不是真实消息）。
 - 需要 **私有聊天主题**（在 DM 中为 message_thread_id；机器人已启用主题功能）。
 - `/reasoning stream` 会将推理过程流式传输到草稿中，然后发送最终答案。
-重试策略的默认值和行为在 [重试策略](/concepts/retry) 中有文档说明。
+重试策略的默认值和行为在 [重试策略](/concepts/retry.md) 中有文档说明。
 
 ### `channels.discord`（机器人传输方式）
 
 通过设置机器人的令牌和可选的访问控制来配置 Discord 机器人：
-多账号支持位于 `channels.discord.accounts` 下（请参见上方的多账号部分）。环境变量令牌仅适用于默认账号。```json5
+多账号支持位于 `channels.discord.accounts` 下（请参见上方的多账号部分）。环境变量令牌仅适用于默认账号。
+```json5
 {
   channels: {
     discord: {
@@ -1000,7 +1022,7 @@ Clawdbot 仅在存在 `channels.discord` 配置部分时才会启动 Discord。`
 
 出站文本会根据 `channels.discord.textChunkLimit` 进行分块（默认为 2000）。设置 `channels.discord.chunkMode="newline"` 可在长度分块前按空行（段落边界）进行分割。Discord 客户端可能会截断非常长的消息，因此 `channels.discord.maxLinesPerMessage`（默认为 17）会在字符数低于 2000 时，仍对长的多行回复进行分割。
 
-重试策略的默认值和行为在 [重试策略](/concepts/retry) 中有文档说明。
+重试策略的默认值和行为在 [重试策略](/concepts/retry.md) 中有文档说明。
 
 ### `channels.googlechat`（Chat API 网络钩子）
 
@@ -1031,12 +1053,13 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 服务账户的 JSON 可以是内联的（`serviceAccount`）或基于文件的（`serviceAccountFile`）。
 - 默认账户的环境变量回退：`GOOGLE_CHAT_SERVICE_ACCOUNT` 或 `GOOGLE_CHAT_SERVICE_ACCOUNT_FILE`。
 - `audienceType` + `audience` 必须与 Chat 应用的 Webhook 认证配置匹配。
-- 设置交付目标时，请使用 `spaces/<spaceId>` 或 `users/<userId|email>`。```json5
+- 设置交付目标时，请使用 `spaces/<spaceId>` 或 `users/<userId|email>`。
+```json5
 {
   channels: {
     slack: {
@@ -1138,7 +1161,7 @@ json5
     }
   }
 }
-``````
+```
 Clawdbot 在配置好账户（bot token + 基础 URL）并启用后启动 Mattermost。token 和基础 URL 会从 `channels.mattermost.botToken` + `channels.mattermost.baseUrl` 或 `MATTERMOST_BOT_TOKEN` + `MATTERMOST_URL` 解析得到，除非 `channels.mattermost.enabled` 为 `false`。
 
 聊天模式：
@@ -1152,7 +1175,8 @@ Clawdbot 在配置好账户（bot token + 基础 URL）并启用后启动 Matter
 - 群组：默认为 `channels.mattermost.groupPolicy="allowlist"`（提及权限控制）。可以使用 `channels.mattermost.groupAllowFrom` 来限制发送者。
 
 多账户支持位于 `channels.mattermost.accounts` 下（请参见上面的多账户部分）。环境变量仅适用于默认账户。
-在指定交付目标时，请使用 `channel:<id>` 或 `user:<id>`（或 `@username`）；纯 ID 会被视为频道 ID。```json5
+在指定交付目标时，请使用 `channel:<id>` 或 `user:<id>`（或 `@username`）；纯 ID 会被视为频道 ID。
+```json5
 {
   channels: {
     signal: {
@@ -1184,7 +1208,7 @@ json5
     }
   }
 }
-``````
+```
 多账户支持位于 `channels.imessage.accounts` 下（参见上方的多账户部分）。
 
 注意事项：
@@ -1194,7 +1218,8 @@ json5
 - `channels.imessage.cliPath` 可以指向一个包装脚本（例如通过 `ssh` 连接到另一台运行 `imsg rpc` 的 Mac）；使用 SSH 密钥可以避免密码提示。
 - 对于远程 SSH 包装器，当启用 `includeAttachments` 时，设置 `channels.imessage.remoteHost` 可通过 SCP 获取附件。
 
-示例包装器：```bash
+示例包装器：
+```bash
 #!/usr/bin/env bash
 exec ssh -T gateway-host imsg "$@"
 ```
@@ -1236,12 +1261,13 @@ json5
 {
   agents: { defaults: { workspace: "~/clawd" } }
 }
-``````
+```
 如果启用了 `agents.defaults.sandbox`，非主会话可以在 `agents.defaults.sandbox.workspaceRoot` 下使用自己的作用域工作区进行覆盖。
 
 ### `agents.defaults.repoRoot`
 
-可选的仓库根目录，用于在系统提示的 Runtime 行中显示。如果未设置，Clawdbot 会尝试从工作区（以及当前工作目录）向上查找 `.git` 目录。该路径必须存在才能被使用。```json5
+可选的仓库根目录，用于在系统提示的 Runtime 行中显示。如果未设置，Clawdbot 会尝试从工作区（以及当前工作目录）向上查找 `.git` 目录。该路径必须存在才能被使用。
+```json5
 {
   agents: { defaults: { repoRoot: "~/Projects/clawdbot" } }
 }
@@ -1255,12 +1281,13 @@ json5
 {
   agents: { defaults: { skipBootstrap: true } }
 }
-``````
+```
 ### `agents.defaults.bootstrapMaxChars`
 
 注入到系统提示中的每个工作区启动文件的最大字符数，在截断之前。默认值：`20000`。
 
-当文件超过此限制时，Clawdbot 会记录一条警告信息，并注入一个带有标记的截断头部/尾部。```json5
+当文件超过此限制时，Clawdbot 会记录一条警告信息，并注入一个带有标记的截断头部/尾部。
+```json5
 {
   agents: { defaults: { bootstrapMaxChars: 20000 } }
 }
@@ -1272,11 +1299,12 @@ json5
 {
   agents: { defaults: { userTimezone: "America/Chicago" } }
 }
-``````
+```
 ### `agents.defaults.timeFormat`
 
 控制系统提示中 **时间格式** 的显示方式。
-默认值：`auto`（操作系统偏好）。```json5
+默认值：`auto`（操作系统偏好）。
+```json5
 {
   agents: { defaults: { timeFormat: "auto" } } // auto | 12 | 24
 }
@@ -1284,7 +1312,7 @@ json5
 ### `messages`
 
 控制入站/出站前缀和可选的确认反应。
-有关队列、会话和流式上下文，请参阅 [Messages](/concepts/messages)。
+有关队列、会话和流式上下文，请参阅 [Messages](/concepts/messages.md)。
 json5
 {
   messages: {
@@ -1294,7 +1322,7 @@ json5
     removeAckAfterReply: false
   }
 }
-``````
+```
 `responsePrefix` 会应用于所有渠道的 **所有出站回复**（工具摘要、块流、最终回复），除非已存在。
 
 如果 `messages.responsePrefix` 未设置，默认情况下不会应用前缀。但 WhatsApp 自己聊天的回复是例外：当设置时，默认使用 `[{identity.name}]`，否则使用 `[clawdbot]`，这样同一手机的对话仍然可以保持可读性。将其设置为 `"auto"` 时，会根据路由的代理自动推导出 `[{identity.name}]`。
@@ -1311,7 +1339,8 @@ json5
 | `{thinkingLevel}` | 当前思考等级       | `high`、`low`、`off` |
 | `{identity.name}` | 代理的身份名称       | （与 `"auto"` 模式相同） |
 
-变量是大小写不敏感的（`{MODEL}` = `{model}`）。`{think}` 是 `{thinkingLevel}` 的别名。未解析的变量将保持为字面文本。```json5
+变量是大小写不敏感的（`{MODEL}` = `{model}`）。`{think}` 是 `{thinkingLevel}` 的别名。未解析的变量将保持为字面文本。
+```json5
 {
   messages: {
     responsePrefix: "[{model} | think:{thinkingLevel}]"
@@ -1406,7 +1435,7 @@ json5
     interruptOnSpeech: true
   }
 }
-``````
+```
 ### `agents.defaults`
 
 控制嵌入式代理运行时（模型/思考/详细程度/超时时间）。
@@ -1417,7 +1446,8 @@ json5
 - `alias`（可选的模型快捷方式，例如 `/opus`）。
 - `params`（可选的提供方特定 API 参数，传递给模型请求）。
 
-`params` 也适用于流式运行（嵌入式代理 + 压缩）。目前支持的键包括：`temperature`（温度）、`maxTokens`（最大令牌数）。这些参数会与调用时的选项合并；调用者提供的值具有优先权。`temperature` 是一个高级参数——除非你了解模型的默认值并需要更改，否则请不要设置。```json5
+`params` 也适用于流式运行（嵌入式代理 + 压缩）。目前支持的键包括：`temperature`（温度）、`maxTokens`（最大令牌数）。这些参数会与调用时的选项合并；调用者提供的值具有优先权。`temperature` 是一个高级参数——除非你了解模型的默认值并需要更改，否则请不要设置。
+```json5
 {
   agents: {
     defaults: {
@@ -1464,7 +1494,7 @@ json5
     }
   }
 }
-``````
+```
 MiniMax 认证：设置 `MINIMAX_API_KEY`（环境变量）或配置 `models.providers.minimax`。
 
 #### `agents.defaults.cliBackends`（CLI 回退）
@@ -1476,7 +1506,8 @@ MiniMax 认证：设置 `MINIMAX_API_KEY`（环境变量）或配置 `models.pro
 - 当设置 `sessionArg` 时支持会话；会话 ID 会按后端进行持久化存储。
 - 对于 `claude-cli`，默认值已经内置。如果 PATH 环境变量非常有限（例如 launchd/systemd），可以覆盖命令路径。
 
-示例：```json5
+示例：
+```json5
 {
   agents: {
     defaults: {
@@ -1589,8 +1620,9 @@ json5
 {
   agents: { defaults: { contextPruning: { mode: "adaptive" } } }
 }
-``````
-禁用：```json5
+```
+禁用：
+```json5
 {
   agents: { defaults: { contextPruning: { mode: "off" } } }
 }
@@ -1608,8 +1640,9 @@ json5
 {
   agents: { defaults: { contextPruning: { mode: "aggressive" } } }
 }
-``````
-示例（自适应调优）：```json5
+```
+示例（自适应调优）：
+```json5
 {
   agents: {
     defaults: {
@@ -1628,11 +1661,11 @@ json5
   }
 }
 ```
-有关行为细节，请参见 [/concepts/session-pruning](/concepts/session-pruning)。
+有关行为细节，请参见 [/concepts/session-pruning](/concepts/session-pruning.md)。
 
 #### `agents.defaults.compaction`（保留空间 + 内存刷新）
 
-`agents.defaults.compaction.mode` 选择压缩的摘要策略。默认为 `default`；设置为 `safeguard` 以启用针对非常长的历史记录的分块摘要。请参见 [/concepts/compaction](/concepts/compaction)。
+`agents.defaults.compaction.mode` 选择压缩的摘要策略。默认为 `default`；设置为 `safeguard` 以启用针对非常长的历史记录的分块摘要。请参见 [/concepts/compaction](/concepts/compaction.md)。
 
 `agents.defaults.compaction.reserveTokensFloor` 为 Pi 压缩设置一个最低的 `reserveTokens` 值（默认：`20000`）。将其设为 `0` 以禁用该下限。
 
@@ -1662,18 +1695,20 @@ json5
     }
   }
 }
-``````
+```
 阻塞流式传输：
 - `agents.defaults.blockStreamingDefault`: `"on"`/`"off"`（默认为 off）。
 - 通道覆盖：`*.blockStreaming`（以及按账户变体）用于强制开启或关闭阻塞流式传输。
   非 Telegram 通道需要显式设置 `*.blockStreaming: true` 才能启用块回复。
 - `agents.defaults.blockStreamingBreak`: `"text_end"` 或 `"message_end"`（默认：text_end）。
 - `agents.defaults.blockStreamingChunk`: 用于流式传输块的软分块。默认为 800–1200 个字符，优先使用段落分隔符（`\n\n`），其次是换行符，最后是句子。
-  示例：  ```json5
+  示例：  
+```json5
   {
     agents: { defaults: { blockStreamingChunk: { minChars: 800, maxChars: 1200 } } }
   }
-  ```
+  
+```
 - `agents.defaults.blockStreamingCoalesce`: 在发送前合并流式块。
   默认值为 `{ idleMs: 1000 }`，并继承 `blockStreamingChunk` 中的 `minChars`，同时将 `maxChars` 限制为频道文本限制。Signal/Slack/Discord/Google Chat 的默认值为 `minChars: 1500`，除非被覆盖。
   频道覆盖设置：`channels.whatsapp.blockStreamingCoalesce`、`channels.telegram.blockStreamingCoalesce`、
@@ -1689,15 +1724,16 @@ json5
   {
     agents: { defaults: { humanDelay: { mode: "natural" } } }
   }
-```  ```
-有关行为和分块的详细信息，请参阅 [/concepts/streaming](/concepts/streaming)。
+```  
+```
+有关行为和分块的详细信息，请参阅 [/concepts/streaming](/concepts/streaming.md)。
 
 打字指示器：
 - `agents.defaults.typingMode`: `"never" | "instant" | "thinking" | "message"`。默认值为：直接聊天/提及时为 `instant`，未提及的群聊中为 `message`。
 - `session.typingMode`: 会话级别的模式覆盖。
 - `agents.defaults.typingIntervalSeconds`: 打字信号刷新的频率（默认：6秒）。
 - `session.typingIntervalSeconds`: 会话级别的刷新间隔覆盖。
-有关行为细节，请参阅 [/concepts/typing-indicators](/concepts/typing-indicators)。
+有关行为细节，请参阅 [/concepts/typing-indicators](/concepts/typing-indicators.md)。
 
 `agents.defaults.model.primary` 应设置为 `provider/model`（例如 `anthropic/claude-opus-4-5`）。
 别名来自 `agents.defaults.models.*.alias`（例如 `Opus`）。
@@ -1777,7 +1813,8 @@ Z.AI 模型以 `zai/<model>` 的形式提供（例如 `zai/glm-4.7`），并且�
 
 提供商标识遵循标准的模型认证顺序（认证配置文件，环境变量如 `OPENAI_API_KEY`/`GROQ_API_KEY`/`GEMINI_API_KEY`，或 `models.providers.*.apiKey`）。
 
-示例：```json5
+示例：
+```json5
 {
   tools: {
     media: {
@@ -1824,8 +1861,9 @@ json5
     allow: ["slack", "discord"]
   }
 }
-``````
-示例（代码配置文件，但禁止在任何地方执行/处理）：```json5
+```
+示例（代码配置文件，但禁止在任何地方执行/处理）：
+```json5
 {
   tools: {
     profile: "coding",
@@ -1849,8 +1887,9 @@ json5
     }
   }
 }
-``````
-示例（提供者/模型特定的白名单）：```json5
+```
+示例（提供者/模型特定的白名单）：
+```json5
 {
   tools: {
     allow: ["group:fs", "group:runtime", "sessions_list"],
@@ -1869,7 +1908,7 @@ json5
 {
   tools: { deny: ["browser", "canvas"] }
 }
-``````
+```
 工具组（快捷方式）在 **全局** 和 **每个代理** 的工具策略中均适用：
 - `group:runtime`: `exec`, `bash`, `process`
 - `group:fs`: `read`, `write`, `edit`, `apply_patch`
@@ -1892,7 +1931,8 @@ json5
   - `imessage`: 聊天名称或聊天 ID
   - `webchat`: 会话 ID 或用户名
 
-示例：```json5
+示例：
+```json5
 {
   tools: {
     elevated: {
@@ -1916,7 +1956,8 @@ json5
       }
     ]
   }
-}```
+}
+```
 说明：
 - `tools.elevated` 是全局基线。`agents.list[].tools.elevated` 只能进一步限制（两者都必须允许）。
 - `/elevated on|off|ask|full` 会按会话键存储状态；内联指令仅对单条消息生效。
@@ -1929,7 +1970,7 @@ json5
 
 可选的 **Docker 沙箱**，用于嵌入式代理。适用于非主会话，以防止其访问你的主机系统。
 
-详情：[沙箱机制](/gateway/sandboxing)
+详情：[沙箱机制](/gateway/sandboxing.md)
 
 默认值（如果启用）：
 - scope: `"agent"`（每个代理一个容器 + 工作区）
@@ -1941,7 +1982,7 @@ json5
 - 自动清理：空闲超过 24 小时或年龄超过 7 天
 - 工具策略：仅允许 `exec`、`process`、`read`、`write`、`edit`、`apply_patch`、`sessions_list`、`sessions_history`、`sessions_send`、`sessions_spawn`、`session_status`（拒绝优先）
   - 通过 `tools.sandbox.tools` 配置，可通过 `agents.list[].tools.sandbox.tools` 覆盖每个代理
-  - 沙箱策略支持工具组简写：`group:runtime`、`group:fs`、`group:sessions`、`group:memory`（参见 [沙箱 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated#tool-groups-shorthands)）
+  - 沙箱策略支持工具组简写：`group:runtime`、`group:fs`、`group:sessions`、`group:memory`（参见 [沙箱 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated.md#tool-groups-shorthands)）
 - 可选的沙箱浏览器（Chromium + CDP，noVNC 观察者）
 - 加固选项：`network`、`user`、`pidsLimit`、`memory`、`cpus`、`ulimits`、`seccompProfile`、`apparmorProfile`
 
@@ -1950,7 +1991,8 @@ json5
 遗留支持：`perSession` 仍然有效（`true` → `scope: "session"`，`false` → `scope: "shared"`）。
 
 `setupCommand` 在容器创建后 **仅运行一次**（通过 `sh -lc` 在容器内部运行）。
-对于包安装，请确保网络出站、可写根文件系统和 root 用户权限。```json5
+对于包安装，请确保网络出站、可写根文件系统和 root 用户权限。
+```json5
 {
   agents: {
     defaults: {
@@ -2021,12 +2063,13 @@ json5
 使用以下命令一次性构建默认的沙盒镜像：
 bash
 scripts/sandbox-setup.sh
-``````
+```
 注意：沙盒容器默认使用 `network: "none"`；如果代理需要出站访问，请将 `agents.defaults.sandbox.docker.network` 设置为 `"bridge"`（或您的自定义网络）。
 
 注意：入站附件会被暂存到活动工作区的 `media/inbound/*` 路径下。当使用 `workspaceAccess: "rw"` 时，这意味着文件会被写入代理的工作区。
 
-注意：`docker.binds` 会挂载额外的主机目录；全局绑定和代理级别的绑定会合并。```bash
+注意：`docker.binds` 会挂载额外的主机目录；全局绑定和代理级别的绑定会合并。
+```bash
 scripts/sandbox-browser-setup.sh
 ```
 当 `agents.defaults.sandbox.browser.enabled=true` 时，浏览器工具将使用沙盒化的 Chromium 实例（CDP）。如果启用了 noVNC（当 headless=false 时默认启用），则会将 noVNC 的 URL 注入到系统提示中，以便代理可以引用它。这不需要在主配置中设置 `browser.enabled`；沙盒控制 URL 是按会话注入的。
@@ -2042,7 +2085,7 @@ scripts/sandbox-browser-setup.sh
 ### `models`（自定义提供者 + 基础 URL）
 
 Clawdbot 使用 **pi-coding-agent** 模型目录。你可以通过编写 `~/.clawdbot/agents/<agentId>/agent/models.json` 或在 Clawdbot 配置中定义相同结构的 `models.providers` 来添加自定义提供者（如 LiteLLM、本地 OpenAI 兼容服务器、Anthropic 代理等）。
-提供者详解 + 示例：[/concepts/model-providers](/concepts/model-providers)。
+提供者详解 + 示例：[/concepts/model-providers](/concepts/model-providers.md)。
 
 当 `models.providers` 存在时，Clawdbot 在启动时会将 `models.json` 写入/合并到 `~/.clawdbot/agents/<agentId>/agent/` 目录中：
 - 默认行为：**合并**（保留现有提供者，按名称覆盖）
@@ -2081,7 +2124,7 @@ json5
     }
   }
 }
-``````
+```
 ### OpenCode Zen（多模型代理）
 
 OpenCode Zen 是一个具有每个模型端点的多模型网关。Clawdbot 使用 `pi-ai` 中的内置 `opencode` 提供商；从 https://opencode.ai/auth 获取 `OPENCODE_API_KEY`（或 `OPENCODE_ZEN_API_KEY`）。
@@ -2089,7 +2132,8 @@ OpenCode Zen 是一个具有每个模型端点的多模型网关。Clawdbot 使�
 注意事项：
 - 模型引用使用 `opencode/<modelId>` 格式（例如：`opencode/claude-opus-4-5`）。
 - 如果通过 `agents.defaults.models` 启用了允许列表，请添加你计划使用的每个模型。
-- 快捷方式：`clawdbot onboard --auth-choice opencode-zen`。```json5
+- 快捷方式：`clawdbot onboard --auth-choice opencode-zen`。
+```json5
 {
   agents: {
     defaults: {
@@ -2113,14 +2157,15 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - `z.ai/*` 和 `z-ai/*` 是被接受的别名，并会标准化为 `zai/*`。
 - 如果缺少 `ZAI_API_KEY`，对 `zai/*` 的请求将在运行时因认证错误而失败。
 - 示例错误：`No API key found for provider "zai".`
 - Z.AI 的通用 API 端点是 `https://api.z.ai/api/paas/v4`。GLM 编码请求使用专用的编码端点 `https://api.z.ai/api/coding/paas/v4`。
   内置的 `zai` 提供者使用编码端点。如果你需要通用端点，请在 `models.providers` 中定义一个自定义提供者，并覆盖基础 URL（参见上方的自定义提供者部分）。
-- 在 docs/configs 中使用假占位符；永远不要提交真实的 API 密钥。```json5
+- 在 docs/configs 中使用假占位符；永远不要提交真实的 API 密钥。
+```json5
 {
   env: { MOONSHOT_API_KEY: "sk-..." },
   agents: {
@@ -2193,14 +2238,15 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 在环境变量中设置 `KIMICODE_API_KEY`，或使用 `clawdbot onboard --auth-choice kimi-code-api-key`。
 - 模型引用：`kimi-code/kimi-for-coding`。
 
 ### Synthetic（Anthropic 兼容）
 
-使用 Synthetic 的 Anthropic 兼容端点：```json5
+使用 Synthetic 的 Anthropic 兼容端点：
+```json5
 {
   env: { SYNTHETIC_API_KEY: "sk-..." },
   agents: {
@@ -2239,7 +2285,7 @@ json5
 
 ### 本地模型（LM Studio）—— 推荐设置
 
-有关当前本地模型的指导，请参阅 [/gateway/local-models](/gateway/local-models)。TL;DR：在高性能硬件上通过 LM Studio 的 Responses API 运行 MiniMax M2.1；保持托管模型合并以备回退。
+有关当前本地模型的指导，请参阅 [/gateway/local-models](/gateway/local-models.md)。TL;DR：在高性能硬件上通过 LM Studio 的 Responses API 运行 MiniMax M2.1；保持托管模型合并以备回退。
 json5
 {
   agent: {
@@ -2272,7 +2318,7 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 设置 `MINIMAX_API_KEY` 环境变量，或使用 `clawdbot onboard --auth-choice minimax-api`。
 - 可用模型：`MiniMax-M2.1`（默认）。
@@ -2280,7 +2326,8 @@ json5
 
 ### Cerebras（GLM 4.6 / 4.7）
 
-通过 Cerebras 的 OpenAI 兼容端点使用 Cerebras：```json5
+通过 Cerebras 的 OpenAI 兼容端点使用 Cerebras：
+```json5
 {
   env: { CEREBRAS_API_KEY: "sk-..." },
   agents: {
@@ -2361,7 +2408,7 @@ json5
     }
   }
 }
-``````
+```
 字段：
 - `mainKey`: 直接聊天（direct-chat）的桶键（默认值为 `"main"`）。当你想“重命名”主聊天线程而不想修改 `agentId` 时很有用。
   - 沙箱说明：`agents.defaults.sandbox.mode: "non-main"` 使用此键来检测主会话。任何不匹配 `mainKey`（群组/频道）的会话键都会被沙箱隔离。
@@ -2398,7 +2445,8 @@ json5
 - `env`: 为代理运行注入环境变量（仅在未设置时生效）。
 - `apiKey`: 为声明主环境变量的技能提供便捷的 API 密钥（例如 `nano-banana-pro` → `GEMINI_API_KEY`）。
 
-示例：```json5
+示例：
+```json5
 {
   skills: {
     allowBundled: ["gemini", "peekaboo"],
@@ -2428,7 +2476,7 @@ json5
 ### `plugins`（扩展）
 
 控制插件的发现、允许/拒绝以及每个插件的配置。插件将从 `~/.clawdbot/extensions`、`<workspace>/.clawdbot/extensions` 以及任何 `plugins.load.paths` 中的条目加载。**配置更改需要重启网关。**  
-有关完整用法，请参见 [/plugin](/plugin)。
+有关完整用法，请参见 [/plugin](/plugin.md)。
 
 字段：
 - `enabled`: 插件加载的主开关（默认值：true）。
@@ -2458,7 +2506,7 @@ json5
     }
   }
 }
-``````
+```
 ### `browser`（clawd 管理的浏览器）
 
 Clawdbot 可以为 clawd 启动一个 **专用、隔离的** Chrome/Brave/Edge/Chromium 实例，并暴露一个小型的本地回环控制服务器。  
@@ -2472,7 +2520,8 @@ Clawdbot 可以为 clawd 启动一个 **专用、隔离的** Chrome/Brave/Edge/C
 - CDP URL：`http://127.0.0.1:18792`（控制 URL + 1，旧版单配置文件）
 - 配置文件颜色：`#FF4500`（龙虾橙色）
 - 注意：控制服务器由运行中的网关启动（Clawdbot.app 菜单栏，或 `clawdbot gateway`）。
-- 自动检测顺序：如果为基于 Chromium 的浏览器，则使用默认浏览器；否则依次为 Chrome → Brave → Edge → Chromium → Chrome Canary。```json5
+- 自动检测顺序：如果为基于 Chromium 的浏览器，则使用默认浏览器；否则依次为 Chrome → Brave → Edge → Chromium → Chrome Canary。
+```json5
 {
   browser: {
     enabled: true,
@@ -2510,7 +2559,7 @@ json5
     }
   }
 }
-``````
+```
 ### `gateway`（网关服务器模式 + 绑定）
 
 使用 `gateway.mode` 明确声明此机器是否应运行网关。
@@ -2518,7 +2567,8 @@ json5
 默认值：
 - mode: **未设置**（视为“不自动启动”）
 - bind: `loopback`
-- port: `18789`（用于 WS 和 HTTP 的单一端口）```json5
+- port: `18789`（用于 WS 和 HTTP 的单一端口）
+```json5
 {
   gateway: {
     mode: "local", // or "remote"
@@ -2537,10 +2587,10 @@ Control UI 基础路径：
 - `gateway.controlUi.allowInsecureAuth` 允许仅使用 token 的认证，并跳过设备身份 + 配对（即使在 HTTPS 上）。默认值：`false`。优先使用 HTTPS（Tailscale Serve）或 `127.0.0.1`。
 
 相关文档：
-- [Control UI](/web/control-ui)
-- [Web 概览](/web)
-- [Tailscale](/gateway/tailscale)
-- [远程访问](/gateway/remote)
+- [Control UI](/web/control-ui.md)
+- [Web 概览](/web/index.md)
+- [Tailscale](/gateway/tailscale.md)
+- [远程访问](/gateway/remote.md)
 
 可信代理：
 - `gateway.trustedProxies`：列出在 Gateway 前端终止 TLS 的反向代理 IP。
@@ -2587,8 +2637,9 @@ json5
     }
   }
 }
-``````
-直接传输示例（macOS 应用程序）：```json5
+```
+直接传输示例（macOS 应用程序）：
+```json5
 {
   gateway: {
     mode: "remote",
@@ -2618,7 +2669,7 @@ json5
     }
   }
 }
-``````
+```
 #### 热重载矩阵（文件 + 影响）
 
 监听的文件：
@@ -2653,10 +2704,11 @@ json5
 - `clawdbot --dev …` → 使用 `~/.clawdbot-dev` + 从基础端口 `19001` 调整端口
 - `clawdbot --profile <name> …` → 使用 `~/.clawdbot-<name>`（端口通过配置/环境变量/标志确定）
 
-有关衍生端口映射（网关/浏览器/canvas）请参见 [网关操作手册](/gateway)。
-有关浏览器/CDP 端口隔离的详细信息，请参见 [多个网关](/gateway/multiple-gateways)。
+有关衍生端口映射（网关/浏览器/canvas）请参见 [网关操作手册](/gateway/index.md)。
+有关浏览器/CDP 端口隔离的详细信息，请参见 [多个网关](/gateway/multiple-gateways.md)。
 
-示例：```bash
+示例：
+```bash
 CLAWDBOT_CONFIG_PATH=~/.clawdbot/a.json \
 CLAWDBOT_STATE_DIR=~/.clawdbot-a \
 clawdbot gateway --port 19001
@@ -2693,7 +2745,7 @@ json5
     ],
   }
 }
-``````
+```
 请求必须包含钩子令牌：
 - `Authorization: Bearer <token>` **或**
 - `x-clawdbot-token: <token>` **或**
@@ -2715,7 +2767,8 @@ json5
 - 如果没有先前的交付路径，请显式设置 `channel` + `to`（对于 Telegram/Discord/Google Chat/Slack/Signal/iMessage/MS Teams 是必需的）。
 - `model` 覆盖此次钩子运行的 LLM（格式为 `provider/model` 或别名；如果设置了 `agents.defaults.models`，则必须是允许的模型）。
 
-Gmail 辅助配置（由 `clawdbot webhooks gmail setup` / `run` 使用）：```json5
+Gmail 辅助配置（由 `clawdbot webhooks gmail setup` / `run` 使用）：
+```json5
 {
   hooks: {
     gmail: {
@@ -2780,7 +2833,7 @@ json5
     liveReload: true
   }
 }
-``````
+```
 对 `canvasHost.*` 的更改需要重启网关（配置重新加载会重启）。
 
 禁用方式：
@@ -2814,7 +2867,8 @@ TLS：
 
 当启用 TLS 时，网关会在发现 TXT 记录中公布 `bridgeTls=1` 和 `bridgeTlsSha256`，以便节点可以固定证书。  
 如果尚未存储指纹，手动连接将使用“首次信任”机制。  
-自动生成的证书需要 `openssl` 在 PATH 中；如果生成失败，桥接器将无法启动。```json5
+自动生成的证书需要 `openssl` 在 PATH 中；如果生成失败，桥接器将无法启动。
+```json5
 {
   bridge: {
     enabled: true,
@@ -2840,8 +2894,9 @@ TLS：
 一次性设置助手（网关主机）：
 bash
 clawdbot dns setup --apply
-``````
-"```json5
+```
+"
+```json5
 {
   discovery: { wideArea: { enabled: true } }
 }
@@ -2875,7 +2930,7 @@ clawdbot dns setup --apply
 
 ## 定时任务（网关调度器）
 
-定时任务是网关自带的调度器，用于唤醒和定时任务。请参阅 [定时任务](/automation/cron-jobs) 了解该功能的概览和 CLI 示例。
+定时任务是网关自带的调度器，用于唤醒和定时任务。请参阅 [定时任务](/automation/cron-jobs.md) 了解该功能的概览和 CLI 示例。
 json5
 {
   cron: {
@@ -2883,7 +2938,7 @@ json5
     maxConcurrentRuns: 2
   }
 }
-``````
+```
 ---
 
-*下一个：[Agent 运行时](/concepts/agent)* 🦞
+*下一个：[Agent 运行时](/concepts/agent.md)* 🦞

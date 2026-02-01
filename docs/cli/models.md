@@ -10,15 +10,16 @@ read_when:
 模型发现、扫描和配置（默认模型、回退选项、认证配置）。
 
 相关：
-- 提供商 + 模型：[Models](/providers/models)
-- 提供商认证设置：[入门指南](/start/getting-started)
+- 提供商 + 模型：[Models](/providers/models.md)
+- 提供商认证设置：[入门指南](/start/getting-started.md)
 
 ## 常用命令
 bash
 clawdbot models status
 clawdbot models list
 clawdbot models set <model-or-alias>
-clawdbot models scan``````
+clawdbot models scan
+```
 `clawdbot models status` 显示已解析的默认/回退模型以及认证概览。
 当提供者使用快照可用时，OAuth/令牌状态部分会包含提供者使用头信息。
 添加 `--probe` 选项以对每个配置的提供者资料进行实时认证探测。
@@ -39,7 +40,8 @@ clawdbot models scan``````
 - `--probe-profile <id>`（重复或逗号分隔的资料 ID）
 - `--probe-timeout <ms>`
 - `--probe-concurrency <n>`
-- `--probe-max-tokens <n>````bash
+- `--probe-max-tokens <n>
+```bash
 clawdbot models aliases list
 clawdbot models fallbacks list
 ```
@@ -55,3 +57,4 @@ clawdbot models auth paste-token
 注意事项：
 - `setup-token` 需要在当前机器上运行 `claude setup-token`（需要 Claude Code CLI）。
 - `paste-token` 接受从其他地方生成的令牌字符串。"
+```

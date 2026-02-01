@@ -7,10 +7,11 @@ export const TAB_GROUPS = [
     tabs: ["overview", "channels", "instances", "sessions", "cron"],
   },
   { label: "智能体", tabs: ["skills", "nodes"] },
-  { label: "设置", tabs: ["config", "debug", "logs"] },
+  { label: "设置", tabs: ["onboarding", "config", "debug", "logs"] },
 ] as const;
 
 export type Tab =
+  | "onboarding"
   | "overview"
   | "channels"
   | "instances"
@@ -24,6 +25,7 @@ export type Tab =
   | "logs";
 
 const TAB_PATHS: Record<Tab, string> = {
+  onboarding: "/onboarding",
   overview: "/overview",
   channels: "/channels",
   instances: "/instances",
@@ -102,6 +104,8 @@ export function inferBasePathFromPathname(pathname: string): string {
 
 export function iconForTab(tab: Tab): IconName {
   switch (tab) {
+    case "onboarding":
+      return "magicWand";
     case "chat":
       return "messageSquare";
     case "overview":
@@ -131,6 +135,8 @@ export function iconForTab(tab: Tab): IconName {
 
 export function titleForTab(tab: Tab) {
   switch (tab) {
+    case "onboarding":
+      return "配置向导";
     case "overview":
       return "概览";
     case "channels":
@@ -160,6 +166,8 @@ export function titleForTab(tab: Tab) {
 
 export function subtitleForTab(tab: Tab) {
   switch (tab) {
+    case "onboarding":
+      return "跟随向导完成智能体和渠道的初始化配置。";
     case "overview":
       return "网关状态、入口点及快速健康检查。";
     case "channels":

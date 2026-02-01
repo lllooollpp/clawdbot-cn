@@ -27,8 +27,9 @@ Nostr 是一种用于社交网络的去中心化协议。此频道使 Clawdbot �
 ### 手动安装
 bash
 clawdbot plugins install @clawdbot/nostr
-`````````
-使用本地检出（开发工作流）：```bash
+```
+使用本地检出（开发工作流）：
+```bash
 clawdbot plugins install --link <path-to-clawdbot>/extensions/nostr
 ```
 安装或启用插件后重启网关。
@@ -38,8 +39,10 @@ clawdbot plugins install --link <path-to-clawdbot>/extensions/nostr
 1) 生成 Nostr 密钥对（如果需要）：
 bash
 # 使用 nak
-nak key generate``````
-2) 添加到配置中：```json
+nak key generate
+```
+2) 添加到配置中：
+```json
 {
   "channels": {
     "nostr": {
@@ -50,7 +53,8 @@ nak key generate``````
 ```
 3) 导出密钥：
 bash
-export NOSTR_PRIVATE_KEY="nsec1..."``````
+export NOSTR_PRIVATE_KEY="nsec1..."
+```
 4) 重启网关。
 
 ## 配置参考
@@ -69,7 +73,8 @@ export NOSTR_PRIVATE_KEY="nsec1..."``````
 
 配置文件数据以 NIP-01 `kind:0` 事件的形式发布。您可以通过控制面板（Channels -> Nostr -> Profile）进行管理，或者直接在配置中设置。
 
-示例：```json
+示例：
+```json
 {
   "channels": {
     "nostr": {
@@ -113,7 +118,7 @@ json
     }
   }
 }
-`````````
+```
 ## 关键字格式
 
 接受的格式：
@@ -123,7 +128,8 @@ json
 
 ## 中继服务器
 
-默认值：`relay.damus.io` 和 `nos.lol`。```json
+默认值：`relay.damus.io` 和 `nos.lol`。
+```json
 {
   "channels": {
     "nostr": {
@@ -155,7 +161,8 @@ json
 
 bash
 # 启动 strfry
-docker run -p 7777:7777 ghcr.io/hoytech/strfry``````
+docker run -p 7777:7777 ghcr.io/hoytech/strfry
+```
 ```md
 {
   "channels": {
@@ -167,7 +174,7 @@ docker run -p 7777:7777 ghcr.io/hoytech/strfry``````
 }
 
 
-### 手动测试
+## 手动测试
 
 1) 从日志中记录机器人的公钥（npub）。
 2) 打开一个 Nostr 客户端（如 Damus、Amethyst 等）。

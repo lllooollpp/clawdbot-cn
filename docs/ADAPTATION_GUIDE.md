@@ -1,3 +1,9 @@
+---
+summary: "Development guide for integrating domestic models and new channels"
+read_when:
+  - Customizing Clawdbot or adding new providers
+---
+
 # Clawdbot Development and Adaptation Guide
 
 ## 1. Integrating Domestic Models (GLM / Qwen)

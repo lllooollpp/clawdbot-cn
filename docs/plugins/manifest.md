@@ -11,7 +11,7 @@ read_when:
 Clawdbot 使用此清单在 **不执行插件代码** 的情况下验证配置。  
 缺少或无效的清单将被视为插件错误，并阻止配置验证。
 
-查看完整的插件系统指南：[插件](/plugin)。
+查看完整的插件系统指南：[插件](/plugin.md)。
 json
 {
   "id": "voice-call",
@@ -21,7 +21,7 @@ json
     "properties": {}
   }
 }
-``````
+```
 必需的键：
 - `id`（字符串）：插件的规范 ID。
 - `configSchema`（对象）：插件配置的 JSON Schema（内联）。
@@ -54,3 +54,4 @@ json
 - 所有插件都 **必须提供 manifest**，包括本地文件系统加载的插件。
 - 运行时仍会单独加载插件模块；manifest 仅用于发现和验证。
 - 如果你的插件依赖原生模块，请记录构建步骤以及任何包管理器的允许列表要求（例如，pnpm 的 `allow-build-scripts` + `pnpm rebuild <package>`）。
+```

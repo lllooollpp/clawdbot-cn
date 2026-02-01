@@ -13,16 +13,18 @@ read_when:
 本页面中的子命令位于 `clawdbot gateway …` 下。
 
 相关文档：
-- [/gateway/bonjour](/gateway/bonjour)
-- [/gateway/discovery](/gateway/discovery)
-- [/gateway/configuration](/gateway/configuration)
+- [/gateway/bonjour](/gateway/bonjour.md)
+- [/gateway/discovery](/gateway/discovery.md)
+- [/gateway/configuration](/gateway/configuration.md)
 
 ## 运行网关
 
 运行本地的网关进程：
 bash
-clawdbot gateway``````
-前景别名：```bash
+clawdbot gateway
+```
+前景别名：
+```bash
 clawdbot gateway run
 ```
 ### 注意事项：
@@ -69,10 +71,12 @@ clawdbot gateway run
 
 ### `gateway health`
 bash
-clawdbot gateway health --url ws://127.0.0.1:18789``````
+clawdbot gateway health --url ws://127.0.0.1:18789
+```
 ### `gateway status`
 
-`gateway status` 显示网关服务（launchd/systemd/schtasks）以及可选的 RPC 探针。```bash
+`gateway status` 显示网关服务（launchd/systemd/schtasks）以及可选的 RPC 探针。
+```bash
 clawdbot gateway status
 clawdbot gateway status --json
 ```
@@ -93,12 +97,14 @@ clawdbot gateway status --json
 如果存在多个可访问的网关，它会列出所有网关。当您使用隔离的配置文件/端口（例如救援机器人）时，支持多个网关，但大多数安装仍然只运行一个网关。
 bash
 clawdbot gateway probe
-clawdbot gateway probe --json``````
+clawdbot gateway probe --json
+```
 #### 通过 SSH 的远程连接（Mac 应用程序功能对等）
 
 MacOS 应用程序“通过 SSH 的远程连接”模式使用本地端口转发，使得远程网关（可能仅绑定到环回地址）可以通过 `ws://127.0.0.1:<端口>` 访问。
 
-CLI 对等命令：```bash
+CLI 对等命令：
+```bash
 clawdbot gateway probe --ssh user@gateway-host
 ```
 选项：
@@ -115,8 +121,10 @@ clawdbot gateway probe --ssh user@gateway-host
 低级 RPC 辅助工具。
 bash
 clawdbot gateway call status
-clawdbot gateway call logs.tail --params '{"sinceMs": 60000}'``````
-## 管理网关服务```bash
+clawdbot gateway call logs.tail --params '{"sinceMs": 60000}'
+```
+## 管理网关服务
+```bash
 clawdbot gateway install
 clawdbot gateway start
 clawdbot gateway stop
@@ -132,7 +140,7 @@ clawdbot gateway uninstall
 `gateway discover` 会扫描网关信标（`_clawdbot-gw._tcp`）。
 
 - 多播 DNS-SD：`local.`
-- 单播 DNS-SD（广域 Bonjour）：`clawdbot.internal.`（需要拆分 DNS + DNS 服务器；详见 [/gateway/bonjour](/gateway/bonjour)）
+- 单播 DNS-SD（广域 Bonjour）：`clawdbot.internal.`（需要拆分 DNS + DNS 服务器；详见 [/gateway/bonjour](/gateway/bonjour.md)）
 
 只有启用了 Bonjour 发现功能的网关（默认启用）会广播该信标。
 
@@ -147,12 +155,16 @@ clawdbot gateway uninstall
 
 ### `gateway discover`
 bash
-clawdbot gateway discover``````
+clawdbot gateway discover
+```
 选项：
 - `--timeout <ms>`：每个命令的超时时间（浏览/解析）；默认值为 `2000`。
 - `--json`：机器可读的输出（同时禁用样式/加载动画）。
 
-示例：```bash
+示例：
+```bash
 clawdbot gateway discover --timeout 4000
 clawdbot gateway discover --json | jq '.beacons[].wsUrl'
+```
+
 ```

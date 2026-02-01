@@ -19,15 +19,16 @@ read_when:
 - Bun 无法使用 `pnpm-lock.yaml`，并将忽略它。
 sh
 bun install
-``````
-注意：`bun.lock`/`bun.lockb` 被 git 忽略，因此无论是否进行锁文件写入，都不会引起仓库的变动。如果你想要 *不写入锁文件*：```sh
+```
+注意：`bun.lock`/`bun.lockb` 被 git 忽略，因此无论是否进行锁文件写入，都不会引起仓库的变动。如果你想要 *不写入锁文件*：
+```sh
 bun install --no-save
 ```
 ## 构建 / 测试（Bun）
 sh
 bun run build
 bun run vitest run
-``````
+```
 ## Bun 生命周期脚本（默认被阻止）
 
 Bun 可能会阻止依赖项的生命周期脚本，除非明确信任（`bun pm untrusted` / `bun pm trust`）。
@@ -36,7 +37,8 @@ Bun 可能会阻止依赖项的生命周期脚本，除非明确信任（`bun pm
 - `@whiskeysockets/baileys` 的 `preinstall`：检查 Node 版本是否 >= 20（我们使用的是 Node 22+）。
 - `protobufjs` 的 `postinstall`：会发出关于不兼容版本方案的警告（没有构建产物）。
 
-如果你遇到需要这些脚本的实际运行时问题，请显式地信任它们：```sh
+如果你遇到需要这些脚本的实际运行时问题，请显式地信任它们：
+```sh
 bun pm trust @whiskeysockets/baileys protobufjs
 ```
 ## 注意事项

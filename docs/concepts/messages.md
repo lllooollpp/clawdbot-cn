@@ -16,13 +16,14 @@ read_when:
   -> 路由/绑定 -> 会话密钥
   -> 队列（如果运行正在激活中）
   -> 代理运行（流式传输 + 工具）
-  -> 传出回复（频道限制 + 分块处理）``````
+  -> 传出回复（频道限制 + 分块处理）
+```
 关键配置选项位于配置中：
 - `messages.*` 用于前缀、队列和群组行为。
 - `agents.defaults.*` 用于块流式传输和分块的默认设置。
 - 渠道覆盖配置（如 `channels.whatsapp.*`、`channels.telegram.*` 等）用于功能限制和流式传输开关。
 
-有关完整配置结构，请参见 [Configuration](/gateway/configuration)。
+有关完整配置结构，请参见 [Configuration](/gateway/configuration.md)。
 
 ## 入站去重
 
@@ -32,7 +33,8 @@ read_when:
 
 来自**同一发送者**的快速连续消息可以通过 `messages.inbound` 被批量处理为一次代理交互。防抖功能按渠道 + 会话作用域，并使用最近一条消息进行回复的线程处理/ID 识别。
 
-配置（全局默认值 + 每个渠道的覆盖配置）：```json5
+配置（全局默认值 + 每个渠道的覆盖配置）：
+```json5
 {
   messages: {
     inbound: {
@@ -61,7 +63,7 @@ read_when:
 
 多个设备/频道可以映射到同一个会话，但历史记录不会完全同步到每个客户端。建议：在长时间对话中使用一个主要设备，以避免上下文分歧。控制UI和TUI始终显示由网关支持的会话记录，因此它们是事实的来源。
 
-详情：[会话管理](/concepts/session)。
+详情：[会话管理](/concepts/session.md)。
 
 ## 入站内容与历史上下文
 
@@ -87,7 +89,7 @@ Clawdbot 将**提示内容**与**命令内容**分开：
 - 通过 `messages.queue`（以及 `messages.queue.byChannel`）进行配置。
 - 模式：`interrupt`、`steer`、`followup`、`collect`，以及后备模式。
 
-详情：[队列](/concepts/queue)。
+详情：[队列](/concepts/queue.md)。
 
 ## 流式传输、分块与批处理
 
@@ -102,7 +104,7 @@ Clawdbot 将**提示内容**与**命令内容**分开：
 - `agents.defaults.humanDelay` (块回复之间的类人暂停)
 - 渠道覆盖：`*.blockStreaming` 和 `*.blockStreamingCoalesce` (非 Telegram 渠道需要显式设置 `*.blockStreaming: true`)
 
-详细信息：[流式传输 + 分块](/concepts/streaming)。
+详细信息：[流式传输 + 分块](/concepts/streaming.md)。
 
 ## 推理可见性与令牌
 
@@ -111,7 +113,7 @@ Clawdbot 可以暴露或隐藏模型推理：
 - 当模型生成推理内容时，仍会计算到令牌使用中。
 - Telegram 支持将推理流式传输到草稿气泡中。
 
-详细信息：[思考 + 推理指令](/tools/thinking) 和 [令牌使用](/token-use)。
+详细信息：[思考 + 推理指令](/tools/thinking.md) 和 [令牌使用](/token-use.md)。
 
 ## 前缀、线程与回复
 
@@ -119,4 +121,4 @@ Clawdbot 可以暴露或隐藏模型推理：
 - `messages.responsePrefix` (出站前缀) 和 `channels.whatsapp.messagePrefix` (WhatsApp 入站前缀)
 - 通过 `replyToMode` 和各渠道默认设置实现回复线程化
 
-详细信息：[配置](/gateway/configuration#messages) 和 渠道文档。
+详细信息：[配置](/gateway/configuration.md#messages) 和 渠道文档。

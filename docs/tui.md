@@ -8,15 +8,18 @@ read_when:
 # TUI（终端用户界面）
 
 ## 快速入门
-1) 启动网关。```bash
+1) 启动网关。
+```bash
 clawdbot gateway
 ```
-"2) 打开 TUI。"```bash
+"2) 打开 TUI。"
+```bash
 clawdbot tui
 ```
 3) 输入一条消息并按 Enter 键。
 
-远程网关：```bash
+远程网关：
+```bash
 clawdbot tui --url ws://<host>:<port> --token <gateway-token>
 ```
 使用 `--password` 如果你的网关使用密码认证。
@@ -86,7 +89,7 @@ clawdbot tui --url ws://<host>:<port> --token <gateway-token>
 - `/settings`
 - `/exit`
 
-其他网关斜杠命令（例如 `/context`）会被转发到网关，并作为系统输出显示。详见 [斜杠命令](/tools/slash-commands)。
+其他网关斜杠命令（例如 `/context`）会被转发到网关，并作为系统输出显示。详见 [斜杠命令](/tools/slash-commands.md)。
 
 ## 工具输出
 - 工具调用以卡片形式显示参数和结果。

@@ -13,7 +13,7 @@ Clawdbot 配备了两个轻量级网络工具：
 - `web_search` — 通过 Brave Search API（默认）、Bocha Search（国内优化）或 Perplexity Sonar（直接或通过 OpenRouter）搜索网络。
 - `web_fetch` — HTTP 获取 + 可读提取（HTML → markdown/文本）。
 
-这些工具**不是**浏览器自动化工具。对于需要 JavaScript 或登录的网站，请使用 [浏览器工具](/tools/browser)。
+这些工具**不是**浏览器自动化工具。对于需要 JavaScript 或登录的网站，请使用 [浏览器工具](/tools/browser.md)。
 
 ## 工作原理
 
@@ -33,7 +33,7 @@ Clawdbot 配备了两个轻量级网络工具：
 | **Bocha** | 针对中国市场优化，提供国内结果 | 需要 Bocha API 账户 | `BOCHA_API_KEY` |
 | **Perplexity** | AI 合成答案，带引用，实时 | 需要 Perplexity 或 OpenRouter 访问权限 | `OPENROUTER_API_KEY` 或 `PERPLEXITY_API_KEY` |
 
-有关提供者特定的详细信息，请参见 [Brave Search 设置](/brave-search)、[Bocha Search 设置](/bocha-search) 和 [Perplexity Sonar](/perplexity)。
+有关提供者特定的详细信息，请参见 [Brave Search 设置](/brave-search.md)、[Bocha Search 设置](/bocha-search.md) 和 [Perplexity Sonar](/perplexity.md)。
 json5
 {
   tools: {
@@ -44,8 +44,9 @@ json5
     }
   }
 }
-``````
-示例：切换到 Perplexity Sonar（直接 API）：```json5
+```
+示例：切换到 Perplexity Sonar（直接 API）：
+```json5
 {
   tools: {
     web: {
@@ -73,7 +74,7 @@ Brave 提供了免费层级以及付费计划；请查看 Brave API 门户以了
 
 **推荐方式：** 运行 `clawdbot configure --section web`。它会将密钥存储在 `~/.clawdbot/clawdbot.json` 中的 `tools.web.search.apiKey` 下。
 
-**环境变量方式：** 在网关进程的环境变量中设置 `BRAVE_API_KEY`。对于网关安装，将其放在 `~/.clawdbot/.env` 文件中（或你的服务环境变量中）。参见 [环境变量](/help/faq#how-does-clawdbot-load-environment-variables)。
+**环境变量方式：** 在网关进程的环境变量中设置 `BRAVE_API_KEY`。对于网关安装，将其放在 `~/.clawdbot/.env` 文件中（或你的服务环境变量中）。参见 [环境变量](/help/faq.md#how-does-clawdbot-load-environment-variables)。
 
 ## 使用 Perplexity（直接使用或通过 OpenRouter）
 
@@ -105,7 +106,7 @@ json5
     }
   }
 }
-``````
+```
 **环境替代方案:** 在网关的环境变量中设置 `OPENROUTER_API_KEY` 或 `PERPLEXITY_API_KEY`。对于网关安装，将其放在 `~/.clawdbot/.env` 中。
 
 如果未设置基础 URL，Clawdbot 会根据 API 密钥来源选择默认值：
@@ -131,7 +132,8 @@ json5
 - `tools.web.search.enabled` 必须不是 `false`（默认：启用）
 - 您所选提供者的 API 密钥：
   - **Brave**: `BRAVE_API_KEY` 或 `tools.web.search.apiKey`
-  - **Perplexity**: `OPENROUTER_API_KEY`、`PERPLEXITY_API_KEY` 或 `tools.web.search.perplexity.apiKey````json5
+  - **Perplexity**: `OPENROUTER_API_KEY`、`PERPLEXITY_API_KEY` 或 `tools.web.search.perplexity.apiKey
+```json5
 {
   tools: {
     web: {
@@ -178,7 +180,7 @@ await web_search({
   query: "TMBG interview",
   freshness: "pw"
 });
-``````
+```
 ## web_fetch
 
 获取 URL 并提取可读内容。
@@ -188,7 +190,8 @@ await web_search({
 - `tools.web.fetch.enabled` 必须不是 `false`（默认值：启用）
 - 可选的 Firecrawl 回退：设置 `tools.web.fetch.firecrawl.apiKey` 或 `FIRECRAWL_API_KEY`。
 
-### 配置```json5
+### 配置
+```json5
 {
   tools: {
     web: {
@@ -225,7 +228,8 @@ await web_search({
 - `web_fetch` 默认发送 Chrome 类似的 User-Agent 和 `Accept-Language`；如需覆盖，请设置 `userAgent`。
 - `web_fetch` 会阻止私有/内部的主机名，并重新检查重定向（可通过 `maxRedirects` 限制次数）。
 - `web_fetch` 是尽力而为的内容提取；某些网站可能需要使用浏览器工具。
-- 请参阅 [Firecrawl](/tools/firecrawl) 了解密钥设置和服务详情。
+- 请参阅 [Firecrawl](/tools/firecrawl.md) 了解密钥设置和服务详情。
 - 响应默认缓存 15 分钟，以减少重复获取。
 - 如果您使用工具配置文件/允许列表，请添加 `web_search`/`web_fetch` 或 `group:web`。
 - 如果缺少 Brave 密钥，`web_search` 将返回一个简短的设置提示并附带文档链接。
+```

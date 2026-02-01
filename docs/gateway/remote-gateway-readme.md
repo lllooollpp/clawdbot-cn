@@ -26,12 +26,13 @@ Clawdbot.app 通过 SSH 隧道连接到远程网关。本指南将向您展示�
 │  网关 WebSocket ──► ws://127.0.0.1:18789 ──►              │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
-``````
+```
 ## 快速设置
 
 ### 第1步：添加SSH配置
 
-编辑 `~/.ssh/config` 并添加以下内容：```ssh
+编辑 `~/.ssh/config` 并添加以下内容：
+```ssh
 Host remote-gateway
     HostName <REMOTE_IP>          # e.g., 172.27.187.184
     User <REMOTE_USER>            # e.g., jefferson
@@ -45,15 +46,17 @@ Host remote-gateway
 将你的公钥复制到远程机器（输入一次密码）：
 bash
 ssh-copy-id -i ~/.ssh/id_rsa <REMOTE_USER>@<REMOTE_IP>
-``````
-### 第3步：设置网关令牌```bash
+```
+### 第3步：设置网关令牌
+```bash
 launchctl setenv CLAWDBOT_GATEWAY_TOKEN "<your-token>"
 ```
 ### 第4步：启动SSH隧道
 bash
 ssh -N remote-gateway &
-``````
-### 第5步：重启 Clawdbot.app```bash
+```
+### 第5步：重启 Clawdbot.app
+```bash
 # Quit Clawdbot.app (⌘Q), then reopen:
 open /path/to/Clawdbot.app
 ```
@@ -87,8 +90,9 @@ xml
     <true/>
 </dict>
 </plist>
-``````
-### 加载启动代理```bash
+```
+### 加载启动代理
+```bash
 launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.clawdbot.ssh-tunnel.plist
 ```
 "隧道现在将：
@@ -100,17 +104,19 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.clawdbot.ssh-tunnel.plis
 
 ## 故障排除
 
-**检查隧道是否正在运行：**```bash
+**检查隧道是否正在运行：**
+```bash
 ps aux | grep "ssh -N remote-gateway" | grep -v grep
 lsof -i :18789
-``````
-**重启隧道：**```bash
+```
+**重启隧道：**
+```bash
 launchctl kickstart -k gui/$UID/com.clawdbot.ssh-tunnel
 ```
 **停止隧道：**
 bash
 launchctl bootout gui/$UID/com.clawdbot.ssh-tunnel
-``````
+```
 ---
 
 ## 工作原理
@@ -123,3 +129,4 @@ launchctl bootout gui/$UID/com.clawdbot.ssh-tunnel
 | `RunAtLoad` | 在代理加载时启动隧道 |
 
 Clawdbot.app 在您的客户端机器上连接到 `ws://127.0.0.1:18789`。SSH 隧道会将该连接转发到运行 Gateway 的远程机器的 18789 端口。
+```

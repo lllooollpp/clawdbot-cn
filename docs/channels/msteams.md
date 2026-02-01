@@ -21,14 +21,16 @@ Microsoft Teams 作为插件提供，不包含在核心安装中。
 
 通过 CLI 安装（npm 仓库）：
 bash
-clawdbot plugins install @clawdbot/msteams``````
-本地签出（当从 git 仓库运行时）：```bash
+clawdbot plugins install @clawdbot/msteams
+```
+本地签出（当从 git 仓库运行时）：
+```bash
 clawdbot plugins install ./extensions/msteams
 ```
 如果在配置/引导过程中选择了 Teams，并且检测到 git 检出，  
 Clawdbot 将会自动提供本地安装路径。
 
-详细信息：[插件](/plugin)
+详细信息：[插件](/plugin.md)
 
 ## 快速设置（初学者）
 1) 安装 Microsoft Teams 插件。  
@@ -50,7 +52,7 @@ json5
     }
   }
 }
-`````````
+```
 注意：群组聊天默认被阻止（`channels.msteams.groupPolicy: "allowlist"`）。要允许群组回复，请设置 `channels.msteams.groupAllowFrom`（或使用 `groupPolicy: "open"` 以允许任何成员回复，但需提及）。
 
 ## 目标
@@ -61,7 +63,8 @@ json5
 ## 配置写入
 默认情况下，Microsoft Teams 允许通过 `/config set|unset` 触发的配置更新（需要 `commands.config: true`）。
 
-禁用方式为：```json5
+禁用方式为：
+```json5
 {
   channels: { msteams: { configWrites: false } }
 }
@@ -88,7 +91,7 @@ json5
     }
   }
 }
-`````````
+```
 **Teams + 通道白名单**
 - 通过在 `channels.msteams.teams` 下列出 Teams 和通道来限制群组/通道的回复范围。
 - 键可以是团队 ID 或名称；通道键可以是对话 ID 或名称。
@@ -97,7 +100,8 @@ json5
 - 在启动时，Clawdbot 会将团队/通道和用户白名单的名称解析为 ID（当 Graph 权限允许时），
   并记录映射关系；无法解析的条目会以原始输入形式保留。
   
-示例：```json5
+示例：
+```json5
 {
   channels: {
     msteams: {
@@ -173,8 +177,10 @@ Teams 无法访问 `localhost`。请使用隧道进行本地开发：
 bash
 ngrok http 3978
 # Copy the https URL, e.g., https://abc123.ngrok.io
-# Set messaging endpoint to: https://abc123.ngrok.io/api/messages``````
-**选项 B：Tailscale Funnel**```bash
+# Set messaging endpoint to: https://abc123.ngrok.io/api/messages
+```
+**选项 B：Tailscale Funnel**
+```bash
 tailscale funnel 3978
 # Use your Tailscale funnel URL as the messaging endpoint
 ```
@@ -234,7 +240,8 @@ json
     "webhook": { "port": 3978, "path": "/api/messages" }
   }
 }
-``````   ```
+```   
+```
 您可以使用环境变量代替配置键：
 - `MSTEAMS_APP_ID`
 - `MSTEAMS_APP_PASSWORD`
@@ -268,7 +275,8 @@ json
 - `ChatMessage.Read.Chat`（应用程序） - 无需@提醒即可接收所有群组聊天消息
 
 ## 示例 Teams Manifest（已脱敏）
-一个包含必要字段的最小有效示例。请替换 ID 和 URL。```json
+一个包含必要字段的最小有效示例。请替换 ID 和 URL。
+```json
 {
   "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.23/MicrosoftTeams.schema.json",
   "manifestVersion": "1.23",
@@ -410,7 +418,7 @@ Teams 的 Markdown 功能比 Slack 或 Discord 更有限：
 - `channels.msteams.sharePointSiteId`: 群组聊天/频道中文件上传的 SharePoint 站点 ID（见 [在群组聊天中发送文件](#sending-files-in-group-chats)）。
 
 ## 路由与会话
-- 会话密钥遵循标准代理格式（参见 [/concepts/session](/concepts/session)）：
+- 会话密钥遵循标准代理格式（参见 [/concepts/session](/concepts/session.md)）：
   - 直接消息使用主会话（`agent:<agentId>:<mainKey>`）。
   - 频道/群组消息使用对话 ID：
     - `agent:<agentId>:msteams:channel:<conversationId>`
@@ -445,7 +453,7 @@ json
     }
   }
 }
-`````````
+```
 ## 附件与图片
 
 **当前限制：**
@@ -467,7 +475,8 @@ Bots 可以通过 FileConsentCard 流程在私聊中发送文件（内置功能�
 
 ### 为什么群组聊天需要 SharePoint
 
-Bots 没有个人的 OneDrive 驱动器（对于应用身份，`/me/drive` Graph API 端点无法使用）。要在群组聊天/频道中发送文件，bot 需要将文件上传到一个 **SharePoint 站点**，并创建一个分享链接。   ```bash
+Bots 没有个人的 OneDrive 驱动器（对于应用身份，`/me/drive` Graph API 端点无法使用）。要在群组聊天/频道中发送文件，bot 需要将文件上传到一个 **SharePoint 站点**，并创建一个分享链接。   
+```bash
    # Via Graph Explorer or curl with a valid token:
    curl -H "Authorization: Bearer $TOKEN" \
      "https://graph.microsoft.com/v1.0/sites/{hostname}:/{site-path}"
@@ -477,7 +486,8 @@ Bots 没有个人的 OneDrive 驱动器（对于应用身份，`/me/drive` Graph
      "https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com:/sites/BotFiles"
 
    # Response includes: "id": "contoso.sharepoint.com,guid1,guid2"
-   ```
+   
+```
 4. **配置 Clawdbot：**
 json5
 {
@@ -487,7 +497,9 @@ json5
       sharePointSiteId: "contoso.sharepoint.com,guid1,guid2"
     }
   }
-}```   ```
+}
+```   
+```
 ### 共享行为
 
 | 权限 | 共享行为 |
@@ -523,7 +535,8 @@ Clawdbot 通过 Teams 发送自适应卡片格式的投票（Teams 没有原生�
 
 `card` 参数接受一个自适应卡片 JSON 对象。当提供 `card` 时，消息文本是可选的。
 
-**代理工具：**```json
+**代理工具：**
+```json
 {
   "action": "send",
   "channel": "msteams",
@@ -554,7 +567,8 @@ MSTeams 的目标使用前缀来区分用户和对话：
 | 群组/频道 | `conversation:<conversation-id>` | `conversation:19:abc123...@thread.tacv2` |
 | 群组/频道（原始格式） | `<conversation-id>` | `19:abc123...@thread.tacv2`（如果包含 `@thread`） |
 
-**CLI 示例：**```bash
+**CLI 示例：**
+```bash
 # 通过用户 ID 发送消息
 clawdbot message send --channel msteams --target "user:40a1a0ed-..." --message "Hello"
 
@@ -567,7 +581,7 @@ clawdbot message send --channel msteams --target "conversation:19:abc...@thread.
 # 向对话发送 Adaptive Card
 clawdbot message send --channel msteams --target "conversation:19:abc...@thread.tacv2" \
   --card '{"type":"AdaptiveCard","version":"1.5","body":[{"type":"TextBlock","text":"Hello"}]}'
-``````
+```
 **代理工具示例：**
 json
 {
@@ -576,7 +590,7 @@ json
   "target": "user:John Smith",
   "message": "Hello!"
 }
-``````
+```
 {
   "action": "发送",
   "channel": "msteams",
@@ -602,7 +616,8 @@ https://teams.microsoft.com/l/team/19%3ABk4j...%40thread.tacv2/conversations?gro
 
 https://teams.microsoft.com/l/channel/19%3A15bc...%40thread.tacv2/ChannelName?groupId=...
                                       └─────────────────────────┘
-                                      频道 ID（对这部分进行 URL 解码）``````
+                                      频道 ID（对这部分进行 URL 解码）
+```
 **关于配置：**
 - **Team ID** = `/team/` 之后的路径段（URL解码，例如 `19:Bk4j...@thread.tacv2`）
 - **Channel ID** = `/channel/` 之后的路径段（URL解码）
@@ -656,3 +671,4 @@ https://teams.microsoft.com/l/channel/19%3A15bc...%40thread.tacv2/ChannelName?gr
 - [RSC 权限参考](https://learn.microsoft.com/zh-cn/microsoftteams/platform/graph-api/rsc/resource-specific-consent)
 - [Teams bot 文件处理](https://learn.microsoft.com/zh-cn/microsoftteams/platform/bots/how-to/bots-filesv4)（频道/群组需要 Graph）
 - [主动消息](https://learn.microsoft.com/zh-cn/microsoftteams/platform/bots/how-to/conversations/send-proactive-messages)
+```

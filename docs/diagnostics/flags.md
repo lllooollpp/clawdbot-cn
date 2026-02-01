@@ -23,8 +23,10 @@ json
   "diagnostics": {
     "flags": ["telegram.http"]
   }
-}``````
-多个标志：```json
+}
+```
+多个标志：
+```json
 {
   "diagnostics": {
     "flags": ["telegram.http", "gateway.*"]
@@ -33,19 +35,20 @@ json
 ```
 重新启动网关以应用更改的标志。
 
-## 环境覆盖（一次性）```bash
+## 环境覆盖（一次性）
+```bash
 CLAWDBOT_DIAGNOSTICS=telegram.http,telegram.payload
-``````
+```
 禁用所有标志：
 bash
 CLAWDBOT_DIAGNOSTICS=0
-``````
+```
 ## 日志的去向
 
 标志会将日志输出到标准诊断日志文件中。默认情况下：
 
 /tmp/clawdbot/clawdbot-YYYY-MM-DD.log
-``````
+```
 如果设置了 `logging.file`，则使用该路径。日志为 JSONL 格式（每行一个 JSON 对象）。根据 `logging.redactSensitive` 的设置，仍会进行敏感信息过滤。
 
 ## 提取日志
@@ -53,18 +56,19 @@ CLAWDBOT_DIAGNOSTICS=0
 选择最新的日志文件：
 bash
 ls -t /tmp/clawdbot/clawdbot-*.log | head -n 1
-``````
+```
 Telegram HTTP 诊断过滤器：
 bash
 rg "telegram http error" /tmp/clawdbot/clawdbot-*.log
-``````
+```
 或者在复制时尾随：
 bash
-tail -f /tmp/clawdbot/clawdbot-$(date +%F).log | rg "telegram http error"```
-对于远程网关，你也可以使用 `clawdbot logs --follow`（参见 [/cli/logs](/cli/logs)）。
+tail -f /tmp/clawdbot/clawdbot-$(date +%F).log | rg "telegram http error"
+```
+对于远程网关，你也可以使用 `clawdbot logs --follow`（参见 [/cli/logs](/cli/logs.md)）。
 
 ## 注意事项
 
 - 如果 `logging.level` 设置的级别高于 `warn`，这些日志可能会被抑制。默认的 `info` 级别是合适的。
 - 标志位可以保持启用状态；它们仅影响特定子系统的日志量。
-- 使用 [/logging](/logging) 来更改日志目标、级别和脱敏设置。
+- 使用 [/logging](/logging.md) 来更改日志目标、级别和脱敏设置。

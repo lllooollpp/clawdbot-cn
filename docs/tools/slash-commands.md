@@ -34,7 +34,7 @@ json5
     useAccessGroups: true
   }
 }
-``````
+```
 - `commands.text`（默认值为 `true`）启用聊天消息中的 `/...` 命令解析。
   - 在没有原生命令支持的平台（如 WhatsApp/WebChat/Signal/iMessage/Google Chat/MS Teams）上，即使将此设置为 `false`，文本命令仍然可以正常工作。
 - `commands.native`（默认值为 `"auto"`）注册原生命令。
@@ -63,7 +63,7 @@ json5
 - `/config show|get|set|unset`（将配置持久化到磁盘，仅限所有者；需要 `commands.config: true`）
 - `/debug show|set|unset|reset`（运行时覆盖，仅限所有者；需要 `commands.debug: true`）
 - `/usage off|tokens|full|cost`（每条响应的使用情况页脚或本地成本摘要）
-- `/tts off|always|inbound|tagged|status|provider|limit|summary|audio`（控制语音合成；详见 [/tts](/tts)）
+- `/tts off|always|inbound|tagged|status|provider|limit|summary|audio`（控制语音合成；详见 [/tts](/tts.md)）
   - Discord：原生命令是 `/voice`（Discord 保留了 `/tts`）；文本 `/tts` 仍然有效。
 - `/stop`
 - `/restart`
@@ -83,7 +83,7 @@ json5
 - `/bash <命令>`（仅限主机；别名 `! <命令>`；需要 `commands.bash: true` + `tools.elevated` 允许列表）
 
 **纯文本命令：**
-- `/compact [说明]`（详见 [/concepts/compaction](/concepts/compaction)）
+- `/compact [说明]`（详见 [/concepts/compaction](/concepts/compaction.md)）
 - `! <命令>`（仅限主机；一次一条；使用 `!poll` + `!stop` 来处理长时间运行的任务）
 - `!poll`（检查输出/状态；可选 `sessionId`；`/bash poll` 也有效）
 - `!stop`（停止正在运行的 bash 任务；可选 `sessionId`；`/bash stop` 也有效）
@@ -107,14 +107,15 @@ json5
   - `/skill <name> [input]` 通过名称运行一个技能（当原生命令限制阻止每个技能的命令时很有用）。
   - 默认情况下，技能命令会被转发给模型作为普通请求。
   - 技能可以可选地声明 `command-dispatch: tool`，以将命令直接路由到工具（确定性操作，不经过模型）。
-  - 示例：`/prose`（OpenProse 插件）—— 请参见 [OpenProse](/prose)。
+  - 示例：`/prose`（OpenProse 插件）—— 请参见 [OpenProse](/prose.md)。
 - **原生命令参数**：Discord 会为动态选项提供自动补全（当你省略必填参数时，会显示按钮菜单）。Telegram 和 Slack 在命令支持选项且你省略参数时会显示按钮菜单。
 
 ## 使用界面（显示位置）
 
 - **提供者使用/配额**（例如：“Claude 80% 剩余”）会在启用使用跟踪时显示在 `/status` 中，针对当前模型提供者。
 - **每条回复的令牌/成本** 由 `/usage off|tokens|full` 控制（附加到正常回复中）。
-- `/model status` 是关于 **模型/认证/端点** 的，而不是关于使用情况的。```
+- `/model status` 是关于 **模型/认证/端点** 的，而不是关于使用情况的。
+```
 /model
 /model list
 /model 3
@@ -136,14 +137,15 @@ json5
 /debug set channels.whatsapp.allowFrom=["+1555","+4477"]
 /debug unset messages.responsePrefix
 /debug reset
-``````
+```
 注意事项：
 - 覆盖设置会立即应用于新的配置读取，但不会写入 `clawdbot.json` 文件。
 - 使用 `/debug reset` 来清除所有覆盖设置，并返回到磁盘上的配置。
 
 ## 配置更新
 
-`/config` 会将配置写入磁盘上的配置文件 (`clawdbot.json`)。仅限所有者使用。默认情况下已禁用；可以通过 `commands.config: true` 启用。```
+`/config` 会将配置写入磁盘上的配置文件 (`clawdbot.json`)。仅限所有者使用。默认情况下已禁用；可以通过 `commands.config: true` 启用。
+```
 /config show
 /config show messages.responsePrefix
 /config get messages.responsePrefix

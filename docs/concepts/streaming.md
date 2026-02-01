@@ -100,3 +100,4 @@ Telegram (private + topics)
   └─ 最终回复 → 普通消息图例：
 - `sendMessageDraft`: Telegram 草稿气泡（不是真实消息）。
 - `final reply`: 正常的 Telegram 消息发送。
+```

@@ -112,6 +112,7 @@ export function applySettingsFromUrl(host: SettingsHost) {
 
 export function setTab(host: SettingsHost, next: Tab) {
   if (host.tab !== next) host.tab = next;
+  if (next === "onboarding") (host as any).onboarding = true;
   if (next === "chat") host.chatHasAutoScrolled = false;
   if (next === "logs")
     startLogsPolling(host as unknown as Parameters<typeof startLogsPolling>[0]);
@@ -260,6 +261,7 @@ export function onPopState(host: SettingsHost) {
 
 export function setTabFromRoute(host: SettingsHost, next: Tab) {
   if (host.tab !== next) host.tab = next;
+  if (next === "onboarding") (host as any).onboarding = true;
   if (next === "chat") host.chatHasAutoScrolled = false;
   if (next === "logs")
     startLogsPolling(host as unknown as Parameters<typeof startLogsPolling>[0]);

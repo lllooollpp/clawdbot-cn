@@ -1,10 +1,17 @@
+---
+summary: "System architecture, core components, and interaction processes"
+read_when:
+  - Designing extensions or understanding the core system
+---
+
 # Clawdbot Architecture Design Document
 
 This document details the system architecture, core components, and interaction processes of Clawdbot.
 
 ## 1. Core Architecture Diagram (Logical View)
 
-Clawdbot adopts a layered and decoupled architecture, ensuring flexibility in message channels and AI logic.```mermaid
+Clawdbot adopts a layered and decoupled architecture, ensuring flexibility in message channels and AI logic.
+```mermaid
 graph TD
     A[外部消息平台: WhatsApp/TG/Feishu] <--> B[Channels 渠道层]
     B <--> C[Gateway 网关核心]

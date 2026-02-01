@@ -29,6 +29,8 @@ import {
   applyVolcengineProviderConfig,
   applyBochaConfig,
   applyOllamaConfig,
+  applyZhipuConfig,
+  applyZhipuProviderConfig,
   applyDomesticMediaDefaults,
   applySyntheticConfig,
   applySyntheticProviderConfig,
@@ -42,6 +44,7 @@ import {
   OPENROUTER_DEFAULT_MODEL_REF,
   DEEPSEEK_DEFAULT_MODEL_REF,
   SILICONFLOW_DEFAULT_MODEL_REF,
+  ZHIPU_DEFAULT_MODEL_REF,
   SYNTHETIC_DEFAULT_MODEL_REF,
   VENICE_DEFAULT_MODEL_REF,
   VERCEL_AI_GATEWAY_DEFAULT_MODEL_REF,
@@ -54,6 +57,7 @@ import {
   setSiliconFlowApiKey,
   setVolcengineApiKey,
   setBochaApiKey,
+  setZhipuApiKey,
   setSyntheticApiKey,
   setVeniceApiKey,
   setVercelAiGatewayApiKey,
@@ -70,8 +74,8 @@ export async function applyAuthChoiceApiProviders(
   const noteAgentModel = async (model: string) => {
     if (!params.agentId) return;
     await params.prompter.note(
-      `Default model set to ${model} for agent "${params.agentId}".`,
-      "Model configured",
+      `代理 "${params.agentId}" 的默认模型已设置为 ${model}。`,
+      "模型配置完成",
     );
   };
 
@@ -100,6 +104,8 @@ export async function applyAuthChoiceApiProviders(
       authChoice = "volcengine-api-key";
     } else if (params.opts.tokenProvider === "bocha") {
       authChoice = "bocha-api-key";
+    } else if (params.opts.tokenProvider === "zhipu") {
+      authChoice = "zhipu-api-key";
     } else if (params.opts.tokenProvider === "ollama") {
       authChoice = "ollama";
     } else if (params.opts.tokenProvider === "zai") {
@@ -148,7 +154,7 @@ export async function applyAuthChoiceApiProviders(
       const envKey = resolveEnvApiKey("openrouter");
       if (envKey) {
         const useExisting = await params.prompter.confirm({
-          message: `Use existing OPENROUTER_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+          message: `使用现有的 OPENROUTER_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
           initialValue: true,
         });
         if (useExisting) {
@@ -160,7 +166,7 @@ export async function applyAuthChoiceApiProviders(
 
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter OpenRouter API key",
+        message: "输入 OpenRouter API 密钥",
         validate: validateApiKeyInput,
       });
       await setOpenrouterApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -206,7 +212,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("vercel-ai-gateway");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing AI_GATEWAY_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 AI_GATEWAY_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -216,7 +222,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Vercel AI Gateway API key",
+        message: "输入 Vercel AI Gateway API 密钥",
         validate: validateApiKeyInput,
       });
       await setVercelAiGatewayApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -254,7 +260,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("moonshot");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing MOONSHOT_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 MOONSHOT_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -264,7 +270,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Moonshot API key",
+        message: "输入 Moonshot API 密钥",
         validate: validateApiKeyInput,
       });
       await setMoonshotApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -300,8 +306,8 @@ export async function applyAuthChoiceApiProviders(
     if (!hasCredential) {
       await params.prompter.note(
         [
-          "Kimi Code uses a dedicated endpoint and API key.",
-          "Get your API key at: https://www.kimi.com/code/en",
+          "Kimi Code 使用专用的端点和 API 密钥。",
+          "在此处获取 API 密钥：https://www.kimi.com/code/zh (中文版: https://kimi.moonshot.cn)",
         ].join("\n"),
         "Kimi Code",
       );
@@ -309,7 +315,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("kimi-code");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing KIMICODE_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 KIMICODE_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -319,7 +325,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Kimi Code API key",
+        message: "输入 Kimi Code API 密钥",
         validate: validateApiKeyInput,
       });
       await setKimiCodeApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -357,7 +363,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("deepseek");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing DEEPSEEK_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 DEEPSEEK_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -367,7 +373,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter DeepSeek API key",
+        message: "输入 DeepSeek API 密钥",
         validate: validateApiKeyInput,
       });
       await setDeepSeekApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -406,7 +412,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("siliconflow");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing SILICONFLOW_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 SILICONFLOW_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -416,7 +422,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter SiliconFlow API key",
+        message: "输入 SiliconFlow API 密钥",
         validate: validateApiKeyInput,
       });
       await setSiliconFlowApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -455,7 +461,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("volcengine");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing VOLCENGINE_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 VOLCENGINE_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -465,14 +471,14 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Volcengine API key",
+        message: "输入火山引擎 (Volcengine) API 密钥",
         validate: validateApiKeyInput,
       });
       await setVolcengineApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
     }
     const modelId = await params.prompter.text({
-      message: "Enter Volcengine Endpoint ID (ep-xxxxxx)",
-      validate: (v) => (v?.startsWith("ep-") ? undefined : "Must start with ep-"),
+      message: "输入火山引擎端点 ID (ep-xxxxxx)",
+      validate: (v) => (v?.startsWith("ep-") ? undefined : "必须以 ep- 开头"),
     });
 
     nextConfig = applyAuthProfileConfig(nextConfig, {
@@ -508,7 +514,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("bocha");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing BOCHA_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 BOCHA_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -518,17 +524,14 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Bocha Search API key (博查 🇨🇳)",
+        message: "输入博查搜索 (Bocha Search) API 密钥 (🇨🇳)",
         validate: validateApiKeyInput,
       });
       await setBochaApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
     }
     nextConfig = applyBochaConfig(nextConfig);
     nextConfig = applyDomesticMediaDefaults(nextConfig);
-    await params.prompter.note(
-      "Bocha Search configured as the primary web search provider.",
-      "Search configured",
-    );
+    await params.prompter.note("博查搜索已配置为主要网页搜索提供商。", "搜索配置完成");
     // Since Bocha is for search, we still need a reasoning model.
     // If we don't have one, we default to DeepSeek as it's the best domestic alternative.
     const hasDeepSeek =
@@ -536,8 +539,8 @@ export async function applyAuthChoiceApiProviders(
       Boolean(nextConfig.auth?.profiles?.["deepseek:default"]);
     if (!hasDeepSeek) {
       await params.prompter.note(
-        "Search configured. Now let's set up a reasoning model (DeepSeek recommended).",
-        "Model Setup",
+        "搜索配置完成。现在让我们设置推理模型（推荐 DeepSeek）。",
+        "模型设置",
       );
       // We'll recurse or just transition to DeepSeek
       return applyAuthChoiceApiProviders({ ...params, authChoice: "deepseek-api-key" });
@@ -545,13 +548,60 @@ export async function applyAuthChoiceApiProviders(
     return { config: nextConfig };
   }
 
+  if (authChoice === "zhipu-api-key") {
+    let hasCredential = false;
+    if (!hasCredential && params.opts?.token && params.opts?.tokenProvider === "zhipu") {
+      await setZhipuApiKey(normalizeApiKeyInput(params.opts.token), params.agentDir);
+      hasCredential = true;
+    }
+    const envKey = resolveEnvApiKey("zhipu");
+    if (envKey) {
+      const useExisting = await params.prompter.confirm({
+        message: `使用现有的 ZHIPU_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
+        initialValue: true,
+      });
+      if (useExisting) {
+        await setZhipuApiKey(envKey.apiKey, params.agentDir);
+        hasCredential = true;
+      }
+    }
+    if (!hasCredential) {
+      const key = await params.prompter.text({
+        message: "输入智谱 AI API 密钥 (🇨🇳)",
+        validate: validateApiKeyInput,
+      });
+      await setZhipuApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
+    }
+    nextConfig = applyAuthProfileConfig(nextConfig, {
+      profileId: "zhipu:default",
+      provider: "zhipu",
+      mode: "api_key",
+    });
+    nextConfig = applyDomesticMediaDefaults(nextConfig);
+    {
+      const applied = await applyDefaultModelChoice({
+        config: nextConfig,
+        setDefaultModel: params.setDefaultModel,
+        defaultModel: ZHIPU_DEFAULT_MODEL_REF,
+        applyDefaultConfig: applyZhipuConfig,
+        applyProviderConfig: applyZhipuProviderConfig,
+        noteDefault: ZHIPU_DEFAULT_MODEL_REF,
+        noteAgentModel,
+        prompter: params.prompter,
+      });
+      nextConfig = applied.config;
+      agentModelOverride = applied.agentModelOverride ?? agentModelOverride;
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
   if (authChoice === "ollama") {
     const baseUrl = await params.prompter.text({
-      message: "Enter Ollama base URL",
+      message: "输入 Ollama 基础 URL",
       initialValue: "http://127.0.0.1:11434/v1",
     });
     const modelId = await params.prompter.text({
-      message: "Enter Ollama model name",
+      message: "输入 Ollama 模型名称",
       initialValue: "qwen2.5:7b-instruct",
     });
 
@@ -563,8 +613,8 @@ export async function applyAuthChoiceApiProviders(
     nextConfig = applyOllamaConfig(nextConfig, configParams);
     const modelRef = `ollama/${configParams.modelId}`;
     await params.prompter.note(
-      `Ollama configured with model ${configParams.modelId}.`,
-      "Local Model configured",
+      `Ollama 已配置，模型为 ${configParams.modelId}。`,
+      "本地模型配置完成",
     );
 
     // Set as default if requested
@@ -588,7 +638,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("google");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing GEMINI_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 GEMINI_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -598,7 +648,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Gemini API key",
+        message: "输入 Gemini API 密钥",
         validate: validateApiKeyInput,
       });
       await setGeminiApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -613,8 +663,8 @@ export async function applyAuthChoiceApiProviders(
       nextConfig = applied.next;
       if (applied.changed) {
         await params.prompter.note(
-          `Default model set to ${GOOGLE_GEMINI_DEFAULT_MODEL}`,
-          "Model configured",
+          `默认模型已设置为 ${GOOGLE_GEMINI_DEFAULT_MODEL}`,
+          "模型配置完成",
         );
       }
     } else {
@@ -635,7 +685,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("zai");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing ZAI_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 ZAI_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -645,7 +695,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Z.AI API key",
+        message: "输入 Z.AI API 密钥",
         validate: validateApiKeyInput,
       });
       await setZaiApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -692,8 +742,8 @@ export async function applyAuthChoiceApiProviders(
       await setSyntheticApiKey(String(params.opts.token).trim(), params.agentDir);
     } else {
       const key = await params.prompter.text({
-        message: "Enter Synthetic API key",
-        validate: (value) => (value?.trim() ? undefined : "Required"),
+        message: "输入 Synthetic API 密钥",
+        validate: (value) => (value?.trim() ? undefined : "必填"),
       });
       await setSyntheticApiKey(String(key).trim(), params.agentDir);
     }
@@ -730,9 +780,9 @@ export async function applyAuthChoiceApiProviders(
     if (!hasCredential) {
       await params.prompter.note(
         [
-          "Venice AI provides privacy-focused inference with uncensored models.",
-          "Get your API key at: https://venice.ai/settings/api",
-          "Supports 'private' (fully private) and 'anonymized' (proxy) modes.",
+          "Venice AI 提供注重隐私且无审查模型的推理服务。",
+          "在此处获取 API 密钥：https://venice.ai/settings/api",
+          "支持 'private'（完全私有）和 'anonymized'（匿名代理）模式。",
         ].join("\n"),
         "Venice AI",
       );
@@ -741,7 +791,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("venice");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing VENICE_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 VENICE_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -751,7 +801,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter Venice AI API key",
+        message: "输入 Venice AI API 密钥",
         validate: validateApiKeyInput,
       });
       await setVeniceApiKey(normalizeApiKeyInput(String(key)), params.agentDir);
@@ -788,9 +838,9 @@ export async function applyAuthChoiceApiProviders(
     if (!hasCredential) {
       await params.prompter.note(
         [
-          "OpenCode Zen provides access to Claude, GPT, Gemini, and more models.",
-          "Get your API key at: https://opencode.ai/auth",
-          "Requires an active OpenCode Zen subscription.",
+          "OpenCode Zen 提供对 Claude, GPT, Gemini 等多种模型的访问。",
+          "在此处获取 API 密钥：https://opencode.ai/auth",
+          "需要有效的 OpenCode Zen 订阅。",
         ].join("\n"),
         "OpenCode Zen",
       );
@@ -798,7 +848,7 @@ export async function applyAuthChoiceApiProviders(
     const envKey = resolveEnvApiKey("opencode");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing OPENCODE_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 OPENCODE_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -808,7 +858,7 @@ export async function applyAuthChoiceApiProviders(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter OpenCode Zen API key",
+        message: "输入 OpenCode Zen API 密钥",
         validate: validateApiKeyInput,
       });
       await setOpencodeZenApiKey(normalizeApiKeyInput(String(key)), params.agentDir);

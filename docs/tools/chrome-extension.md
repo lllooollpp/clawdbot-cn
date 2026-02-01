@@ -22,8 +22,9 @@ Clawdbot Chrome 扩展允许代理控制你的 **现有 Chrome 标签页**（你
 Clawdbot 随后通过正常的 `browser` 工具界面控制已连接的标签页（选择正确的配置文件）。
 bash
 clawdbot browser extension install
-``````
-2) 打印已安装的扩展目录路径：```bash
+```
+2) 打印已安装的扩展目录路径：
+```bash
 clawdbot browser extension path
 ```
 3) Chrome → `chrome://extensions`
@@ -55,7 +56,7 @@ clawdbot browser create-profile \
   --driver extension \
   --cdp-url http://127.0.0.1:18792 \
   --color "#00AA00"
-``````
+```
 ## 挂载 / 取消挂载（工具栏按钮）
 
 - 打开你希望 Clawdbot 控制的标签页。
@@ -91,7 +92,8 @@ clawdbot browser create-profile \
 ### 远程网关（网关运行在其他机器上）—— **需要**
 
 如果你的网关运行在其他机器上，请在运行 Chrome 的机器上运行 `clawdbot browser serve`
-（并通过 Tailscale Serve / TLS 公开它）。请参见下面的章节。```json5
+（并通过 Tailscale Serve / TLS 公开它）。请参见下面的章节。
+```json5
 {
   agents: {
     defaults: {
@@ -116,10 +118,11 @@ clawdbot browser create-profile \
 bash
 clawdbot browser serve --bind 127.0.0.1 --port 18791 --token <token>
 tailscale serve https / http://127.0.0.1:18791
-``````
+```
 在 **网关机器** 上：
 - 将 `browser.controlUrl` 设置为 HTTPS 服务地址（MagicDNS/ts.net）。
-- 提供令牌（优先使用环境变量）：```bash
+- 提供令牌（优先使用环境变量）：
+```bash
 export CLAWDBOT_BROWSER_CONTROL_TOKEN="<token>"
 ```
 然后代理可以通过调用远程 `browser.controlUrl` API 来控制浏览器，而扩展程序 + 中继服务则保留在浏览器所在机器的本地。
@@ -149,6 +152,7 @@ CLI 不会 **输出** `node_modules` 路径。请始终先运行 `clawdbot brows
 - 避免通过局域网（`0.0.0.0`）暴露浏览器控制，并避免使用 Funnel（公网）。
 
 相关：
-- 浏览器工具概述：[Browser](/tools/browser)
-- 安全审计：[Security](/gateway/security)
-- Tailscale 设置：[Tailscale](/gateway/tailscale)
+- 浏览器工具概述：[Browser](/tools/browser.md)
+- 安全审计：[Security](/gateway/security.md)
+- Tailscale 设置：[Tailscale](/gateway/tailscale.md)
+```

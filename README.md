@@ -29,13 +29,13 @@ web端：
 **OpenClaw** 是一个你可以在自己设备上运行的*个人 AI 助手*。
 它通过你常用的渠道回复你（WhatsApp、Telegram、Slack、Discord、Google Chat、Signal、iMessage、Microsoft Teams、飞书、WebChat），以及扩展渠道如 BlueBubbles、Matrix、Zalo 和 Zalo Personal。它可以在 macOS/iOS/Android 上说话和聆听，并可以渲染你控制的实时 Canvas。Gateway 只是控制平面——产品是助手。
 
-如果你想要一个感觉本地、快速、始终在线的个人单用户助手，这就是它。现在提供 **Desktop App (Win/macOS/Linux)**，让你无需命令行即可快速开启。
+如果你想要一个感觉本地、快速、始终在线的个人单用户助手，这就是它。现在提供 **Desktop App (Win/macOS/Linux)**，让你无需命令行即可快速开启。针对中国用户进行了深度优化，内置 **智谱 AI (Zhipu)** 等国产模型支持。
 
 [网站](https://openclaw.cn) · [文档](http://101.35.228.254/) · [入门](./docs/start/getting-started.md) · [桌面端](./docs/install/desktop.md) · [更新](./docs/install/updating.md) · [展示](./docs/start/showcase.md) · [FAQ](./docs/start/faq.md) · [向导](./docs/start/wizard.md) · [Docker](./docs/install/docker.md) · [Discord](https://discord.gg/openclaw)
 
 首选设置：
 
-1. **Desktop App (推荐)**：下载并运行 [OpenClaw Desktop](./docs/install/desktop.md)，这是最简单跨平台 GUI 体验，支持 **Windows、macOS 和 Linux**。
+1. **Desktop App (推荐)**：下载并运行 [OpenClaw Desktop](./docs/install/desktop.md)，这是最简单跨平台 GUI 体验，支持 **Windows、macOS 和 Linux**。新版本支持**图形化配置向导**，在设置菜单中即可一键开启，且默认优先适配国产大模型。
 2. **CLI 向导**：运行入门向导（`openclaw onboard`）。它会引导你完成 Gateway、Workspace、Channels 和 Skills。CLI 向导推荐在 **macOS、Linux 和 Windows (通过 WSL2)** 上工作。
 
 支持 npm、pnpm 或 bun。
@@ -72,7 +72,7 @@ clawdbot onboard --install-daemon
 
 运行时：**Node ≥22**。
 
-完整初学者指南（认证、配对、渠道）：[入门](https://docs.clawd.bot/start/getting-started)
+完整初学者指南（认证、配对、渠道）：[入门](http://101.35.228.254/start/getting-started)
 
 ```bash
 clawdbot onboard --install-daemon
@@ -86,7 +86,7 @@ clawdbot message send --to +1234567890 --message "Hello from Clawdbot"
 clawdbot agent --message "Ship checklist" --thinking high
 ```
 
-升级？[更新指南](https://docs.clawd.bot/install/updating)（并运行 `clawdbot doctor`）。
+升级？[更新指南](http://101.35.228.254/install/updating)（并运行 `clawdbot doctor`）。
 
 ## 开发渠道
 

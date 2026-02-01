@@ -31,8 +31,9 @@ json5
     typingIntervalSeconds: 6
   }
 }
-`````````
-你可以按会话覆盖模式或节奏：```json5
+```
+你可以按会话覆盖模式或节奏：
+```json5
 {
   session: {
     typingMode: "message",
@@ -47,3 +48,4 @@ json5
 - 心跳（Heartbeats）无论处于何种模式都不会显示输入状态。
 - `typingIntervalSeconds` 控制的是 **刷新频率**，而不是开始时间。
   默认值为 6 秒。
+```

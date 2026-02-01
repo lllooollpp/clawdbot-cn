@@ -64,30 +64,38 @@ Google Chat 的 Webhook 需要一个公共的 HTTPS 端点。出于安全考虑�
 使用 Tailscale Serve 来托管私有控制面板，并使用 Funnel 来暴露公共的 Webhook 路径。这样可以保持 `/` 路径私有，同时仅公开 `/googlechat`。
 1. **检查网关绑定的地址：**
 bash
-   ss -tlnp | grep 18789```   ```
+   ss -tlnp | grep 18789
+```   
+```
 注意 IP 地址（例如 `127.0.0.1`、`0.0.0.0`，或你的 Tailscale IP 地址如 `100.x.x.x`）。
 
-2. **仅将仪表板暴露给 tailnet（端口 8443）：**   ```bash
+2. **仅将仪表板暴露给 tailnet（端口 8443）：**   
+```bash
    # If bound to localhost (127.0.0.1 or 0.0.0.0):
    tailscale serve --bg --https 8443 http://127.0.0.1:18789
 
    # If bound to Tailscale IP only (e.g., 100.106.161.80):
    tailscale serve --bg --https 8443 http://100.106.161.80:18789
-   ```
+   
+```
 3. **仅公开 Webhook 路径：**
 bash
    # 如果绑定到 localhost（127.0.0.1 或 0.0.0.0）:
    tailscale funnel --bg --set-path /googlechat http://127.0.0.1:18789/googlechat
 
    # 如果仅绑定到 Tailscale IP（例如 100.106.161.80）:
-   tailscale funnel --bg --set-path /googlechat http://100.106.161.80:18789/googlechat```   ```
+   tailscale funnel --bg --set-path /googlechat http://100.106.161.80:18789/googlechat
+```   
+```
 4. **为 Funnel 访问授权节点：**  
    如果提示，请访问输出中显示的授权 URL，以在您的 tailnet 策略中为此节点启用 Funnel。
 
-5. **验证配置：**   ```bash
+5. **验证配置：**   
+```bash
    tailscale serve status
    tailscale funnel status
-   ```
+   
+```
 您的公共 Webhook URL 将为：
 `https://<node-name>.<tailnet>.ts.net/googlechat`
 
@@ -102,7 +110,8 @@ bash
 caddy
 your-domain.com {
     reverse_proxy /googlechat* localhost:18789
-}``````
+}
+```
 使用此配置，对 `your-domain.com/` 的任何请求将被忽略或返回 404，而 `your-domain.com/googlechat` 会安全地路由到 Clawdbot。
 
 ### 选项 C：Cloudflare Tunnel
@@ -128,7 +137,8 @@ your-domain.com {
 - 私人消息：`users/<userId>` 或 `users/<email>`（接受邮箱地址）。
 - 聊天室：`spaces/<spaceId>`。
 
-## 配置亮点```json5
+## 配置亮点
+```json5
 {
   channels: {
     "googlechat": {
@@ -170,36 +180,41 @@ your-domain.com {
 ### 405 方法不允许
 如果 Google Cloud Logs Explorer 显示错误信息如下：
 
-status code: 405, reason phrase: HTTP error response: HTTP/1.1 405 Method Not Allowed```，根据输入
-``````
+status code: 405, reason phrase: HTTP error response: HTTP/1.1 405 Method Not Allowed
+```，根据输入
+```
 这意味着网络钩子处理程序未被注册。常见原因包括：
 1. **未配置频道**：您的配置中缺少 `channels.googlechat` 部分。请验证如下内容：
 bash
-   clawdbot config get channels.googlechat   ```
+   clawdbot config get channels.googlechat   
+```
 如果返回 "Config path not found"，请添加配置（参见 [Config highlights](#config-highlights)）。
 
 2. **插件未启用**：检查插件状态：
 bash
    clawdbot plugins list | grep googlechat
-```   ```
+```   
+```
 如果显示 "disabled"，请在您的配置文件中添加 `plugins.entries.googlechat.enabled: true`。
 
 3. **网关未重启**：添加配置后，请重启网关：
 bash
 clawdbot gateway restart
-```   ```
+```   
+```
 验证频道是否在运行：
 bash
 clawdbot channels status
 # 应显示：Google Chat 默认频道：已启用，已配置，...
-``````
-### 其他问题
+```
+## 其他问题
 - 检查 `clawdbot channels status --probe` 是否存在认证错误或缺少受众配置。
 - 如果没有消息到达，请确认聊天应用的 Webhook URL 和事件订阅。
 - 如果提及限制阻止了回复，请将 `botUser` 设置为应用的用户资源名称，并验证 `requireMention`。
 - 在发送测试消息时使用 `clawdbot logs --follow`，查看请求是否到达网关。
 
 相关文档：
-- [网关配置](/gateway/configuration)
-- [安全](/gateway/security)
-- [反应](/tools/reactions)
+- [网关配置](/gateway/configuration.md)
+- [安全](/gateway/security.md)
+- [反应](/tools/reactions.md)
+```

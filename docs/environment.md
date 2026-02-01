@@ -18,7 +18,8 @@ Clawdbot 会从多个来源获取环境变量。规则是 **不要覆盖已有�
 4) **配置文件中的 `env` 块**，位于 `~/.clawdbot/clawdbot.json`（仅在变量缺失时应用）。
 5) **可选的登录 shell 导入**（通过 `env.shellEnv.enabled` 或 `CLAWDBOT_LOAD_SHELL_ENV=1` 启用），仅在预期的键缺失时应用。
 
-如果配置文件完全缺失，步骤 4 将被跳过；但如果启用了 shell 导入，仍会执行。```json5
+如果配置文件完全缺失，步骤 4 将被跳过；但如果启用了 shell 导入，仍会执行。
+```json5
 {
   env: {
     OPENROUTER_API_KEY: "sk-or-...",
@@ -30,7 +31,8 @@ Clawdbot 会从多个来源获取环境变量。规则是 **不要覆盖已有�
 ```
 ## Shell 环境导入
 
-`env.shellEnv` 会运行您的登录 shell，并仅导入 **缺失** 的预期键：```json5
+`env.shellEnv` 会运行您的登录 shell，并仅导入 **缺失** 的预期键：
+```json5
 {
   env: {
     shellEnv: {
@@ -46,7 +48,8 @@ Clawdbot 会从多个来源获取环境变量。规则是 **不要覆盖已有�
 
 ## 在配置中使用环境变量替换
 
-你可以在配置字符串值中直接通过 `${VAR_NAME}` 语法引用环境变量：```json5
+你可以在配置字符串值中直接通过 `${VAR_NAME}` 语法引用环境变量：
+```json5
 {
   models: {
     providers: {
@@ -57,10 +60,10 @@ Clawdbot 会从多个来源获取环境变量。规则是 **不要覆盖已有�
   }
 }
 ```
-有关详细信息，请参阅[配置：环境变量替换](/gateway/configuration#env-var-substitution-in-config)。
+有关详细信息，请参阅[配置：环境变量替换](/gateway/configuration.md#env-var-substitution-in-config)。
 
 ## 相关内容
 
-- [网关配置](/gateway/configuration)
-- [常见问题：环境变量与.env加载](/help/faq#env-vars-and-env-loading)
-- [模型概述](/concepts/models)
+- [网关配置](/gateway/configuration.md)
+- [常见问题：环境变量与.env加载](/help/faq.md#env-vars-and-env-loading)
+- [模型概述](/concepts/models.md)

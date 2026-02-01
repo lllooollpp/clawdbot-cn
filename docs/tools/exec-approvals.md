@@ -55,7 +55,7 @@ json
     }
   }
 }
-``````
+```
 ## 策略开关
 
 ### 安全性 (`exec.security`)
@@ -111,7 +111,7 @@ json
 目标选择器可以选择 **网关**（本地审批）或一个 **节点**。节点必须公开 `system.execApprovals.get/set`（macOS应用或无头节点主机）。
 如果节点尚未公开执行审批功能，请直接编辑其本地文件 `~/.clawdbot/exec-approvals.json`。
 
-CLI：`clawdbot approvals` 支持网关或节点编辑（参见 [审批CLI](/cli/approvals)）。
+CLI：`clawdbot approvals` 支持网关或节点编辑（参见 [审批CLI](/cli/approvals.md)）。
 
 当需要批准时，exec 工具会立即返回一个批准 ID。使用该 ID 来关联后续系统事件（`Exec finished` / `Exec denied`）。如果在超时前没有收到决定，该请求将被视为批准超时，并作为拒绝原因显示。
 
@@ -129,7 +129,8 @@ CLI：`clawdbot approvals` 支持网关或节点编辑（参见 [审批CLI](/cli
 
 ## exec 批准提示转发到聊天频道
 
-您可以将 exec 批准提示转发到任何聊天频道（包括插件频道），并通过 `/approve` 命令进行批准。这将使用正常的出站传递管道。```json5
+您可以将 exec 批准提示转发到任何聊天频道（包括插件频道），并通过 `/approve` 命令进行批准。这将使用正常的出站传递管道。
+```json5
 {
   approvals: {
     exec: {
@@ -150,8 +151,9 @@ CLI：`clawdbot approvals` 支持网关或节点编辑（参见 [审批CLI](/cli
 /approve <id> allow-once
 /approve <id> allow-always
 /approve <id> deny
-``````
-### macOS 进程间通信流程```
+```
+### macOS 进程间通信流程
+```
 Gateway -> Node Service (WS)
                  |  IPC (UDS + token + HMAC + TTL)
                  v
@@ -180,6 +182,6 @@ Gateway -> Node Service (WS)
 - 每个代理的允许列表可以防止一个代理的批准泄露到其他代理中。
 
 相关：
-- [执行工具](/tools/exec)
-- [提升模式](/tools/elevated)
-- [技能](/tools/skills)
+- [执行工具](/tools/exec.md)
+- [提升模式](/tools/elevated.md)
+- [技能](/tools/skills.md)

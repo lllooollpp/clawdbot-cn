@@ -8,9 +8,9 @@ read_when:
 
 # 模型 CLI
 
-有关认证配置文件轮换、冷却时间和回退机制的交互方式，请参阅 [/concepts/model-failover](/concepts/model-failover)。
+有关认证配置文件轮换、冷却时间和回退机制的交互方式，请参阅 [/concepts/model-failover](/concepts/model-failover.md)。
 
-快速提供者概览 + 示例：[/concepts/model-providers](/concepts/model-providers)。
+快速提供者概览 + 示例：[/concepts/model-providers](/concepts/model-providers.md)。
 
 ## 模型选择机制
 
@@ -23,7 +23,7 @@ Clawdbot 按以下顺序选择模型：
 相关说明：
 - `agents.defaults.models` 是 Clawdbot 可以使用的允许列表/模型目录（包括别名）。
 - `agents.defaults.imageModel` 仅在主模型无法处理图像时使用。
-- 每个代理的默认设置可以通过 `agents.list[].model` 加上绑定来覆盖（参见 [/concepts/multi-agent](/concepts/multi-agent)）。
+- 每个代理的默认设置可以通过 `agents.list[].model` 加上绑定来覆盖（参见 [/concepts/multi-agent](/concepts/multi-agent.md)）。
 
 ## 快速模型选择（经验之谈）
 
@@ -32,7 +32,8 @@ Clawdbot 按以下顺序选择模型：
 - **DeepSeek**：极强的推理能力，是目前最均衡的国产模型之一。
 - **MiniMax**：在写作和整体语言风格方面表现更好。
 bash
-clawdbot onboard``````
+clawdbot onboard
+```
 它可以为常见的提供者设置模型 + 认证，包括 **OpenAI Code (Codex) 订阅**（OAuth）和 **Anthropic**（推荐使用 API 密钥；也支持 `claude setup-token`）。
 
 ## 配置键（概览）
@@ -44,7 +45,8 @@ clawdbot onboard``````
 
 模型引用会被标准化为小写。像 `z.ai/*` 这样的提供者别名会被标准化为 `zai/*`。
 
-提供者配置示例（包括 OpenCode Zen）位于 [/gateway/configuration](/gateway/configuration#opencode-zen-multi-model-proxy)。```
+提供者配置示例（包括 OpenCode Zen）位于 [/gateway/configuration](/gateway/configuration.md#opencode-zen-multi-model-proxy)。
+```
 Model "provider/model" is not allowed. Use /model to list available models.
 ```
 这发生在正常回复生成**之前**，因此消息可能会感觉“没有回应”。解决方法是：
@@ -64,10 +66,11 @@ json5
     }
   }
 }
-`````````
+```
 ## 在聊天中切换模型 (`/model`)
 
-您可以在不重启的情况下切换当前会话的模型：```
+您可以在不重启的情况下切换当前会话的模型：
+```
 /model
 /model list
 /model 3
@@ -82,7 +85,7 @@ json5
 - 如果模型 ID 本身包含 `/`（如 OpenRouter 风格），则必须包含提供者前缀（例如：`/model openrouter/moonshotai/kimi-k2`）。
 - 如果省略提供者，Clawdbot 会将输入视为别名或 **默认提供者** 的模型（仅在模型 ID 中没有 `/` 时有效）。
 
-完整命令行为/配置：[斜杠命令](/tools/slash-commands)。
+完整命令行为/配置：[斜杠命令](/tools/slash-commands.md)。
 
 ## CLI 命令
 bash
@@ -103,7 +106,8 @@ clawdbot models fallbacks clear
 clawdbot models image-fallbacks list
 clawdbot models image-fallbacks add <provider/model>
 clawdbot models image-fallbacks remove <provider/model>
-clawdbot models image-fallbacks clear``````
+clawdbot models image-fallbacks clear
+```
 `clawdbot models`（无子命令）是 `models status` 的快捷方式。
 
 ### `models list`
@@ -125,7 +129,8 @@ OAuth 状态始终显示（并包含在 `--json` 输出中）。如果某个已�
 JSON 输出包括 `auth.oauth`（警告窗口 + 配置文件）和 `auth.providers`（每个提供者的有效认证）。
 使用 `--check` 用于自动化（当缺少或过期时退出代码为 `1`，当即将过期时退出代码为 `2`）。
 
-首选的 Anthropic 认证是 Claude Code CLI 的 setup-token（可在任何地方运行；如需在网关主机上粘贴）：```bash
+首选的 Anthropic 认证是 Claude Code CLI 的 setup-token（可在任何地方运行；如需在网关主机上粘贴）：
+```bash
 claude setup-token
 clawdbot models status
 ```
@@ -153,8 +158,9 @@ clawdbot models status
 
 输入
 - OpenRouter `/models` 列表（过滤 `:free`）
-- 需要来自认证配置文件或 `OPENROUTER_API_KEY` 的 OpenRouter API 密钥（参见 [/environment](/environment)）
+- 需要来自认证配置文件或 `OPENROUTER_API_KEY` 的 OpenRouter API 密钥（参见 [/environment](/environment.md)）
 - 可选过滤器：`--max-age-days`, `--min-params`, `--provider`, `--max-candidates`
 - 探测控制：`--timeout`, `--concurrency`
 
 在 TTY 中运行时，可以交互式地选择回退模型。在非交互模式下，可通过 `--yes` 接受默认值。
+```

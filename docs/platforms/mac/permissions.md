@@ -29,5 +29,7 @@ macOS 的权限授予机制是脆弱的。TCC（Transparency, Consent, and Contr
 bash
 sudo tccutil reset Accessibility com.clawdbot.mac
 sudo tccutil reset ScreenCapture com.clawdbot.mac
-sudo tccutil reset AppleEvents```
+sudo tccutil reset AppleEvents
+```
 如果您在测试权限，请始终使用真实证书进行签名。Ad-hoc 构建仅适用于快速的本地运行，此时权限并不重要。
+```

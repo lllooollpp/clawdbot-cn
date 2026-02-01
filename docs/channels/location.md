@@ -29,7 +29,8 @@ Clawdbot 将聊天通道中的共享位置标准化为：
 如果通道包含标题/注释，它会显示在下一行：
 
 📍 48.858844, 2.294351 ±12m
-Meet here``````
+Meet here
+```
 ## 上下文字段
 当存在位置信息时，以下字段会被添加到 `ctx` 中：
 - `LocationLat`（数字）
@@ -44,3 +45,4 @@ Meet here``````
 - **Telegram**：场地信息会映射到 `LocationName/LocationAddress`；实时位置会使用 `live_period`。
 - **WhatsApp**：`locationMessage.comment` 和 `liveLocationMessage.caption` 会被追加为标题行。
 - **Matrix**：`geo_uri` 会被解析为一个标记位置；高度信息会被忽略，且 `LocationIsLive` 始终为 false。
+```

@@ -23,7 +23,8 @@ read_when:
 ## 回复中的语音指令
 助手可能在其回复前加上一个**单独的JSON行**来控制语音：
 json
-"``````json
+"
+```json
 {"voice":"<voice-id>","once":true}
 ```
 规则：
@@ -51,7 +52,7 @@ json5
     "interruptOnSpeech": true
   }
 }
-``````
+```
 默认值：
 - `interruptOnSpeech`: true
 - `voiceId`: 回退到 `ELEVENLABS_VOICE_ID` / `SAG_VOICE_ID`（或当 API 密钥可用时使用第一个 ElevenLabs 语音）
@@ -76,3 +77,4 @@ json5
 - `eleven_v3` 的 `stability` 有效值为 `0.0`、`0.5` 或 `1.0`；其他模型接受 `0..1`。
 - 当设置 `latency_tier` 时，其有效值为 `0..4`。
 - Android 支持 `pcm_16000`、`pcm_22050`、`pcm_24000` 和 `pcm_44100` 的输出格式，用于低延迟的 AudioTrack 流式传输。
+```

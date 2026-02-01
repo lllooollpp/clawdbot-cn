@@ -3,6 +3,7 @@ import {
   getWeComRuntime,
   resolveWeComAccount,
   listWeComAccountIds,
+  wecomOnboardingAdapter,
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
   type ChannelPlugin,
@@ -20,6 +21,7 @@ export const wecomPlugin: ChannelPlugin<any> = {
     blurb: "支持通过企业微信自建应用进行消息收发。",
     systemImage: "bubble.left.and.bubble.right",
   },
+  onboarding: wecomOnboardingAdapter,
   capabilities: {
     chatTypes: ["direct", "group"],
     reactions: false,

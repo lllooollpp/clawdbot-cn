@@ -23,8 +23,10 @@ bash
 # 在仓库根目录
 node --version
 pnpm install
-node --import tsx src/entry.ts status``````
-## 仓库中的最小可复现示例```bash
+node --import tsx src/entry.ts status
+```
+## 仓库中的最小可复现示例
+```bash
 node --import tsx scripts/repro/tsx-name-repro.ts
 ```
 ## Node 版本检查
@@ -47,7 +49,8 @@ node --import tsx scripts/repro/tsx-name-repro.ts
 bash
 pnpm exec tsc --watch --preserveWatchOutput
 node --watch dist/entry.js status
-``````  ```
+```  
+```
 - 本地确认：`pnpm exec tsc -p tsconfig.json` + `node dist/entry.js status` 在 Node 25 上可以正常运行。
 - 如果可能的话，在 TS 加载器中禁用 esbuild 的 keepNames（防止插入 `__name` 辅助函数）；目前 `tsx` 尚未暴露此选项。
 - 使用 `tsx` 测试 Node LTS（22/24），以确认该问题是否仅限于 Node 25。

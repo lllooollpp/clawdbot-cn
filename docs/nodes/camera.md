@@ -65,7 +65,8 @@ Clawdbot 支持 **摄像头捕捉** 功能用于代理工作流：
 获取附件最简单的方式是使用 CLI 辅助工具，它会将解码后的媒体写入临时文件，并输出 `MEDIA:<路径>`。
 
 示例：
-bash``````bash
+bash
+```bash
 clawdbot nodes camera snap --node <id>               # default: both front + back (2 MEDIA lines)
 clawdbot nodes camera snap --node <id> --facing front
 clawdbot nodes camera clip --node <id> --duration 3000
@@ -108,7 +109,7 @@ clawdbot nodes camera clip --node <id> --duration 10s          # 输出 MEDIA:<�
 clawdbot nodes camera clip --node <id> --duration-ms 3000      # 输出 MEDIA:<路径>（旧版标志）
 clawdbot nodes camera clip --node <id> --device-id <id>
 clawdbot nodes camera clip --node <id> --no-audio
-``````
+```
 注意事项：
 - `clawdbot nodes camera snap` 默认使用 `maxWidth=1600`，除非被覆盖。
 - 在 macOS 上，`camera.snap` 会在预热/曝光稳定后等待 `delayMs`（默认 2000 毫秒）再进行捕获。
@@ -121,8 +122,10 @@ clawdbot nodes camera clip --node <id> --no-audio
 
 ## macOS 屏幕视频（系统级）
 
-对于 *屏幕* 视频（非摄像头），请使用 macOS 的配套工具：```bash
+对于 *屏幕* 视频（非摄像头），请使用 macOS 的配套工具：
+```bash
 clawdbot nodes screen record --node <id> --duration 10s --fps 15   # prints MEDIA:<path>
 ```
 注意事项：
 - 需要 macOS 的 **屏幕录制** 权限（TCC）。
+```

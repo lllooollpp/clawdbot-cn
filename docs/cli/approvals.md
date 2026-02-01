@@ -11,15 +11,17 @@ read_when:
 默认情况下，命令会针对磁盘上的本地批准文件。使用 `--gateway` 来针对网关，或使用 `--node` 来针对特定节点。
 
 相关：
-- 执行批准：[执行批准](/tools/exec-approvals)
-- 节点：[节点](/nodes)
+- 执行批准：[执行批准](/tools/exec-approvals.md)
+- 节点：[节点](/nodes/index.md)
 
 ## 常用命令
 bash
 clawdbot approvals get
 clawdbot approvals get --node <id|name|ip>
-clawdbot approvals get --gateway``````
-## 从文件中替换审批```bash
+clawdbot approvals get --gateway
+```
+## 从文件中替换审批
+```bash
 clawdbot approvals set --file ./exec-approvals.json
 clawdbot approvals set --node <id|name|ip> --file ./exec-approvals.json
 clawdbot approvals set --gateway --file ./exec-approvals.json
@@ -37,3 +39,4 @@ clawdbot approvals allowlist remove "~/Projects/**/bin/rg"
 - `--agent` 默认值为 `"*"`, 表示适用于所有代理。
 - 节点主机必须公开 `system.execApprovals.get/set`（适用于 macOS 应用或无头节点主机）。
 - 审批文件按主机存储在 `~/.clawdbot/exec-approvals.json`。
+```

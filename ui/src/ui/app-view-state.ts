@@ -29,6 +29,7 @@ import type {
 import type { DevicePairingList } from "./controllers/devices";
 import type { ExecApprovalRequest } from "./controllers/exec-approval";
 import type { NostrProfileFormState } from "./views/channels.nostr-profile-form";
+import type { WizardStep, WizardSessionStatus } from "./controllers/wizard";
 
 export type AppViewState = {
   settings: UiSettings;
@@ -36,6 +37,12 @@ export type AppViewState = {
   tab: Tab;
   onboarding: boolean;
   basePath: string;
+  onboardingWizardSessionId: string | null;
+  onboardingWizardStep: WizardStep | null;
+  onboardingWizardStatus: WizardSessionStatus | null;
+  onboardingWizardError: string | null;
+  onboardingWizardBusy: boolean;
+  onboardingWizardDraft: unknown;
   connected: boolean;
   theme: ThemeMode;
   themeResolved: "light" | "dark";
@@ -192,6 +199,11 @@ export type AppViewState = {
   handleDebugCall: () => Promise<void>;
   handleRunUpdate: () => Promise<void>;
   handleDiscoverModels: (provider: string) => Promise<void>;
+  handleOnboardingStart: () => Promise<void>;
+  handleOnboardingNext: () => Promise<void>;
+  handleOnboardingCancel: () => Promise<void>;
+  handleOnboardingDraftChange: (value: unknown) => void;
+  handleOnboardingExit: () => void;
   setPassword: (next: string) => void;
   setSessionKey: (next: string) => void;
   setChatMessage: (next: string) => void;

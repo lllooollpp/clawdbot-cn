@@ -33,7 +33,7 @@ clawdbot nodes approve <requestId>
 clawdbot nodes reject <requestId>
 clawdbot nodes status
 clawdbot nodes rename --node <id|name|ip> --name "Living Room iPad"
-``````
+```
 `nodes status` 命令显示已配对/连接的节点及其功能。
 
 ## API 接口（网关协议）
@@ -80,3 +80,4 @@ macOS 应用可以可选地尝试 **静默批准**，当满足以下条件时：
 - 传输是 **无状态的**；它不存储成员信息。
 - 如果网关离线或配对功能被禁用，节点无法进行配对。
 - 如果网关处于远程模式，配对仍然针对远程网关的存储进行。
+```

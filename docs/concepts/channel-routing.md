@@ -55,13 +55,15 @@ json5
     "120363403215116621@g.us": ["alfred", "baerbel"],
     "+15555550123": ["support", "logger"]
   }
-}``````
-参见：[广播组](/broadcast-groups)。
+}
+```
+参见：[广播组](/broadcast-groups.md)。
 
 ## 配置概览
 
 - `agents.list`: 命名的代理定义（工作区、模型等）。
-- `bindings`: 将入站渠道/账户/对等方映射到代理。```json5
+- `bindings`: 将入站渠道/账户/对等方映射到代理。
+```json5
 {
   agents: {
     list: [
@@ -82,3 +84,4 @@ json5
 - 与存储文件一同存在的对话记录为 JSONL 格式
 
 你可以通过 `session.store` 和 `{agentId}` 模板来覆盖存储路径。
+```

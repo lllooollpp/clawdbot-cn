@@ -13,7 +13,7 @@ bash
 clawdbot security audit
 clawdbot security audit --deep
 clawdbot security audit --fix
-``````
+```
 它会标记常见的安全风险（网关认证暴露、浏览器控制暴露、提升的允许列表、文件系统权限）。
 
 `--fix` 会应用安全限制：
@@ -68,7 +68,7 @@ gateway:
   auth:
     mode: password
     password: ${CLAWDBOT_GATEWAY_PASSWORD}
-``````
+```
 当配置了 `trustedProxies` 时，网关将使用 `X-Forwarded-For` 请求头来确定本地客户端检测的真实客户端 IP。请确保你的代理服务器会覆盖（而不是追加到）传入的 `X-Forwarded-For` 请求头，以防止伪造。
 
 ## 本地会话日志存储在磁盘上
@@ -127,7 +127,7 @@ Clawdbot 的立场：
   - Clawdbot 会使用 `npm pack`，然后在该目录中运行 `npm install --omit=dev`（npm 生命周期脚本可以在安装期间执行代码）。
   - 优先使用固定版本（`@scope/pkg@1.2.3`），在启用插件前检查磁盘上的解压代码。
 
-详情：[插件](/plugin)
+详情：[插件](/plugin.md)
 
 ## 私信访问模式（配对 / 允许列表 / 公开 / 禁用）
 
@@ -138,11 +138,12 @@ Clawdbot 的立场：
 - `open`：允许任何人发送私信（公开）。**需要**频道允许列表包含 `"*"`（明确的自愿加入）。
 - `disabled`：完全忽略入站私信。
 
-通过 CLI 审核：```bash
+通过 CLI 审核：
+```bash
 clawdbot pairing list <channel>
 clawdbot pairing approve <channel> <code>
 ```
-"磁盘上的详细信息 + 文件：[配对](/start/pairing)
+"磁盘上的详细信息 + 文件：[配对](/start/pairing.md)
 
 ## DM 会话隔离（多用户模式）
 
@@ -151,8 +152,9 @@ json5
 {
   session: { dmScope: "per-channel-peer" }
 }
-```"```
-这可以防止跨用户上下文泄露，同时保持群聊的隔离性。如果同一个人通过多个渠道联系你，可以使用 `session.identityLinks` 将这些私聊会话合并为一个规范的身份。参见 [会话管理](/concepts/session) 和 [配置](/gateway/configuration)。
+```"
+```
+这可以防止跨用户上下文泄露，同时保持群聊的隔离性。如果同一个人通过多个渠道联系你，可以使用 `session.identityLinks` 将这些私聊会话合并为一个规范的身份。参见 [会话管理](/concepts/session.md) 和 [配置](/gateway/configuration.md)。
 
 ## 允许列表（私聊 + 群组）—— 术语说明
 
@@ -168,7 +170,7 @@ Clawdbot 有两个独立的“谁可以触发我？”层：
     - `channels.discord.guilds` / `channels.slack.channels`：每个渠道的允许列表 + @ 默认设置。
   - **安全提示：** 将 `dmPolicy="open"` 和 `groupPolicy="open"` 视为最后的应急设置。它们应极少使用；除非你完全信任房间中的每个成员，否则应优先使用配对 + 允许列表。
 
-详情：[配置](/gateway/configuration) 和 [群组](/concepts/groups)
+详情：[配置](/gateway/configuration.md) 和 [群组](/concepts/groups.md)
 
 ## 提示注入（是什么，为什么重要）
 
@@ -270,7 +272,8 @@ Clawdbot 有两个独立的“谁可以触发我？”层：
 
 现在，引导向导默认会生成一个令牌（即使对于回环连接也是如此），因此本地客户端必须进行认证。如果你跳过向导或移除了认证，你将回到未认证的回环模式。
 
-设置一个令牌，使得 **所有** WebSocket 客户端都必须进行认证：```json5
+设置一个令牌，使得 **所有** WebSocket 客户端都必须进行认证：
+```json5
 {
   gateway: {
     auth: { mode: "token", token: "your-token" }
@@ -308,18 +311,18 @@ Clawdbot 有两个独立的“谁可以触发我？”层：
 - Clawdbot 将信任来自这些 IP 的 `x-forwarded-for`（或 `x-real-ip`）头，用于本地配对检查和 HTTP 认证/本地检查。
 - 确保你的代理**覆盖** `x-forwarded-for` 头，并阻止对网关端口的直接访问。
 
-参见 [Tailscale](/gateway/tailscale) 和 [Web 概述](/web)。
+参见 [Tailscale](/gateway/tailscale.md) 和 [Web 概述](/web/index.md)。
 
 ### 0.6.1）通过 Tailscale 使用浏览器控制服务器（推荐）
 
-如果你的网关是远程的，但浏览器运行在另一台机器上，你通常会在浏览器所在机器上运行一个**单独的浏览器控制服务器**（参见 [浏览器工具](/tools/browser)）。将其视为一个管理员 API。
+如果你的网关是远程的，但浏览器运行在另一台机器上，你通常会在浏览器所在机器上运行一个**单独的浏览器控制服务器**（参见 [浏览器工具](/tools/browser.md)）。将其视为一个管理员 API。
 
 推荐模式：
 bash
 # 在运行 Chrome 的机器上
 clawdbot browser serve --bind 127.0.0.1 --port 18791 --token <token>
 tailscale serve https / http://127.0.0.1:18791
-``````
+```
 然后在网关上，设置：
 - `browser.controlUrl` 为 `https://…` 服务地址（MagicDNS/ts.net）
 - 并使用相同的令牌进行认证（推荐使用环境变量 `CLAWDBOT_BROWSER_CONTROL_TOKEN`）
@@ -328,7 +331,7 @@ tailscale serve https / http://127.0.0.1:18791
 - `--bind 0.0.0.0`（LAN可见的接口）
 - 使用 Tailscale Funnel 作为浏览器控制端点（避免公开暴露）
 
-### 0.7）磁盘上的敏感信息（哪些内容是敏感的）
+## 0.7）磁盘上的敏感信息（哪些内容是敏感的）
 
 假设 `~/.clawdbot/`（或 `$CLAWDBOT_STATE_DIR/`）下的任何内容可能包含敏感信息或私有数据：
 
@@ -356,9 +359,10 @@ tailscale serve https / http://127.0.0.1:18791
 - 在分享诊断信息时，优先使用 `clawdbot status --all`（可粘贴，敏感信息已脱敏），而不是原始日志。
 - 如果不需要长期保留，定期清理旧的会话记录和日志文件。
 
-详情：[日志](/gateway/logging)
+详情：[日志](/gateway/logging.md)
 
-### 1）私信（DMs）：默认配对```json5
+### 1）私信（DMs）：默认配对
+```json5
 {
   channels: { whatsapp: { dmPolicy: "pairing" } }
 }
@@ -379,7 +383,8 @@ tailscale serve https / http://127.0.0.1:18791
       }
     ]
   }
-}```
+}
+```
 在群聊中，只有在被明确提及的时候才回复。
 
 ### 3. 使用独立号码
@@ -398,7 +403,8 @@ tailscale serve https / http://127.0.0.1:18791
 
 ### 5）安全基线（复制/粘贴）
 
-一种“安全默认”配置，可以保持网关私密，要求私信配对，并避免始终在线的群组机器人：```json5
+一种“安全默认”配置，可以保持网关私密，要求私信配对，并避免始终在线的群组机器人：
+```json5
 {
   gateway: {
     mode: "local",
@@ -418,12 +424,12 @@ tailscale serve https / http://127.0.0.1:18791
 
 ## 沙箱（推荐）
 
-专用文档：[沙箱](/gateway/sandboxing)
+专用文档：[沙箱](/gateway/sandboxing.md)
 
 两种互补方法：
 
-- **在 Docker 中运行完整的 Gateway**（容器边界）：[Docker](/install/docker)
-- **工具沙箱**（`agents.defaults.sandbox`，主机 Gateway + Docker 隔离的工具）：[沙箱](/gateway/sandboxing)
+- **在 Docker 中运行完整的 Gateway**（容器边界）：[Docker](/install/docker.md)
+- **工具沙箱**（`agents.defaults.sandbox`，主机 Gateway + Docker 隔离的工具）：[沙箱](/gateway/sandboxing.md)
 
 注意：为防止跨代理访问，请保持 `agents.defaults.sandbox.scope` 为 `"agent"`（默认）或 `"session"`（更严格的按会话隔离）。`scope: "shared"` 使用单个容器/工作区。
 
@@ -432,7 +438,7 @@ tailscale serve https / http://127.0.0.1:18791
 - `agents.defaults.sandbox.workspaceAccess: "ro"` 以只读方式将代理工作区挂载到 `/agent`（禁用 `write`/`edit`/`apply_patch`）。
 - `agents.defaults.sandbox.workspaceAccess: "rw"` 以读写方式将代理工作区挂载到 `/workspace`
 
-重要提示：`tools.elevated` 是全局的逃逸机制，允许在主机上运行执行。请保持 `tools.elevated.allowFrom` 的权限严格，并且不要为陌生人启用它。你也可以通过 `agents.list[].tools.elevated` 为每个代理进一步限制提升权限。参见 [提升模式](/tools/elevated)。
+重要提示：`tools.elevated` 是全局的逃逸机制，允许在主机上运行执行。请保持 `tools.elevated.allowFrom` 的权限严格，并且不要为陌生人启用它。你也可以通过 `agents.list[].tools.elevated` 为每个代理进一步限制提升权限。参见 [提升模式](/tools/elevated.md)。
 
 ## 浏览器控制风险
 
@@ -466,8 +472,9 @@ json5
     ]
   }
 }
-``````
-### 示例：只读工具 + 只读工作区```json5
+```
+### 示例：只读工具 + 只读工作区
+```json5
 {
   agents: {
     list: [
@@ -518,7 +525,7 @@ json5
 - 在修改系统配置的请求上，需先获得所有者的确认
 - 当不确定时，先询问再行动
 - 私人信息即使对“朋友”也要保持私密
-``````
+```
 ## 事件响应
 
 如果您的AI做了坏事：
@@ -546,21 +553,25 @@ json5
 - 时间戳、网关主机操作系统及 Clawdbot 版本
 - 会话对话记录 + 一段简短的日志尾部（在脱敏后）
 - 攻击者发送的内容 + 代理执行的操作
-- 网关是否暴露到了 loopback 之外（LAN / Tailscale Funnel/Serve）   ```bash
+- 网关是否暴露到了 loopback 之外（LAN / Tailscale Funnel/Serve）   
+```bash
    detect-secrets scan --baseline .secrets.baseline
-   ```
+   
+```
 2. 了解工具：
    - `detect-secrets scan` 会查找潜在的敏感信息，并将其与基线进行比较。
    - `detect-secrets audit` 会打开一个交互式审查界面，用于将每个基线项标记为真实敏感信息或误报。
 3. 对于真实敏感信息：进行轮换/删除，然后重新运行扫描以更新基线。
 4. 对于误报：运行交互式审查并将其标记为误报：
 bash
-   detect-secrets audit .secrets.baseline   ```
+   detect-secrets audit .secrets.baseline   
+```
 5. 如果你需要添加新的排除项，请将其添加到 `.detect-secrets.cfg` 文件中，并使用对应的 `--exclude-files` / `--exclude-lines` 标志重新生成基线文件（配置文件仅用于参考；detect-secrets 不会自动读取它）。
 
 在 `.secrets.baseline` 文件反映预期状态后，将其提交到版本控制中。
 
-## 信任层级```
+## 信任层级
+```
 Owner (Peter)
   │ Full trust
   ▼
@@ -589,3 +600,4 @@ Mario asking for find ~
 *"安全是一个过程，而不是一个产品。同样，不要信任拥有外壳访问权限的龙虾。"* — 一位睿智的人，很可能就是这样说的
 
 🦞🔐
+```

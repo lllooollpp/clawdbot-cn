@@ -29,10 +29,11 @@ read_when:
 1) 启动网关：
 bash
 clawdbot gateway --port 18789
-``````
+```
 2) 在 iOS 应用中，打开“设置”并选择一个发现的网关（或启用“手动主机”并输入主机/端口）。
 
-3) 在网关主机上批准配对请求：```bash
+3) 在网关主机上批准配对请求：
+```bash
 clawdbot nodes pending
 clawdbot nodes approve <requestId>
 ```
@@ -40,7 +41,7 @@ clawdbot nodes approve <requestId>
 bash  
 clawdbot nodes status  
 clawdbot gateway call node.list --params "{}"  
-``````
+```
 ## 发现路径
 
 ### Bonjour（局域网）
@@ -50,7 +51,7 @@ clawdbot gateway call node.list --params "{}"
 ### Tailnet（跨网络）
 
 如果 mDNS 被阻止，可以使用单播 DNS-SD 区域（推荐域名：`clawdbot.internal.`）和 Tailscale 分割 DNS。
-有关 CoreDNS 示例，请参阅 [Bonjour](/gateway/bonjour)。
+有关 CoreDNS 示例，请参阅 [Bonjour](/gateway/bonjour.md)。
 
 ### 手动主机/端口
 
@@ -58,7 +59,8 @@ clawdbot gateway call node.list --params "{}"
 
 ## Canvas + A2UI
 
-iOS 节点渲染一个 WKWebView 画布。使用 `node.invoke` 来驱动它：```bash
+iOS 节点渲染一个 WKWebView 画布。使用 `node.invoke` 来驱动它：
+```bash
 clawdbot nodes invoke --node "iOS Node" --command canvas.navigate --params '{"url":"http://<gateway-host>:18793/__clawdbot__/canvas/"}'
 ```
 注意事项：
@@ -67,9 +69,10 @@ clawdbot nodes invoke --node "iOS Node" --command canvas.navigate --params '{"ur
 - 使用 `canvas.navigate` 和 `{"url":""}` 返回到内置的脚手架。
 bash
 clawdbot nodes invoke --node "iOS Node" --command canvas.eval --params '{"javaScript":"(() => { const {ctx} = window.__clawdbot; ctx.clearRect(0,0,innerWidth,innerHeight); ctx.lineWidth=6; ctx.strokeStyle=\"#ff2d55\"; ctx.beginPath(); ctx.moveTo(40,40); ctx.lineTo(innerWidth-40, innerHeight-40); ctx.stroke(); return \"ok\"; })()"}'
-``````
+```
 ```md
-clawdbot 节点调用 --节点 "iOS 节点" --命令 canvas.snapshot --参数 '{"maxWidth":900,"format":"jpeg"}'```
+clawdbot 节点调用 --节点 "iOS 节点" --命令 canvas.snapshot --参数 '{"maxWidth":900,"format":"jpeg"}'
+```
 ## 语音唤醒 + 语音对话模式
 
 - 语音唤醒和语音对话模式可在设置中启用。
@@ -78,12 +81,13 @@ clawdbot 节点调用 --节点 "iOS 节点" --命令 canvas.snapshot --参数 '{
 ## 常见错误
 
 - `NODE_BACKGROUND_UNAVAILABLE`: 将 iOS 应用带到前台（画布/相机/屏幕命令需要此操作）。
-- `A2UI_HOST_NOT_CONFIGURED`: 网关未广播画布主机 URL；请检查 [网关配置](/gateway/configuration) 中的 `canvasHost`。
+- `A2UI_HOST_NOT_CONFIGURED`: 网关未广播画布主机 URL；请检查 [网关配置](/gateway/configuration.md) 中的 `canvasHost`。
 - 配对提示始终不出现：运行 `clawdbot nodes pending` 并手动批准。
 - 重新安装后重连失败：钥匙串中的配对令牌已被清除；请重新配对节点。
 
 ## 相关文档
 
-- [配对](/gateway/pairing)
-- [发现](/gateway/discovery)
-- [Bonjour](/gateway/bonjour)
+- [配对](/gateway/pairing.md)
+- [发现](/gateway/discovery.md)
+- [Bonjour](/gateway/bonjour.md)
+```

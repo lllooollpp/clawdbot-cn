@@ -19,7 +19,7 @@ json5
 {
   tools: { deny: ["browser"] }
 }
-``````
+```
 注意事项：
 - 匹配是大小写不敏感的。
 - 支持 `*` 通配符（`"*"` 表示所有工具）。
@@ -36,7 +36,8 @@ json5
 - `messaging`：`group:messaging`、`sessions_list`、`sessions_history`、`sessions_send`、`session_status`
 - `full`：无限制（与未设置相同）
 
-示例（默认仅允许 messaging，也允许 Slack + Discord 工具）：```json5
+示例（默认仅允许 messaging，也允许 Slack + Discord 工具）：
+```json5
 {
   tools: {
     profile: "messaging",
@@ -49,8 +50,10 @@ json5
     profile: "coding",
     deny: ["group:runtime"]
   }
-}```
-示例（全局编码配置，仅支持消息的客服代理）：```json5
+}
+```
+示例（全局编码配置，仅支持消息的客服代理）：
+```json5
 {
   tools: { profile: "coding" },
   agents: {
@@ -81,8 +84,9 @@ json5
     }
   }
 }
-``````
-示例（针对一个不稳定的端点的提供者/模型特定白名单）：```json5
+```
+示例（针对一个不稳定的端点的提供者/模型特定白名单）：
+```json5
 {
   tools: {
     allow: ["group:fs", "group:runtime", "sessions_list"],
@@ -105,7 +109,8 @@ json5
       }
     ]
   }
-}```
+}
+```
 ## 工具组（快捷方式）
 
 工具策略（全局、代理、沙箱）支持 `group:*` 条目，这些条目会扩展为多个工具。
@@ -123,7 +128,8 @@ json5
 - `group:nodes`: `nodes`
 - `group:clawdbot`: 所有内置的 Clawdbot 工具（不包括提供者插件）
 
-示例（仅允许文件工具 + 浏览器）：```json5
+示例（仅允许文件工具 + 浏览器）：
+```json5
 {
   tools: {
     allow: ["group:fs", "browser"]
@@ -133,11 +139,11 @@ json5
 ## 插件 + 工具
 
 插件可以注册**额外的工具**（以及CLI命令）超出核心集。
-有关安装 + 配置，请参阅[插件](/plugin)，有关如何将工具使用指南注入提示的信息，请参阅[技能](/tools/skills)。一些插件会随工具一起提供自己的技能（例如，语音通话插件）。
+有关安装 + 配置，请参阅[插件](/plugin.md)，有关如何将工具使用指南注入提示的信息，请参阅[技能](/tools/skills.md)。一些插件会随工具一起提供自己的技能（例如，语音通话插件）。
 
 可选插件工具：
-- [Lobster](/tools/lobster)：带可恢复批准的类型化工作流运行时（需要在网关主机上安装Lobster CLI）。
-- [LLM任务](/tools/llm-task)：仅JSON的LLM步骤，用于结构化工作流输出（可选的模式验证）。
+- [Lobster](/tools/lobster.md)：带可恢复批准的类型化工作流运行时（需要在网关主机上安装Lobster CLI）。
+- [LLM任务](/tools/llm-task.md)：仅JSON的LLM步骤，用于结构化工作流输出（可选的模式验证）。
 
 ## 工具列表
 
@@ -167,7 +173,7 @@ json5
 - `elevated` 由 `tools.elevated` 加上任何 `agents.list[].tools.elevated` 的覆盖设置共同决定（两者都必须允许）并且是 `host=gateway` + `security=full` 的别名。
 - `elevated` 仅在代理处于沙箱模式时才会改变行为（否则无操作）。
 - `host=node` 可以针对macOS伴侣应用或无头节点主机（`clawdbot node run`）。
-- 网关/节点的批准和允许列表：[Exec批准](/tools/exec-approvals)。
+- 网关/节点的批准和允许列表：[Exec批准](/tools/exec-approvals.md)。
 
 ### `process`
 管理后台的exec会话。
@@ -191,7 +197,7 @@ json5
 - 需要Brave API密钥（推荐：`clawdbot configure --section web`，或设置 `BRAVE_API_KEY`）。
 - 通过 `tools.web.search.enabled` 启用。
 - 响应会被缓存（默认15分钟）。
-- 详见[网络工具](/tools/web)的设置。
+- 详见[网络工具](/tools/web.md)的设置。
 
 ### `web_fetch`
 从URL获取并提取可读内容（HTML → markdown/文本）。
@@ -205,8 +211,8 @@ json5
 - 通过 `tools.web.fetch.enabled` 启用。
 - 响应会被缓存（默认为15分钟）。
 - 对于JavaScript密集型网站，建议使用浏览器工具。
-- 详见 [Web 工具](/tools/web) 进行设置。
-- 详见 [Firecrawl](/tools/firecrawl) 了解可选的反机器人备用方案。
+- 详见 [Web 工具](/tools/web.md) 进行设置。
+- 详见 [Firecrawl](/tools/firecrawl.md) 了解可选的反机器人备用方案。
 
 ### `browser`
 控制专用的 clawd 浏览器。
@@ -286,7 +292,7 @@ json
   "invokeTimeoutMs": 45000,
   "needsScreenRecording": false
 }
-``````
+```
 ### `image`
 使用配置的图像模型分析图像。
 
@@ -420,3 +426,4 @@ json
 2) **工具模式**：发送给模型 API 的结构化函数定义。
 
 这意味着代理可以看到“有哪些工具”以及“如何调用它们”。如果一个工具没有出现在系统提示或模式中，模型将无法调用它。
+```

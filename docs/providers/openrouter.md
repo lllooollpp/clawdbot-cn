@@ -12,8 +12,9 @@ OpenRouter 提供了一个 **统一的 API**，通过一个端点和一个 API �
 ## CLI 设置
 bash
 clawdbot onboard --auth-choice apiKey --token-provider openrouter --token "$OPENROUTER_API_KEY"
-``````
-## 配置片段```json5
+```
+## 配置片段
+```json5
 {
   env: { OPENROUTER_API_KEY: "sk-or-..." },
   agents: {
@@ -26,5 +27,6 @@ clawdbot onboard --auth-choice apiKey --token-provider openrouter --token "$OPEN
 ## 注意事项
 
 - 模型引用格式为 `openrouter/<提供商>/<模型>`.
-- 如需了解更多模型/提供商选项，请参阅 [/concepts/model-providers](/concepts/model-providers)。
+- 如需了解更多模型/提供商选项，请参阅 [/concepts/model-providers](/concepts/model-providers.md)。
 - OpenRouter 使用 Bearer 令牌和您的 API 密钥进行身份验证。
+```

@@ -11,9 +11,9 @@ read_when:
 
 ## 推荐默认方案（大多数用户）
 
-- **小型 Linux VPS** 作为始终运行的网关，成本低。参见 [VPS 主机](/vps)。
+- **小型 Linux VPS** 作为始终运行的网关，成本低。参见 [VPS 主机](/vps.md)。
 - **专用硬件**（Mac mini 或 Linux 服务器）如果你想要完全的控制权和一个 **住宅 IP** 用于浏览器自动化。许多网站会屏蔽数据中心 IP，因此本地浏览通常效果更好。
-- **混合方案**：将网关放在便宜的 VPS 上，当你需要浏览器/UI 自动化时，将你的 Mac 作为 **节点** 连接。参见 [节点](/nodes) 和 [网关远程](/gateway/remote)。
+- **混合方案**：将网关放在便宜的 VPS 上，当你需要浏览器/UI 自动化时，将你的 Mac 作为 **节点** 连接。参见 [节点](/nodes/index.md) 和 [网关远程](/gateway/remote.md)。
 
 在你需要 macOS 独有的功能（如 iMessage/BlueBubbles）或希望与日常使用的 Mac 严格隔离时，可以使用 macOS 虚拟机。
 
@@ -59,19 +59,21 @@ read_when:
 bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/trycua/cua/main/libs/lume/scripts/install.sh)"
 " 
-``````
-如果 `~/.local/bin` 不在你的 PATH 中：```bash
+```
+如果 `~/.local/bin` 不在你的 PATH 中：
+```bash
 echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.zshrc && source ~/.zshrc
 ```
 验证：
 bash
 lume --version
-``````
+```
 Docs: [Lume 安装](https://cua.ai/docs/lume/guide/getting-started/installation)
 
 ---
 
-## 2) 创建 macOS 虚拟机```bash
+## 2) 创建 macOS 虚拟机
+```bash
 lume create clawdbot --os macos --ipsw latest
 ```
 This will download macOS and create a virtual machine. The VNC window will open automatically.
@@ -97,12 +99,13 @@ After the setup is complete, enable SSH:
 ## 4) Get the IP address of the virtual machine
 bash
 lume get clawdbot
-``````
+```
 查找IP地址（通常为 `192.168.64.x`）。
 
 ---
 
-## 5）通过SSH登录到虚拟机```bash
+## 5）通过SSH登录到虚拟机
+```bash
 ssh youruser@192.168.64.X
 ```
 将 `youruser` 替换为你的账户，将 IP 替换为你的虚拟机的 IP。
@@ -115,13 +118,14 @@ ssh youruser@192.168.64.X
 bash
 npm install -g clawdbot@latest
 clawdbot onboard --install-daemon
-``````
+```
 按照入门提示设置您的模型提供商（Anthropic、OpenAI 等）。
 
 ---
 
 ## 7）配置频道
-编辑配置文件：```bash
+编辑配置文件：
+```bash
 nano ~/.clawdbot/clawdbot.json
 ```
 "添加你的频道：
@@ -137,8 +141,10 @@ json
     }
   }
 }
-```"```
-然后登录 WhatsApp（扫描二维码）：```bash
+```"
+```
+然后登录 WhatsApp（扫描二维码）：
+```bash
 clawdbot channels login
 ```
 ## 8) 以无头模式运行虚拟机
@@ -147,10 +153,11 @@ clawdbot channels login
 bash
 lume stop clawdbot
 lume run clawdbot --no-display
-``````
+```
 虚拟机在后台运行。Clawdbot 的守护进程保持网关运行。
 
-检查状态：```bash
+检查状态：
+```bash
 ssh youruser@192.168.64.X "clawdbot status"
 ```
 ## 奖励功能：iMessage 集成
@@ -175,16 +182,17 @@ json
     }
   }
 }
-``````
+```
 重启网关。现在你的代理可以发送和接收iMessages了。
 
-完整设置详情：[BlueBubbles频道](/channels/bluebubbles)
+完整设置详情：[BlueBubbles频道](/channels/bluebubbles.md)
 
 ---
 
 ## 保存一个干净的镜像
 
-在进一步自定义之前，对你的干净状态进行快照：```bash
+在进一步自定义之前，对你的干净状态进行快照：
+```bash
 lume stop clawdbot
 lume clone clawdbot clawdbot-golden
 ```
@@ -192,7 +200,8 @@ lume clone clawdbot clawdbot-golden
 bash  
 lume stop clawdbot && lume delete clawdbot  
 lume clone clawdbot-golden clawdbot  
-lume run clawdbot --no-display```
+lume run clawdbot --no-display
+```
 ---
 
 ## 24/7 运行
@@ -202,7 +211,7 @@ lume run clawdbot --no-display```
 - 在系统设置 → 电源管理中禁用睡眠
 - 如有需要，可以使用 `caffeinate`
 
-如果需要真正的持续运行，建议使用专用的 Mac mini 或小型 VPS。参见 [VPS 托管](/vps)。
+如果需要真正的持续运行，建议使用专用的 Mac mini 或小型 VPS。参见 [VPS 托管](/vps.md)。
 
 ---
 
@@ -219,11 +228,12 @@ lume run clawdbot --no-display```
 
 ## 相关文档
 
-- [VPS 托管](/vps)
-- [节点](/nodes)
-- [网关远程](/gateway/remote)
-- [BlueBubbles 频道](/channels/bluebubbles)
+- [VPS 托管](/vps.md)
+- [节点](/nodes/index.md)
+- [网关远程](/gateway/remote.md)
+- [BlueBubbles 频道](/channels/bluebubbles.md)
 - [Lume 快速入门](https://cua.ai/docs/lume/guide/getting-started/quickstart)
 - [Lume CLI 参考](https://cua.ai/docs/lume/reference/cli-reference)
 - [无监督 VM 设置](https://cua.ai/docs/lume/guide/fundamentals/unattended-setup)（高级）
-- [Docker 隔离](/install/docker)（替代隔离方式）
+- [Docker 隔离](/install/docker.md)（替代隔离方式）
+```

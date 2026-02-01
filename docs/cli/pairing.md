@@ -9,9 +9,10 @@ read_when:
 批准或检查私信配对请求（适用于支持配对功能的频道）。
 
 相关：
-- 配对流程：[配对](/start/pairing)
+- 配对流程：[配对](/start/pairing.md)
 bash
 clawdbot pairing list whatsapp
-clawdbot pairing approve whatsapp <code> --notify``````
+clawdbot pairing approve whatsapp <code> --notify
+```
 ```md
 """

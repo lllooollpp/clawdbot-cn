@@ -8,9 +8,9 @@ read_when:
 
 当 Clawdbot 行为异常时，以下是修复它的方法。
 
-如果你只是想快速排查问题，可以先查看 FAQ 的 [前60秒](/help/faq#first-60-seconds-if-somethings-broken)。本页面会更深入地讲解运行时故障和诊断。
+如果你只是想快速排查问题，可以先查看 FAQ 的 [前60秒](/help/faq.md#first-60-seconds-if-somethings-broken)。本页面会更深入地讲解运行时故障和诊断。
 
-特定提供者的快捷方式：[/channels/troubleshooting](/channels/troubleshooting)
+特定提供者的快捷方式：[/channels/troubleshooting](/channels/troubleshooting.md)
 
 ## 状态与诊断
 
@@ -28,7 +28,7 @@ read_when:
 
 **分享输出内容**：优先使用 `clawdbot status --all`（会屏蔽令牌）。如果你粘贴 `clawdbot status`，请先设置 `CLAWDBOT_SHOW_SECRETS=0`（显示令牌预览）。
 
-另请参阅：[健康检查](/gateway/health) 和 [日志](/logging)。
+另请参阅：[健康检查](/gateway/health.md) 和 [日志](/logging.md)。
 
 ## 常见问题
 
@@ -42,10 +42,12 @@ read_when:
 - 或者在 **网关主机** 上粘贴一个 setup-token：
 bash
   clawdbot models auth setup-token --provider anthropic
-```  ```
+```  
+```
 - 或者从主代理目录复制 `auth-profiles.json` 文件到新的代理目录。
 
-验证：```bash
+验证：
+```bash
 clawdbot models status
 ```
 ### OAuth 令牌刷新失败（Anthropic Claude 订阅）
@@ -59,31 +61,32 @@ bash
 # 在网关主机上运行（运行 Claude Code CLI）
 clawdbot models auth setup-token --provider anthropic
 clawdbot models status
-``````
-如果你在其他地方生成了令牌：```bash
+```
+如果你在其他地方生成了令牌：
+```bash
 clawdbot models auth paste-token --provider anthropic
 clawdbot models status
 ```
 **如果您希望保留OAuth的复用：**  
 在网关主机上使用Claude Code CLI登录，然后运行 `clawdbot models status`，以将刷新后的令牌同步到Clawdbot的认证存储中。
 
-更多细节：[Anthropic](/providers/anthropic) 和 [OAuth](/concepts/oauth)。
+更多细节：[Anthropic](/providers/anthropic.md) 和 [OAuth](/concepts/oauth.md)。
 
-### 控制UI在HTTP下失败（“需要设备身份” / “连接失败”）
+## 控制UI在HTTP下失败（“需要设备身份” / “连接失败”）
 
 如果您通过普通的HTTP打开仪表盘（例如 `http://<lan-ip>:18789/` 或  
 `http://<tailscale-ip>:18789/`），浏览器会在**非安全上下文中**运行，并阻止WebCrypto，因此无法生成设备身份。
 
 **解决方法：**  
-- 优先通过 [Tailscale Serve](/gateway/tailscale) 使用HTTPS。  
+- 优先通过 [Tailscale Serve](/gateway/tailscale.md) 使用HTTPS。  
 - 或在网关主机本地打开：`http://127.0.0.1:18789/`。  
-- 如果您必须使用HTTP，请启用 `gateway.controlUi.allowInsecureAuth: true` 并使用网关令牌（仅令牌；无需设备身份/配对）。详见 [Control UI](/web/control-ui#insecure-http)。
+- 如果您必须使用HTTP，请启用 `gateway.controlUi.allowInsecureAuth: true` 并使用网关令牌（仅令牌；无需设备身份/配对）。详见 [Control UI](/web/control-ui.md#insecure-http)。
 
 ### CI 秘钥扫描失败
 
 这意味着 `detect-secrets` 发现了尚未纳入基线的新候选秘密。
 
-请参考 [Secret scanning](/gateway/security#secret-scanning-detect-secrets) 进行处理。
+请参考 [Secret scanning](/gateway/security.md#secret-scanning-detect-secrets) 进行处理。
 
 ### 服务已安装但无任何进程运行
 
@@ -93,7 +96,7 @@ clawdbot models status
 bash
 clawdbot gateway status
 clawdbot doctor
-``````
+```
 医生/服务将在运行时显示状态（PID/上次退出）和日志提示。
 
 **日志：**
@@ -104,33 +107,41 @@ clawdbot doctor
 - Windows：`schtasks /Query /TN "Clawdbot Gateway (<profile>)" /V /FO LIST`
 
 **启用更多日志：**
-- 提高文件日志详细程度（持久化 JSONL）：  ```json
+- 提高文件日志详细程度（持久化 JSONL）：  
+```json
   { "logging": { "level": "debug" } }
-  ```
+  
+```
 - 提高控制台详细程度（仅限 TTY 输出）：
 json
   { "logging": { "consoleLevel": "debug", "consoleStyle": "pretty" } }
-```  ```
+```  
+```
 - 快速提示：`--verbose` 仅影响 **控制台** 输出。文件日志仍然由 `logging.level` 控制。
 
-有关格式、配置和访问的完整概述，请参见 [/logging](/logging)。
+有关格式、配置和访问的完整概述，请参见 [/logging](/logging.md)。
 
 ### “网关启动被阻止：set gateway.mode=local”
 
 这意味着配置已存在，但 `gateway.mode` 未设置（或不是 `local`），因此网关拒绝启动。
 
 **修复方法（推荐）：**
-- 运行向导并将网关运行模式设置为 **本地模式**：  ```bash
+- 运行向导并将网关运行模式设置为 **本地模式**：  
+```bash
   clawdbot configure
-  ```
+  
+```
 - 或直接设置：
 bash
-  clawdbot config set gateway.mode local  ```
+  clawdbot config set gateway.mode local  
+```
 **如果您是想运行一个远程网关：**
-- 设置远程 URL 并保持 `gateway.mode=remote`：  ```bash
+- 设置远程 URL 并保持 `gateway.mode=remote`：  
+```bash
   clawdbot config set gateway.mode remote
   clawdbot config set gateway.remote.url "wss://gateway.example.com"
-  ```
+  
+```
 **临时/开发专用:** 通过 `--allow-unconfigured` 参数启动网关，而无需设置 `gateway.mode=local`。
 
 **还没有配置文件？** 运行 `clawdbot setup` 来生成一个初始配置文件，然后重新运行网关。
@@ -142,7 +153,7 @@ bash
 - Linux: `/usr/local/bin`, `/usr/bin`, `/bin`
 
 这有意排除了版本管理器（nvm/fnm/volta/asdf）和包管理器（pnpm/npm），因为服务不会加载你的 shell 初始化文件。像 `DISPLAY` 这样的运行时变量应该放在 `~/.clawdbot/.env` 中（由网关早期加载）。
-在 `host=gateway` 下执行时，会将你的登录 shell 的 `PATH` 合并到执行环境中，因此缺少工具通常意味着你的 shell 初始化文件没有导出它们（或者设置 `tools.exec.pathPrepend`）。详见 [/tools/exec](/tools/exec)。
+在 `host=gateway` 下执行时，会将你的登录 shell 的 `PATH` 合并到执行环境中，因此缺少工具通常意味着你的 shell 初始化文件没有导出它们（或者设置 `tools.exec.pathPrepend`）。详见 [/tools/exec](/tools/exec.md)。
 
 WhatsApp + Telegram 通道需要 **Node**；Bun 不被支持。如果你的服务是通过 Bun 或版本管理的 Node 路径安装的，请运行 `clawdbot doctor` 以迁移到系统 Node 安装。
 
@@ -203,7 +214,7 @@ WhatsApp + Telegram 通道需要 **Node**；Bun 不被支持。如果你的服�
 **检查：**
 bash
 clawdbot gateway status
-``````
+```
 它会显示监听者（listener(s)）以及可能的原因（网关已经在运行，SSH 隧道）。
 如果需要，停止服务或选择其他端口。
 
@@ -212,7 +223,7 @@ clawdbot gateway status
 如果你是从旧版本升级上来的，磁盘上可能仍然存在 `~/clawdbot`。
 多个工作区目录可能导致认证或状态漂移的问题，因为只有一个工作区是活动的。
 
-**修复方法：** 保留一个活动的工作区，并归档/删除其余的。参见 [Agent 工作区](/concepts/agent-workspace#extra-workspace-folders)。
+**修复方法：** 保留一个活动的工作区，并归档/删除其余的。参见 [Agent 工作区](/concepts/agent-workspace.md#extra-workspace-folders)。
 
 ### 主聊天在沙盒工作区中运行
 
@@ -245,7 +256,8 @@ Clawdbot 有意拒绝 **旧的/不安全的模型**（尤其是那些容易受�
 - 如果你不确定可用的模型有哪些，运行 `clawdbot models list` 或 `clawdbot models scan`，并选择一个受支持的模型。
 - 检查网关日志以获取详细的失败原因。
 
-另请参阅：[模型 CLI](/cli/models) 和 [模型提供者](/concepts/model-providers)。```bash
+另请参阅：[模型 CLI](/cli/models.md) 和 [模型提供者](/concepts/model-providers.md)。
+```bash
 clawdbot status
 ```
 在输出中查找 `AllowFrom: ...`。
@@ -256,23 +268,25 @@ bash
 # 多代理：`agents.list[].groupChat.mentionPatterns` 会覆盖全局模式。
 grep -n "agents\|groupChat\|mentionPatterns\|channels\.whatsapp\.groups\|channels\.telegram\.groups\|channels\.imessage\.groups\|channels\.discord\.guilds" \
   "${CLAWDBOT_CONFIG_PATH:-$HOME/.clawdbot/clawdbot.json}"
-``````
-**检查 3：** 检查日志```bash
+```
+**检查 3：** 检查日志
+```bash
 clawdbot logs --follow
 # or if you want quick filters:
 tail -f "$(ls -t /tmp/clawdbot/clawdbot-*.log | head -1)" | grep "blocked\\|skip\\|unauthorized"
 ```
-### 配对代码未到达
+## 配对代码未到达
 
 如果 `dmPolicy` 设置为 `pairing`，则未知发件人应收到一个验证码，并且在获得批准前其消息将被忽略。
 
 **检查 1：** 是否已有待处理的请求在等待？
 bash
 clawdbot pairing list <channel>
-``````
+```
 默认情况下，待处理的DM配对请求每频道最多为 **3个**。如果列表已满，新的请求将不会生成代码，直到其中一个请求被批准或过期。
 
-**检查点 2：** 请求是否已创建但未发送回复？```bash
+**检查点 2：** 请求是否已创建但未发送回复？
+```bash
 clawdbot logs --follow | grep "pairing request"
 ```
 **检查 3：** 确认该频道的 `dmPolicy` 不是 `open`/`allowlist`。
@@ -290,8 +304,9 @@ clawdbot logs --follow | grep "pairing request"
 **检查 1：** 会话文件是否存在？
 bash
 ls -la ~/.clawdbot/agents/<agentId>/sessions/
-``````
-**检查 2：** 重置窗口是否太短？```json
+```
+**检查 2：** 重置窗口是否太短？
+```json
 {
   "session": {
     "reset": {
@@ -313,10 +328,11 @@ json
     "timeoutSeconds": 3600  // 1 小时
   }
 }
-``````
+```
 或者使用 `process` 工具在后台运行长时间命令。
 
-### WhatsApp 已断开连接```bash
+### WhatsApp 已断开连接
+```bash
 # Check local status (creds, sessions, queued events)
 clawdbot status
 # Probe the running gateway + channels (WA connect + Telegram + Discord APIs)
@@ -327,24 +343,27 @@ clawdbot logs --limit 200 | grep "connection\\|disconnect\\|logout"
 ```
 **修复方法：** 通常在网关运行后会自动重新连接。如果仍然无法连接，请重启网关进程（无论您如何监控它），或手动运行并开启详细输出：
 bash
-clawdbot gateway --verbose```
-如果您的账户已登出 / 未绑定：```bash
+clawdbot gateway --verbose
+```
+如果您的账户已登出 / 未绑定：
+```bash
 clawdbot channels logout
 trash "${CLAWDBOT_STATE_DIR:-$HOME/.clawdbot}/credentials" # if logout can't cleanly remove everything
 clawdbot channels login --verbose       # re-scan QR
 ```
-### 媒体发送失败
+## 媒体发送失败
 
 **检查 1：** 文件路径是否有效？
 bash
 ls -la /path/to/your/image.jpg
-``````
+```
 **检查 2：** 是否过大？
 - 图片：最大 6MB
 - 音频/视频：最大 16MB  
 - 文档：最大 100MB
 
-**检查 3：** 检查媒体日志```bash
+**检查 3：** 检查媒体日志
+```bash
 grep "media\\|fetch\\|download" "$(ls -t /tmp/clawdbot/clawdbot-*.log | head -1)" | tail -20
 ```
 ### 高内存使用
@@ -358,7 +377,7 @@ json
     "historyLimit": 100  // 最大保留消息数
   }
 }
-``````
+```
 ## 常见故障排除
 
 ### “网关无法启动 —— 配置无效”
@@ -366,7 +385,8 @@ json
 Clawdbot 现在会在配置中包含未知键、格式错误的值或无效类型时拒绝启动。
 这是为了安全而有意为之的改进。
 
-使用 Doctor 工具进行修复：```bash
+使用 Doctor 工具进行修复：
+```bash
 clawdbot doctor
 clawdbot doctor --fix
 ```
@@ -391,12 +411,13 @@ json5
     }
   }
 }
-``````
-参见 [WhatsApp 设置](/channels/whatsapp)。
+```
+参见 [WhatsApp 设置](/channels/whatsapp.md)。
 
 ### WhatsApp 将我登出了。如何重新授权？
 
-再次运行登录命令并扫描二维码：```bash
+再次运行登录命令并扫描二维码：
+```bash
 clawdbot channels login
 ```
 ### 在 `main` 分支上出现构建错误 —— 通常的修复路径是什么？
@@ -416,26 +437,29 @@ pnpm install
 pnpm build
 clawdbot doctor
 clawdbot gateway restart
-``````
+```
 为什么：pnpm 是此仓库的配置包管理器。
 
 ### 如何在 git 安装和 npm 安装之间切换？
 
 使用 **网站安装程序**，并使用标志选择安装方式。它会在原地升级，并重写网关服务以指向新的安装。
 
-切换 **到 git 安装**：```bash
+切换 **到 git 安装**：
+```bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git --no-onboard
 ```
 切换到 npm 全局：
 bash
 curl -fsSL https://clawd.bot/install.sh | bash
-``````
+```
 注意事项：
 - git flow 仅在仓库干净时才会执行变基操作。请先提交或暂存您的更改。
-- 切换之后，请运行：  ```bash
+- 切换之后，请运行：  
+```bash
   clawdbot doctor
   clawdbot gateway restart
-  ```
+  
+```
 ### 为什么 Telegram 的块流式传输不会在工具调用之间拆分文本？
 
 块流式传输仅发送**已完成的文本块**。你看到单条消息的常见原因包括：
@@ -450,7 +474,7 @@ curl -fsSL https://clawd.bot/install.sh | bash
 2) 如果你想获得真正的多消息块回复，请将 `channels.telegram.streamMode: "off"`。
 3) 在调试时使用较小的块/合并阈值。
 
-参见 [流式传输](/concepts/streaming)。
+参见 [流式传输](/concepts/streaming.md)。
 
 ### 即使设置了 `requireMention: false`，Discord 仍不回复我的服务器。为什么？
 
@@ -465,7 +489,7 @@ curl -fsSL https://clawd.bot/install.sh | bash
 4) 确保机器人拥有 **Message Content Intent** 和频道权限。
 5) 运行 `clawdbot channels status --probe` 以获取审计提示。
 
-文档：[Discord](/channels/discord)，[频道故障排除](/channels/troubleshooting)。
+文档：[Discord](/channels/discord.md)，[频道故障排除](/channels/troubleshooting.md)。
 
 ### Cloud Code Assist API 错误：无效的工具模式（400）。该怎么办？
 
@@ -478,7 +502,7 @@ curl -fsSL https://clawd.bot/install.sh | bash
 2) 避免使用不支持的关键字，如 `anyOf/oneOf/allOf`、`patternProperties`、`additionalProperties`、`minLength`、`maxLength`、`format` 等。
 3) 如果你定义了自定义工具，请确保顶层模式为 `type: "object"`，并使用 `properties` 和简单的枚举。
 
-参见 [工具](/tools) 和 [TypeBox 模式](/concepts/typebox)。
+参见 [工具](/tools/index.md) 和 [TypeBox 模式](/concepts/typebox.md)。
 
 ## macOS 特定问题
 
@@ -489,7 +513,7 @@ curl -fsSL https://clawd.bot/install.sh | bash
 **修复 1：重置 TCC 缓存**
 bash
 tccutil reset All com.clawdbot.mac.debug
-``````
+```
 **修复方法 2：强制使用新的 Bundle ID**
 如果重置无效，请在 [`scripts/package-mac-app.sh`](https://github.com/clawdbot/clawdbot/blob/main/scripts/package-mac-app.sh) 中修改 `BUNDLE_ID`（例如，添加 `.test` 后缀），然后重新构建。这会强制 macOS 将其视为一个新应用。
 
@@ -498,7 +522,8 @@ tccutil reset All com.clawdbot.mac.debug
 该应用连接到本地网关的端口 `18789`。如果它一直卡在这里：
 
 **修复方法 1：停止 supervisor（推荐）**
-如果网关由 launchd 进行管理，直接终止 PID 会导致它重新启动。请先停止 supervisor：```bash
+如果网关由 launchd 进行管理，直接终止 PID 会导致它重新启动。请先停止 supervisor：
+```bash
 clawdbot gateway status
 clawdbot gateway stop
 # Or: launchctl bootout gui/$UID/com.clawdbot.gateway (replace with com.clawdbot.<profile> if needed)
@@ -506,8 +531,9 @@ clawdbot gateway stop
 **修复方式 2：端口被占用（查找监听者）**
 bash
 lsof -nP -iTCP:18789 -sTCP:LISTEN
-``````
-如果这是一个无监督的过程，请先尝试优雅停止，然后再升级：```bash
+```
+如果这是一个无监督的过程，请先尝试优雅停止，然后再升级：
+```bash
 kill -TERM <PID>
 sleep 1
 kill -9 <PID> # last resort
@@ -516,10 +542,12 @@ kill -9 <PID> # last resort
 确保全局安装的 `clawdbot` CLI 与应用程序版本匹配：
 bash
 clawdbot --version
-npm install -g clawdbot@<version>```
+npm install -g clawdbot@<version>
+```
 ## 调试模式
 
-获取详细日志：```bash
+获取详细日志：
+```bash
 # Turn on trace logging in config:
 #   ${CLAWDBOT_CONFIG_PATH:-$HOME/.clawdbot/clawdbot.json} -> { logging: { level: "trace" } }
 #
@@ -556,10 +584,11 @@ lsof -nP -iTCP:18789 -sTCP:LISTEN
 clawdbot logs --follow
 # 如果 RPC 不可用，可以使用以下方式作为替代
 tail -20 /tmp/clawdbot/clawdbot-*.log
-``````
+```
 ## 重置一切
 
-终极选项：```bash
+终极选项：
+```bash
 clawdbot gateway stop
 # If you installed a service and want a clean install:
 # clawdbot gateway uninstall
@@ -596,12 +625,14 @@ clawdbot gateway restart           # or: clawdbot gateway
 bash
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
-``````
-然后在配置中设置：```json
+```
+然后在配置中设置：
+```json
 {
   "browser": {
     "executablePath": "/usr/bin/google-chrome-stable"
   }
 }
 ```
-**完整指南：** 参见 [browser-linux-troubleshooting](/tools/browser-linux-troubleshooting)
+**完整指南：** 参见 [browser-linux-troubleshooting](/tools/browser-linux-troubleshooting.md)
+```

@@ -62,8 +62,8 @@ json5
     }
   }
 }
-`````````
-有关完整配置，请参见 [Heartbeat](/gateway/heartbeat)。
+```
+有关完整配置，请参见 [Heartbeat](/gateway/heartbeat.md)。
 
 ## Cron：精确调度
 
@@ -87,7 +87,8 @@ Cron 任务在 **精确的时间点** 运行，并且可以在隔离的会话中
 - **无需代理上下文**：即使主会话处于空闲或压缩状态，也能运行。
 - **支持一次性任务**：使用 `--at` 进行精确的未来时间戳设置。
 
-### Cron 示例：每日早间简报```bash
+### Cron 示例：每日早间简报
+```bash
 clawdbot cron add \
   --name "Morning briefing" \
   --cron "0 7 * * *" \
@@ -109,10 +110,12 @@ clawdbot cron add \
   --session main \
   --system-event "提醒：站立会议将在10分钟后开始。" \
   --wake now \
-  --delete-after-run``````
-有关完整的 CLI 参考，请参见 [Cron 作业](/automation/cron-jobs)。
+  --delete-after-run
+```
+有关完整的 CLI 参考，请参见 [Cron 作业](/automation/cron-jobs.md)。
 
-## 决策流程图```
+## 决策流程图
+```
 Does the task need to run at an EXACT time?
   YES -> Use cron
   NO  -> Continue...
@@ -157,7 +160,8 @@ clawdbot cron add --name "Morning brief" --cron "0 7 * * *" --session isolated -
 clawdbot cron add --name "Weekly review" --cron "0 9 * * 1" --session isolated --message "..." --model opus
 
 # 一次性提醒
-clawdbot cron add --name "Call back" --at "2h" --session main --system-event "Call back the client" --wake now``````
+clawdbot cron add --name "Call back" --at "2h" --session main --system-event "Call back the client" --wake now
+```
 ## Lobster：具有审批的确定性工作流
 
 Lobster 是用于 **多步骤工具管道** 的工作流运行时，这些管道需要 **确定性执行** 和 **显式审批**。
@@ -184,7 +188,7 @@ Lobster 是用于 **多步骤工具管道** 的工作流运行时，这些管道
 - 工具是一个 **可选插件**；你必须在 `tools.allow` 中允许 `lobster`。
 - 如果你传递了 `lobsterPath`，它必须是一个 **绝对路径**。
 
-有关完整用法和示例，请参见 [Lobster](/tools/lobster)。
+有关完整用法和示例，请参见 [Lobster](/tools/lobster.md)。
 
 ## 主会话与隔离会话
 
@@ -205,7 +209,8 @@ Heartbeat 和 cron 都可以与主会话交互，但方式不同：
 - 让 agent 在下一次 heartbeat 时处理它，并带有完整的上下文
 - 不需要单独的隔离运行
 
-使用 `--session main` 和 `--system-event`。```bash
+使用 `--session main` 和 `--system-event`。
+```bash
 clawdbot cron add \
   --name "Check project" \
   --every "4h" \
@@ -228,7 +233,8 @@ clawdbot cron add \
   --message "每周代码库分析..." \
   --model opus \
   --thinking high \
-  --deliver``````
+  --deliver
+```
 ## 成本考量
 
 | 机制 | 成本概况 |

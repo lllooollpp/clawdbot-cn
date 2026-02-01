@@ -122,7 +122,7 @@ json
     }
   }
 }
-``````
+```
 备注：
 - 不支持旧版的允许列表格式。
 - `askFallback` 仅在 `ask` 是必需的且无法访问 UI 时生效。
@@ -155,7 +155,8 @@ json
 5) Node 服务将输出返回给网关。
 
 如果 UI 缺失：
-- 应用 `askFallback`（`deny|allowlist|full`）。```
+- 应用 `askFallback`（`deny|allowlist|full`）。
+```
 Agent -> Gateway -> Bridge -> Node Service (TS)
                          |  IPC (UDS + token + HMAC + TTL)
                          v
@@ -255,7 +256,8 @@ Agent -> Gateway -> Bridge -> Node Service (TS)
 - 多节点歧义：除非有节点绑定或显式节点参数，否则会报错。
 
 ## 相关文档
-- [Exec 工具](/tools/exec)
-- [Exec 审批](/tools/exec-approvals)
-- [节点](/nodes)
-- [提升模式](/tools/elevated)
+- [Exec 工具](/tools/exec.md)
+- [Exec 审批](/tools/exec-approvals.md)
+- [节点](/nodes/index.md)
+- [提升模式](/tools/elevated.md)
+```

@@ -12,7 +12,8 @@ read_when:
 
 ## 使用方法
 
-clawdbot message <子命令> [标志]``````
+clawdbot message <子命令> [标志]
+```
 频道选择：
 - 如果配置了多个频道，则必须使用 `--channel`。
 - 如果仅配置了一个频道，则会成为默认频道。
@@ -189,11 +190,13 @@ clawdbot message poll --channel discord \
   --poll-question "Snack?" \
   --poll-option Pizza --poll-option Sushi \
   --poll-multi --poll-duration-hours 48
-``````
+```
 发送一条 Teams 的主动消息：
 clawdbot message send --channel msteams \  
-  --target conversation:19:abc@thread.tacv2 --message "hi"```
-创建一个团队投票：```
+  --target conversation:19:abc@thread.tacv2 --message "hi"
+```
+创建一个团队投票：
+```
 clawdbot message poll --channel msteams \
   --target conversation:19:abc@thread.tacv2 \
   --poll-question "Lunch?" \
@@ -206,7 +209,10 @@ clawdbot 消息 react --channel slack \
 在 Signal 组中使用 React：
 clawdbot 消息 react --channel signal \
   --target signal:group:abc123 --message-id 1737630212345 \
-  --emoji "✅" --target-author-uuid 123e4567-e89b-12d3-a456-426614174000```
+  --emoji "✅" --target-author-uuid 123e4567-e89b-12d3-a456-426614174000
+```
 发送 Telegram 内联按钮：
 clawdbot message send --channel telegram --target @mychat --message "请选择：" \
-  --buttons '[ [{"text":"是","callback_data":"cmd:yes"}], [{"text":"否","callback_data":"cmd:no"}] ]'```
+  --buttons '[ [{"text":"是","callback_data":"cmd:yes"}], [{"text":"否","callback_data":"cmd:no"}] ]'
+```
+

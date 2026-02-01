@@ -9,7 +9,9 @@ Clawdbot Desktop 是一个基于 Electron 的图形化应用程序，它集成�
 ## 特性
 
 - **开箱即用**：集成了 Gateway 核心，自动处理启动和状态检测。
+- **图形化向导**：在程序菜单栏中点击“配置向导 (Onboarding Wizard)”，即可零门槛完成初始化。
 - **跨平台支持**：支持原生 Windows (无需 WSL2)、macOS 和 Linux。
+- **内置国产大模型**：新安装默认配置通过智谱 AI (Zhipu) 接入，对中文语境支持更佳。
 - **环境隔离**：桌面版使用独立的数据目录，不会影响你全局安装的 `clawdbot` CLI 配置。
 - **自动配置**：首次运行会自动配置为本地模式 (`gateway.mode=local`)。
 - **环境变量继承**：自动从系统环境继承 API 密钥 (如 `ZAI_KEY`, `ANTHROPIC_API_KEY` 等)。

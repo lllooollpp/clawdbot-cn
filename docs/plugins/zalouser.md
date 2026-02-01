@@ -20,10 +20,11 @@ read_when:
 如果你使用的是远程 Gateway，请在 **运行 Gateway 的机器上** 安装/配置它，然后重启 Gateway。
 bash
 clawdbot plugins install @clawdbot/zalouser
-``````
+```
 重启网关后继续操作。
 
-### 选项 B：从本地文件夹安装（开发环境）```bash
+### 选项 B：从本地文件夹安装（开发环境）
+```bash
 clawdbot plugins install ./extensions/zalouser
 cd ./extensions/zalouser && pnpm install
 ```
@@ -33,9 +34,10 @@ cd ./extensions/zalouser && pnpm install
 网关机器上必须在 `PATH` 中包含 `zca`：
 bash
 zca --version
-``````
+```
 ## 配置
-频道配置位于 `channels.zalouser` 下（而非 `plugins.entries.*`）：```json5
+频道配置位于 `channels.zalouser` 下（而非 `plugins.entries.*`）：
+```json5
 {
   channels: {
     zalouser: {
@@ -51,8 +53,10 @@ clawdbot channels login --channel zalouser
 clawdbot channels logout --channel zalouser
 clawdbot channels status --probe
 clawdbot message send --channel zalouser --target <threadId> --message "Hello from Clawdbot"
-clawdbot directory peers list --channel zalouser --query "name"```
+clawdbot directory peers list --channel zalouser --query "name"
+```
 ## Agent 工具
 工具名称: `zalouser`
 
 操作: `发送`, `图片`, `链接`, `好友`, `群组`, `我`, `状态`
+```

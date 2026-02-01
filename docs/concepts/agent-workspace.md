@@ -11,7 +11,7 @@ read_when:
 
 这与 `~/.clawdbot/` 是分开的，后者存储配置、凭证和会话。
 
-**重要提示：** 工作空间是 **默认的当前工作目录 (cwd)**，而不是一个硬性沙箱。工具会根据工作空间解析相对路径，但如果启用了沙箱，绝对路径仍然可以访问主机上的其他位置。如果你需要隔离环境，请使用 [`agents.defaults.sandbox`](/gateway/sandboxing)（或每个代理的沙箱配置）。当沙箱功能启用且 `workspaceAccess` 不是 `"rw"` 时，工具会在 `~/.clawdbot/sandboxes` 下的沙箱工作空间中运行，而不是在你的主机工作空间中。
+**重要提示：** 工作空间是 **默认的当前工作目录 (cwd)**，而不是一个硬性沙箱。工具会根据工作空间解析相对路径，但如果启用了沙箱，绝对路径仍然可以访问主机上的其他位置。如果你需要隔离环境，请使用 [`agents.defaults.sandbox`](/gateway/sandboxing.md)（或每个代理的沙箱配置）。当沙箱功能启用且 `workspaceAccess` 不是 `"rw"` 时，工具会在 `~/.clawdbot/sandboxes` 下的沙箱工作空间中运行，而不是在你的主机工作空间中。
 
 ## 默认位置
 
@@ -24,13 +24,13 @@ json5
     workspace: "~/clawd"
   }
 }
-``````
+```
 命令 `clawdbot onboard`、`clawdbot configure` 或 `clawdbot setup` 在工作区文件缺失时会创建工作区并初始化引导文件。
 
 如果你自行管理工作区文件，可以禁用引导文件的创建：
 json5
 { agent: { skipBootstrap: true } }
-``````
+```
 ## 额外的工作区文件夹
 
 较旧的安装可能会创建 `~/clawdbot`。保留多个工作区目录可能导致令人困惑的认证或状态漂移，因为一次只能有一个工作区处于活动状态。
@@ -85,7 +85,7 @@ Clawdbot 在工作区中期望的标准文件如下：
   - 精选的长期记忆。
   - 仅在主会话、私有会话中加载（不在共享/群组上下文中）。
 
-有关工作流程和自动记忆清除，请参阅 [Memory](/concepts/memory)。
+有关工作流程和自动记忆清除，请参阅 [Memory](/concepts/memory.md)。
 
 - `skills/`（可选）
   - 工作区特定的技能。
@@ -120,7 +120,7 @@ cd ~/clawd
 git init
 git add AGENTS.md SOUL.md TOOLS.md IDENTITY.md USER.md HEARTBEAT.md memory/
 git commit -m "Add agent workspace"
-``````
+```
 ### 2) 添加一个私有远程仓库（适合初学者的选项）
 
 选项 A：GitHub 网页界面
@@ -132,8 +132,10 @@ git commit -m "Add agent workspace"
 bash
 git branch -M main
 git remote add origin <https-url>
-git push -u origin main```
-选项 B：GitHub 命令行界面（`gh`）```bash
+git push -u origin main
+```
+选项 B：GitHub 命令行界面（`gh`）
+```bash
 gh auth login
 gh repo create clawd-workspace --private --source . --remote origin --push
 ```
@@ -146,8 +148,10 @@ gh repo create clawd-workspace --private --source . --remote origin --push
 bash
 git branch -M main
 git remote add origin <https-url>
-git push -u origin main``````
-### 3) 持续更新```bash
+git push -u origin main
+```
+### 3) 持续更新
+```bash
 git status
 git add .
 git commit -m "Update memory"
@@ -169,7 +173,8 @@ gitignore
 .env
 **/*.key
 **/*.pem
-**/secrets*``````
+**/secrets*
+```
 ## 将工作区迁移到新机器
 
 1. 将仓库克隆到所需的路径（默认为 `~/clawd`）。
@@ -179,5 +184,5 @@ gitignore
 
 ## 高级说明
 
-- 多代理路由可以为每个代理使用不同的工作区。请参阅 [频道路由](/concepts/channel-routing) 了解路由配置。
+- 多代理路由可以为每个代理使用不同的工作区。请参阅 [频道路由](/concepts/channel-routing.md) 了解路由配置。
 - 如果启用了 `agents.defaults.sandbox`，非主会话可以使用位于 `agents.defaults.sandbox.workspaceRoot` 下的会话级沙盒工作区。

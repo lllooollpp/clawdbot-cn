@@ -13,7 +13,7 @@ read_when:
 
 请 **不要** 将您的凭据提供给模型。自动登录往往会触发反机器人防御机制，可能导致账户被锁定。
 
-返回主浏览器文档：[浏览器](/tools/browser)。
+返回主浏览器文档：[浏览器](/tools/browser.md)。
 
 ## 使用的是哪个 Chrome 配置文件？
 
@@ -26,7 +26,7 @@ Clawdbot 控制一个 **专用的 Chrome 配置文件**（名为 `clawd`，带�
 bash
 clawdbot browser start
 clawdbot browser open https://x.com
-``````
+```
 如果您有多个配置文件，请使用 `--browser-profile <name>`（默认为 `clawd`）。
 
 ## X/Twitter：推荐的操作流程
@@ -39,7 +39,8 @@ clawdbot browser open https://x.com
 
 沙箱中的浏览器会话**更有可能**触发机器人检测。对于 X/Twitter（以及其他严格网站），建议使用 **host** 浏览器。
 
-如果代理处于沙箱环境中，浏览器工具将默认使用沙箱。若要允许使用 host 浏览器控制：```json5
+如果代理处于沙箱环境中，浏览器工具将默认使用沙箱。若要允许使用 host 浏览器控制：
+```json5
 {
   agents: {
     defaults: {
@@ -56,5 +57,5 @@ clawdbot browser open https://x.com
 然后针对主机浏览器：
 bash
 clawdbot browser open https://x.com --browser-profile clawd --target host
-``````
+```
 或者为发布更新的代理禁用沙箱机制。

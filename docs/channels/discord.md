@@ -28,7 +28,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 目标
 - 通过 Discord 私信或服务器频道与 Clawdbot 进行交流。
 - 直接聊天会合并到代理的主会话中（默认为 `agent:main:main`）；服务器频道则保持独立，格式为 `agent:<agentId>:discord:channel:<channelId>`（显示名称使用 `discord:<guildSlug>#<channelSlug>`）。
@@ -50,10 +50,10 @@ json5
 8. 默认情况下，群组私信会被忽略；通过 `channels.discord.dm.groupEnabled` 启用，并可选择通过 `channels.discord.dm.groupChannels` 进行限制。
 9. 可选的服务器规则：通过 `channels.discord.guilds` 设置，以服务器 ID（推荐）或 slug 为键，并可设置每个频道的规则。
 10. 可选的原生命令：`commands.native` 默认为 `"auto"`（对 Discord/Telegram 为开启，对 Slack 为关闭）。可通过 `channels.discord.commands.native: true|false|"auto"` 覆盖；设置 `false` 会清除之前注册的命令。文本命令由 `commands.text` 控制，必须作为独立的 `/...` 消息发送。使用 `commands.useAccessGroups: false` 可绕过命令的访问组检查。
-    - 完整的命令列表 + 配置：[斜杠命令](/tools/slash-commands)
+    - 完整的命令列表 + 配置：[斜杠命令](/tools/slash-commands.md)
 11. 可选的服务器上下文历史记录：设置 `channels.discord.historyLimit`（默认为 20，若未设置则回退到 `messages.groupChat.historyLimit`），以在回复提及消息时包含最后 N 条服务器消息作为上下文。设置 `0` 可禁用。
 12. 反应：代理可以通过 `discord` 工具触发反应（由 `channels.discord.actions.*` 控制）。
-    - 反应移除语义：详见 [/tools/reactions](/tools/reactions)。
+    - 反应移除语义：详见 [/tools/reactions](/tools/reactions.md)。
     - `discord` 工具仅在当前频道为 Discord 时可用。
 13. 原生命令使用独立的会话密钥（`agent:<agentId>:discord:slash:<userId>`），而不是共享的 `main` 会话。
 
@@ -64,7 +64,8 @@ json5
 ## 配置写入
 默认情况下，Discord 允许通过 `/config set|unset` 触发的配置更新（需要 `commands.config: true`）。
 
-禁用方式为：```json5
+禁用方式为：
+```json5
 {
   channels: { discord: { configWrites: false } }
 }
@@ -127,7 +128,7 @@ Discord 在很多地方都使用数字 ID；Clawdbot 的配置更倾向于使用
 python
 # 示例配置
 token = "你的Bot Token"
-````````````json5
+```json5
 {
   channels: {
     discord: {
@@ -137,9 +138,9 @@ token = "你的Bot Token"
   }
 }
 ```
-多账号支持：使用 `channels.discord.accounts`，每个账号可以设置独立的令牌，并且可选设置 `name`。详见 [`gateway/configuration`](/gateway/configuration#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts) 中的通用模式。
+多账号支持：使用 `channels.discord.accounts`，每个账号可以设置独立的令牌，并且可选设置 `name`。详见 [`gateway/configuration`](/gateway/configuration.md#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts) 中的通用模式。
 
-#### 允许列表 + 频道路由  
+## 允许列表 + 频道路由
 示例：“仅允许我，仅允许 #help 频道”：
 json5
 {
@@ -164,7 +165,8 @@ json5
       }
     }
   }
-}``````
+}
+```
 注意事项：
 - `requireMention: true` 表示机器人仅在被@提及的时候才会回复（推荐用于共享频道）。
 - `agents.list[].groupChat.mentionPatterns`（或 `messages.groupChat.mentionPatterns`）也适用于服务器消息的提及。
@@ -202,7 +204,8 @@ json5
 - 支持上传文件，最大支持配置的 `channels.discord.mediaMaxMb`（默认值为 8 MB）。
 - 默认对服务器回复进行提及限制，以避免嘈杂的机器人。
 - 当消息引用其他消息时（引用内容 + ID），会注入回复上下文。
-- 原生回复线程默认是 **关闭的**；可以通过 `channels.discord.replyToMode` 和回复标签来启用。```json5
+- 原生回复线程默认是 **关闭的**；可以通过 `channels.discord.replyToMode` 和回复标签来启用。
+```json5
 {
   channels: {
     discord: {

@@ -23,6 +23,7 @@ import {
   buildSiliconFlowModelDefinition,
   buildVolcengineModelDefinition,
   buildOllamaModelDefinition,
+  buildZhipuModelDefinition,
   DEEPSEEK_BASE_URL,
   DEEPSEEK_DEFAULT_MODEL_ID,
   DEEPSEEK_DEFAULT_MODEL_REF,
@@ -31,6 +32,9 @@ import {
   SILICONFLOW_DEFAULT_MODEL_REF,
   VOLCENGINE_BASE_URL,
   VOLCENGINE_DEFAULT_MODEL_ID,
+  ZHIPU_BASE_URL,
+  ZHIPU_DEFAULT_MODEL_ID,
+  ZHIPU_DEFAULT_MODEL_REF,
   OLLAMA_BASE_URL,
   OLLAMA_DEFAULT_MODEL_ID,
   KIMI_CODE_BASE_URL,
@@ -405,6 +409,71 @@ export function applySiliconFlowConfig(cfg: ClawdbotConfig): ClawdbotConfig {
               }
             : undefined),
           primary: SILICONFLOW_DEFAULT_MODEL_REF,
+        },
+      },
+    },
+  };
+}
+
+export function applyZhipuProviderConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const models = { ...cfg.agents?.defaults?.models };
+  models[ZHIPU_DEFAULT_MODEL_REF] = {
+    ...models[ZHIPU_DEFAULT_MODEL_REF],
+    alias: models[ZHIPU_DEFAULT_MODEL_REF]?.alias ?? "GLM-4 Flash",
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.zhipu;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildZhipuModelDefinition();
+  const hasDefaultModel = existingModels.some((model) => model.id === ZHIPU_DEFAULT_MODEL_ID);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+  const { apiKey: existingApiKey, ...existingProviderRest } = (existingProvider ?? {}) as Record<
+    string,
+    unknown
+  > as { apiKey?: string };
+  const resolvedApiKey = typeof existingApiKey === "string" ? existingApiKey : undefined;
+  const normalizedApiKey = resolvedApiKey?.trim();
+  providers.zhipu = {
+    ...existingProviderRest,
+    baseUrl: ZHIPU_BASE_URL,
+    api: "openai-completions",
+    ...(normalizedApiKey ? { apiKey: normalizedApiKey } : {}),
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applyZhipuConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const next = applyZhipuProviderConfig(cfg);
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: ZHIPU_DEFAULT_MODEL_REF,
         },
       },
     },

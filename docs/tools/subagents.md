@@ -103,7 +103,7 @@ json5
     }
   }
 }
-``````
+```
 ## 并发
 
 子代理使用专用的进程内队列通道：
@@ -120,3 +120,4 @@ json5
 - 子代理仍然共享相同的网关进程资源；将 `maxConcurrent` 视为一个安全阀。
 - `sessions_spawn` 始终是非阻塞的：会立即返回 `{ status: "accepted", runId, childSessionKey }`。
 - 子代理上下文仅注入 `AGENTS.md` 和 `TOOLS.md`（不包括 `SOUL.md`、`IDENTITY.md`、`USER.md`、`HEARTBEAT.md` 或 `BOOTSTRAP.md`）。
+```

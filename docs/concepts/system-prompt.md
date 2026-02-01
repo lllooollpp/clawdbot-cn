@@ -54,7 +54,7 @@ Clawdbot 可以为子代理渲染更小的系统提示。运行时为每个运�
 
 内部钩子可以通过 `agent:bootstrap` 拦截此步骤，以修改或替换注入的启动文件（例如，用替代人格的 `SOUL.md` 替换原始文件）。
 
-要检查每个注入文件的贡献（原始 vs 注入、截断、加上工具模式的开销），请使用 `/context list` 或 `/context detail`。详见 [上下文](/concepts/context)。
+要检查每个注入文件的贡献（原始 vs 注入、截断、加上工具模式的开销），请使用 `/context list` 或 `/context detail`。详见 [上下文](/concepts/context.md)。
 
 ## 时间处理
 
@@ -67,7 +67,7 @@ Clawdbot 可以为子代理渲染更小的系统提示。运行时为每个运�
 - `agents.defaults.userTimezone`
 - `agents.defaults.timeFormat`（`auto` | `12` | `24`）
 
-有关完整的行为细节，请参阅 [日期与时间](/date-time)。
+有关完整的行为细节，请参阅 [日期与时间](/date-time.md)。
 
 ## 技能
 
@@ -79,9 +79,11 @@ md
     <description>...</description>
     <location>...</location>
   </skill>
-</available_skills>``````
+</available_skills>
+```
 这在保持基础提示简短的同时，仍然能够实现针对特定技能的使用。
 
 ## 文档
 
 当可用时，系统提示包含一个 **文档** 部分，该部分指向本地的 Clawdbot 文档目录（仓库工作区中的 `docs/` 或捆绑的 npm 包文档），同时还注明了公共镜像、源代码仓库、社区 Discord 和 ClawdHub（https://clawdhub.com）用于技能发现。提示会指示模型优先查阅本地文档以了解 Clawdbot 的行为、命令、配置或架构，并在可能的情况下自行运行 `clawdbot status`（当没有访问权限时才会询问用户）。
+```

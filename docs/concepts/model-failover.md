@@ -21,7 +21,7 @@ Clawdbot 使用 **认证配置文件** 来存储 API 密钥和 OAuth 令牌。
 - 配置 `auth.profiles` / `auth.order` 仅是 **元数据 + 路由信息**（不包含密钥）。
 - 旧版仅导入的 OAuth 文件：`~/.clawdbot/credentials/oauth.json`（在首次使用时会被导入到 `auth-profiles.json` 中）。
 
-更多细节：[/concepts/oauth](/concepts/oauth)
+更多细节：[/concepts/oauth](/concepts/oauth.md)
 
 凭证类型：
 - `type: "api_key"` → `{ provider, key }`
@@ -83,12 +83,13 @@ json
     }
   }
 }
-`````````
+```
 ## 计费禁用
 
 计费/信用失败（例如“信用不足” / “信用余额过低”）被视为可进行故障转移的情况，但它们通常不是暂时性的。Clawdbot 不会进行短暂的冷却，而是将该配置文件标记为 **禁用**（采用更长的退避时间），并切换到下一个配置文件/提供者。
 
-状态存储在 `auth-profiles.json` 中：```json
+状态存储在 `auth-profiles.json` 中：
+```json
 {
   "usageStats": {
     "provider:profile": {
@@ -110,11 +111,12 @@ json
 
 ## 相关配置
 
-请参阅 [网关配置](/gateway/configuration) 了解：
+请参阅 [网关配置](/gateway/configuration.md) 了解：
 - `auth.profiles` / `auth.order`
 - `auth.cooldowns.billingBackoffHours` / `auth.cooldowns.billingBackoffHoursByProvider`
 - `auth.cooldowns.billingMaxHours` / `auth.cooldowns.failureWindowHours`
 - `agents.defaults.model.primary` / `agents.defaults.model.fallbacks`
 - `agents.defaults.imageModel` 路由设置
 
-有关更广泛的模型选择和回退概述，请参阅 [模型](/concepts/models)。
+有关更广泛的模型选择和回退概述，请参阅 [模型](/concepts/models.md)。
+```

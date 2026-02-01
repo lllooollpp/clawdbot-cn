@@ -12,7 +12,7 @@ read_when:
 Zalo 作为插件提供，并不包含在核心安装中。
 - 通过 CLI 安装：`clawdbot plugins install @clawdbot/zalo`
 - 或在引导过程中选择 **Zalo** 并确认安装提示
-- 详情：[插件](/plugin)
+- 详情：[插件](/plugin.md)
 
 ## 快速设置（初学者）
 1) 安装 Zalo 插件：
@@ -36,7 +36,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 什么是 Zalo
 Zalo 是一款专注于越南市场的即时通讯应用；其 Bot API 允许网关运行一个用于一对一对话的机器人。
 它非常适合需要确定性路由回 Zalo 的支持或通知场景。
@@ -53,7 +53,8 @@ Zalo 是一款专注于越南市场的即时通讯应用；其 Bot API 允许网
 3) 复制机器人令牌（格式：`12345689:abc-xyz`）。
 
 ### 2) 配置令牌（环境变量或配置文件）
-示例：```json5
+示例：
+```json5
 {
   channels: {
     zalo: {
@@ -88,7 +89,7 @@ Zalo 是一款专注于越南市场的即时通讯应用；其 Bot API 允许网
 - 批准方式：
   - `clawdbot pairing list zalo`
   - `clawdbot pairing approve zalo <CODE>`
-- 配对是默认的token交换方式。详情请参见：[配对](/start/pairing)
+- 配对是默认的token交换方式。详情请参见：[配对](/start/pairing.md)
 - `channels.zalo.allowFrom` 仅接受数字用户ID（不支持用户名查找）。
 
 ## 长轮询 vs Webhook
@@ -137,7 +138,7 @@ Zalo 是一款专注于越南市场的即时通讯应用；其 Bot API 允许网
 - 检查 getUpdates 轮询是否正在运行（它们是互斥的）
 
 ## 配置参考（Zalo）
-完整配置：[Configuration](/gateway/configuration)
+完整配置：[Configuration](/gateway/configuration.md)
 
 提供者选项：
 - `channels.zalo.enabled`: 启用/禁用频道启动。
@@ -162,3 +163,4 @@ Zalo 是一款专注于越南市场的即时通讯应用；其 Bot API 允许网
 - `channels.zalo.accounts.<id>.webhookSecret`: 每个账号的 Webhook 秘钥。
 - `channels.zalo.accounts.<id>.webhookPath`: 每个账号的 Webhook 路径。
 - `channels.zalo.accounts.<id>.proxy`: 每个账号的代理 URL。
+```

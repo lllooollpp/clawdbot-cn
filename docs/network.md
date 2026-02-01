@@ -12,17 +12,17 @@ read_when:
 
 ## 核心模型
 
-- [网关架构](/concepts/architecture)
-- [网关协议](/gateway/protocol)
-- [网关操作手册](/gateway)
-- [网络界面 + 绑定模式](/web)
+- [网关架构](/concepts/architecture.md)
+- [网关协议](/gateway/protocol.md)
+- [网关操作手册](/gateway/index.md)
+- [网络界面 + 绑定模式](/web/index.md)
 
 ## 配对 + 身份验证
 
-- [配对概述（DM + 节点）](/start/pairing)
-- [网关拥有的节点配对](/gateway/pairing)
-- [设备 CLI（配对 + 令牌轮换）](/cli/devices)
-- [配对 CLI（DM 审批）](/cli/pairing)
+- [配对概述（DM + 节点）](/start/pairing.md)
+- [网关拥有的节点配对](/gateway/pairing.md)
+- [设备 CLI（配对 + 令牌轮换）](/cli/devices.md)
+- [配对 CLI（DM 审批）](/cli/pairing.md)
 
 本地信任：
 - 本地连接（环回地址或网关主机自身的 tailnet 地址）可以自动批准配对，以保持同主机的用户体验流畅。
@@ -30,21 +30,21 @@ read_when:
 
 ## 发现 + 传输方式
 
-- [发现与传输方式](/gateway/discovery)
-- [Bonjour / mDNS](/gateway/bonjour)
-- [远程访问（SSH）](/gateway/remote)
-- [Tailscale](/gateway/tailscale)
+- [发现与传输方式](/gateway/discovery.md)
+- [Bonjour / mDNS](/gateway/bonjour.md)
+- [远程访问（SSH）](/gateway/remote.md)
+- [Tailscale](/gateway/tailscale.md)
 
 ## 节点 + 传输方式
 
-- [节点概述](/nodes)
-- [桥接协议（旧版节点）](/gateway/bridge-protocol)
-- [节点操作手册：iOS](/platforms/ios)
-- [节点操作手册：Android](/platforms/android)
+- [节点概述](/nodes/index.md)
+- [桥接协议（旧版节点）](/gateway/bridge-protocol.md)
+- [节点操作手册：iOS](/platforms/ios.md)
+- [节点操作手册：Android](/platforms/android.md)
 
 ## 安全性
 
-- [安全性概述](/gateway/security)
-- [网关配置参考](/gateway/configuration)
-- [故障排除](/gateway/troubleshooting)
-- [诊断工具](/gateway/doctor)
+- [安全性概述](/gateway/security.md)
+- [网关配置参考](/gateway/configuration.md)
+- [故障排除](/gateway/troubleshooting.md)
+- [诊断工具](/gateway/doctor.md)

@@ -15,33 +15,35 @@ read_when:
 
 快速路径：
 
-1) 查看哪些插件已加载：```bash
+1) 查看哪些插件已加载：
+```bash
 clawdbot plugins list
 ```
-2) 安装官方插件（例如：语音通话）：```bash
+2) 安装官方插件（例如：语音通话）：
+```bash
 clawdbot plugins install @clawdbot/voice-call
 ```
 3) 重启网关后，在 `plugins.entries.<id>.config` 下进行配置。
 
-有关具体插件的示例，请参阅 [语音通话](/plugins/voice-call)。
+有关具体插件的示例，请参阅 [语音通话](/plugins/voice-call.md)。
 
 ## 可用插件（官方）
 
 - Microsoft Teams 从 2026.1.15 版本起仅支持插件形式；如果使用 Teams，请安装 `@clawdbot/msteams`。
 - Memory（核心）— 内置的内存搜索插件（通过 `plugins.slots.memory` 默认启用）
 - Memory（LanceDB）— 内置的长期记忆插件（自动回忆/捕获；设置 `plugins.slots.memory = "memory-lancedb"`）
-- [语音通话](/plugins/voice-call) — `@clawdbot/voice-call`
-- [Zalo 个人](/plugins/zalouser) — `@clawdbot/zalouser`
-- [Matrix](/channels/matrix) — `@clawdbot/matrix`
-- [Nostr](/channels/nostr) — `@clawdbot/nostr`
-- [Zalo](/channels/zalo) — `@clawdbot/zalo`
-- [Microsoft Teams](/channels/msteams) — `@clawdbot/msteams`
+- [语音通话](/plugins/voice-call.md) — `@clawdbot/voice-call`
+- [Zalo 个人](/plugins/zalouser.md) — `@clawdbot/zalouser`
+- [Matrix](/channels/matrix.md) — `@clawdbot/matrix`
+- [Nostr](/channels/nostr.md) — `@clawdbot/nostr`
+- [Zalo](/channels/zalo.md) — `@clawdbot/zalo`
+- [Microsoft Teams](/channels/msteams.md) — `@clawdbot/msteams`
 - Google Antigravity OAuth（提供方认证）— 内置为 `google-antigravity-auth`（默认禁用）
 - Gemini CLI OAuth（提供方认证）— 内置为 `google-gemini-cli-auth`（默认禁用）
 - Qwen OAuth（提供方认证）— 内置为 `qwen-portal-auth`（默认禁用）
 - Copilot 代理（提供方认证）— 本地 VS Code Copilot 代理桥接；与内置的 `github-copilot` 设备登录不同（内置，默认禁用）
 
-Clawdbot 插件是 **TypeScript 模块**，通过 jiti 在运行时加载。**配置验证不会执行插件代码**；它使用插件的清单和 JSON Schema。详见 [插件清单](/plugins/manifest)。
+Clawdbot 插件是 **TypeScript 模块**，通过 jiti 在运行时加载。**配置验证不会执行插件代码**；它使用插件的清单和 JSON Schema。详见 [插件清单](/plugins/manifest.md)。
 
 插件可以注册以下内容：
 
@@ -55,11 +57,12 @@ Clawdbot 插件是 **TypeScript 模块**，通过 jiti 在运行时加载。**�
 - **自动回复命令**（无需调用 AI 代理即可执行）
 
 插件与网关 **在同一进程中运行**，因此请将它们视为可信代码。
-工具编写指南：[插件代理工具](/plugins/agent-tools)。
+工具编写指南：[插件代理工具](/plugins/agent-tools.md)。
 
 ## 运行时辅助函数
 
-插件可以通过 `api.runtime` 访问选定的核心辅助函数。对于电话语音合成（TTS）：```ts
+插件可以通过 `api.runtime` 访问选定的核心辅助函数。对于电话语音合成（TTS）：
+```ts
 const result = await api.runtime.tts.textToSpeechTelephony({
   text: "Hello from Clawdbot",
   cfg: api.config,
@@ -96,7 +99,8 @@ Clawdbot 按以下顺序进行扫描：
 
 ### 包装包
 
-一个插件目录可能包含一个 `package.json` 文件，其中包含 `clawdbot.extensions` 字段：```json
+一个插件目录可能包含一个 `package.json` 文件，其中包含 `clawdbot.extensions` 字段：
+```json
 {
   "name": "my-pack",
   "clawdbot": {
@@ -112,7 +116,8 @@ Clawdbot 按以下顺序进行扫描：
 
 渠道插件可以通过 `clawdbot.channel` 广告引导信息，并通过 `clawdbot.install` 提供安装提示。这使得核心目录数据保持简洁。
 
-示例：```json
+示例：
+```json
 {
   "name": "@clawdbot/nextcloud-talk",
   "clawdbot": {
@@ -149,7 +154,8 @@ Clawdbot 还可以合并 **外部频道目录**（例如，MPM 注册表导出�
 - 包含包：`package.json` 中的 `name`
 - 独立文件：文件基础名称（`~/.../voice-call.ts` → `voice-call`）
 
-如果插件导出了 `id`，Clawdbot 会使用它，但当它与配置的 ID 不匹配时会发出警告。```json5
+如果插件导出了 `id`，Clawdbot 会使用它，但当它与配置的 ID 不匹配时会发出警告。
+```json5
 {
   plugins: {
     enabled: true,
@@ -179,7 +185,8 @@ Clawdbot 还可以合并 **外部频道目录**（例如，MPM 注册表导出�
 
 ## 插件槽位（互斥类别）
 
-某些插件类别是 **互斥的**（同一时间只能有一个激活）。使用 `plugins.slots` 来选择哪个插件拥有该槽位：```json5
+某些插件类别是 **互斥的**（同一时间只能有一个激活）。使用 `plugins.slots` 来选择哪个插件拥有该槽位：
+```json5
 {
   plugins: {
     slots: {
@@ -202,7 +209,8 @@ Clawdbot 在运行时根据发现的插件来增强 `uiHints`：
 
 如果你想让插件的配置字段显示良好的标签/占位符（并标记敏感信息），请在插件的清单中提供 `uiHints` 与 JSON Schema 一起使用。
 
-示例：```json
+示例：
+```json
 {
   "id": "my-plugin",
   "configSchema": {
@@ -219,7 +227,8 @@ Clawdbot 在运行时根据发现的插件来增强 `uiHints`：
   }
 }
 ```
-## 命令行界面（CLI）```bash
+## 命令行界面（CLI）
+```bash
 clawdbot plugins list
 clawdbot plugins info <id>
 clawdbot plugins install <path>                 # copy a local file/dir into ~/.clawdbot/extensions/<id>
@@ -249,7 +258,8 @@ clawdbot plugins doctor
 
 插件可以自带钩子，并在运行时注册它们。这使得插件能够在不安装单独钩子包的情况下，打包事件驱动的自动化功能。
 
-### 示例```
+### 示例
+```
 import { registerPluginHooksFromDir } from "clawdbot/plugin-sdk";
 
 export default function register(api) {
@@ -270,7 +280,8 @@ export default function register(api) {
 
 - `clawdbot models auth login --provider <id> [--method <id>]`
 
-示例：```ts
+示例：
+```ts
 api.registerProvider({
   id: "acme",
   label: "AcmeAI",
@@ -308,7 +319,8 @@ api.registerProvider({
 
 ### 注册一个消息通道
 
-插件可以注册 **通道插件**，这些插件的行为类似于内置通道（如 WhatsApp、Telegram 等）。通道配置位于 `channels.<id>` 下，并由你的通道插件代码进行验证。```ts
+插件可以注册 **通道插件**，这些插件的行为类似于内置通道（如 WhatsApp、Telegram 等）。通道配置位于 `channels.<id>` 下，并由你的通道插件代码进行验证。
+```ts
 const myChannel = {
   id: "acmechat",
   meta: {
@@ -370,7 +382,8 @@ export default function (api) {
 5) 在你的插件中注册该频道
 - `api.registerChannel({ plugin })`
 
-最小配置示例：```json5
+最小配置示例：
+```json5
 {
   channels: {
     acmechat: {
@@ -381,7 +394,8 @@ export default function (api) {
   }
 }
 ```
-最小化通道插件（仅出站）：```ts
+最小化通道插件（仅出站）：
+```ts
 const plugin = {
   id: "acmechat",
   meta: {
@@ -416,16 +430,18 @@ export default function (api) {
 
 ### 代理工具
 
-参见专用指南：[插件代理工具](/plugins/agent-tools)。
+参见专用指南：[插件代理工具](/plugins/agent-tools.md)。
 
-### 注册网关 RPC 方法```ts
+### 注册网关 RPC 方法
+```ts
 export default function (api) {
   api.registerGatewayMethod("myplugin.status", ({ respond }) => {
     respond(true, { ok: true });
   });
 }
 ```
-### 注册 CLI 命令```ts
+### 注册 CLI 命令
+```ts
 export default function (api) {
   api.registerCli(({ program }) => {
     program.command("mycmd").action(() => {
@@ -436,7 +452,8 @@ export default function (api) {
 ```
 ### 注册自动回复命令
 
-插件可以注册自定义的斜杠命令，这些命令**无需调用AI代理**即可执行。这对于开关命令、状态检查或不需要LLM处理的快速操作非常有用。```ts
+插件可以注册自定义的斜杠命令，这些命令**无需调用AI代理**即可执行。这对于开关命令、状态检查或不需要LLM处理的快速操作非常有用。
+```ts
 export default function (api) {
   api.registerCommand({
     name: "mystatus",
@@ -464,7 +481,8 @@ export default function (api) {
 - `requireAuth`：是否需要授权的发送者（默认：true）
 - `handler`：返回 `{ text: string }` 的函数（可以是异步的）
 
-带授权和参数的示例：```ts
+带授权和参数的示例：
+```ts
 api.registerCommand({
   name: "setmode",
   description: "Set plugin mode",
@@ -485,7 +503,8 @@ api.registerCommand({
 - 保留命令名称（如 `help`、`status`、`reset` 等）不能被插件覆盖
 - 多个插件重复注册相同命令会导致诊断错误并失败
 
-### 注册后台服务```ts
+### 注册后台服务
+```ts
 export default function (api) {
   api.registerService({
     id: "my-service",
@@ -531,7 +550,7 @@ export default function (api) {
 - 配置（Twilio）：`provider: "twilio"` + `twilio.accountSid/authToken/from`（可选 `statusCallbackUrl`, `twimlUrl`）
 - 配置（开发）：`provider: "log"`（无网络）
 
-有关设置和使用，请参见 [语音通话](/plugins/voice-call) 和 `extensions/voice-call/README.md`。
+有关设置和使用，请参见 [语音通话](/plugins/voice-call.md) 和 `extensions/voice-call/README.md`。
 
 ## 安全注意事项
 

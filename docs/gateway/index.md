@@ -20,16 +20,16 @@ clawdbot gateway --port 18789 --verbose
 clawdbot gateway --force
 # 开发模式（TS 文件更改时自动重新加载）：
 pnpm gateway:watch
-``````
+```
 - 配置热重载会监视 `~/.clawdbot/clawdbot.json`（或 `CLAWDBOT_CONFIG_PATH`）。
   - 默认模式：`gateway.reload.mode="hybrid"`（热应用安全更改，关键更改时重启）。
   - 热重载在需要时通过 **SIGUSR1** 进程内重启。
   - 通过 `gateway.reload.mode="off"` 禁用。
 - 将 WebSocket 控制平面绑定到 `127.0.0.1:<port>`（默认端口 18789）。
 - 同一端口也提供 HTTP 服务（控制 UI、钩子、A2UI）。单端口多路复用。
-  - OpenAI 聊天完成（HTTP）：[`/v1/chat/completions`](/gateway/openai-http-api)。
-  - OpenResponses（HTTP）：[`/v1/responses`](/gateway/openresponses-http-api)。
-  - 工具调用（HTTP）：[`/tools/invoke`](/gateway/tools-invoke-http-api)。
+  - OpenAI 聊天完成（HTTP）：[`/v1/chat/completions`](/gateway/openai-http-api.md)。
+  - OpenResponses（HTTP）：[`/v1/responses`](/gateway/openresponses-http-api.md)。
+  - 工具调用（HTTP）：[`/tools/invoke`](/gateway/tools-invoke-http-api.md)。
 - 默认在 `canvasHost.port`（默认 `18793`）启动 Canvas 文件服务器，从 `~/clawd/canvas` 提供 `http://<gateway-host>:18793/__clawdbot__/canvas/`。通过 `canvasHost.enabled=false` 或 `CLAWDBOT_SKIP_CANVAS_HOST=1` 禁用。
 - 日志输出到 stdout；使用 launchd/systemd 来保持运行并轮换日志。
 - 通过 `--verbose` 参数可以将日志文件中的调试日志（握手、请求/响应、事件）镜像到 stdio，用于故障排查。
@@ -41,9 +41,11 @@ pnpm gateway:watch
 - 端口优先级：`--port` > `CLAWDBOT_GATEWAY_PORT` > `gateway.port` > 默认 `18789`。
 
 ## 远程访问
-- 推荐使用 Tailscale/VPN；否则使用 SSH 隧道：  ```bash
+- 推荐使用 Tailscale/VPN；否则使用 SSH 隧道：  
+```bash
   ssh -N -L 18789:127.0.0.1:18789 user@host
-  ```
+  
+```
 - 客户端通过隧道连接到 `ws://127.0.0.1:18789`。
 - 如果配置了令牌，客户端即使在隧道中也必须在 `connect.params.auth.token` 中包含该令牌。
 
@@ -51,7 +53,7 @@ pnpm gateway:watch
 
 通常不需要：一个网关可以为多个消息通道和代理提供服务。仅在需要冗余或严格隔离时（例如救援机器人）使用多个网关。
 
-如果隔离状态 + 配置并使用不同的端口，则支持多个网关。完整指南：[多个网关](/gateway/multiple-gateways)。
+如果隔离状态 + 配置并使用不同的端口，则支持多个网关。完整指南：[多个网关](/gateway/multiple-gateways.md)。
 
 服务名称具有配置文件感知性：
 - macOS: `com.clawdbot.<profile>`
@@ -63,7 +65,7 @@ pnpm gateway:watch
 - `CLAWDBOT_SERVICE_KIND=gateway`
 - `CLAWDBOT_SERVICE_VERSION=<version>`
 
-救援机器人模式：使用独立的配置文件、状态目录、工作区和基础端口间隔，保持第二个网关隔离。完整指南：[救援机器人指南](/gateway/multiple-gateways#rescue-bot-guide)。
+救援机器人模式：使用独立的配置文件、状态目录、工作区和基础端口间隔，保持第二个网关隔离。完整指南：[救援机器人指南](/gateway/multiple-gateways.md#rescue-bot-guide)。
 
 ### 开发配置文件 (`--dev`)
 
@@ -74,7 +76,7 @@ clawdbot --dev gateway --allow-unconfigured
 # 然后指向开发实例：
 clawdbot --dev status
 clawdbot --dev health
-``````
+```
 默认值（可以通过环境变量/标志/配置覆盖）：
 - `CLAWDBOT_STATE_DIR=~/.clawdbot-dev`
 - `CLAWDBOT_CONFIG_PATH=~/.clawdbot-dev/clawdbot.json`
@@ -96,7 +98,8 @@ clawdbot --dev health
 - 独立的 `agents.defaults.workspace`
 - 独立的 WhatsApp 号码（如果使用 WA）
 
-每个配置文件的服务安装：```bash
+每个配置文件的服务安装：
+```bash
 clawdbot --profile main gateway install
 clawdbot --profile rescue gateway install
 ```
@@ -104,9 +107,9 @@ clawdbot --profile rescue gateway install
 bash
 CLAWDBOT_CONFIG_PATH=~/.clawdbot/a.json CLAWDBOT_STATE_DIR=~/.clawdbot-a clawdbot gateway --port 19001
 CLAWDBOT_CONFIG_PATH=~/.clawdbot/b.json CLAWDBOT_STATE_DIR=~/.clawdbot-b clawdbot gateway --port 19002
-``````
+```
 ## 协议（操作员视角）
-- 完整文档：[网关协议](/gateway/protocol) 和 [桥接协议（旧版）](/gateway/bridge-protocol)。
+- 完整文档：[网关协议](/gateway/protocol.md) 和 [桥接协议（旧版）](/gateway/bridge-protocol.md)。
 - 客户端必须发送的第一个帧：`req {type:"req", id, method:"connect", params:{minProtocol,maxProtocol,client:{id,displayName?,version,platform,deviceFamily?,modelIdentifier?,mode,instanceId?}, caps, auth?, locale?, userAgent? } }`。
 - 网关回复 `res {type:"res", id, ok:true, payload:hello-ok }`（或 `ok:false` 并附带错误信息，然后关闭连接）。
 - 握手完成后：
@@ -128,7 +131,7 @@ CLAWDBOT_CONFIG_PATH=~/.clawdbot/b.json CLAWDBOT_STATE_DIR=~/.clawdbot-b clawdbo
 - `node.invoke` — 在节点上执行一个命令（例如 `canvas.*`, `camera.*`）。
 - `node.pair.*` — 配对生命周期（`request`、`list`、`approve`、`reject`、`verify`）。
 
-另见：[存在](/concepts/presence) 了解存在信息是如何生成/去重的，以及为什么稳定的 `client.instanceId` 很重要。
+另见：[存在](/concepts/presence.md) 了解存在信息是如何生成/去重的，以及为什么稳定的 `client.instanceId` 很重要。
 
 ## 类型与验证
 - 服务器使用 AJV 对协议定义生成的 JSON Schema 验证每个传入的帧。
@@ -170,7 +173,8 @@ CLAWDBOT_CONFIG_PATH=~/.clawdbot/b.json CLAWDBOT_STATE_DIR=~/.clawdbot-b clawdbo
 
 ## 网关服务管理（CLI）
 
-使用网关 CLI 进行安装/启动/停止/重启/状态检查：```bash
+使用网关 CLI 进行安装/启动/停止/重启/状态检查：
+```bash
 clawdbot gateway status
 clawdbot gateway install
 clawdbot gateway stop
@@ -187,7 +191,7 @@ clawdbot logs --follow
 - 当服务看起来在运行但端口关闭时，`gateway status` 会包含最后一次的网关错误信息。
 - `logs` 通过 RPC 尾随 Gateway 文件日志（无需手动使用 `tail`/`grep`）。
 - 如果检测到其他类似 Gateway 的服务，CLI 会发出警告，除非它们是 Clawdbot 配置文件服务。
-  我们仍然建议大多数设置中 **每台机器只运行一个 Gateway**；若需要冗余或救援机器人，请使用隔离的配置文件/端口。参见 [多个网关](/gateway/multiple-gateways)。
+  我们仍然建议大多数设置中 **每台机器只运行一个 Gateway**；若需要冗余或救援机器人，请使用隔离的配置文件/端口。参见 [多个网关](/gateway/multiple-gateways.md)。
   - 清理：`clawdbot gateway uninstall`（当前服务）和 `clawdbot doctor`（旧版迁移）。
 
 捆绑的 macOS 应用程序：
@@ -219,17 +223,19 @@ WorkingDirectory=/home/youruser
 
 [Install]
 WantedBy=default.target
-``````
-"启用持久化（确保用户服务在注销/空闲时仍然运行）：```
+```
+"启用持久化（确保用户服务在注销/空闲时仍然运行）：
+```
 sudo loginctl enable-linger youruser
 ```
 在 Linux/WSL2 上运行 Onboarding（可能会提示输入 sudo；会写入 `/var/lib/systemd/linger`）。
 然后启用服务：
 
 systemctl --user enable --now clawdbot-gateway[-<profile>].service
-``````
+```
 **替代（系统服务）** - 对于始终运行或多用户服务器，您可以安装一个 systemd **系统** 服务单元，而不是用户单元（不需要持久化）。
-创建 `/etc/systemd/system/clawdbot-gateway[-<profile>].service`（复制上面的单元文件，将 `WantedBy=multi-user.target` 改为 `WantedBy=multi-user.target`，设置 `User=` 和 `WorkingDirectory=`），然后执行以下操作：```
+创建 `/etc/systemd/system/clawdbot-gateway[-<profile>].service`（复制上面的单元文件，将 `WantedBy=multi-user.target` 改为 `WantedBy=multi-user.target`，设置 `User=` 和 `WorkingDirectory=`），然后执行以下操作：
+```
 sudo systemctl daemon-reload
 sudo systemctl enable --now clawdbot-gateway[-<profile>].service
 ```
@@ -259,3 +265,4 @@ Windows 系统的安装应使用 **WSL2**，并遵循上述 Linux systemd 部分
 ## 迁移指导
 - 废弃 `clawdbot gateway` 和旧版 TCP 控制端口的使用。
 - 更新客户端，使其通过 WebSocket 协议通信，要求连接和结构化的 presence 信息。
+```

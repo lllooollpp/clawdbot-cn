@@ -13,12 +13,12 @@ read_when:
 提示：使用 `clawdbot config` 而不带子命令将打开相同的向导。如需非交互式编辑，请使用 `clawdbot config get|set|unset`。
 
 相关：
-- 网关配置参考：[配置](/gateway/configuration)
-- 配置 CLI：[配置](/cli/config)
+- 网关配置参考：[配置](/gateway/configuration.md)
+- 配置 CLI：[配置](/cli/config.md)
 
 备注：
 - 选择网关运行的位置会始终更新 `gateway.mode`。如果你只需要这个部分，可以选择“继续”而跳过其他章节。
 - 面向频道的服务（如 Slack/ Discord/ Matrix/ Microsoft Teams）在设置过程中会提示输入频道/房间白名单。你可以输入名称或 ID；向导在可能的情况下会将名称解析为 ID。
 bash
 clawdbot configure
-clawdbot configure --section models --section channels``````
+clawdbot configure --section models --section channels

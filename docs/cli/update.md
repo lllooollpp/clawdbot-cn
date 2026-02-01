@@ -9,7 +9,7 @@ read_when:
 
 安全地更新 Clawdbot 并在稳定版/测试版/开发版渠道之间切换。
 
-如果你通过 **npm/pnpm**（全局安装，没有 git 元数据）进行安装，更新将通过 [更新](/install/updating) 中描述的包管理器流程进行。
+如果你通过 **npm/pnpm**（全局安装，没有 git 元数据）进行安装，更新将通过 [更新](/install/updating.md) 中描述的包管理器流程进行。
 bash
 clawdbot update
 clawdbot update status
@@ -19,7 +19,8 @@ clawdbot update --channel dev
 clawdbot update --tag beta
 clawdbot update --no-restart
 clawdbot update --json
-clawdbot --update``````
+clawdbot --update
+```
 ## 选项
 
 - `--no-restart`: 在成功更新后跳过重启网关服务。
@@ -28,7 +29,8 @@ clawdbot --update``````
 - `--json`: 输出可被机器读取的 `UpdateRunResult` JSON 格式结果。
 - `--timeout <秒数>`: 每个步骤的超时时间（默认为 1200 秒）。
 
-注意：降级需要确认，因为旧版本可能会破坏配置。```bash
+注意：降级需要确认，因为旧版本可能会破坏配置。
+```bash
 clawdbot update status
 clawdbot update status --json
 clawdbot update status --timeout 10
@@ -75,6 +77,7 @@ clawdbot update status --timeout 10
 ## 参考
 
 - `clawdbot doctor`（在 git 检出时会提示先运行更新）
-- [开发通道](/install/development-channels)
-- [更新](/install/updating)
-- [CLI 参考](/cli)
+- [开发通道](/install/development-channels.md)
+- [更新](/install/updating.md)
+- [CLI 参考](/cli/index.md)
+```

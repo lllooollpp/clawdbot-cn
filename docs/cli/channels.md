@@ -10,8 +10,8 @@ read_when:
 管理网关上的聊天频道账户及其运行状态。
 
 相关文档：
-- 频道指南：[频道](/channels/index)
-- 网关配置：[配置](/gateway/configuration)
+- 频道指南：[频道](/channels/index.md)
+- 网关配置：[配置](/gateway/configuration.md)
 
 ## 常用命令
 bash
@@ -20,8 +20,10 @@ clawdbot channels status
 clawdbot channels capabilities
 clawdbot channels capabilities --channel discord --target channel:123
 clawdbot channels resolve --channel slack "#general" "@jane"
-clawdbot channels logs --channel all``````
-## 添加/移除账户```bash
+clawdbot channels logs --channel all
+```
+## 添加/移除账户
+```bash
 clawdbot channels add --channel telegram --token <bot-token>
 clawdbot channels remove --channel telegram --delete
 ```
@@ -30,7 +32,8 @@ clawdbot channels remove --channel telegram --delete
 ## 登录 / 注销（交互式）
 bash
 clawdbot channels login --channel whatsapp
-clawdbot channels logout --channel whatsapp``````
+clawdbot channels logout --channel whatsapp
+```
 ## 故障排除
 
 - 运行 `clawdbot status --deep` 进行全面检查。
@@ -39,7 +42,8 @@ clawdbot channels logout --channel whatsapp``````
 
 ## 功能探测
 
-获取提供者功能提示（如有可用的意图/权限）以及静态功能支持：```bash
+获取提供者功能提示（如有可用的意图/权限）以及静态功能支持：
+```bash
 clawdbot channels capabilities
 clawdbot channels capabilities --channel discord --target channel:123
 ```
@@ -54,7 +58,9 @@ clawdbot channels capabilities --channel discord --target channel:123
 bash
 clawdbot channels resolve --channel slack "#general" "@jane"
 clawdbot channels resolve --channel discord "My Server/#support" "@someone"
-clawdbot channels resolve --channel matrix "Project Room"``````
+clawdbot channels resolve --channel matrix "Project Room"
+```
 注意事项：
 - 使用 `--kind user|group|auto` 来强制指定目标类型。
 - 当多个条目具有相同名称时，优先选择活动匹配项。
+```

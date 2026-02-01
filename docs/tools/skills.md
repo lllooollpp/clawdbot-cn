@@ -35,11 +35,11 @@ Clawdbot 使用 **[AgentSkills](https://agentskills.io)** 兼容的技能文件�
 
 ## 插件 + 技能
 
-插件可以通过在 `clawdbot.plugin.json` 中列出 `skills` 目录（路径相对于插件根目录）来自带自己的技能。插件技能在插件启用时加载，并遵循正常的技能优先级规则。你可以通过插件的配置项 `metadata.clawdbot.requires.config` 来控制它们的启用条件。有关插件的发现和配置，请参见 [插件](/plugin)，有关这些技能所教授的工具界面，请参见 [工具](/tools)。
+插件可以通过在 `clawdbot.plugin.json` 中列出 `skills` 目录（路径相对于插件根目录）来自带自己的技能。插件技能在插件启用时加载，并遵循正常的技能优先级规则。你可以通过插件的配置项 `metadata.clawdbot.requires.config` 来控制它们的启用条件。有关插件的发现和配置，请参见 [插件](/plugin.md)，有关这些技能所教授的工具界面，请参见 [工具](/tools/index.md)。
 
 ## ClawdHub（安装 + 同步）
 
-ClawdHub 是 Clawdbot 的公共技能注册表。可在 https://clawdhub.com 浏览。你可以用它来发现、安装、更新和备份技能。完整指南：[ClawdHub](/tools/clawdhub)。
+ClawdHub 是 Clawdbot 的公共技能注册表。可在 https://clawdhub.com 浏览。你可以用它来发现、安装、更新和备份技能。完整指南：[ClawdHub](/tools/clawdhub.md)。
 
 常见操作：
 
@@ -133,7 +133,7 @@ json5
     }
   }
 }
-``````
+```
 注意：如果技能名称包含连字符，请对键进行引号（JSON5 允许使用引号的键）。
 
 默认情况下，配置键与 **技能名称** 匹配。如果一个技能定义了 `metadata.clawdbot.skillKey`，则使用该键在 `skills.entries` 下。
@@ -169,7 +169,8 @@ Clawdbot 在**会话开始时**对符合条件的技能进行快照，并在该�
 
 ## 技能观察器（自动刷新）
 
-默认情况下，Clawdbot 会监视技能文件夹，并在 `SKILL.md` 文件更改时更新技能快照。可以在 `skills.load` 下进行配置：```json5
+默认情况下，Clawdbot 会监视技能文件夹，并在 `SKILL.md` 文件更改时更新技能快照。可以在 `skills.load` 下进行配置：
+```json5
 {
   skills: {
     load: {
@@ -189,7 +190,7 @@ Clawdbot 在**会话开始时**对符合条件的技能进行快照，并在该�
 公式（字符数）：
 
 total = 195 + Σ (97 + len(name_escaped) + len(description_escaped) + len(location_escaped))
-``````
+```
 注意事项：
 - XML 转义会将 `& < > " '` 转换为实体（`&amp;`, `&lt;` 等），从而增加长度。
 - 令牌数量因模型的分词器而异。一个粗略的 OpenAI 风格估算约为每令牌 4 个字符，因此每个技能大约 **97 个字符 ≈ 24 个令牌**，加上你实际字段的长度。

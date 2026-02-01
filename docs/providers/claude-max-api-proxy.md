@@ -21,13 +21,14 @@ read_when:
 
 Your App → claude-max-api-proxy → Claude Code CLI → Anthropic (via subscription)
      (OpenAI format)              (converts format)      (uses your login)
-``````
+```
 代理：
 1. 在 `http://localhost:3456/v1/chat/completions` 接受 OpenAI 格式的请求
 2. 将其转换为 Claude Code CLI 命令
 3. 以 OpenAI 格式返回响应（支持流式传输）
 
-## 安装```bash
+## 安装
+```bash
 # Requires Node.js 20+ and Claude Code CLI
 npm install -g claude-max-api-proxy
 
@@ -40,8 +41,9 @@ claude --version
 bash
 claude-max-api
 # 服务器运行在 http://localhost:3456
-``````
-### 测试它```bash
+```
+## 测试它
+```bash
 # Health check
 curl http://localhost:3456/health
 
@@ -56,7 +58,7 @@ curl http://localhost:3456/v1/chat/completions \
     "messages": [{"role": "user", "content": "Hello!"}]
   }'
 ```
-### 使用 Clawdbot
+## 使用 Clawdbot
 
 您可以将 Clawdbot 指向代理作为自定义的 OpenAI 兼容端点：
 json5
@@ -71,7 +73,7 @@ json5
     }
   }
 }
-``````
+```
 ## 可用模型
 
 | 模型ID | 映射到 |
@@ -82,7 +84,8 @@ json5
 
 ## 在 macOS 上自动启动
 
-创建一个 LaunchAgent 以自动运行代理：```bash
+创建一个 LaunchAgent 以自动运行代理：
+```bash
 cat > ~/Library/LaunchAgents/com.claude-max-api.plist << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -125,5 +128,6 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-max-api.plist
 
 ## 相关内容
 
-- [Anthropic 提供商](/providers/anthropic) - 与 Claude Code CLI OAuth 的原生 Clawdbot 集成
-- [OpenAI 提供商](/providers/openai) - 适用于 OpenAI/Codex 订阅
+- [Anthropic 提供商](/providers/anthropic.md) - 与 Claude Code CLI OAuth 的原生 Clawdbot 集成
+- [OpenAI 提供商](/providers/openai.md) - 适用于 OpenAI/Codex 订阅
+```

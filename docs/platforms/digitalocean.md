@@ -25,7 +25,7 @@ read_when:
 
 **推荐：**
 - **免费：** Oracle Cloud ARM（如果你能处理注册流程）
-- **付费：** Hetzner CX22（性价比最高）—— 请参阅 [Hetzner 教程](/platforms/hetzner)
+- **付费：** Hetzner CX22（性价比最高）—— 请参阅 [Hetzner 教程](/platforms/hetzner.md)
 - **简便：** DigitalOcean（本指南）—— 对初学者友好的界面
 
 ---
@@ -51,8 +51,9 @@ read_when:
 ## 2) 通过 SSH 连接
 bash
 ssh root@YOUR_DROPLET_IP
-``````
-## 3）安装 Clawdbot```bash
+```
+## 3）安装 Clawdbot
+```bash
 # Update system
 apt update && apt upgrade -y
 
@@ -69,14 +70,15 @@ clawdbot --version
 ## 4）运行入门指南
 bash
 clawdbot onboard --install-daemon
-``````
+```
 向导将引导您完成以下步骤：
 - 模型认证（API 密钥或 OAuth）
 - 渠道设置（Telegram、WhatsApp、Discord 等）
 - 网关令牌（自动生成）
 - 守护进程安装（systemd）
 
-## 5）验证网关```bash
+## 5）验证网关
+```bash
 # Check status
 clawdbot status
 
@@ -96,8 +98,9 @@ bash
 ssh -L 18789:localhost:18789 root@YOUR_DROPLET_IP
 
 # 然后打开：http://localhost:18789
-``````
-**选项 B：Tailscale（长期更简单）**```bash
+```
+**选项 B：Tailscale（长期更简单）**
+```bash
 # On the droplet
 curl -fsSL https://tailscale.com/install.sh | sh
 tailscale up
@@ -112,12 +115,14 @@ clawdbot gateway restart
 
 ### Telegram
 clawdbot pairing list telegram
-clawdbot pairing approve telegram <CODE>```
-### WhatsApp```bash
+clawdbot pairing approve telegram <CODE>
+```
+### WhatsApp
+```bash
 clawdbot channels login whatsapp
 # Scan QR code
 ```
-有关其他提供商的信息，请参阅[Channels](/channels)。
+有关其他提供商的信息，请参阅[Channels](/channels/index.md)。
 
 ---
 
@@ -132,13 +137,14 @@ chmod 600 /swapfile
 mkswap /swapfile
 swapon /swapfile
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
-``````
+```
 ### 使用更轻量的模型
 如果你遇到内存不足（OOM）的问题，可以考虑：
 - 使用基于API的模型（如Claude、GPT）而不是本地模型
 - 将 `agents.defaults.model.primary` 设置为更小的模型
 
-### 监控内存```bash
+### 监控内存
+```bash
 free -h
 htop
 ```
@@ -153,7 +159,7 @@ htop
 这些数据在重启后仍然保留。请定期备份：
 bash
 tar -czvf clawdbot-backup.tar.gz ~/.clawdbot ~/clawd
-``````
+```
 ---
 
 ## Oracle Cloud 的免费替代方案
@@ -185,7 +191,8 @@ Oracle Cloud 提供了**Always Free**的 ARM 实例，性能显著更强：
 
 ## 故障排除
 
-### 网关无法启动```bash
+### 网关无法启动
+```bash
 clawdbot gateway status
 clawdbot doctor --non-interactive
 journalctl -u clawdbot --no-pager -n 50
@@ -194,8 +201,9 @@ journalctl -u clawdbot --no-pager -n 50
 bash
 lsof -i :18789
 kill <PID>
-``````
-### 内存不足```bash
+```
+### 内存不足
+```bash
 # Check memory
 free -h
 
@@ -204,7 +212,8 @@ free -h
 ```
 ## 参见
 
-- [Hetzner 指南](/platforms/hetzner) — 更便宜，更强大
-- [Docker 安装](/install/docker) — 容器化设置
-- [Tailscale](/gateway/tailscale) — 安全的远程访问
-- [配置](/gateway/configuration) — 完整的配置参考
+- [Hetzner 指南](/platforms/hetzner.md) — 更便宜，更强大
+- [Docker 安装](/install/docker.md) — 容器化设置
+- [Tailscale](/gateway/tailscale.md) — 安全的远程访问
+- [配置](/gateway/configuration.md) — 完整的配置参考
+```

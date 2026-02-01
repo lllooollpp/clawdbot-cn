@@ -19,7 +19,7 @@ Clawdbot 支持通过 OAuth 为提供方（尤其是 **Anthropic (Claude Pro/Max
 Clawdbot 还支持自带 OAuth 或 API 密钥流程的 **提供方插件**。可以通过以下方式运行它们：
 bash
 clawdbot models auth login --provider <id>
-`````````
+```
 ## token sink（为什么存在）
 
 OAuth 提供商通常在登录/刷新流程中生成一个新的 **刷新令牌**。一些提供方（或 OAuth 客户端）会在为同一用户/应用颁发新令牌时使旧的刷新令牌失效。
@@ -42,7 +42,7 @@ OAuth 提供商通常在登录/刷新流程中生成一个新的 **刷新令牌*
 仅用于导入的旧文件（仍然支持，但不是主要存储）：
 - `~/.clawdbot/credentials/oauth.json`（在首次使用时会被导入到 `auth-profiles.json` 中）
 
-以上所有路径都支持 `$CLAWDBOT_STATE_DIR`（状态目录覆盖）。完整说明：[/gateway/configuration](/gateway/configuration#auth-storage-oauth--api-keys)
+以上所有路径都支持 `$CLAWDBOT_STATE_DIR`（状态目录覆盖）。完整说明：[/gateway/configuration](/gateway/configuration.md#auth-storage-oauth--api-keys)
 
 ## 重用 Claude Code / Codex CLI 的 OAuth token（推荐方式）
 
@@ -54,13 +54,15 @@ OAuth 提供商通常在登录/刷新流程中生成一个新的 **刷新令牌*
 - Codex CLI：读取 `~/.codex/auth.json` → 配置文件 `openai-codex:codex-cli`
 
 同步操作会在 Clawdbot 加载认证存储时发生（因此当 CLI 刷新 token 时，Clawdbot 的 token 也会保持同步）。
-在 macOS 上，第一次读取可能会触发 Keychain 提示；如果网关以无头模式运行且无法访问该条目，可在终端中运行一次 `clawdbot models status`。```bash
+在 macOS 上，第一次读取可能会触发 Keychain 提示；如果网关以无头模式运行且无法访问该条目，可在终端中运行一次 `clawdbot models status`。
+```bash
 clawdbot models status
 clawdbot channels list
 ```
 或者 JSON：
 bash
-clawdbot channels list --json```## OAuth 交换（如何登录）
+clawdbot channels list --json
+```## OAuth 交换（如何登录）
 
 Clawdbot 的交互式登录流程在 `@mariozechner/pi-ai` 中实现，并连接到向导/命令中。
 
@@ -126,7 +128,7 @@ Anthropic OAuth 令牌在几小时后会过期。如果没有双向同步：
 bash
 clawdbot agents add work
 clawdbot agents add personal
-``````
+```
 然后为每个代理配置身份验证（向导），并将聊天路由到正确的代理。
 
 ### 2）高级用法：一个代理中的多个配置文件
@@ -144,5 +146,6 @@ clawdbot agents add personal
 - `clawdbot channels list --json`（显示 `auth[]`）
 
 相关文档：
-- [/concepts/model-failover](/concepts/model-failover)（轮换 + 冷却规则）
-- [/tools/slash-commands](/tools/slash-commands)（命令界面）
+- [/concepts/model-failover](/concepts/model-failover.md)（轮换 + 冷却规则）
+- [/tools/slash-commands](/tools/slash-commands.md)（命令界面）
+```

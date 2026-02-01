@@ -5,21 +5,26 @@ read_when:
   - Setting up a new machine
 ---
 
-# 上线向导（CLI）
+# 上线向导
 
-上线向导是**推荐**的方式，用于在 macOS、Linux 或 Windows（通过 WSL2；强烈推荐）上设置 Clawdbot。
-它通过一个引导流程配置本地网关或远程网关连接，以及频道、技能和工作区的默认设置。
+上线向导是**推荐**的方式，用于在 Windows、macOS 和 Linux 上设置 Clawdbot。
+它可以通过命令行、桌面端软件或 Web 仪表盘访问，引导你配置模型、频道、技能和工作区。
 
 主要入口点：
-bash
-clawdbot onboard
-``````
-后续重新配置：```bash
+- **桌面软件**：在“设置 (Settings)”菜单中点击“配置向导 (Onboarding Wizard)”。
+- **Web 界面**：在侧边栏点击“配置向导”图标（魔棒形状）。
+- **命令行 (CLI)**：运行 `clawdbot onboard`。
+```
+后续重新配置：
+```bash
 clawdbot configure
 ```
+## 特点：国内优先 🇨🇳
+
+针对中文用户，向导现在默认将 **DeepSeek、智谱 AI (Zhipu)、火山引擎 (Volcengine)** 等国内模型提供商列为首选项，方便快速连接最佳本地大模型体验。
 ## 推荐：设置 Brave Search API 密钥
 
-以便代理可以使用 `web_search`（`web_fetch` 无需密钥）。最简单的路径是运行 `clawdbot configure --section web`，这会存储 `tools.web.search.apiKey`。文档：[Web 工具](/tools/web)。
+以便代理可以使用 `web_search`（`web_fetch` 无需密钥）。最简单的路径是运行 `clawdbot configure --section web`，这会存储 `tools.web.search.apiKey`。文档：[Web 工具](/tools/web.md)。
 
 ## QuickStart 与 Advanced
 
@@ -52,7 +57,7 @@ clawdbot configure
 如需添加更多隔离的代理（独立的工作空间 + 会话 + 认证），请使用：
 bash
 clawdbot agents add <name>
-``````
+```
 提示：`--json` **不**表示非交互模式。对于脚本，请使用 `--non-interactive`（和 `--workspace`）。
 
 ## 流程详情（本地）
@@ -77,24 +82,24 @@ clawdbot agents add <name>
    - **OpenCode Zen（多模型代理）**：提示输入 `OPENCODE_API_KEY`（或 `OPENCODE_ZEN_API_KEY`，可在 https://opencode.ai/auth 获取）。
    - **API 密钥**：为你存储该密钥。
    - **Vercel AI 网关（多模型代理）**：提示输入 `AI_GATEWAY_API_KEY`。
-     - 更多详情：[Vercel AI 网关](/providers/vercel-ai-gateway)
+     - 更多详情：[Vercel AI 网关](/providers/vercel-ai-gateway.md)
    - **MiniMax M2.1**：配置会自动写入。
-     - 更多详情：[MiniMax](/providers/minimax)
+     - 更多详情：[MiniMax](/providers/minimax.md)
    - **Synthetic（Anthropic 兼容）**：提示输入 `SYNTHETIC_API_KEY`。
-     - 更多详情：[Synthetic](/providers/synthetic)
+     - 更多详情：[Synthetic](/providers/synthetic.md)
    - **Moonshot（Kimi K2）**：配置会自动写入。
    - **Kimi Code**：配置会自动写入。
-     - 更多详情：[Moonshot AI（Kimi + Kimi Code）](/providers/moonshot)
+     - 更多详情：[Moonshot AI（Kimi + Kimi Code）](/providers/moonshot.md)
    - **跳过**：尚未配置认证。
    - 从检测到的选项中选择一个默认模型（或手动输入提供者/模型）。
    - 向导会运行模型检查，并在配置的模型未知或缺少认证时发出警告。
    - OAuth 凭据存储在 `~/.clawdbot/credentials/oauth.json` 中；认证配置文件存储在 `~/.clawdbot/agents/<agentId>/agent/auth-profiles.json`（API 密钥 + OAuth）。
-     - 更多详情：[/concepts/oauth](/concepts/oauth)
+     - 更多详情：[/concepts/oauth](/concepts/oauth.md)
 
 3) **工作区**
    - 默认路径为 `~/clawd`（可配置）。
    - 生成代理启动所需的默认工作区文件。
-   - 完整的工作区结构和备份指南：[代理工作区](/concepts/agent-workspace)
+   - 完整的工作区结构和备份指南：[代理工作区](/concepts/agent-workspace.md)
 
 4) **网关**
    - 端口、绑定、认证模式、Tailscale 暴露。
@@ -166,7 +171,8 @@ clawdbot agents add <name>
 
 ## 非交互模式
 
-使用 `--non-interactive` 来自动化或脚本化接入流程：```bash
+使用 `--non-interactive` 来自动化或脚本化接入流程：
+```bash
 clawdbot onboard --non-interactive \
   --mode local \
   --auth-choice apiKey \
@@ -187,8 +193,9 @@ clawdbot onboard --non-interactive \
   --gemini-api-key "$GEMINI_API_KEY" \
   --gateway-port 18789 \
   --gateway-bind loopback
-``````
-Z.AI 示例：```bash
+```
+Z.AI 示例：
+```bash
 clawdbot onboard --non-interactive \
   --mode local \
   --auth-choice zai-api-key \
@@ -204,10 +211,11 @@ clawdbot onboard --non-interactive \
   --ai-gateway-api-key "$AI_GATEWAY_API_KEY" \
   --gateway-port 18789 \
   --gateway-bind loopback
-``````
+```
 月球射击示例：
 
-"```bash
+"
+```bash
 clawdbot onboard --non-interactive \
   --mode local \
   --auth-choice moonshot-api-key \
@@ -223,8 +231,9 @@ clawdbot onboard --non-interactive \
   --synthetic-api-key "$SYNTHETIC_API_KEY" \
   --gateway-port 18789 \
   --gateway-bind loopback
-``````
-OpenCode Zen 示例：```bash
+```
+OpenCode Zen 示例：
+```bash
 clawdbot onboard --non-interactive \
   --mode local \
   --auth-choice opencode-zen \
@@ -240,7 +249,7 @@ clawdbot agents add work \
   --bind whatsapp:biz \
   --non-interactive \
   --json
-``````
+```
 ## 网关向导 RPC
 
 网关通过 RPC 暴露向导流程（`wizard.start`、`wizard.next`、`wizard.cancel`、`wizard.status`）。

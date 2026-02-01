@@ -49,9 +49,10 @@ json5
     }
   }
 }
-``````
+```
 ### Model entries
-每个 `models[]` 条目可以是 **provider** 或 **CLI**：```json5
+每个 `models[]` 条目可以是 **provider** 或 **CLI**：
+```json5
 {
   type: "provider",        // default if omitted
   provider: "openai",
@@ -79,7 +80,8 @@ json5
   maxBytes: 52428800,
   timeoutSeconds: 120,
   capabilities: ["video", "image"]
-}```
+}
+```
 CLI 模板也可以使用：
 - `{{MediaDir}}`（包含媒体文件的目录）
 - `{{OutputDir}}`（此次运行创建的临时目录）
@@ -113,7 +115,8 @@ CLI 模板也可以使用：
    - 图像：OpenAI → Anthropic → Google → MiniMax
    - 视频：Google
 
-要禁用自动检测，请设置：```json5
+要禁用自动检测，请设置：
+```json5
 {
   tools: {
     media: {
@@ -151,7 +154,7 @@ CLI 模板也可以使用：
 **音频**
 - `openai/gpt-4o-mini-transcribe`、`groq/whisper-large-v3-turbo` 或 `deepgram/nova-3`。
 - CLI 回退选项：`whisper-cli`（whisper-cpp）或 `whisper`。
-- Deepgram 设置：[Deepgram（音频转录）](/providers/deepgram)。
+- Deepgram 设置：[Deepgram（音频转录）](/providers/deepgram.md)。
 
 **视频**
 - `google/gemini-3-flash-preview`（快速）、`google/gemini-3-pro-preview`（更丰富）。
@@ -197,8 +200,9 @@ json5
     }
   }
 }
-``````
-### 2) 仅音频+视频（关闭图像）```json5
+```
+### 2) 仅音频+视频（关闭图像）
+```json5
 {
   tools: {
     media: {
@@ -263,8 +267,9 @@ json5
     }
   }
 }
-``````
-### 4) 多模态单入口（显式能力）```json5
+```
+### 4) 多模态单入口（显式能力）
+```json5
 {
   tools: {
     media: {
@@ -289,5 +294,6 @@ json5
 - 使用 `scope` 来限制理解功能运行的范围（例如，仅限私信）。
 
 ## 相关文档
-- [配置](/gateway/configuration)
-- [图像与媒体支持](/nodes/images)
+- [配置](/gateway/configuration.md)
+- [图像与媒体支持](/nodes/images.md)
+```

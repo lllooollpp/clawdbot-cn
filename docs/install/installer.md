@@ -17,11 +17,12 @@ Clawdbot 提供两个安装脚本（从 `clawd.bot` 提供）：
 要查看当前的标志/行为，请运行：
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --help
-``````
-Windows（PowerShell）帮助：```powershell
+```
+Windows（PowerShell）帮助：
+```powershell
 & ([scriptblock]::Create((iwr -useb https://clawd.bot/install.ps1))) -?
 ```
-如果安装程序已完成但在新终端中找不到 `clawdbot`，通常是因为 Node.js/npm 的 PATH 问题。请参见：[安装](/install#nodejs--npm-path-sanity)。
+如果安装程序已完成但在新终端中找不到 `clawdbot`，通常是因为 Node.js/npm 的 PATH 问题。请参见：[安装](/install/index.md#nodejs--npm-path-sanity)。
 
 ## install.sh（推荐）
 
@@ -40,7 +41,7 @@ Windows（PowerShell）帮助：```powershell
 如果你 **希望** `sharp` 链接全局安装的 libvips（或者你在进行调试），请设置：
 bash
 SHARP_IGNORE_GLOBAL_LIBVIPS=0 curl -fsSL https://clawd.bot/install.sh | bash
-``````
+```
 ### 可发现性 / “git install” 提示
 
 如果你在 **已经处于 Clawdbot 源代码检出目录中**（通过 `package.json` 和 `pnpm-workspace.yaml` 进行检测），运行安装程序时会提示：
@@ -62,7 +63,8 @@ SHARP_IGNORE_GLOBAL_LIBVIPS=0 curl -fsSL https://clawd.bot/install.sh | bash
 
 `install.sh` 脚本通过将前缀切换为以下路径来缓解这个问题：
 
-- `~/.npm-global`（如果存在，则将其添加到 `~/.bashrc` 或 `~/.zshrc` 的 `PATH` 中）```bash
+- `~/.npm-global`（如果存在，则将其添加到 `~/.bashrc` 或 `~/.zshrc` 的 `PATH` 中）
+```bash
 curl -fsSL https://clawd.bot/install-cli.sh | bash -s -- --help
 ```
 ## install.ps1 (Windows PowerShell)
@@ -78,11 +80,13 @@ curl -fsSL https://clawd.bot/install-cli.sh | bash -s -- --help
 示例：
 powershell
 iwr -useb https://clawd.bot/install.ps1 | iex
-``````
+```
 ```md
-"iwr -useb https://clawd.bot/install.ps1 | iex -InstallMethod git"```
+"iwr -useb https://clawd.bot/install.ps1 | iex -InstallMethod git"
+```
 ```md
-iwr -useb https://clawd.bot/install.ps1 | iex -InstallMethod git -GitDir "C:\\clawdbot"```
+iwr -useb https://clawd.bot/install.ps1 | iex -InstallMethod git -GitDir "C:\\clawdbot"
+```
 环境变量：
 
 - `CLAWDBOT_INSTALL_METHOD=git|npm`
@@ -96,3 +100,4 @@ Git 要求：
 
 - **npm 错误 spawn git / ENOENT**：安装 Git for Windows，然后重新打开 PowerShell，再重新运行安装程序。
 - **"clawdbot" 未被识别**：您的 npm 全局 bin 文件夹未被添加到 PATH 中。大多数系统使用 `%AppData%\\npm`。您也可以运行 `npm config get prefix`，并将 `\\bin` 添加到 PATH 中，然后重新打开 PowerShell。
+```

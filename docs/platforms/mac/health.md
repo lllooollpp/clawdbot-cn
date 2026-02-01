@@ -26,4 +26,4 @@ read_when:
 - 分别缓存最后一次成功的快照和最后一次错误，以避免状态闪烁；并显示每个的时间戳。
 
 ## 如有疑问
-- 你仍然可以在 [网关健康](/gateway/health) 中使用 CLI 流程（`clawdbot status`、`clawdbot status --deep`、`clawdbot health --json`），并可通过 `tail /tmp/clawdbot/clawdbot-*.log` 查看 `web-heartbeat` 或 `web-reconnect` 的日志。
+- 你仍然可以在 [网关健康](/gateway/health.md) 中使用 CLI 流程（`clawdbot status`、`clawdbot status --deep`、`clawdbot health --json`），并可通过 `tail /tmp/clawdbot/clawdbot-*.log` 查看 `web-heartbeat` 或 `web-reconnect` 的日志。

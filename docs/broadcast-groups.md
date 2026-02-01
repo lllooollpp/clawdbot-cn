@@ -22,7 +22,8 @@ status: experimental
 ## 使用场景
 
 ### 1. 专业代理团队
-部署多个具有原子化、专注职责的代理:```
+部署多个具有原子化、专注职责的代理:
+```
 Group: "Development Team"
 Agents:
   - CodeReviewer (reviews code snippets)
@@ -32,20 +33,23 @@ Agents:
 ```
 每个代理处理相同的消息并提供其专业视角。
 
-### 2. 多语言支持```
+### 2. 多语言支持
+```
 Group: "International Support"
 Agents:
   - Agent_EN (responds in English)
   - Agent_DE (responds in German)
   - Agent_ES (responds in Spanish)
 ```
-### 3. 质量保证工作流程```
+### 3. 质量保证工作流程
+```
 Group: "Customer Support"
 Agents:
   - SupportAgent (provides answer)
   - QAAgent (reviews quality, only responds if issues found)
 ```
-### 4. 任务自动化```
+### 4. 任务自动化
+```
 Group: "Project Management"
 Agents:
   - TaskTracker (updates task database)
@@ -58,7 +62,8 @@ Agents:
 
 添加一个顶级的 `broadcast` 部分（与 `bindings` 并列）。键为 WhatsApp 对等 ID：
 - 群聊：群组 JID（例如 `120363403215116621@g.us`）
-- 私聊：E.164 电话号码（例如 `+15551234567`）```json
+- 私聊：E.164 电话号码（例如 `+15551234567`）
+```json
 {
   "broadcast": {
     "120363403215116621@g.us": ["alfred", "baerbel", "assistant3"]
@@ -72,7 +77,8 @@ Agents:
 控制代理如何处理消息：
 
 #### 并行（默认）
-所有代理同时处理：```json
+所有代理同时处理：
+```json
 {
   "broadcast": {
     "strategy": "parallel",
@@ -81,7 +87,8 @@ Agents:
 }
 ```
 #### 顺序执行
-代理按顺序处理（一个等待前一个完成）：```json
+代理按顺序处理（一个等待前一个完成）：
+```json
 {
   "broadcast": {
     "strategy": "sequential",
@@ -89,7 +96,8 @@ Agents:
   }
 }
 ```
-### 完整示例```json
+### 完整示例
+```json
 {
   "agents": {
     "list": [
@@ -151,13 +159,15 @@ Agents:
 - 不同的性格
 - 不同的工具访问权限（例如只读 vs. 读写）
 - 不同的模型（例如 opus vs. sonnet）
-- 不同的技能安装```
+- 不同的技能安装
+```
 Session: agent:alfred:whatsapp:group:120363403215116621@g.us
 History: [user message, alfred's previous responses]
 Workspace: /Users/pascal/clawd-alfred/
 Tools: read, write, exec
 ```
-**Bärbel的上下文：**```
+**Bärbel的上下文：**
+```
 Session: agent:baerbel:whatsapp:group:120363403215116621@g.us  
 History: [user message, baerbel's previous responses]
 Workspace: /Users/pascal/clawd-baerbel/
@@ -167,7 +177,8 @@ Tools: read only
 
 ### 1. 保持代理专注
 
-为每个代理设计一个单一且明确的职责：```json
+为每个代理设计一个单一且明确的职责：
+```json
 {
   "broadcast": {
     "DEV_GROUP": ["formatter", "linter", "tester"]
@@ -178,7 +189,8 @@ Tools: read only
 ❌ **缺点：** 一个通用的 "dev-helper" 代理
 ### 2. 使用描述性名称
 
-明确每个代理的作用：```json
+明确每个代理的作用：
+```json
 {
   "agents": {
     "security-scanner": { "name": "Security Scanner" },
@@ -189,7 +201,8 @@ Tools: read only
 ```
 ### 3. 配置不同的工具访问权限
 
-仅向代理提供他们需要的工具：```json
+仅向代理提供他们需要的工具：
+```json
 {
   "agents": {
     "reviewer": {
@@ -210,7 +223,8 @@ Tools: read only
 
 ### 5. 优雅处理故障
 
-代理程序会独立失败。一个代理程序的错误不会阻碍其他代理程序的运行：```
+代理程序会独立失败。一个代理程序的错误不会阻碍其他代理程序的运行：
+```
 Message → [Agent A ✓, Agent B ✗ error, Agent C ✓]
 Result: Agent A and C respond, Agent B logs error
 ```
@@ -226,7 +240,8 @@ Result: Agent A and C respond, Agent B logs error
 
 ### 路由
 
-广播组可以与现有路由一起使用：```json
+广播组可以与现有路由一起使用：
+```json
 {
   "bindings": [
     { "match": { "channel": "whatsapp", "peer": { "kind": "group", "id": "GROUP_A" } }, "agentId": "alfred" }
@@ -250,7 +265,8 @@ Result: Agent A and C respond, Agent B logs error
 2. 对等 ID 格式是否正确（例如：`120363403215116621@g.us`）
 3. 代理是否不在拒绝列表中
 
-**调试:**```bash
+**调试:**
+```bash
 tail -f ~/.clawdbot/logs/gateway.log | grep broadcast
 ```
 ### 只有一个代理响应
@@ -268,7 +284,8 @@ tail -f ~/.clawdbot/logs/gateway.log | grep broadcast
 
 ## 示例
 
-### 示例 1：代码审查团队```json
+### 示例 1：代码审查团队
+```json
 {
   "broadcast": {
     "strategy": "parallel",
@@ -296,7 +313,8 @@ tail -f ~/.clawdbot/logs/gateway.log | grep broadcast
 - test-coverage: "覆盖率是 45%，缺少错误情况的测试用例"
 - docs-checker: "函数 `process_data` 缺少文档字符串"
 
-### 示例 2：多语言支持```json
+### 示例 2：多语言支持
+```json
 {
   "broadcast": {
     "strategy": "sequential",
@@ -313,7 +331,8 @@ tail -f ~/.clawdbot/logs/gateway.log | grep broadcast
 ```
 ## API 参考
 
-### 配置模式```typescript
+### 配置模式
+```typescript
 interface ClawdbotConfig {
   broadcast?: {
     strategy?: "parallel" | "sequential";
@@ -347,6 +366,6 @@ interface ClawdbotConfig {
 
 ## 参考
 
-- [多代理配置](/multi-agent-sandbox-tools)
-- [路由配置](/concepts/channel-routing)
-- [会话管理](/concepts/sessions)
+- [多代理配置](/multi-agent-sandbox-tools.md)
+- [路由配置](/concepts/channel-routing.md)
+- [会话管理](/concepts/sessions.md)

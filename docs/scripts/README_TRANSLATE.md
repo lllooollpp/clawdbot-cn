@@ -1,3 +1,7 @@
+---
+summary: "Documentation for the translation script"
+---
+
 翻译脚本说明
 =================
 
@@ -56,7 +60,7 @@ python scripts/translate_docs.py
 在 `docs` 根目录下运行：
 bash
 python scripts/translate_docs.py
-``````
+```
 说明
 ----
 - 脚本会保留 YAML frontmatter 与代码块（

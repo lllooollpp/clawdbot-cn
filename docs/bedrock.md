@@ -20,7 +20,8 @@ Clawdbot 可以通过 pi‑ai 的 **Bedrock Converse** 流式传输服务提供�
 
 如果检测到 AWS 凭据，Clawdbot 可以自动发现支持 **流式传输** 和 **文本输出** 的 Bedrock 模型。发现过程使用 `bedrock:ListFoundationModels` 接口，并且结果会被缓存（默认：1 小时）。
 
-配置选项位于 `models.bedrockDiscovery` 下：```json5
+配置选项位于 `models.bedrockDiscovery` 下：
+```json5
 {
   models: {
     bedrockDiscovery: {
@@ -43,7 +44,8 @@ Clawdbot 可以通过 pi‑ai 的 **Bedrock Converse** 流式传输服务提供�
 
 ## 设置（手动）
 
-1）确保 AWS 凭据在 **网关主机** 上可用：```bash
+1）确保 AWS 凭据在 **网关主机** 上可用：
+```bash
 export AWS_ACCESS_KEY_ID="AKIA..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_REGION="us-east-1"
@@ -53,7 +55,8 @@ export AWS_PROFILE="your-profile"
 # Optional (Bedrock API key/bearer token):
 export AWS_BEARER_TOKEN_BEDROCK="..."
 ```
-2) 在您的配置中添加一个 Bedrock 提供商和模型（无需 `apiKey`）：```json5
+2) 在您的配置中添加一个 Bedrock 提供商和模型（无需 `apiKey`）：
+```json5
 {
   models: {
     providers: {
@@ -88,7 +91,8 @@ export AWS_BEARER_TOKEN_BEDROCK="..."
 然而，目前 Clawdbot 的凭证检测功能仅检查环境变量，而不检查 IMDS 凭证。
 
 **解决方法：** 设置 `AWS_PROFILE=default` 以表明 AWS 凭证可用。
-实际的身份验证仍然通过 IMDS 使用实例角色进行。```bash
+实际的身份验证仍然通过 IMDS 使用实例角色进行。
+```bash
 # Add to ~/.bashrc or your shell profile
 export AWS_PROFILE=default
 export AWS_REGION=us-east-1
@@ -100,7 +104,8 @@ export AWS_REGION=us-east-1
 
 或者附加托管策略 `AmazonBedrockFullAccess`。
 
-**快速设置:**```bash
+**快速设置:**
+```bash
 # 1. Create IAM role and instance profile
 aws iam create-role --role-name EC2-Bedrock-Access \
   --assume-role-policy-document '{

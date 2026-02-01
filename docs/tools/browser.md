@@ -30,7 +30,7 @@ clawdbot browser --browser-profile clawd status
 clawdbot browser --browser-profile clawd start
 clawdbot browser --browser-profile clawd open https://example.com
 clawdbot browser --browser-profile clawd snapshot
-``````
+```
 如果出现“Browser disabled”，请启用它（见下文配置），然后重启网关。
 
 ## 配置文件：`clawd` 与 `chrome`
@@ -42,7 +42,8 @@ clawdbot browser --browser-profile clawd snapshot
 
 ## 配置
 
-浏览器设置位于 `~/.clawdbot/clawdbot.json` 中。```json5
+浏览器设置位于 `~/.clawdbot/clawdbot.json` 中。
+```json5
 {
   browser: {
     enabled: true,                    // default: true
@@ -78,7 +79,7 @@ clawdbot browser --browser-profile clawd snapshot
 - 本地 `clawd` 配置文件会自动分配 `cdpPort`/`cdpUrl` —— 仅在使用远程 CDP 时设置这些参数。
 bash
 clawdbot config set browser.executablePath "/usr/bin/google-chrome"
-`````````
+```
 ```md
 // macOS
 {
@@ -99,7 +100,8 @@ clawdbot config set browser.executablePath "/usr/bin/google-chrome"
   browser: {
     executablePath: "/usr/bin/brave-browser"
   }
-}```
+}
+```
 ## 本地控制与远程控制
 
 - **本地控制（默认）:** `controlUrl` 是本地回环地址（`127.0.0.1` / `localhost`）。
@@ -116,7 +118,8 @@ clawdbot config set browser.executablePath "/usr/bin/google-chrome"
 - **网关** 只需要 HTTP 控制 URL。
 - 配置文件在 **控制服务器** 端进行解析。
 
-示例：```json5
+示例：
+```json5
 {
   browser: {
     enabled: true,
@@ -164,14 +167,15 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 将 `<BROWSERLESS_API_KEY>` 替换为你的实际 Browserless 令牌。
 - 选择与你的 Browserless 账户匹配的区域端点（请参阅他们的文档）。
 
 ### 在浏览器机器上运行控制服务器
 
-在网关为远程的情况下，运行一个独立的浏览器控制服务器（推荐方式）：```bash
+在网关为远程的情况下，运行一个独立的浏览器控制服务器（推荐方式）：
+```bash
 # on the machine that runs Chrome/Brave/Edge
 clawdbot browser serve --bind <browser-host> --port 18791 --token <token>
 ```
@@ -187,8 +191,9 @@ json5
     // controlToken: "<token>"
   }
 }
-``````
-在网关环境中设置认证令牌：```bash
+```
+在网关环境中设置认证令牌：
+```bash
 export CLAWDBOT_BROWSER_CONTROL_TOKEN="<token>"
 ```
 选项 B：将令牌存储在网关配置中（使用相同的共享令牌）：
@@ -200,7 +205,7 @@ json5
     controlToken: "<token>"
   }
 }
-``````
+```
 ## 安全性
 
 本节介绍用于代理浏览器自动化的 **浏览器控制服务器** (`browser.controlUrl`)。
@@ -223,7 +228,8 @@ json5
 - 或者仅绑定到 Tailnet IP（**永远不要绑定到 `0.0.0.0`**），并要求使用令牌认证。
 
 避免做法：
-- `--bind 0.0.0.0`（局域网可见）。即使使用了令牌认证，除非你同时添加 TLS，否则流量仍是明文 HTTP。```bash
+- `--bind 0.0.0.0`（局域网可见）。即使使用了令牌认证，除非你同时添加 TLS，否则流量仍是明文 HTTP。
+```bash
 # on the browser machine
 clawdbot browser serve --bind 127.0.0.1 --port 18791 --token <token>
 tailscale serve https / http://127.0.0.1:18791
@@ -232,7 +238,7 @@ tailscale serve https / http://127.0.0.1:18791
 
 注意事项：
 - 除非你明确希望将端点公开，否则 **不要** 使用 Tailscale Funnel。
-- 关于 Tailnet 设置/背景知识，请参阅 [网关网页界面](/web/index) 和 [网关 CLI](/cli/gateway)。
+- 关于 Tailnet 设置/背景知识，请参阅 [网关网页界面](/web/index.md) 和 [网关 CLI](/cli/gateway.md)。
 
 ## 配置文件（多浏览器）
 
@@ -253,7 +259,7 @@ Clawdbot 支持多个命名的配置文件（路由配置）。配置文件可�
 
 Clawdbot 还可以通过本地 CDP 中继 + Chrome 扩展来控制 **你已有的 Chrome 标签页**（不需要单独的“clawd” Chrome 实例）。
 
-完整指南：[Chrome 扩展](/tools/chrome-extension)
+完整指南：[Chrome 扩展](/tools/chrome-extension.md)
 
 流程：
 - 你运行一个 **浏览器控制服务器**（与同一台机器上的 Gateway，或运行 `clawdbot browser serve`）。
@@ -272,7 +278,7 @@ Chrome 扩展中继接管需要主机浏览器的控制权限，因此需要：
 - 设置 `agents.defaults.sandbox.browser.allowHostControl: true`，并在调用工具时使用 `target="host"`。
 bash
 clawdbot browser extension install
-``````
+```
 - Chrome → `chrome://extensions` → 启用“开发者模式”
 - “加载解压的扩展程序” → 选择由 `clawdbot browser extension path` 输出的目录
 - 固定该扩展程序，然后点击你想要控制的标签页（徽章显示 `ON`）。
@@ -281,7 +287,8 @@ clawdbot browser extension install
 - 命令行：`clawdbot browser --browser-profile chrome tabs`
 - 代理工具：`browser` 并设置 `profile="chrome"`
 
-可选：如果你想要不同的名称或中继端口，可以创建自己的配置文件：```bash
+可选：如果你想要不同的名称或中继端口，可以创建自己的配置文件：
+```bash
 clawdbot browser create-profile \
   --name my-chrome \
   --driver extension \
@@ -419,7 +426,7 @@ snapshot：
   - `--format ai`（当安装 Playwright 时的默认格式）：返回带有数字引用的 AI 快照（`aria-ref="<n>"`）。
   - `--format aria`：返回可访问性树（无引用；仅用于检查）。
   - `--efficient`（或 `--mode efficient`）：紧凑的角色快照预设（交互式 + 紧凑 + 深度 + 更低的 maxChars）。
-  - 配置默认值（仅限工具/CLI）：设置 `browser.snapshotDefaults.mode: "efficient"`，当调用者未传递 mode 时使用紧凑快照（参见 [Gateway 配置](/gateway/configuration#browser-clawd-managed-browser)）。
+  - 配置默认值（仅限工具/CLI）：设置 `browser.snapshotDefaults.mode: "efficient"`，当调用者未传递 mode 时使用紧凑快照（参见 [Gateway 配置](/gateway/configuration.md#browser-clawd-managed-browser)）。
   - 角色快照选项（`--interactive`, `--compact`, `--depth`, `--selector`）强制生成基于角色的快照，并带有引用如 `ref=e12`。
   - `--frame "<iframe 选择器>"` 会将角色快照限定在某个 iframe 中（与角色引用如 `e12` 配对）。
   - `--interactive` 输出一个扁平、易于选择的交互元素列表（最适合驱动操作）。
@@ -461,7 +468,7 @@ clawdbot browser wait "#main" \
   --load networkidle \
   --fn "window.ready===true" \
   --timeout-ms 15000
-``````
+```
 ## 调试工作流
 
 当一个操作失败时（例如：“不可见”、“严格模式违规”、“被覆盖”）：
@@ -481,7 +488,8 @@ clawdbot browser wait "#main" \
 
 `--json` 用于脚本和结构化工具。
 
-示例：```bash
+示例：
+```bash
 clawdbot browser status --json
 clawdbot browser snapshot --interactive --json
 clawdbot browser requests --filter api --json
@@ -508,13 +516,13 @@ clawdbot browser cookies --json
 ## 安全与隐私
 
 - clawd 浏览器配置文件可能包含已登录的会话；请将其视为敏感信息。
-- 对于登录和反机器人备注（如 X/Twitter 等），请参阅 [浏览器登录 + X/Twitter 发布](/tools/browser-login)。
+- 对于登录和反机器人备注（如 X/Twitter 等），请参阅 [浏览器登录 + X/Twitter 发布](/tools/browser-login.md)。
 - 除非你有意暴露服务器，否则控制 URL 应限制为本地回环（loopback-only）。
 - 远程 CDP 端点功能强大；请通过隧道传输并加以保护。
 
 ## 排错
 
-对于 Linux 特定的问题（尤其是 snap 版的 Chromium），请参阅 [浏览器排错](/tools/browser-linux-troubleshooting)。
+对于 Linux 特定的问题（尤其是 snap 版的 Chromium），请参阅 [浏览器排错](/tools/browser-linux-troubleshooting.md)。
 
 ## Agent 工具与控制机制
 
@@ -535,3 +543,4 @@ Agent 会获得一个用于浏览器自动化的工具：
   - 默认设置：允许列表未设置（无限制），沙箱主机控制默认被禁用。
 
 这种方式确保了 Agent 的确定性，并避免了脆弱的选择器问题。"
+```

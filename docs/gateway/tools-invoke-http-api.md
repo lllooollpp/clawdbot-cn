@@ -31,7 +31,7 @@ json
   "sessionKey": "main",
   "dryRun": false
 }
-``````
+```
 字段：
 - `tool` (字符串，必填)：要调用的工具名称。
 - `action` (字符串，可选)：如果工具的 schema 支持 `action` 并且 args 负载中未包含它，则将其映射到 args。
@@ -62,7 +62,8 @@ json
 - `404` → 工具不可用（未找到或未被允许）
 - `405` → 方法不允许
 
-## 示例```bash
+## 示例
+```bash
 curl -sS http://127.0.0.1:18789/tools/invoke \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \
@@ -71,4 +72,3 @@ curl -sS http://127.0.0.1:18789/tools/invoke \
     "action": "json",
     "args": {}
   }'
-```

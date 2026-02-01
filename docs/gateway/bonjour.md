@@ -24,8 +24,10 @@ json5
 {
   gateway: { bind: "tailnet" }, // 仅限 Tailnet（推荐）
   discovery: { wideArea: { enabled: true } } // 启用 clawdbot.internal 的 DNS-SD 发布
-}``````
-### 一次性 DNS 服务器设置（网关主机）```bash
+}
+```
+### 一次性 DNS 服务器设置（网关主机）
+```bash
 clawdbot dns setup --apply
 ```
 这将安装 CoreDNS 并将其配置为：
@@ -35,7 +37,8 @@ clawdbot dns setup --apply
 从已连接到 tailnet 的机器上进行验证：
 bash
 dns-sd -B _clawdbot-gw._tcp clawdbot.internal.
-dig @<TAILNET_IPV4> -p 53 _clawdbot-gw._tcp.clawdbot.internal PTR +short``````
+dig @<TAILNET_IPV4> -p 53 _clawdbot-gw._tcp.clawdbot.internal PTR +short
+```
 ### Tailscale DNS 设置
 
 在 Tailscale 管理控制台中：
@@ -81,12 +84,16 @@ dig @<TAILNET_IPV4> -p 53 _clawdbot-gw._tcp.clawdbot.internal PTR +short``````
 
 有用的内置工具：
 
-- 浏览实例：  ```bash
+- 浏览实例：  
+```bash
   dns-sd -B _clawdbot-gw._tcp local.
-  ```
+  
+```
 - 解决一个实例（替换 `<instance>`）:
 bash
-  dns-sd -L "<instance>" _clawdbot-gw._tcp local.  ```  ```
+  dns-sd -L "<instance>" _clawdbot-gw._tcp local.  
+```  
+```
 如果浏览功能正常但解析失败，通常是因为局域网策略或 mDNS 解析器的问题。
 
 ## 在网关日志中进行调试
@@ -131,5 +138,5 @@ Bonjour/DNS-SD 经常将服务实例名称中的字节转义为十进制 `\DDD` 
 
 ## 相关文档
 
-- 发现策略与传输选择：[发现](/gateway/discovery)
-- 节点配对 + 审批：[网关配对](/gateway/pairing)
+- 发现策略与传输选择：[发现](/gateway/discovery.md)
+- 节点配对 + 审批：[网关配对](/gateway/pairing.md)

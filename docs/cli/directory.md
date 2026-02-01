@@ -22,7 +22,8 @@ read_when:
 ## 如何将结果与 `message send` 一起使用
 bash
 clawdbot directory peers list --channel slack --query "U0"
-clawdbot message send --channel slack --target user:U012ABCDEF --message "hello"``````
+clawdbot message send --channel slack --target user:U012ABCDEF --message "hello"
+```
 ## ID 格式（按渠道）
 
 - WhatsApp: `+15551234567`（私信），`1234567890-1234567890@g.us`（群组）
@@ -32,7 +33,8 @@ clawdbot message send --channel slack --target user:U012ABCDEF --message "hello"
 - Matrix（插件）: `user:@user:server`，`room:!roomId:server`，或 `#alias:server`
 - Microsoft Teams（插件）: `user:<id>` 和 `conversation:<id>`
 - Zalo（插件）: 用户 ID（Bot API）
-- Zalo 个人 / `zalouser`（插件）: 从 `zca`（`me`，`好友列表`，`群组列表`）获取的线程 ID（私信/群组）```bash
+- Zalo 个人 / `zalouser`（插件）: 从 `zca`（`me`，`好友列表`，`群组列表`）获取的线程 ID（私信/群组）
+```bash
 clawdbot directory self --channel zalouser
 ```
 ## 对等节点（联系人/用户）
@@ -43,4 +45,6 @@ clawdbot 目录 对等节点 列表 --channel zalouser --limit 50
 ## 组
 clawdbot 目录 组 列表 --channel zalouser
 clawdbot 目录 组 列表 --channel zalouser --query "work"
-clawdbot 目录 组 成员 --channel zalouser --group-id <id>```
+clawdbot 目录 组 成员 --channel zalouser --group-id <id>
+```
+

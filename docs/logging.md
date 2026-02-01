@@ -25,7 +25,8 @@ Clawdbot 在两个地方记录日志：
 
 您可以在 `~/.clawdbot/clawdbot.json` 中覆盖此设置：
 
-"```json
+"
+```json
 {
   "logging": {
     "file": "/path/to/clawdbot.log"
@@ -36,7 +37,8 @@ Clawdbot 在两个地方记录日志：
 
 ### CLI：实时尾随（推荐）
 
-通过 RPC 使用 CLI 尾随网关日志文件：```bash
+通过 RPC 使用 CLI 尾随网关日志文件：
+```bash
 clawdbot logs --follow
 ```
 输出模式：
@@ -54,17 +56,19 @@ clawdbot logs --follow
 - `notice`：截断/轮转提示
 - `raw`：未解析的日志行
 
-如果网关不可达，CLI 会打印一个简短提示，提示运行：```bash
+如果网关不可达，CLI 会打印一个简短提示，提示运行：
+```bash
 clawdbot doctor
 ```
 ### 控制界面（Web）
 
 控制界面的 **日志** 选项卡使用 `logs.tail` 尾随同一个文件。  
-有关如何打开它，请参阅 [/web/control-ui](/web/control-ui)。
+有关如何打开它，请参阅 [/web/control-ui](/web/control-ui.md)。
 
 ### 仅频道日志
 
-要过滤频道活动（WhatsApp/Telegram/等），请使用：```bash
+要过滤频道活动（WhatsApp/Telegram/等），请使用：
+```bash
 clawdbot channels logs --channel whatsapp
 ```
 ## 日志格式
@@ -81,7 +85,8 @@ clawdbot channels logs --channel whatsapp
 - 级别颜色标记（info/warn/error）
 - 可选的紧凑模式或 JSON 模式
 
-控制台格式由 `logging.consoleStyle` 控制。```json
+控制台格式由 `logging.consoleStyle` 控制。
+```json
 {
   "logging": {
     "level": "info",
@@ -159,7 +164,8 @@ clawdbot channels logs --channel whatsapp
 
 ### 启用诊断信息（无导出器）
 
-如果您希望诊断事件可供插件或自定义接收器使用，请使用此设置：```json
+如果您希望诊断事件可供插件或自定义接收器使用，请使用此设置：
+```json
 {
   "diagnostics": {
     "enabled": true
@@ -169,24 +175,27 @@ clawdbot channels logs --channel whatsapp
 ### 诊断标志（定向日志）
 
 使用标志来开启额外的、定向的调试日志，而无需提升 `logging.level`。
-标志不区分大小写，并支持通配符（例如 `telegram.*` 或 `*`）。```json
+标志不区分大小写，并支持通配符（例如 `telegram.*` 或 `*`）。
+```json
 {
   "diagnostics": {
     "flags": ["telegram.http"]
   }
 }
 ```
-Env override (one-off):```
+Env override (one-off):
+```
 CLAWDBOT_DIAGNOSTICS=telegram.http,telegram.payload
 ```
 注意事项：
 - 标志日志会输出到标准日志文件（与 `logging.file` 相同）。
 - 输出内容仍然根据 `logging.redactSensitive` 进行脱敏处理。
-- 完整指南：[/diagnostics/flags](/diagnostics/flags)。
+- 完整指南：[/diagnostics/flags](/diagnostics/flags.md)。
 
 ### 导出到 OpenTelemetry
 
-诊断信息可以通过 `diagnostics-otel` 插件（OTLP/HTTP）进行导出。这适用于任何接受 OTLP/HTTP 的 OpenTelemetry 收集器/后端。```json
+诊断信息可以通过 `diagnostics-otel` 插件（OTLP/HTTP）进行导出。这适用于任何接受 OTLP/HTTP 的 OpenTelemetry 收集器/后端。
+```json
 {
   "plugins": {
     "allow": ["diagnostics-otel"],

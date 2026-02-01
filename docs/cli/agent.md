@@ -10,9 +10,9 @@ read_when:
 使用 `--agent <id>` 直接指定一个已配置的代理。
 
 相关：
-- 代理发送工具：[代理发送](/tools/agent-send)
+- 代理发送工具：[代理发送](/tools/agent-send.md)
 bash
 clawdbot agent --to +15555550123 --message "status update" --deliver
 clawdbot agent --agent ops --message "Summarize logs"
 clawdbot agent --session-id 1234 --message "Summarize inbox" --thinking medium
-clawdbot agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"``````
+clawdbot agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"

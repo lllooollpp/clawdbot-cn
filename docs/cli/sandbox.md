@@ -22,10 +22,12 @@ bash
 clawdbot sandbox explain
 clawdbot sandbox explain --session agent:main:main
 clawdbot sandbox explain --agent work
-clawdbot sandbox explain --json``````
+clawdbot sandbox explain --json
+```
 ### `clawdbot sandbox list`
 
-列出所有沙箱容器及其状态和配置。```bash
+列出所有沙箱容器及其状态和配置。
+```bash
 clawdbot sandbox list
 clawdbot sandbox list --browser  # List only browser containers
 clawdbot sandbox list --json     # JSON output
@@ -45,7 +47,8 @@ clawdbot sandbox recreate --all                # 重新创建所有容器
 clawdbot sandbox recreate --session main       # 指定会话
 clawdbot sandbox recreate --agent mybot        # 指定代理
 clawdbot sandbox recreate --browser            # 仅重新创建浏览器容器
-clawdbot sandbox recreate --all --force        # 跳过确认``````
+clawdbot sandbox recreate --all --force        # 跳过确认
+```
 **选项：**
 - `--all`: 重新创建所有沙盒容器
 - `--session <key>`: 为特定会话重新创建容器
@@ -57,7 +60,8 @@ clawdbot sandbox recreate --all --force        # 跳过确认``````
 
 ## 使用场景
 
-### 在更新 Docker 镜像之后```bash
+### 在更新 Docker 镜像之后
+```bash
 # Pull new image
 docker pull clawdbot-sandbox:latest
 docker tag clawdbot-sandbox:latest clawdbot-sandbox:bookworm-slim
@@ -68,22 +72,23 @@ docker tag clawdbot-sandbox:latest clawdbot-sandbox:bookworm-slim
 # Recreate containers
 clawdbot sandbox recreate --all
 ```
-### 更改沙箱配置后
+## 更改沙箱配置后
 # 编辑配置：agents.defaults.sandbox.*（或 agents.list[].sandbox.*）
 
 # 重新创建以应用新配置
 clawdbot sandbox recreate --all
 
 
-### 更改 setupCommand 之后
+## 更改 setupCommand 之后
 ```bash
 clawdbot sandbox recreate --all
 # 或者仅重新创建一个代理：
 clawdbot sandbox recreate --agent family
-``````
-### 仅针对特定代理
+```
+## 仅针对特定代理
 # 仅重新创建一个代理的容器
-clawdbot sandbox recreate --agent alfred```
+clawdbot sandbox recreate --agent alfred
+```
 ## 为什么需要这个？
 
 **问题：** 当你更新沙盒 Docker 镜像或配置时：
@@ -93,7 +98,8 @@ clawdbot sandbox recreate --agent alfred```
 
 **解决方案：** 使用 `clawdbot sandbox recreate` 强制删除旧容器。当下次需要时，它们将自动使用当前设置重新创建。
 
-提示：比起手动使用 `docker rm`，优先使用 `clawdbot sandbox recreate`。它会使用网关的容器命名规则，避免在作用域/会话密钥变化时出现不匹配的问题。```jsonc
+提示：比起手动使用 `docker rm`，优先使用 `clawdbot sandbox recreate`。它会使用网关的容器命名规则，避免在作用域/会话密钥变化时出现不匹配的问题。
+```jsonc
 {
   "agents": {
     "defaults": {
@@ -116,6 +122,7 @@ clawdbot sandbox recreate --agent alfred```
 ```
 ## 参见
 
-- [沙盒文档](/gateway/sandboxing)
-- [代理配置](/concepts/agent-workspace)
-- [Doctor 命令](/gateway/doctor) - 检查沙盒设置
+- [沙盒文档](/gateway/sandboxing.md)
+- [代理配置](/concepts/agent-workspace.md)
+- [Doctor 命令](/gateway/doctor.md) - 检查沙盒设置
+```

@@ -24,8 +24,9 @@ json
   "event": "connect.challenge",
   "payload": { "nonce": "…", "ts": 1737264000000 }
 }
-``````
-客户端 → 网关：```json
+```
+客户端 → 网关：
+```json
 {
   "type": "req",
   "id": "…",
@@ -62,8 +63,10 @@ json
   "id": "…",
   "ok": true,
   "payload": { "type": "hello-ok", "protocol": 3, "policy": { "tickIntervalMs": 15000 } }
-}```
-当设备令牌被颁发时，`hello-ok` 还包括：```json
+}
+```
+当设备令牌被颁发时，`hello-ok` 还包括：
+```json
 {
   "auth": {
     "deviceToken": "…",
@@ -103,7 +106,7 @@ json
     }
   }
 }
-``````
+```
 ## 封装
 
 - **请求**: `{type:"req", id, method, params}`  

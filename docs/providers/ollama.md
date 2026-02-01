@@ -20,8 +20,9 @@ ollama pull llama3.3
 ollama pull qwen2.5-coder:32b
 # 或者
 ollama pull deepseek-r1:32b
-``````
-3) 为 Clawdbot 启用 Ollama（任何值均可；Ollama 不需要真实的密钥）：```bash
+```
+3) 为 Clawdbot 启用 Ollama（任何值均可；Ollama 不需要真实的密钥）：
+```bash
 # Set environment variable
 export OLLAMA_API_KEY="ollama-local"
 
@@ -34,7 +35,8 @@ clawdbot config set models.providers.ollama.apiKey "ollama-local"
       model: { primary: "ollama/llama3.3" }
     }
   }
-}```
+}
+```
 ## 模型发现（隐式提供者）
 
 当你设置 `OLLAMA_API_KEY`（或认证配置文件）并且**不**定义 `models.providers.ollama` 时，Clawdbot 会从本地的 Ollama 实例 `http://127.0.0.1:11434` 中自动发现模型：
@@ -48,7 +50,8 @@ clawdbot config set models.providers.ollama.apiKey "ollama-local"
 
 这样可以在不手动添加模型的情况下，保持目录与 Ollama 的功能一致。
 
-要查看可用的模型：```bash
+要查看可用的模型：
+```bash
 ollama list
 clawdbot models list
 ```
@@ -59,7 +62,7 @@ clawdbot models list
 要添加一个新模型，只需使用 Ollama 拉取它：
 bash
 ollama pull mistral
-``````
+```
 新模型将被自动发现并可供使用。
 
 如果您显式设置了 `models.providers.ollama`，则会跳过自动发现功能，您必须手动定义模型（见下文）。
@@ -68,7 +71,8 @@ ollama pull mistral
 
 ### 基本设置（隐式发现）
 
-启用 Ollama 最简单的方式是通过环境变量：```bash
+启用 Ollama 最简单的方式是通过环境变量：
+```bash
 export OLLAMA_API_KEY="ollama-local"
 ```
 ### 显式设置（手动模型）
@@ -101,12 +105,13 @@ json5
     }
   }
 }
-``````
+```
 如果设置了 `OLLAMA_API_KEY`，可以在 provider 条目中省略 `apiKey`，Clawdbot 会自动填充以进行可用性检查。
 
 ### 自定义基础 URL（显式配置）
 
-如果 Ollama 运行在不同的主机或端口上（显式配置会禁用自动发现，因此需要手动定义模型）：```json5
+如果 Ollama 运行在不同的主机或端口上（显式配置会禁用自动发现，因此需要手动定义模型）：
+```json5
 {
   models: {
     providers: {
@@ -132,12 +137,13 @@ json5
     }
   }
 }
-``````
+```
 ## 高级
 
 ### 推理模型
 
-当 Ollama 在 `/api/show` 中报告 `thinking` 时，Clawdbot 会将这些模型标记为具有推理能力：```bash
+当 Ollama 在 `/api/show` 中报告 `thinking` 时，Clawdbot 会将这些模型标记为具有推理能力：
+```bash
 ollama pull deepseek-r1:32b
 ```
 ### 模型成本
@@ -149,8 +155,9 @@ Ollama 是免费的，并且在本地运行，因此所有模型成本均设置�
 对于自动发现的模型，Clawdbot 会使用 Ollama 报告的上下文窗口大小，如果不可用，则默认为 `8192`。您可以在显式提供者配置中覆盖 `contextWindow` 和 `maxTokens`。
 bash
 ollama serve
-``````
-并且API是可访问的：```bash
+```
+并且API是可访问的：
+```bash
 curl http://localhost:11434/api/tags
 ```
 ### 没有可用的模型
@@ -163,10 +170,11 @@ Clawdbot 仅会自动发现报告支持工具的模型。如果您的模型未�
 bash
 ollama list  # 查看已安装的模型
 ollama pull llama3.3  # 拉取一个模型
-``````
+```
 ### 连接被拒绝
 
-请确认 Ollama 是否在正确的端口上运行：```bash
+请确认 Ollama 是否在正确的端口上运行：
+```bash
 # Check if Ollama is running
 ps aux | grep ollama
 
@@ -175,6 +183,7 @@ ollama serve
 ```
 ## 参见
 
-- [模型提供者](/concepts/model-providers) - 所有提供者的概览
-- [模型选择](/concepts/models) - 如何选择模型
-- [配置](/gateway/configuration) - 完整的配置参考
+- [模型提供者](/concepts/model-providers.md) - 所有提供者的概览
+- [模型选择](/concepts/models.md) - 如何选择模型
+- [配置](/gateway/configuration.md) - 完整的配置参考
+```

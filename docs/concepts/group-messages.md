@@ -17,7 +17,8 @@ read_when:
 - 上下文注入：**仅等待**的群组消息（默认 50 条）中，那些**未触发运行**的消息会在 `[Chat messages since your last reply - for context]` 下被前置，而触发运行的消息则在 `[Current message - respond to this]` 下。已经存在于会话中的消息不会被重新注入。
 - 发送者标识：每个群组消息批次结尾都会加上 `[from: Sender Name (+E164)]`，这样 Pi 能知道是谁在发言。
 - 短时/仅看一次消息：在提取文本/提及之前我们会解包这些消息，因此其中的@提及仍然会触发。
-- 群组系统提示：在群组会话的第一次交互中（以及每次 `/activation` 改变激活模式时），我们会将一段简短的说明注入到系统提示中，例如 `You are replying inside the WhatsApp group "<subject>". Group members: Alice (+44...), Bob (+43...), … Activation: trigger-only … Address the specific sender noted in the message context.` 如果没有元数据，我们仍然会告诉代理这是群组聊天。``````
+- 群组系统提示：在群组会话的第一次交互中（以及每次 `/activation` 改变激活模式时），我们会将一段简短的说明注入到系统提示中，例如 `You are replying inside the WhatsApp group "<subject>". Group members: Alice (+44...), Bob (+43...), … Activation: trigger-only … Address the specific sender noted in the message context.` 如果没有元数据，我们仍然会告诉代理这是群组聊天。
+```
 注意事项：
 - 正则表达式不区分大小写；它们涵盖像 `@clawdbot` 这样的显示名称提及，以及带或不带 `+`/空格的原始号码。
 - WhatsApp 在有人点击联系人时仍会通过 `mentionedJids` 发送规范的提及，因此号码回退很少需要，但是一个有用的备用方案。
@@ -47,3 +48,4 @@ read_when:
 - 回声抑制使用组合的批次字符串；如果你在没有提及的情况下两次发送相同文本，只有第一次会收到回复。
 - 会话存储条目将在会话存储中显示为 `agent:<agentId>:whatsapp:group:<jid>`（默认路径为 `~/.clawdbot/agents/<agentId>/sessions/sessions.json`）；如果没有条目，只是表示该群组尚未触发过运行。
 - 群组中的输入指示符遵循 `agents.defaults.typingMode`（默认：未提及情况下为 `message`）。
+```

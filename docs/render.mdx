@@ -7,7 +7,7 @@ title: Deploy on Render
 ## 先决条件
 
 - 一个 [Render 账户](https://render.com)（提供免费层级）
-- 从你偏好的 [模型提供者](/providers) 获取一个 API 密钥
+- 从你偏好的 [模型提供者](/providers/index.md) 获取一个 API 密钥
 
 ## 使用 Render 蓝图进行部署
 
@@ -23,7 +23,8 @@ title: Deploy on Render
 
 ## 理解蓝图
 
-Render 蓝图是定义你基础设施的 YAML 文件。本仓库中的 `render.yaml` 配置了运行 Clawdbot 所需的一切：```yaml
+Render 蓝图是定义你基础设施的 YAML 文件。本仓库中的 `render.yaml` 配置了运行 Clawdbot 所需的一切：
+```yaml
 services:
   - type: web
     name: clawdbot
@@ -115,7 +116,8 @@ Render 支持横向和纵向扩展：
 - **纵向扩展**：更改计划以获得更多 CPU/RAM
 - **横向扩展**：增加实例数量（标准计划及以上）
 
-对于 Clawdbot，纵向扩展通常已足够。横向扩展需要使用粘性会话或外部状态管理。```
+对于 Clawdbot，纵向扩展通常已足够。横向扩展需要使用粘性会话或外部状态管理。
+```
 https://<your-service>.onrender.com/setup/export
 ```
 这将下载一个便携式备份，您可以在任何 Clawdbot 主机上恢复。

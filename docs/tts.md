@@ -55,8 +55,9 @@ Edge TTS 在 TTS 启用后**默认是开启的**，并且在没有 OpenAI 或 El
 ## 配置
 
 TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
-完整架构请参见 [网关配置](/gateway/configuration)。
-### 最小配置（启用 + 提供者）```json5
+完整架构请参见 [网关配置](/gateway/configuration.md)。
+### 最小配置（启用 + 提供者）
+```json5
 {
   messages: {
     tts: {
@@ -66,7 +67,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### OpenAI 主要接口，ElevenLabs 作为备用接口```json5
+### OpenAI 主要接口，ElevenLabs 作为备用接口
+```json5
 {
   messages: {
     tts: {
@@ -101,7 +103,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### Edge TTS 主要功能（无需 API 密钥）```json5
+### Edge TTS 主要功能（无需 API 密钥）
+```json5
 {
   messages: {
     tts: {
@@ -119,7 +122,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### 禁用 Edge TTS```json5
+### 禁用 Edge TTS
+```json5
 {
   messages: {
     tts: {
@@ -130,7 +134,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### 自定义限制 + 首选项路径```json5
+### 自定义限制 + 首选项路径
+```json5
 {
   messages: {
     tts: {
@@ -142,7 +147,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### 仅在接收到语音消息后回复音频```json5
+### 仅在接收到语音消息后回复音频
+```json5
 {
   messages: {
     tts: {
@@ -151,7 +157,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-### 禁用长回复的自动摘要```json5
+### 禁用长回复的自动摘要
+```json5
 {
   messages: {
     tts: {
@@ -160,7 +167,8 @@ TTS 配置位于 `clawdbot.json` 中的 `messages.tts` 下。
   }
 }
 ```
-然后运行：```
+然后运行：
+```
 /tts summary off
 ```
 ### 关于字段的说明
@@ -216,7 +224,8 @@ json
 - `languageCode`（ISO 639-1）
 - `seed`
 
-禁用所有模型覆盖：```json5
+禁用所有模型覆盖：
+```json5
 {
   messages: {
     tts: {
@@ -227,7 +236,8 @@ json
   }
 }
 ```
-可选的允许列表（在保持标签启用的同时禁用特定覆盖）：```json5
+可选的允许列表（在保持标签启用的同时禁用特定覆盖）：
+```json5
 {
   messages: {
     tts: {
@@ -274,7 +284,8 @@ OpenAI/ElevenLabs 的格式是固定的；Telegram 期望 Opus 以获得语音�
 - 当启用摘要功能时，使用 `agents.defaults.model.primary`（或 `summaryModel`）对长回复进行摘要。
 - 将生成的音频附加到回复中。
 
-如果回复超过 `maxLength` 且摘要功能关闭（或没有摘要模型的 API 密钥），则跳过音频并发送正常的文本回复。```
+如果回复超过 `maxLength` 且摘要功能关闭（或没有摘要模型的 API 密钥），则跳过音频并发送正常的文本回复。
+```
 Reply -> TTS enabled?
   no  -> send text
   yes -> has media / MEDIA: / short?
@@ -289,9 +300,10 @@ Reply -> TTS enabled?
 ## 斜杠命令用法
 
 只有一个命令：`/tts`。
-有关启用详情，请参见 [斜杠命令](/tools/slash-commands)。
+有关启用详情，请参见 [斜杠命令](/tools/slash-commands.md)。
 
-Discord 注意：`/tts` 是 Discord 内置的斜杠命令，因此 Clawdbot 在那里注册了 `/voice` 作为原生命令。`/tts ...` 的文本命令仍然有效。```
+Discord 注意：`/tts` 是 Discord 内置的斜杠命令，因此 Clawdbot 在那里注册了 `/voice` 作为原生命令。`/tts ...` 的文本命令仍然有效。
+```
 /tts off
 /tts always
 /tts inbound
@@ -322,3 +334,4 @@ Discord 注意：`/tts` 是 Discord 内置的斜杠命令，因此 Clawdbot 在�
 - `tts.convert`
 - `tts.setProvider`
 - `tts.providers`
+```

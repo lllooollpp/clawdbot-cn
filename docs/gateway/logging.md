@@ -7,7 +7,7 @@ read_when:
 
 # 日志记录
 
-有关用户界面的概述（CLI + 控制 UI + 配置），请参阅 [/logging](/logging)。
+有关用户界面的概述（CLI + 控制 UI + 配置），请参阅 [/logging](/logging.md)。
 
 Clawdbot 有两个日志“界面”：
 
@@ -28,7 +28,7 @@ Clawdbot 有两个日志“界面”：
 CLI 也可以实现相同的功能：
 bash
 clawdbot logs --follow
-``````
+```
 **详细模式 vs 日志级别**
 
 - **文件日志** 仅由 `logging.level` 控制。
@@ -73,7 +73,8 @@ CLI 会捕获 `console.log/info/warn/error/debug/trace` 并将其写入文件日
 - `--ws-log full`：详细模式下使用完整的帧级输出
 - `--compact`：`--ws-log compact` 的别名
 
-示例：```bash
+示例：
+```bash
 # optimized (only errors/slow)
 clawdbot gateway
 

@@ -1,9 +1,9 @@
 ---
 summary: "Node.js + npm install sanity: versions, PATH, and global installs"
 read_when:
-  - You installed Clawdbot but `clawdbot` is “command not found”
-  - You’re setting up Node.js/npm on a new machine
-  - `npm install -g ...` fails with permissions or PATH issues
+  - "You installed Clawdbot but `clawdbot` is “command not found”"
+  - "You’re setting up Node.js/npm on a new machine"
+  - "npm install -g ... fails with permissions or PATH issues"
 ---
 
 # Node.js + npm（PATH 检查）
@@ -15,17 +15,18 @@ Clawdbot 的运行时基础是 **Node 22+**。
 ## 快速排查
 
 运行以下命令：
-bash
+```bash
 node -v
 npm -v
 npm prefix -g
 echo "$PATH"
-``````
+```
 如果 `$(npm prefix -g)/bin`（macOS/Linux）或 `$(npm prefix -g)`（Windows）**不在** `echo "$PATH"` 中，你的 shell 将无法找到全局的 npm 二进制文件（包括 `clawdbot`）。
 
 ## 解决方法：将 npm 的全局 bin 目录添加到 PATH 中
 
-1) 找到你的全局 npm 前缀：```bash
+1) 找到你的全局 npm 前缀：
+```bash
 npm prefix -g
 ```
 2) 将全局 npm bin 目录添加到你的 shell 启动文件中：
@@ -34,17 +35,18 @@ npm prefix -g
 - bash: `~/.bashrc`
 
 示例（将路径替换为你的 `npm prefix -g` 输出）：
-bash
+```bash
 # macOS / Linux
 export PATH="/path/from/npm/prefix/bin:$PATH"
-``````
+```
 然后打开一个 **新终端**（或者在 zsh 中运行 `rehash`，在 bash 中运行 `hash -r`）。
 
 在 Windows 上，将 `npm prefix -g` 的输出添加到你的 PATH 环境变量中。
 
 ## 修复：避免使用 `sudo npm install -g` / 权限错误（Linux）
 
-如果 `npm install -g ...` 报错 `EACCES`，请将 npm 的全局前缀切换到用户可写的目录：```bash
+如果 `npm install -g ...` 报错 `EACCES`，请将 npm 的全局前缀切换到用户可写的目录：
+```bash
 mkdir -p "$HOME/.npm-global"
 npm config set prefix "$HOME/.npm-global"
 export PATH="$HOME/.npm-global/bin:$PATH"

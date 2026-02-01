@@ -8,7 +8,7 @@ read_when:
 
 # 定时任务（网关调度器）
 
-> **Cron 与 Heartbeat 的区别？** 有关何时使用每种机制的指导，请参阅 [Cron 与 Heartbeat](/automation/cron-vs-heartbeat)。
+> **Cron 与 Heartbeat 的区别？** 有关何时使用每种机制的指导，请参阅 [Cron 与 Heartbeat](/automation/cron-vs-heartbeat.md)。
 
 Cron 是网关内置的调度器。它可以持久化任务，在正确的时间唤醒代理，并且可以可选地将输出返回到聊天中。
 
@@ -134,14 +134,15 @@ json5
     maxConcurrentRuns: 1 // 默认为 1
   }
 }
-`````````
+```
 禁用所有 cron：
 - `cron.enabled: false`（配置）
 - `CLAWDBOT_SKIP_CRON=1`（环境变量）
 
 ## CLI 快速入门
 
-一次性提醒（UTC ISO 时间，成功后自动删除）：```bash
+一次性提醒（UTC ISO 时间，成功后自动删除）：
+```bash
 clawdbot cron add \
   --name "Send reminder" \
   --at "2026-01-12T18:00:00Z" \
@@ -157,8 +158,10 @@ clawdbot cron add \
   --at "20m" \
   --session main \
   --system-event "下一个心跳：检查日历。" \
-  --wake now``````
-定期单独任务（发送至 WhatsApp）：```bash
+  --wake now
+```
+定期单独任务（发送至 WhatsApp）：
+```bash
 clawdbot cron add \
   --name "Morning status" \
   --cron "0 7 * * *" \
@@ -179,8 +182,10 @@ clawdbot cron add \
   --message "总结今天的内容；发送到夜间话题。" \
   --deliver \
   --channel telegram \
-  --to "-1001234567890:topic:123"``````
-独立任务，带有模型和思维覆盖：```bash
+  --to "-1001234567890:topic:123"
+```
+独立任务，带有模型和思维覆盖：
+```bash
 clawdbot cron add \
   --name "Deep analysis" \
   --cron "0 6 * * 1" \
@@ -205,27 +210,27 @@ clawdbot cron edit <jobId> --clear-agent
 手动运行（调试）：
 bash
 clawdbot cron run <jobId> --force
-``````
+```
 编辑现有任务（部分字段）：
 bash
 clawdbot cron edit <jobId> \
   --message "更新后的提示" \
   --model "opus" \
   --thinking low
-``````
+```
 运行历史：
 bash
 clawdbot cron runs --id <jobId> --limit 50
-``````
+```
 无需创建任务的即时系统事件：
 bash
 clawdbot system event --mode now --text "Next heartbeat: check battery."
-``````
+```
 ## 网关 API 接口
 - `cron.list`, `cron.status`, `cron.add`, `cron.update`, `cron.remove`
 - `cron.run`（强制执行或到期执行），`cron.runs`
 
-对于没有任务的即时系统事件，请使用 [`clawdbot 系统事件`](/cli/system)。
+对于没有任务的即时系统事件，请使用 [`clawdbot 系统事件`](/cli/system.md)。
 
 ## 故障排除
 
@@ -238,3 +243,4 @@ clawdbot system event --mode now --text "Next heartbeat: check battery."
 - 对于论坛主题，请使用 `-100…:topic:<id>` 以确保明确且无歧义。
 - 如果在日志或存储的“最后路由”目标中看到 `telegram:...` 前缀，这是正常现象；
   cron 传输会接受这些前缀，并且仍然可以正确解析主题 ID。
+```

@@ -35,7 +35,7 @@ read_when:
 - 暴露命令如 `canvas.*`、`camera.*`、`screen.record`、`location.get`。
 
 协议细节：
-- [网关协议](/gateway/protocol)
+- [网关协议](/gateway/protocol.md)
 
 ### WebChat
 - 静态用户界面，使用网关的 WS API 获取聊天历史和发送消息。
@@ -60,7 +60,7 @@ read_when:
 - **非本地** 连接必须对 `connect.challenge` 的随机数进行签名，并且需要显式审批。
 - 网关认证（`gateway.auth.*`）仍然适用于 **所有** 连接，无论是本地还是远程。
 
-详细信息：[网关协议](/gateway/protocol)，[配对](/start/pairing)，[安全](/gateway/security)。
+详细信息：[网关协议](/gateway/protocol.md)，[配对](/start/pairing.md)，[安全](/gateway/security.md)。
 
 ## 协议类型与代码生成
 
@@ -74,7 +74,8 @@ read_when:
 - 替代方式：SSH 隧道
 bash
   ssh -N -L 18789:127.0.0.1:18789 user@host
-```  ```
+```  
+```
 - 相同的握手 + 认证令牌通过隧道应用。
 - 可以在远程设置中为 WS 启用 TLS + 可选的证书锁定。
 

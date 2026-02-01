@@ -30,7 +30,7 @@ read_when:
 
 本指南使用 GCP Compute Engine 上的 Debian。
 Ubuntu 也可以使用；请相应地映射软件包。
-对于通用的 Docker 流程，请参见 [Docker](/install/docker)。
+对于通用的 Docker 流程，请参见 [Docker](/install/docker.md)。
 
 ---
 
@@ -63,7 +63,7 @@ Ubuntu 也可以使用；请相应地映射软件包。
 bash
 gcloud init
 gcloud auth login
-``````
+```
 **选项 B：Cloud Console**
 
 所有步骤都可以通过网页界面在 https://console.cloud.google.com 完成
@@ -72,7 +72,8 @@ gcloud auth login
 
 ## 2）创建 GCP 项目
 
-**命令行界面（CLI）：**```bash
+**命令行界面（CLI）：**
+```bash
 gcloud projects create my-clawdbot-project --name="Clawdbot Gateway"
 gcloud config set project my-clawdbot-project
 ```
@@ -80,7 +81,8 @@ gcloud config set project my-clawdbot-project
 
 启用 Compute Engine API：
 bash
-gcloud services enable compute.googleapis.com```
+gcloud services enable compute.googleapis.com
+```
 **控制台：**
 
 1. 进入 IAM & Admin > 创建项目
@@ -97,7 +99,8 @@ gcloud services enable compute.googleapis.com```
 | 类型 | 规格 | 成本 | 备注 |
 |------|-------|------|-------|
 | e2-small | 2 个 vCPU，2GB 内存 | ~$12/月 | 推荐使用 |
-| e2-micro | 2 个 vCPU（共享），1GB 内存 | 免费套餐可选 | 在高负载下可能会出现内存不足（OOM） |```bash
+| e2-micro | 2 个 vCPU（共享），1GB 内存 | 免费套餐可选 | 在高负载下可能会出现内存不足（OOM） |
+```bash
 gcloud compute instances create clawdbot-gateway \
   --zone=us-central1-a \
   --machine-type=e2-small \
@@ -121,7 +124,7 @@ gcloud compute instances create clawdbot-gateway \
 **命令行界面：**
 bash
 gcloud compute ssh clawdbot-gateway --zone=us-central1-a
-``````
+```
 **控制台：**
 
 点击 Compute Engine 仪表板中你的虚拟机 (VM) 旁边的 "SSH" 按钮。
@@ -129,7 +132,8 @@ gcloud compute ssh clawdbot-gateway --zone=us-central1-a
 注意：在创建虚拟机后，SSH 密钥可能需要 1-2 分钟才能传播。如果连接被拒绝，请等待后重试。
 ---
 
-## 5) 在虚拟机上安装 Docker```bash
+## 5) 在虚拟机上安装 Docker
+```bash
 sudo apt-get update
 sudo apt-get install -y git curl ca-certificates
 curl -fsSL https://get.docker.com | sudo sh
@@ -138,16 +142,18 @@ sudo usermod -aG docker $USER
 注销并重新登录以使组更改生效：
 bash
 exit
-``````
-然后通过 SSH 重新登录：```bash
+```
+然后通过 SSH 重新登录：
+```bash
 gcloud compute ssh clawdbot-gateway --zone=us-central1-a
 ```
 验证：
 bash
 docker --version
 docker compose version
-``````
-## 6）克隆 Clawdbot 仓库```bash
+```
+## 6）克隆 Clawdbot 仓库
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 ```
@@ -162,10 +168,11 @@ Docker 容器是短暂的。
 bash
 mkdir -p ~/.clawdbot
 mkdir -p ~/clawd
-``````
+```
 ## 8) 配置环境变量
 
-在仓库根目录创建 `.env` 文件。```bash
+在仓库根目录创建 `.env` 文件。
+```bash
 CLAWDBOT_IMAGE=clawdbot:latest
 CLAWDBOT_GATEWAY_TOKEN=change-me-now
 CLAWDBOT_GATEWAY_BIND=lan
@@ -178,14 +185,16 @@ GOG_KEYRING_PASSWORD=change-me-now
 XDG_CONFIG_HOME=/home/node/.clawdbot
 ```
 生成强密码：
-openssl rand -hex 32```
+openssl rand -hex 32
+```
 **不要提交此文件。**
 
 ---
 
 ## 9) Docker Compose 配置
 
-创建或更新 `docker-compose.yml`。```yaml
+创建或更新 `docker-compose.yml`。
+```yaml
 services:
   clawdbot-gateway:
     image: ${CLAWDBOT_IMAGE}
@@ -283,8 +292,9 @@ RUN pnpm ui:build
 ENV NODE_ENV=production
 
 CMD ["node", "dist/index.js"]
-``````
-## 11）构建和启动```bash
+```
+## 11）构建和启动
+```bash
 docker compose build
 docker compose up -d clawdbot-gateway
 ```
@@ -293,21 +303,25 @@ bash
 docker compose exec clawdbot-gateway which gog
 docker compose exec clawdbot-gateway which goplaces
 docker compose exec clawdbot-gateway which wacli
-``````
+```
 ```md
 /usr/local/bin/gog
 /usr/local/bin/goplaces
-/usr/local/bin/wacli```
-## 12）验证网关```bash
+/usr/local/bin/wacli
+```
+## 12）验证网关
+```bash
 docker compose logs -f clawdbot-gateway
 ```
 "成功：
 
 [gateway] 在 ws://0.0.0.0:18789 上监听
-"```
+"
+```
 ## 13) 从你的笔记本电脑访问
 
-创建一个 SSH 隧道来转发网关端口：```bash
+创建一个 SSH 隧道来转发网关端口：
+```bash
 gcloud compute ssh clawdbot-gateway --zone=us-central1-a -- -L 18789:127.0.0.1:18789
 ```
 在浏览器中打开：
@@ -340,7 +354,7 @@ cd ~/clawdbot
 git pull
 docker compose build
 docker compose up -d
-``````
+```
 ---
 
 ## 故障排除
@@ -351,7 +365,8 @@ docker compose up -d
 
 **操作系统登录问题**
 
-检查您的操作系统登录配置：```bash
+检查您的操作系统登录配置：
+```bash
 gcloud compute os-login describe-profile
 ```
 确保您的账户拥有所需的 IAM 权限（Compute OS Login 或 Compute OS Admin Login）。
@@ -370,7 +385,7 @@ gcloud compute instances set-machine-type clawdbot-gateway \
 
 # 启动虚拟机
 gcloud compute instances start clawdbot-gateway --zone=us-central1-a
-``````
+```
 ---
 
 ## 服务账户（安全最佳实践）
@@ -379,16 +394,19 @@ gcloud compute instances start clawdbot-gateway --zone=us-central1-a
 
 对于自动化或 CI/CD 流水线，应创建一个专用的服务账户，并赋予最小权限：
 
-1. 创建一个服务账户：   ```bash
+1. 创建一个服务账户：   
+```bash
    gcloud iam service-accounts create clawdbot-deploy \
      --display-name="Clawdbot Deployment"
-   ```
+   
+```
 2. 授予计算实例管理员角色（或更细粒度的自定义角色）：
 bash
 gcloud projects add-iam-policy-binding my-clawdbot-project \
   --member="serviceAccount:clawdbot-deploy@my-clawdbot-project.iam.gserviceaccount.com" \
   --role="roles/compute.instanceAdmin.v1"
-```   ```
+```   
+```
 避免将 Owner 角色用于自动化。应使用最小权限原则。
 
 有关 IAM 角色的详细信息，请参见 https://cloud.google.com/iam/docs/understanding-roles。
@@ -397,6 +415,6 @@ gcloud projects add-iam-policy-binding my-clawdbot-project \
 
 ## 后续步骤
 
-- 设置消息通道：[通道](/channels)
-- 将本地设备配对为节点：[节点](/nodes)
-- 配置网关：[网关配置](/gateway/configuration)
+- 设置消息通道：[通道](/channels/index.md)
+- 将本地设备配对为节点：[节点](/nodes/index.md)
+- 配置网关：[网关配置](/gateway/configuration.md)

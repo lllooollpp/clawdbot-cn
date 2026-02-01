@@ -51,7 +51,7 @@ clawdbot nodes canvas present --node <id>
 clawdbot nodes canvas navigate --node <id> --url "/"
 clawdbot nodes canvas eval --node <id> --js "document.title"
 clawdbot nodes canvas snapshot --node <id>
-``````
+```
 说明：
 - `canvas.navigate` 接受 **本地画布路径**、`http(s)` URL 和 `file://` URL。
 - 如果传递 `"/"`，Canvas 将显示本地的 scaffold 或 `index.html`。
@@ -61,7 +61,8 @@ clawdbot nodes canvas snapshot --node <id>
 A2UI 由 Gateway 的画布主机托管，并在 Canvas 面板中渲染。
 当 Gateway 宣布一个 Canvas 主机时，macOS 应用程序在首次打开时会自动导航到 A2UI 主机页面。
 
-默认的 A2UI 主机 URL：```
+默认的 A2UI 主机 URL：
+```
 http://<gateway-host>:18793/__clawdbot__/a2ui/
 ```
 ### A2UI 命令（v0.8）
@@ -83,8 +84,9 @@ cat > /tmp/a2ui-v0.8.jsonl <<'EOFA2'
 EOFA2
 
 clawdbot nodes canvas a2ui push --jsonl /tmp/a2ui-v0.8.jsonl --node <id>
-``````
-快速吸烟：```bash
+```
+快速吸烟：
+```bash
 clawdbot nodes canvas a2ui push --node <id> --text "Hello from A2UI"
 ```
 ## 通过 Canvas 触发代理运行
@@ -96,7 +98,7 @@ Canvas 可以通过深度链接触发新的代理运行：
 示例（在 JS 中）：
 js
 window.location.href = "clawdbot://agent?message=Review%20this%20design";
-``````
+```
 应用会在未提供有效密钥时提示进行确认。
 
 ## 安全注意事项
@@ -104,3 +106,4 @@ window.location.href = "clawdbot://agent?message=Review%20this%20design";
 - Canvas 方案阻止目录遍历；文件必须位于会话根目录下。
 - 本地 Canvas 内容使用自定义方案（无需回环服务器）。
 - 外部 `http(s)` URL 仅在明确导航时允许使用。
+```

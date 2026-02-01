@@ -35,8 +35,8 @@ curl -fsSL "https://raw.githubusercontent.com/kyle-seongwoo-jun/apple-device-ide
 
 curl -fsSL "https://raw.githubusercontent.com/kyle-seongwoo-jun/apple-device-identifiers/${MAC_COMMIT}/mac-device-identifiers.json" \
   -o apps/macos/Sources/Clawdbot/Resources/DeviceModels/mac-device-identifiers.json
-``````
-4. 确保 `apps/macos/Sources/Clawdbot/Resources/DeviceModels/LICENSE.apple-device-identifiers.txt` 与上游版本保持一致（如果上游许可证发生变化，请替换它）。
-5. 验证 macOS 应用是否能干净地构建（无警告）：```bash
-swift build --package-path apps/macos
 ```
+4. 确保 `apps/macos/Sources/Clawdbot/Resources/DeviceModels/LICENSE.apple-device-identifiers.txt` 与上游版本保持一致（如果上游许可证发生变化，请替换它）。
+5. 验证 macOS 应用是否能干净地构建（无警告）：
+```bash
+swift build --package-path apps/macos

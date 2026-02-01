@@ -49,10 +49,11 @@ json5
     }
   }
 }
-``````
+```
 ## 禁用端点
 
-将 `gateway.http.endpoints.responses.enabled` 设置为 `false`：```json5
+将 `gateway.http.endpoints.responses.enabled` 设置为 `false`：
+```json5
 {
   gateway: {
     http: {
@@ -104,7 +105,7 @@ json
   "call_id": "call_123",
   "output": "{\"temperature\": \"72F\"}"
 }
-``````
+```
 ### `reasoning` 和 `item_reference`
 
 为了保持模式兼容性而接受，但在构建提示时会被忽略。
@@ -114,7 +115,8 @@ json
 通过 `tools: [{ type: "function", function: { name, description?, parameters? } }]` 提供工具。
 
 如果代理决定调用一个工具，响应将返回一个 `function_call` 输出项。
-然后你需要发送一个后续请求，包含 `function_call_output` 以继续这一轮对话。```json
+然后你需要发送一个后续请求，包含 `function_call_output` 以继续这一轮对话。
+```json
 {
   "type": "input_image",
   "source": { "type": "url", "url": "https://example.com/image.png" }
@@ -136,7 +138,7 @@ json
     "filename": "hello.txt"
   }
 }
-``````
+```
 允许的 MIME 类型（当前）：`text/plain`、`text/markdown`、`text/html`、`text/csv`、`application/json`、`application/pdf`。
 
 最大文件大小（当前）：5MB。
@@ -155,7 +157,8 @@ URL 获取默认设置：
 
 ## 文件和图像限制（配置）
 
-默认值可以在 `gateway.http.endpoints.responses` 下进行调整：```json5
+默认值可以在 `gateway.http.endpoints.responses` 下进行调整：
+```json5
 {
   gateway: {
     http: {
@@ -238,7 +241,7 @@ json
     "code": "错误代码"
   }
 }
-`````````json
+```json
 { "error": { "message": "...", "type": "invalid_request_error" } }
 ```
 常见错误代码：
@@ -258,8 +261,9 @@ curl -sS http://127.0.0.1:18789/v1/responses \
     "model": "clawdbot",
     "input": "hi"
   }'
-``````
-流媒体：```bash
+```
+流媒体：
+```bash
 curl -N http://127.0.0.1:18789/v1/responses \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \

@@ -145,7 +145,8 @@ Clawdbot 有三个 Vitest 测试套件（单元/集成测试、端到端测试�
   - 嵌入式代理将多模态用户消息转发给模型
   - 断言：回复中包含 `cat` 和随机代码（OCR 容错：允许轻微错误）
   
-提示：要查看你机器上可以测试的内容（以及确切的 `provider/model` ID），运行以下命令：```bash
+提示：要查看你机器上可以测试的内容（以及确切的 `provider/model` ID），运行以下命令：
+```bash
 clawdbot models list
 clawdbot models list --json
 ```
@@ -162,7 +163,8 @@ clawdbot models list --json
 - 模型覆盖（可选）：
   - `CLAWDBOT_LIVE_SETUP_TOKEN_MODEL=anthropic/claude-opus-4-5`
 
-设置示例：```bash
+设置示例：
+```bash
 clawdbot models auth paste-token --provider anthropic --profile-id anthropic:setup-token-test
 CLAWDBOT_LIVE_SETUP_TOKEN=1 CLAWDBOT_LIVE_SETUP_TOKEN_PROFILE=anthropic:setup-token-test pnpm test:live src/agents/anthropic.setup-token.live.test.ts
 ```
@@ -189,7 +191,8 @@ CLAWDBOT_LIVE_SETUP_TOKEN=1 CLAWDBOT_LIVE_SETUP_TOKEN_PROFILE=anthropic:setup-to
   - `CLAWDBOT_LIVE_CLI_BACKEND_RESUME_PROBE=1` 用于发送第二轮对话并验证恢复流程。
 - `CLAWDBOT_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG=0` 用于保留 Claude Code CLI 的 MCP 配置（默认会通过临时空文件禁用 MCP 配置）。
 
-示例：```bash
+示例：
+```bash
 CLAWDBOT_LIVE_CLI_BACKEND=1 \
   CLAWDBOT_LIVE_CLI_BACKEND_MODEL="claude-cli/claude-sonnet-4-5" \
   pnpm test:live src/gateway/gateway-cli-backend.live.test.ts
@@ -319,7 +322,7 @@ CLAWDBOT_LIVE_CLI_BACKEND=1 \
 - 通过真实网关 + 代理循环进行模拟工具调用 (`src/gateway/gateway.tool-calling.mock-openai.test.ts`)。
 - 端到端的注册向导流程，用于验证会话连接和配置影响 (`src/gateway/gateway.wizard.e2e.test.ts`)。
 
-技能方面仍缺失的内容（参见 [Skills](/tools/skills)）：
+技能方面仍缺失的内容（参见 [Skills](/tools/skills.md)）：
 - **决策机制:** 当技能在提示中列出时，代理是否选择正确的技能（或避免无关的技能）？
 - **合规性:** 代理在使用前是否读取 `SKILL.md` 并遵循所需的步骤/参数？
 - **工作流契约:** 多轮场景，用于断言工具调用顺序、会话历史传递和沙箱边界。
@@ -335,3 +338,4 @@ CLAWDBOT_LIVE_CLI_BACKEND=1 \
 - 优先定位能够捕获该问题的最小层级：
   - 如果是 provider 请求转换/重放问题 → 直接进行模型测试
   - 如果是 gateway 会话/历史/工具流水线问题 → 进行 gateway 生产环境的烟雾测试或 CI 安全的 gateway mock 测试
+```

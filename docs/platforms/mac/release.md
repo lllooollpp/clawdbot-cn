@@ -56,9 +56,10 @@ scripts/package-mac-dist.sh
 
 # 可选：将 dSYM 与发布版本一起打包
 ditto -c -k --keepParent apps/macos/.build/release/Clawdbot.app.dSYM dist/Clawdbot-2026.1.25.dSYM.zip
-``````
+```
 ## Appcast 条目
-使用发布说明生成器，以便 Sparkle 渲染格式化的 HTML 说明：```bash
+使用发布说明生成器，以便 Sparkle 渲染格式化的 HTML 说明：
+```bash
 SPARKLE_PRIVATE_KEY_FILE=/path/to/ed25519-private-key scripts/make_appcast.sh dist/Clawdbot-2026.1.25.zip https://raw.githubusercontent.com/clawdbot/clawdbot/main/appcast.xml
 ```
 从 `CHANGELOG.md` 生成 HTML 格式的发布说明（通过 [`scripts/changelog-to-html.sh`](https://github.com/clawdbot/clawdbot/blob/main/scripts/changelog-to-html.sh）），并将它们嵌入到 appcast 条目中。  
@@ -73,3 +74,4 @@ SPARKLE_PRIVATE_KEY_FILE=/path/to/ed25519-private-key scripts/make_appcast.sh di
   - 在之前的公开构建版本中，从“关于”标签中运行“检查更新…”并验证 Sparkle 能够干净地安装新版本。
 
 完成标准：已发布签名的应用程序 + appcast，从旧版本可以正常进行更新流程，并且发布资源已附加到 GitHub 发布页面。
+```

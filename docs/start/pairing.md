@@ -14,13 +14,13 @@ read_when:
 1) **DM配对**（谁被允许与机器人交谈）
 2) **节点配对**（哪些设备/节点被允许加入网关网络）
 
-安全上下文：[安全](/gateway/security)
+安全上下文：[安全](/gateway/security.md)
 
 ## 1) DM配对（入站聊天访问）
 
 当一个频道配置了DM策略为 `pairing` 时，未知发送者会收到一个短代码，且他们的消息在你批准之前 **不会被处理**。
 
-默认的DM策略在以下位置有文档说明：[安全](/gateway/security)
+默认的DM策略在以下位置有文档说明：[安全](/gateway/security.md)
 
 配对代码：
 - 8个字符，全大写，没有易混淆的字符（`0O1I`）。
@@ -31,7 +31,7 @@ read_when:
 bash
 clawdbot pairing list telegram
 clawdbot pairing approve telegram <CODE>
-``````
+```
 支持的渠道：`telegram`、`whatsapp`、`signal`、`imessage`、`discord`、`slack`。
 
 ### 何处存储状态
@@ -46,7 +46,8 @@ clawdbot pairing approve telegram <CODE>
 
 节点以 **设备** 的身份连接到网关，角色为 `role: node`。网关会创建一个设备配对请求，该请求必须被批准。
 
-### 批准节点设备```bash
+### 批准节点设备
+```bash
 clawdbot devices list
 clawdbot devices approve <requestId>
 clawdbot devices reject <requestId>
@@ -63,12 +64,13 @@ clawdbot devices reject <requestId>
 
 ## 相关文档
 
-- 安全模型 + 提示注入：[安全](/gateway/security)
-- 安全更新（运行 doctor）：[更新](/install/updating)
+- 安全模型 + 提示注入：[安全](/gateway/security.md)
+- 安全更新（运行 doctor）：[更新](/install/updating.md)
 - 渠道配置：
-  - 电报：[电报](/channels/telegram)
-  - WhatsApp：[WhatsApp](/channels/whatsapp)
-  - Signal：[Signal](/channels/signal)
-  - iMessage：[iMessage](/channels/imessage)
-  - Discord：[Discord](/channels/discord)
-  - Slack：[Slack](/channels/slack)
+  - 电报：[电报](/channels/telegram.md)
+  - WhatsApp：[WhatsApp](/channels/whatsapp.md)
+  - Signal：[Signal](/channels/signal.md)
+  - iMessage：[iMessage](/channels/imessage.md)
+  - Discord：[Discord](/channels/discord.md)
+  - Slack：[Slack](/channels/slack.md)
+```

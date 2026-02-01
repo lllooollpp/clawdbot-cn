@@ -20,7 +20,8 @@ Clawdbot 可以使用 Perplexity Sonar 作为 `web_search` 工具。您可以通
 
 - 基础 URL：https://openrouter.ai/api/v1
 - 环境变量：`OPENROUTER_API_KEY`
-- 支持预付/加密货币积分。```json5
+- 支持预付/加密货币积分。
+```json5
 {
   tools: {
     web: {
@@ -36,7 +37,8 @@ Clawdbot 可以使用 Perplexity Sonar 作为 `web_search` 工具。您可以通
   }
 }
 ```
-## 从 Brave 切换```json5
+## 从 Brave 切换
+```json5
 {
   tools: {
     web: {
@@ -65,4 +67,4 @@ Clawdbot 可以使用 Perplexity Sonar 作为 `web_search` 工具。您可以通
 - `perplexity/sonar-pro`（默认） — 多步骤推理 + 网络搜索
 - `perplexity/sonar-reasoning-pro` — 深度研究
 
-有关完整的 `web_search` 配置，请参见 [Web 工具](/tools/web)。
+有关完整的 `web_search` 配置，请参见 [Web 工具](/tools/web.md)。

@@ -42,6 +42,7 @@ import { renderNodes } from "./views/nodes";
 import { renderOverview } from "./views/overview";
 import { renderSessions } from "./views/sessions";
 import { renderExecApprovalPrompt } from "./views/exec-approval";
+import { renderOnboarding } from "./views/onboarding";
 import {
   approveDevicePairing,
   loadDevices,
@@ -101,6 +102,23 @@ function resolveAssistantAvatarUrl(state: AppViewState): string | undefined {
 }
 
 export function renderApp(state: AppViewState) {
+  if (state.onboarding) {
+    return renderOnboarding({
+      connected: state.connected,
+      basePath: state.basePath,
+      onboardingWizardStep: state.onboardingWizardStep,
+      onboardingWizardStatus: state.onboardingWizardStatus,
+      onboardingWizardError: state.onboardingWizardError,
+      onboardingWizardBusy: state.onboardingWizardBusy,
+      onboardingWizardDraft: state.onboardingWizardDraft,
+      onWizardStart: () => void state.handleOnboardingStart(),
+      onWizardNext: () => void state.handleOnboardingNext(),
+      onWizardCancel: () => void state.handleOnboardingCancel(),
+      onWizardDraftChange: (value) => state.handleOnboardingDraftChange(value),
+      onReconnect: () => state.connect(),
+      onExit: () => state.handleOnboardingExit(),
+    });
+  }
   const presenceCount = state.presenceEntries.length;
   const sessionsCount = state.sessionsResult?.count ?? null;
   const cronNext = state.cronStatus?.nextWakeAtMs ?? null;

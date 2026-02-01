@@ -39,7 +39,7 @@ read_when:
 - 每个会话键（会话车道）的运行是序列化的，也可以选择通过全局车道进行。
 - 这可以防止工具/会话竞争，并保持会话历史的一致性。
 - 消息通道可以选择队列模式（collect/steer/followup），这些模式会进入这个车道系统。
-  请参阅 [命令队列](/concepts/queue)。
+  请参阅 [命令队列](/concepts/queue.md)。
 
 ## 会话与工作区准备
 - 工作区被解析并创建；沙盒运行可能会重定向到沙盒工作区根目录。
@@ -50,7 +50,7 @@ read_when:
 ## 提示组装与系统提示
 - 系统提示由 Clawdbot 的基础提示、技能提示、启动上下文和每次运行的覆盖项组成。
 - 强制执行模型特定的限制和压缩预留标记。
-- 有关模型看到的内容，请参阅 [系统提示](/concepts/system-prompt)。
+- 有关模型看到的内容，请参阅 [系统提示](/concepts/system-prompt.md)。
 
 ## 钩子点（你可以拦截的地方）
 Clawdbot 有两个钩子系统：
@@ -62,7 +62,7 @@ Clawdbot 有两个钩子系统：
   用于添加/删除启动上下文文件。
 - **命令钩子**：`/new`、`/reset`、`/stop` 和其他命令事件（详见 Hooks 文档）。
 
-有关设置和示例，请参阅 [Hooks](/hooks)。
+有关设置和示例，请参阅 [Hooks](/hooks.md)。
 
 ### 插件钩子（agent + gateway 生命周期）
 这些钩子在 agent 循环或 gateway 管道中运行：
@@ -75,13 +75,13 @@ Clawdbot 有两个钩子系统：
 - **`session_start` / `session_end`**：会话生命周期的边界。
 - **`gateway_start` / `gateway_stop`**：网关生命周期事件。
 
-有关钩子 API 和注册详情，请参阅 [Plugins](/plugin#plugin-hooks)。
+有关钩子 API 和注册详情，请参阅 [Plugins](/plugin.md#plugin-hooks)。
 
 ## 流式传输 + 部分回复
 - 助手的增量（deltas）由 pi-agent-core 流式传输，并作为 `assistant` 事件发出。
 - 块流式传输可以在 `text_end` 或 `message_end` 上发出部分回复。
 - 推理流式传输可以作为独立流或块回复发出。
-- 有关分块和块回复行为，请参阅 [Streaming](/concepts/streaming)。
+- 有关分块和块回复行为，请参阅 [Streaming](/concepts/streaming.md)。
 
 ## 工具执行 + 消息工具
 - 工具的开始/更新/结束事件会在 `tool` 流上发出。
@@ -100,7 +100,7 @@ Clawdbot 有两个钩子系统：
 ## 压缩 + 重试
 - 自动压缩会发出 `compaction` 流事件，并可能触发重试。
 - 在重试时，内存缓冲区和工具摘要会被重置，以避免重复输出。
-- 有关压缩流程，请参阅 [Compaction](/concepts/compaction)。
+- 有关压缩流程，请参阅 [Compaction](/concepts/compaction.md)。
 
 ## 事件流（当前）
 - `lifecycle`：由 `subscribeEmbeddedPiSession` 发出（作为后备由 `agentCommand` 发出）

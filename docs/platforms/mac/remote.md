@@ -54,7 +54,7 @@ read_when:
 ## 安全注意事项
 - 在远程主机上优先使用环回绑定（loopback bind），并通过 SSH 或 Tailscale 连接。
 - 如果将网关绑定到非环回接口，请启用令牌/密码认证。
-- 请参阅 [安全](/gateway/security) 和 [Tailscale](/gateway/tailscale)。
+- 请参阅 [安全](/gateway/security.md) 和 [Tailscale](/gateway/tailscale.md)。
 
 ## WhatsApp 登录流程（远程）
 - 在 **远程主机** 上运行 `clawdbot channels login --verbose`。使用手机上的 WhatsApp 扫描二维码。
@@ -71,6 +71,6 @@ read_when:
 可以通过脚本使用 `clawdbot` 和 `node.invoke` 为每条通知选择声音，例如：
 bash
 clawdbot nodes notify --node <id> --title "Ping" --body "Remote gateway ready" --sound Glass
-``````
+```
 ```md
 "The app no longer has a global 'default sound' switch; each time a request is made, the caller can choose a sound (or choose none)."

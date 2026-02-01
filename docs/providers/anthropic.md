@@ -22,8 +22,9 @@ clawdbot onboard
 
 # 或非交互式方式
 clawdbot onboard --anthropic-api-key "$ANTHROPIC_API_KEY"
-``````
-### 配置片段```json5
+```
+## 配置片段
+```json5
 {
   env: { ANTHROPIC_API_KEY: "sk-ant-..." },
   agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } }
@@ -47,8 +48,8 @@ json5
     }
   }
 }
-``````
-Clawdbot 包含了 `extended-cache-ttl-2025-04-11` 的 beta 标志，用于 Anthropic API 请求；如果你覆盖了提供者头信息，请保留它（参见 [/gateway/configuration](/gateway/configuration)）。
+```
+Clawdbot 包含了 `extended-cache-ttl-2025-04-11` 的 beta 标志，用于 Anthropic API 请求；如果你覆盖了提供者头信息，请保留它（参见 [/gateway/configuration](/gateway/configuration.md)）。
 
 ## 选项 B：Claude Code CLI（setup-token 或 OAuth）
 
@@ -56,21 +57,25 @@ Clawdbot 包含了 `extended-cache-ttl-2025-04-11` 的 beta 标志，用于 Anth
 
 ### 如何获取 setup-token
 
-setup-token 是由 **Claude Code CLI** 生成的，而不是 Anthropic 控制台。你可以在 **任何机器上** 运行它：```bash
+setup-token 是由 **Claude Code CLI** 生成的，而不是 Anthropic 控制台。你可以在 **任何机器上** 运行它：
+```bash
 claude setup-token
 ```
 将令牌粘贴到 Clawdbot（向导：**Anthropic 令牌（粘贴 setup-token）**），或者在网关主机上运行它：
 bash
-clawdbot models auth setup-token --provider anthropic```
-如果您在其他机器上生成了令牌，请粘贴它：```bash
+clawdbot models auth setup-token --provider anthropic
+```
+如果您在其他机器上生成了令牌，请粘贴它：
+```bash
 clawdbot models auth paste-token --provider anthropic
 ```
 ### CLI 设置
 bash
 # 如果已登录，复用 Claude Code CLI 的 OAuth 凭据
 clawdbot onboard --auth-choice claude-cli
-``````
-### 配置片段```json5
+```
+## 配置片段
+```json5
 {
   agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } }
 }
@@ -78,10 +83,10 @@ clawdbot onboard --auth-choice claude-cli
 ## 注意事项
 
 - 使用 `claude setup-token` 生成 setup-token 并粘贴，或者在网关主机上运行 `clawdbot models auth setup-token`。
-- 如果在 Claude 订阅中看到 “OAuth token refresh failed …”，请使用 setup-token 重新授权，或在网关主机上重新同步 Claude Code CLI 的 OAuth。详见 [/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription](/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription)。
+- 如果在 Claude 订阅中看到 “OAuth token refresh failed …”，请使用 setup-token 重新授权，或在网关主机上重新同步 Claude Code CLI 的 OAuth。详见 [/gateway/troubleshooting#oauth-token-refresh-failed-anthropic-claude-subscription](/gateway/troubleshooting.md#oauth-token-refresh-failed-anthropic-claude-subscription)。
 
 - Clawdbot 会将 `auth.profiles["anthropic:claude-cli"].mode` 写入为 `"oauth"`，因此该配置文件会接受 OAuth 和 setup-token 凭证。旧版配置中使用 `"token"` 的会自动迁移到新格式。
-- 认证详情和复用规则详见 [/concepts/oauth](/concepts/oauth)。
+- 认证详情和复用规则详见 [/concepts/oauth](/concepts/oauth.md)。
 
 ## 排错指南
 
@@ -101,4 +106,4 @@ clawdbot onboard --auth-choice claude-cli
 - 运行 `clawdbot models status --json` 查看 `auth.unusableProfiles`。
 - 添加另一个 Anthropic 配置文件，或等待冷却时间结束。
 
-更多内容：[/gateway/troubleshooting](/gateway/troubleshooting) 和 [/help/faq](/help/faq)。
+更多内容：[/gateway/troubleshooting](/gateway/troubleshooting.md) 和 [/help/faq](/help/faq.md)。

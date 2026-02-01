@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
@@ -11,7 +11,28 @@ if (args.length === 0) {
 }
 const env = { ...process.env };
 const cwd = process.cwd();
-const compiler = env.CLAWDBOT_TS_COMPILER === "tsc" ? "tsc" : "tsgo";
+const logRunner = (message) => {
+  if (env.CLAWDBOT_RUNNER_LOG === "0") return;
+  process.stderr.write(`[clawdbot] ${message}\n`);
+};
+const resolveCompiler = () => {
+  if (env.CLAWDBOT_TS_COMPILER === "tsc") return "tsc";
+  if (env.CLAWDBOT_TS_COMPILER === "tsgo") return "tsgo";
+  const pnpmArgs = ["exec", "tsgo", "--version"];
+  const checkCmd = process.platform === "win32" ? "cmd.exe" : "pnpm";
+  const checkArgs =
+    process.platform === "win32" ? ["/d", "/s", "/c", "pnpm", ...pnpmArgs] : pnpmArgs;
+  const result = spawnSync(checkCmd, checkArgs, {
+    cwd,
+    env,
+    stdio: "ignore",
+  });
+  if (result.status === 0) return "tsgo";
+  logRunner("tsgo not found; falling back to tsc.");
+  return "tsc";
+};
+
+const compiler = resolveCompiler();
 const projectArgs = ["--project", "tsconfig.json"];
 
 const distRoot = path.join(cwd, "dist");
@@ -82,11 +103,6 @@ const shouldBuild = () => {
   const srcMtime = findLatestMtime(srcRoot, isExcludedSource);
   if (srcMtime != null && srcMtime > stampMtime) return true;
   return false;
-};
-
-const logRunner = (message) => {
-  if (env.CLAWDBOT_RUNNER_LOG === "0") return;
-  process.stderr.write(`[clawdbot] ${message}\n`);
 };
 
 const runNode = () => {

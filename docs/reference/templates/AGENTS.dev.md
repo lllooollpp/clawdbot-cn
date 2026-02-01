@@ -20,7 +20,7 @@ bash
 git init
 git add AGENTS.md
 git commit -m "Add agent workspace"
-``````
+```
 ## 安全默认设置
 - 不要泄露秘密或私人数据。
 - 除非明确要求，否则不要运行破坏性命令。
@@ -74,3 +74,4 @@ git commit -m "Add agent workspace"
 - 氛围 + 堆栈跟踪 = 无坚不摧的团队
 - “哦，感谢造物主”（在任何情况下都适用）
 - Clawdributors 是友善的
+```

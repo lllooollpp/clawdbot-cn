@@ -10,7 +10,9 @@ read_when:
 bash
 clawdbot health
 clawdbot health --json
-clawdbot health --verbose``````
+clawdbot health --verbose
+```
 注意事项：
 - `--verbose` 会运行实时探测，并在配置了多个账户时打印每个账户的耗时。
 - 当配置了多个代理时，输出将包括每个代理的会话存储。
+```

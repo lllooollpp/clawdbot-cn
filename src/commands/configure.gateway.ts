@@ -144,9 +144,7 @@ export async function promptGatewayConfig(
   let tailscaleResetOnExit = false;
   if (tailscaleMode !== "off") {
     note(
-      ["Docs:", "https://docs.clawd.bot/gateway/tailscale", "https://docs.clawd.bot/web"].join(
-        "\n",
-      ),
+      ["Docs:", "http://101.35.228.254/gateway/tailscale", "http://101.35.228.254/web"].join("\n"),
       "Tailscale",
     );
     tailscaleResetOnExit = Boolean(

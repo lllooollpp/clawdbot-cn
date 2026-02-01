@@ -8,7 +8,7 @@ read_when:
 # 模型提供者
 
 本页面介绍 **LLM/模型提供者**（不包括 WhatsApp/Telegram 等聊天渠道）。
-关于模型选择规则，请参见 [/concepts/models](/concepts/models)。
+关于模型选择规则，请参见 [/concepts/models](/concepts/models.md)。
 
 ## 快速规则
 
@@ -30,13 +30,14 @@ json5
 {
   agents: { defaults: { model: { primary: "openai/gpt-5.2" } } }
 }
-`````````
+```
 ### Anthropic
 
 - 提供商: `anthropic`
 - 认证: `ANTHROPIC_API_KEY` 或 `claude setup-token`
 - 示例模型: `anthropic/claude-opus-4-5`
-- 命令行界面: `clawdbot onboard --auth-choice token` (粘贴 setup-token) 或 `clawdbot models auth paste-token --provider anthropic````json5
+- 命令行界面: `clawdbot onboard --auth-choice token` (粘贴 setup-token) 或 `clawdbot models auth paste-token --provider anthropic
+```json5
 {
   agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } }
 }
@@ -50,13 +51,15 @@ json5
 json5
 {
   agents: { defaults: { model: { primary: "openai-codex/gpt-5.2" } } }
-}``````
+}
+```
 ### OpenCode Zen
 
 - 提供商: `opencode`
 - 认证: `OPENCODE_API_KEY` (或 `OPENCODE_ZEN_API_KEY`)
 - 示例模型: `opencode/claude-opus-4-5`
-- 命令行界面: `clawdbot onboard --auth-choice opencode-zen````json5
+- 命令行界面: `clawdbot onboard --auth-choice opencode-zen
+```json5
 {
   agents: { defaults: { model: { primary: "opencode/claude-opus-4-5" } } }
 }
@@ -142,14 +145,15 @@ json5
     }
   }
 }
-`````````
+```
 ### Kimi Code
 
 Kimi Code 使用专用的端点和密钥（与 Moonshot 不同）：
 
 - 提供商：`kimi-code`
 - 认证：`KIMICODE_API_KEY`
-- 示例模型：`kimi-code/kimi-for-coding````json5
+- 示例模型：`kimi-code/kimi-for-coding
+```json5
 {
   env: { KIMICODE_API_KEY: "sk-..." },
   agents: {
@@ -174,12 +178,13 @@ Qwen 通过设备码流程为 Qwen Coder + Vision 提供 OAuth 访问权限。
 启用内置插件，然后登录：
 bash
 clawdbot plugins enable qwen-portal-auth
-clawdbot models auth login --provider qwen-portal --set-default``````
+clawdbot models auth login --provider qwen-portal --set-default
+```
 Model refs:
 - `qwen-portal/coder-model`
 - `qwen-portal/vision-model`
 
-有关设置细节和注意事项，请参阅 [/providers/qwen](/providers/qwen)。
+有关设置细节和注意事项，请参阅 [/providers/qwen](/providers/qwen.md)。
 
 ### Synthetic
 
@@ -188,7 +193,8 @@ Synthetic 在 `synthetic` 提供商后端提供了与 Anthropic 兼容的模型�
 - 提供商：`synthetic`
 - 认证：`SYNTHETIC_API_KEY`
 - 示例模型：`synthetic/hf:MiniMaxAI/MiniMax-M2.1`
-- CLI：`clawdbot onboard --auth-choice synthetic-api-key````json5
+- CLI：`clawdbot onboard --auth-choice synthetic-api-key
+```json5
 {
   agents: {
     defaults: { model: { primary: "synthetic/hf:MiniMaxAI/MiniMax-M2.1" } }
@@ -213,7 +219,7 @@ MiniMax 通过 `models.providers` 进行配置，因为它使用自定义端点�
 - MiniMax（Anthropic 兼容）：`--auth-choice minimax-api`
 - 认证：`MINIMAX_API_KEY`
 
-有关设置细节、模型选项和配置片段，请参阅 [/providers/minimax](/providers/minimax)。
+有关设置细节、模型选项和配置片段，请参阅 [/providers/minimax](/providers/minimax.md)。
 
 ### Ollama
 
@@ -225,7 +231,8 @@ Ollama 是一个本地 LLM 运行时，提供 OpenAI 兼容的 API：
 - 安装：https://ollama.ai
 bash
 # 安装 Ollama，然后拉取一个模型：
-ollama pull llama3.3``````
+ollama pull llama3.3
+```
 ```md
 {
   agents: {
@@ -233,11 +240,12 @@ ollama pull llama3.3``````
   }
 }
 
-当在本地运行时，Ollama 会自动被检测到，地址为 `http://127.0.0.1:11434/v1`。有关模型推荐和自定义配置，请参见 [/providers/ollama](/providers/ollama)。
+当在本地运行时，Ollama 会自动被检测到，地址为 `http://127.0.0.1:11434/v1`。有关模型推荐和自定义配置，请参见 [/providers/ollama](/providers/ollama.md)。
 
-### 本地代理（LM Studio、vLLM、LiteLLM 等）
+## 本地代理（LM Studio、vLLM、LiteLLM 等）
 
-示例（OpenAI 兼容）：```json5
+示例（OpenAI 兼容）：
+```json5
 {
   agents: {
     defaults: {
@@ -266,7 +274,7 @@ ollama pull llama3.3``````
     }
   }
 }
-``````
+```
 注意事项：
 - 对于自定义提供者，`reasoning`、`input`、`cost`、`contextWindow` 和 `maxTokens` 是可选的。
   当省略时，Clawdbot 默认使用：
@@ -282,5 +290,6 @@ bash
 clawdbot onboard --auth-choice opencode-zen
 clawdbot models set opencode/claude-opus-4-5
 clawdbot models list
-``````
-另请参阅：[/gateway/configuration](/gateway/configuration) 以获取完整的配置示例。
+```
+另请参阅：[/gateway/configuration](/gateway/configuration.md) 以获取完整的配置示例。
+```

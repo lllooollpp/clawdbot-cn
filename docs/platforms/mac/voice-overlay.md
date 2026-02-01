@@ -8,7 +8,7 @@ read_when:
 
 受众：macOS 应用贡献者。目标：在唤醒词和按压说话（push-to-talk）重叠时，保持语音覆盖的可预测性。
 
-### 当前意图
+## 当前意图
 - 如果语音覆盖已经因唤醒词而显示，用户按下快捷键时，快捷键会话会 *采用* 已有的文本，而不是重置它。在快捷键被按住时，覆盖保持显示。当用户释放快捷键时：如果有修剪后的文本则发送，否则关闭覆盖。
 - 仅唤醒词仍会在静音时自动发送；按压说话在释放时立即发送。
 
@@ -42,7 +42,9 @@ read_when:
 - 在重现粘滞覆盖时，流式输出日志：
 bash
   sudo log stream --predicate 'subsystem == "com.clawdbot" AND category CONTAINS "voicewake"' --level info --style compact
-  ```  ```
+  
+```  
+```
 - 验证仅有一个活动的会话令牌；过期的回调应由协调器丢弃。
 - 确保按住说话（Push-to-talk）释放时始终调用 `endCapture` 并传入活动令牌；如果文本为空，应预期调用 `dismiss` 而不触发提示音或发送。
 

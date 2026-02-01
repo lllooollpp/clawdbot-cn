@@ -10,11 +10,13 @@ Tlon 是一个基于 Urbit 的去中心化消息应用。Clawdbot 可以连接�
 
 状态：通过插件支持。支持私信、群聊提及、线程回复以及纯文本媒体回退（URL 会附加在标题后）。不支持表情、投票和原生媒体上传。
 bash
-clawdbot plugins install @clawdbot/tlon``````
-本地签出（当从 Git 仓库运行时）：```bash
+clawdbot plugins install @clawdbot/tlon
+```
+本地签出（当从 Git 仓库运行时）：
+```bash
 clawdbot plugins install ./extensions/tlon
 ```
-"Details: [Plugins](/plugin)
+"Details: [Plugins](/plugin.md)
 
 ## 安装步骤
 
@@ -35,10 +37,12 @@ json5
       code: "lidlut-tabwed-pillex-ridrup"
     }
   }
-}``````
+}
+```
 ## 群组频道
 
-自动发现功能默认已启用。您也可以手动固定频道：```json5
+自动发现功能默认已启用。您也可以手动固定频道：
+```json5
 {
   channels: {
     tlon: {
@@ -58,10 +62,12 @@ json5
       autoDiscoverChannels: false
     }
   }
-}``````
+}
+```
 ## 访问控制
 
-DM 允许列表（空 = 允许所有）：```json5
+DM 允许列表（空 = 允许所有）：
+```json5
 {
   channels: {
     tlon: {
@@ -89,7 +95,8 @@ json5
       }
     }
   }
-}``````
+}
+```
 ## 交付目标（CLI/定时任务）
 
 使用这些目标与 `clawdbot message send` 或定时任务进行消息传递：

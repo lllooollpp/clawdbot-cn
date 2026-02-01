@@ -20,35 +20,38 @@ Bun 不推荐用于网关（存在 WhatsApp/Telegram 的问题）。
 4) 从你的笔记本电脑：`ssh -N -L 18789:127.0.0.1:18789 <user>@<host>`  
 5) 打开 `http://127.0.0.1:18789/` 并粘贴你的 token
 
-逐步 VPS 教程：[exe.dev](/platforms/exe-dev)
+逐步 VPS 教程：[exe.dev](/platforms/exe-dev.md)
 
 ## 安装
-- [快速入门](/start/getting-started)
-- [安装与更新](/install/updating)
-- 可选流程：[Bun（实验性）](/install/bun)、[Nix](/install/nix)、[Docker](/install/docker)
+- [快速入门](/start/getting-started.md)
+- [安装与更新](/install/updating.md)
+- 可选流程：[Bun（实验性）](/install/bun.md)、[Nix](/install/nix.md)、[Docker](/install/docker.md)
 
 ## 网关
-- [网关操作手册](/gateway)
-- [配置](/gateway/configuration)
+- [网关操作手册](/gateway/index.md)
+- [配置](/gateway/configuration.md)
 
 ## 网关服务安装（CLI）
 
 使用以下任意一种方式：
 
 clawdbot onboard --install-daemon
-``````
-或者：```
+```
+或者：
+```
 clawdbot gateway install
 ```
 或者：
-clawdbot configure```
+clawdbot configure
+```
 当被提示时选择 **网关服务**。
 
-修复/迁移：```
+修复/迁移：
+```
 clawdbot doctor
 ```
 ## 系统控制（systemd 用户服务）
-Clawdbot 默认安装了一个 systemd **用户** 服务。对于共享或始终运行的服务器，请使用 **系统** 服务。完整的服务示例和指南请参见 [网关运行手册](/gateway)。
+Clawdbot 默认安装了一个 systemd **用户** 服务。对于共享或始终运行的服务器，请使用 **系统** 服务。完整的服务示例和指南请参见 [网关运行手册](/gateway/index.md)。
 
 最小配置：
 
@@ -66,7 +69,10 @@ RestartSec=5
 
 [Install]
 WantedBy=default.target
-``````
-启用它：```
+```
+启用它：
+```
 systemctl --user enable --now clawdbot-gateway[-<profile>].service
+```
+
 ```

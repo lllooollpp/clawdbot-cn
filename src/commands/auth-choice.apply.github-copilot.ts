@@ -10,25 +10,19 @@ export async function applyAuthChoiceGitHubCopilot(
   let nextConfig = params.config;
 
   await params.prompter.note(
-    [
-      "This will open a GitHub device login to authorize Copilot.",
-      "Requires an active GitHub Copilot subscription.",
-    ].join("\n"),
+    ["这将打开 GitHub 设备登录以授权 Copilot。", "需要有效的 GitHub Copilot 订阅。"].join("\n"),
     "GitHub Copilot",
   );
 
   if (!process.stdin.isTTY) {
-    await params.prompter.note(
-      "GitHub Copilot login requires an interactive TTY.",
-      "GitHub Copilot",
-    );
+    await params.prompter.note("GitHub Copilot 登录需要交互式 TTY。", "GitHub Copilot");
     return { config: nextConfig };
   }
 
   try {
     await githubCopilotLoginCommand({ yes: true }, params.runtime);
   } catch (err) {
-    await params.prompter.note(`GitHub Copilot login failed: ${String(err)}`, "GitHub Copilot");
+    await params.prompter.note(`GitHub Copilot 登录失败：${String(err)}`, "GitHub Copilot");
     return { config: nextConfig };
   }
 
@@ -55,7 +49,7 @@ export async function applyAuthChoiceGitHubCopilot(
         },
       },
     };
-    await params.prompter.note(`Default model set to ${model}`, "Model configured");
+    await params.prompter.note(`默认模型已设置为 ${model}`, "模型配置完成");
   }
 
   return { config: nextConfig };

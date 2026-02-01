@@ -26,6 +26,7 @@ export type AuthChoice =
   | "deepseek-api-key"
   | "siliconflow-api-key"
   | "volcengine-api-key"
+  | "zhipu-api-key"
   | "bocha-api-key"
   | "ollama"
   | "minimax-cloud"
@@ -72,6 +73,8 @@ export type OnboardOptions = {
   kimiCodeApiKey?: string;
   deepseekApiKey?: string;
   siliconflowApiKey?: string;
+  volcengineApiKey?: string;
+  zhipuApiKey?: string;
   bochaApiKey?: string;
   geminiApiKey?: string;
   zaiApiKey?: string;

@@ -24,7 +24,7 @@ read_when:
 ## 认证监控脚本
 
 认证监控脚本的说明文档请参见：
-[/automation/auth-monitoring](/automation/auth-monitoring)
+[/automation/auth-monitoring](/automation/auth-monitoring.md)
 
 ## 添加脚本时
 

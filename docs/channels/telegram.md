@@ -28,7 +28,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 它是什么
 - 一个由网关拥有的 Telegram Bot API 频道。
 - 确定性路由：回复会返回到 Telegram；模型从不选择频道。
@@ -42,7 +42,8 @@ json5
 
 可选的 BotFather 设置：
 - `/setjoingroups` — 允许/禁止将机器人添加到群组。
-- `/setprivacy` — 控制机器人是否能看到所有群组消息。```json5
+- `/setprivacy` — 控制机器人是否能看到所有群组消息。
+```json5
 {
   channels: {
     telegram: {
@@ -57,7 +58,7 @@ json5
 环境变量选项：`TELEGRAM_BOT_TOKEN=...`（适用于默认账户）。
 如果同时设置了环境变量和配置文件，配置文件具有优先级。
 
-多账户支持：使用 `channels.telegram.accounts`，每个账户可以设置独立的令牌和可选的 `name`。详见 [`gateway/configuration`](/gateway/configuration#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts) 中的通用模式。
+多账户支持：使用 `channels.telegram.accounts`，每个账户可以设置独立的令牌和可选的 `name`。详见 [`gateway/configuration`](/gateway/configuration.md#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts) 中的通用模式。
 
 3) 启动网关。当解析到令牌时启动 Telegram（优先使用配置文件，环境变量作为备用）。
 4) 私信访问默认为配对模式。当机器人第一次被联系时，批准代码。
@@ -108,13 +109,13 @@ json5
     }
   }
 }
-`````````
+```
 ## 故障排除
 
 - 日志中出现 `setMyCommands failed` 通常意味着到 `api.telegram.org` 的出站 HTTPS/DNS 被阻止。
 - 如果看到 `sendMessage` 或 `sendChatAction` 失败，请检查 IPv6 路由和 DNS。
 
-更多帮助：[频道故障排除](/channels/troubleshooting)。
+更多帮助：[频道故障排除](/channels/troubleshooting.md)。
 
 注意事项：
 - 自定义命令是 **菜单项**；除非你在其他地方处理，否则 Clawdbot 不会实现它们。
@@ -129,7 +130,8 @@ json5
 - 媒体下载/上传受 `channels.telegram.mediaMaxMb`（默认 5）的限制。
 - Telegram Bot API 请求会在 `channels.telegram.timeoutSeconds`（默认 500，通过 grammY）后超时。设置较低的值以避免长时间挂起。
 - 群组历史记录上下文使用 `channels.telegram.historyLimit`（或 `channels.telegram.accounts.*.historyLimit`），如果没有设置则会回退到 `messages.groupChat.historyLimit`。设置 `0` 以禁用（默认 50）。
-- 私聊历史记录可以通过 `channels.telegram.dmHistoryLimit` 限制（用户轮次）。每个用户的覆盖设置：`channels.telegram.dms["<user_id>"].historyLimit`。```json5
+- 私聊历史记录可以通过 `channels.telegram.dmHistoryLimit` 限制（用户轮次）。每个用户的覆盖设置：`channels.telegram.dms["<user_id>"].historyLimit`。
+```json5
 {
   channels: {
     telegram: {
@@ -153,8 +155,10 @@ json5
       }
     }
   }
-}``````
-保持仅提及所有组（默认行为）：```json5
+}
+```
+保持仅提及所有组（默认行为）：
+```json5
 {
   channels: {
     telegram: {
@@ -179,7 +183,8 @@ json5
 
 **提示：** 要获取自己的用户ID，可以私信该机器人，它会回复你的用户ID（配对消息），或者在命令启用后使用 `/whoami`。
 
-**隐私提示：** `@userinfobot` 是第三方机器人。如果你更倾向于隐私，可以将机器人添加到群组中，发送一条消息，然后使用 `clawdbot logs --follow` 来查看 `chat.id`，或者使用 Bot API 的 `getUpdates`。``````
+**隐私提示：** `@userinfobot` 是第三方机器人。如果你更倾向于隐私，可以将机器人添加到群组中，发送一条消息，然后使用 `clawdbot logs --follow` 来查看 `chat.id`，或者使用 Bot API 的 `getUpdates`。
+```
 ## 话题（论坛超级群）
 Telegram 论坛话题中，每个消息都包含一个 `message_thread_id`。Clawdbot：
 - 将 `:topic:<threadId>` 追加到 Telegram 群组的会话键中，以便每个话题相互隔离。
@@ -189,7 +194,8 @@ Telegram 论坛话题中，每个消息都包含一个 `message_thread_id`。Cla
 - 话题特定的配置位于 `channels.telegram.groups.<chatId>.topics.<threadId>` 下（技能、允许列表、自动回复、系统提示、禁用）。
 - 话题配置会继承群组设置（需要提及、允许列表、技能、提示、启用状态），除非在话题级别被覆盖。
 
-私有聊天在某些边缘情况下可能包含 `message_thread_id`。Clawdbot 保持 DM 会话键不变，但在存在 thread id 时仍会使用它进行回复/草稿流传输。```json5
+私有聊天在某些边缘情况下可能包含 `message_thread_id`。Clawdbot 保持 DM 会话键不变，但在存在 thread id 时仍会使用它进行回复/草稿流传输。
+```json5
 {
   "channels": {
     "telegram": {
@@ -214,7 +220,8 @@ json5
       }
     }
   }
-}``````
+}
+```
 作用域：
 - `off` — 禁用内联按钮
 - `dm` — 仅限私信（阻止群组目标）
@@ -227,7 +234,8 @@ json5
 
 ### 发送按钮
 
-使用带有 `buttons` 参数的消息工具：```json5
+使用带有 `buttons` 参数的消息工具：
+```json5
 {
   "action": "send",
   "channel": "telegram",
@@ -263,7 +271,7 @@ Telegram 的功能可以在两个层级进行配置（上面显示的是对象�
 - 批准方式：
   - `clawdbot pairing list telegram`
   - `clawdbot pairing approve telegram <CODE>`
-- 配对是 Telegram 私信中默认的令牌交换方式。详情请参阅：[配对](/start/pairing)
+- 配对是 Telegram 私信中默认的令牌交换方式。详情请参阅：[配对](/start/pairing.md)
 - `channels.telegram.allowFrom` 接受数字用户 ID（推荐）或 `@username` 条目。**不是**机器人的用户名；请使用真实用户发送者的 ID。向导支持 `@username`，并在可能的情况下将其解析为数字 ID。
 
 #### 查找你的 Telegram 用户 ID
@@ -275,7 +283,9 @@ Telegram 的功能可以在两个层级进行配置（上面显示的是对象�
 1) 私信你的机器人。
 2) 使用你的机器人令牌获取更新，并读取 `message.from.id`。
 bash
-   curl "https://api.telegram.org/bot<bot_token>/getUpdates"```   ```
+   curl "https://api.telegram.org/bot<bot_token>/getUpdates"
+```   
+```
 第三方（ less private）：
 - 向 `@userinfobot` 或 `@getidsbot` 发送 DM，并使用返回的用户 ID。
 
@@ -319,7 +329,8 @@ Clawdbot 默认使用音频文件以保持向后兼容性。
 
 该标签在传递给用户的消息中会被移除。其他渠道会忽略此标签。
 
-对于消息工具发送的音频，设置 `asVoice: true` 并提供一个支持语音的音频 `media` URL（当存在 `media` 时，`message` 是可选的）：```json5
+对于消息工具发送的音频，设置 `asVoice: true` 并提供一个支持语音的音频 `media` URL（当存在 `media` 时，`message` 是可选的）：
+```json5
 {
   "action": "send",
   "channel": "telegram",
@@ -353,17 +364,17 @@ Clawdbot 使用 Bot API 的 `sendMessageDraft`（不是真实消息）来发送�
 - `/reasoning stream` 在回复生成期间将推理内容流式传输到草稿气泡中，然后发送最终答案而不包含推理过程。
 - 如果 `channels.telegram.streamMode` 设置为 `off`，则禁用推理流。
 
-更多背景信息：[流式传输 + 分块](/concepts/streaming)。
+更多背景信息：[流式传输 + 分块](/concepts/streaming.md)。
 
 ## 重试策略
 出站的 Telegram API 调用会在遇到临时网络错误或 429 错误时进行重试，采用指数退避和随机抖动机制。可以通过 `channels.telegram.retry` 进行配置。  
-更多信息：[重试策略](/concepts/retry)。
+更多信息：[重试策略](/concepts/retry.md)。
 
 ## 代理工具（消息 + 反应）
 - 工具：`telegram`，带有 `sendMessage` 操作（`to`、`content`、可选 `mediaUrl`、`replyToMessageId`、`messageThreadId`）。
 - 工具：`telegram`，带有 `react` 操作（`chatId`、`messageId`、`emoji`）。
 - 工具：`telegram`，带有 `deleteMessage` 操作（`chatId`、`messageId`）。
-- 反应移除语义：详见 [/tools/reactions](/tools/reactions)。
+- 反应移除语义：详见 [/tools/reactions](/tools/reactions.md)。
 - 工具门控：`channels.telegram.actions.reactions`、`channels.telegram.actions.sendMessage`、`channels.telegram.actions.deleteMessage`（默认：启用）。
 
 ## 反应通知
@@ -400,7 +411,7 @@ json5
     }
   }
 }
-`````````
+```
 **要求：**
 - Telegram 机器人必须在 `allowed_updates` 中显式请求 `message_reaction`（由 Clawdbot 自动配置）
 - 对于 webhook 模式，反应包含在 webhook 的 `allowed_updates` 中

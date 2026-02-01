@@ -8,7 +8,7 @@ read_when:
 
 # 配置示例
 
-以下示例与当前配置模式一致。有关完整的参考和字段说明，请参见 [配置](/gateway/configuration)。
+以下示例与当前配置模式一致。有关完整的参考和字段说明，请参见 [配置](/gateway/configuration.md)。
 
 ## 快速开始
 
@@ -17,10 +17,12 @@ json5
 {
   agent: { workspace: "~/clawd" },
   channels: { whatsapp: { allowFrom: ["+15555550123"] } }
-}``````
+}
+```
 保存到 `~/.clawdbot/clawdbot.json`，你可以通过该号码私信机器人。
 
-### 推荐的起点```json5
+### 推荐的起点
+```json5
 {
   identity: {
     name: "Clawd",
@@ -171,7 +173,8 @@ json5
       groups: { "*": { requireMention: true } }
     }
   }
-}```
+}
+```
 
 telegram: {
       enabled: true,
@@ -414,10 +417,12 @@ skills: {
       },
       peekaboo: { enabled: true }
     }
-  }```
+  }
+```
 ## 常见模式
 
-### 多平台设置```json5
+### 多平台设置
+```json5
 {
   agent: { workspace: "~/clawd" },
   channels: {
@@ -461,8 +466,10 @@ json5
       fallbacks: ["anthropic/claude-opus-4-5"]
     }
   }
-}``````
-### Anthropic 订阅 + API 密钥，MiniMax 回退方案```json5
+}
+```
+### Anthropic 订阅 + API 密钥，MiniMax 回退方案
+```json5
 {
   auth: {
     profiles: {
@@ -517,10 +524,12 @@ json5
       }
     }
   }
-}```
+}
+```
 ## 提示
 
 - 如果设置 `dmPolicy: "open"`，则匹配的 `allowFrom` 列表必须包含 `"*"`。
 - 提供者 ID 是不同的（电话号码、用户 ID、频道 ID）。请使用提供者文档确认格式。
 - 可选部分可稍后添加：`web`、`browser`、`ui`、`discovery`、`canvasHost`、`talk`、`signal`、`imessage`。
-- 有关更详细的设置说明，请参阅 [Providers](/channels/whatsapp) 和 [Troubleshooting](/gateway/troubleshooting)。
+- 有关更详细的设置说明，请参阅 [Providers](/channels/whatsapp.md) 和 [Troubleshooting](/gateway/troubleshooting.md)。
+```

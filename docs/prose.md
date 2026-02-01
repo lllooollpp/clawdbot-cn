@@ -20,18 +20,20 @@ OpenProse 是一种便携式的、以 Markdown 为先的工作流格式，用于
 
 ## 安装与启用
 
-捆绑的插件默认是禁用的。请启用 OpenProse：```bash
+捆绑的插件默认是禁用的。请启用 OpenProse：
+```bash
 clawdbot plugins enable open-prose
 ```
 在启用插件后重启网关。
 
 Dev/local 检出：`clawdbot plugins install ./extensions/open-prose`
 
-相关文档：[插件](/plugin)，[插件清单](/plugins/manifest)，[技能](/tools/skills)。
+相关文档：[插件](/plugin.md)，[插件清单](/plugins/manifest.md)，[技能](/tools/skills.md)。
 
 ## 斜杠命令
 
-OpenProse 注册了 `/prose` 作为用户可调用的技能命令。它会将请求路由到 OpenProse 虚拟机指令，并在内部使用 Clawdbot 工具。```
+OpenProse 注册了 `/prose` 作为用户可调用的技能命令。它会将请求路由到 OpenProse 虚拟机指令，并在内部使用 Clawdbot 工具。
+```
 /prose help
 /prose run <file.prose>
 /prose run <handle/slug>
@@ -40,7 +42,8 @@ OpenProse 注册了 `/prose` 作为用户可调用的技能命令。它会将请
 /prose examples
 /prose update
 ```
-## 示例：一个简单的 `.prose` 文件```prose
+## 示例：一个简单的 `.prose` 文件
+```prose
 # Research + synthesis with two agents running in parallel.
 
 input topic: "What should we research?"
@@ -64,7 +67,8 @@ context: { findings, draft }
 ```
 ## 文件位置
 
-OpenProse 在您的工作区下的 `.prose/` 目录中保存状态：```
+OpenProse 在您的工作区下的 `.prose/` 目录中保存状态：
+```
 .prose/
 ├── .env
 ├── runs/
@@ -75,7 +79,8 @@ OpenProse 在您的工作区下的 `.prose/` 目录中保存状态：```
 │       └── agents/
 └── agents/
 ```
-用户级持久化代理位于：```
+用户级持久化代理位于：
+```
 ~/.prose/agents/
 ```
 ## 状态模式
@@ -106,10 +111,10 @@ OpenProse 程序映射到 Clawdbot 原语：
 | 文件读写 | `read` / `write` |
 | 网页获取 | `web_fetch` |
 
-如果您的工具白名单阻止了这些工具，OpenProse 程序将无法运行。请参阅 [Skills 配置](/tools/skills-config)。
+如果您的工具白名单阻止了这些工具，OpenProse 程序将无法运行。请参阅 [Skills 配置](/tools/skills-config.md)。
 
 ## 安全性与审批
 
 将 `.prose` 文件视为代码。在运行前进行审查。使用 Clawdbot 工具白名单和审批门禁来控制副作用。
 
-对于确定性、审批控制的工作流，请与 [Lobster](/tools/lobster) 进行比较。
+对于确定性、审批控制的工作流，请与 [Lobster](/tools/lobster.md) 进行比较。

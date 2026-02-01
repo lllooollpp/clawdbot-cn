@@ -11,5 +11,7 @@ read_when:
 bash
 clawdbot reset
 clawdbot reset --dry-run
-clawdbot reset --scope config+creds+sessions --yes --non-interactive``````
+clawdbot reset --scope config+creds+sessions --yes --non-interactive
+```
 "
+```

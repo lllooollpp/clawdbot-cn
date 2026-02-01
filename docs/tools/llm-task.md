@@ -22,8 +22,9 @@ json
     }
   }
 }
-``````
-2) 将工具加入白名单（它已使用 `optional: true` 注册）：```json
+```
+2) 将工具加入白名单（它已使用 `optional: true` 注册）：
+```json
 {
   "agents": {
     "list": [
@@ -54,7 +55,7 @@ json
     }
   }
 }
-``````
+```
 `allowedModels` 是一个 `provider/model` 字符串的白名单。如果设置了该参数，则白名单之外的任何请求都会被拒绝。
 
 ## 工具参数
@@ -73,7 +74,8 @@ json
 
 返回 `details.json`，其中包含解析后的 JSON（当提供 `schema` 时会进行验证）。
 
-## 示例：Lobster 工作流步骤```lobster
+## 示例：Lobster 工作流步骤
+```lobster
 clawd.invoke --tool llm-task --action json --args-json '{
   "prompt": "Given the input email, return intent and draft.",
   "input": {

@@ -22,7 +22,7 @@ Clawdbot 的内存是 **代理工作区中的普通 Markdown 文件**。文件�
   - 精选的长期记忆。
   - **仅在主会话、私有会话中加载**（从不在群组上下文中加载）。
 
-这些文件位于工作区中（`agents.defaults.workspace`，默认为 `~/clawd`）。有关完整布局，请参阅 [代理工作区](/concepts/agent-workspace)。
+这些文件位于工作区中（`agents.defaults.workspace`，默认为 `~/clawd`）。有关完整布局，请参阅 [代理工作区](/concepts/agent-workspace.md)。
 
 ## 何时写入内存
 
@@ -53,7 +53,7 @@ json5
     }
   }
 }
-`````````
+```
 详细信息：
 - **软阈值**：当会话令牌估计值超过 `contextWindow - reserveTokensFloor - softThresholdTokens` 时触发刷新。
 - **默认静默**：提示中包含 `NO_REPLY`，因此不会有任何内容被发送。
@@ -62,7 +62,7 @@ json5
 - **工作区必须可写**：如果会话以 `workspaceAccess: "ro"` 或 `"none"` 的方式沙箱运行，则会跳过刷新。
 
 有关完整的压缩生命周期，请参阅
-[会话管理 + 压缩](/reference/session-management-compaction)。
+[会话管理 + 压缩](/reference/session-management-compaction.md)。
 
 ## 向量内存搜索
 
@@ -83,7 +83,8 @@ Clawdbot 可以在 `MEMORY.md` 和 `memory/*.md` 上构建一个小的向量索�
 
 ### Gemini 嵌入（原生）
 
-将提供者设置为 `gemini` 以直接使用 Gemini 嵌入 API：```json5
+将提供者设置为 `gemini` 以直接使用 Gemini 嵌入 API：
+```json5
 agents: {
   defaults: {
     memorySearch: {
@@ -115,7 +116,8 @@ agents: {
       }
     }
   }
-}``````
+}
+```
 如果你不想设置 API 密钥，请使用 `memorySearch.provider = "local"` 或设置 `memorySearch.fallback = "none"`。
 
 回退选项：
@@ -136,7 +138,8 @@ agents: {
   - https://platform.openai.com/docs/api-reference/batch
   - https://platform.openai.com/pricing
 
-配置示例：```json5
+配置示例：
+```json5
 agents: {
   defaults: {
     memorySearch: {
@@ -232,10 +235,11 @@ agents: {
     }
   }
 }
-`````````
+```
 ### 嵌入缓存
 
-Clawdbot 可以在 SQLite 中缓存 **块嵌入**，因此重新索引和频繁更新（尤其是会话记录）不会对未更改的文本进行重新嵌入。```json5
+Clawdbot 可以在 SQLite 中缓存 **块嵌入**，因此重新索引和频繁更新（尤其是会话记录）不会对未更改的文本进行重新嵌入。
+```json5
 agents: {
   defaults: {
     memorySearch: {
@@ -259,7 +263,8 @@ agents: {
       sources: ["memory", "sessions"]
     }
   }
-}```注意事项：
+}
+```注意事项：
 - 会话索引是**可选的**（默认关闭）。
 - 会话更新会被去抖动处理，并且**异步索引**，一旦超过delta阈值（尽力而为）。
 - `memory_search` 从不会阻塞索引；在后台同步完成前，结果可能略有过时。
@@ -278,7 +283,7 @@ agents: {
       }
     }
 }
-``````
+```
 ### SQLite 向量加速（sqlite-vec）
 
 当 sqlite-vec 扩展可用时，Clawdbot 会将向量嵌入存储在 SQLite 虚拟表（`vec0`）中，并在数据库中执行向量距离查询。这样可以在不将所有嵌入向量加载到 JavaScript 中的情况下保持搜索速度。
@@ -297,7 +302,7 @@ agents: {
     }
   }
 }
-``````
+```
 注意事项：
 - `enabled` 默认为 true；当禁用时，搜索会回退到基于存储嵌入的进程内余弦相似度。
 - 如果 sqlite-vec 扩展缺失或加载失败，Clawdbot 会记录错误并继续使用 JS 回退（不使用向量表）。
@@ -328,7 +333,8 @@ agents: {
     }
   }
 }
-``````
+```
 注意事项：
 - `remote.*` 的优先级高于 `models.providers.openai.*`。
 - `remote.headers` 会与 OpenAI 的 headers 合并；在键冲突时，remote 会覆盖 OpenAI 的设置。若省略 `remote.headers`，则使用 OpenAI 的默认值。
+```

@@ -10,13 +10,14 @@ read_when:
 通过 RPC 尾随网关文件日志（仅在远程模式下有效）。
 
 相关：
-- 日志概览：[日志](/logging)
+- 日志概览：[日志](/logging.md)
 
 ## 示例
 bash
 clawdbot logs
 clawdbot logs --follow
 clawdbot logs --json
-clawdbot logs --limit 500``````
+clawdbot logs --limit 500
+```
 ```md
 """

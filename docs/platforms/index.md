@@ -16,26 +16,26 @@ Windows 的原生配套应用也正在计划中；网关建议通过 WSL2 运行
 
 ## 选择你的操作系统
 
-- macOS: [macOS](/platforms/macos)
-- iOS: [iOS](/platforms/ios)
-- Android: [Android](/platforms/android)
-- Windows: [Windows](/platforms/windows)
-- Linux: [Linux](/platforms/linux)
+- macOS: [macOS](/platforms/macos.md)
+- iOS: [iOS](/platforms/ios.md)
+- Android: [Android](/platforms/android.md)
+- Windows: [Windows](/platforms/windows.md)
+- Linux: [Linux](/platforms/linux.md)
 
 ## VPS 与托管
 
-- VPS 中心: [VPS 托管](/vps)
+- VPS 中心: [VPS 托管](/vps.md)
 - Railway（一键部署）: [Railway](/railway)
-- Fly.io: [Fly.io](/platforms/fly)
-- Hetzner（Docker）: [Hetzner](/platforms/hetzner)
-- GCP（Compute Engine）: [GCP](/platforms/gcp)
-- exe.dev（虚拟机 + HTTPS 代理）: [exe.dev](/platforms/exe-dev)
+- Fly.io: [Fly.io](/platforms/fly.md)
+- Hetzner（Docker）: [Hetzner](/platforms/hetzner.md)
+- GCP（Compute Engine）: [GCP](/platforms/gcp.md)
+- exe.dev（虚拟机 + HTTPS 代理）: [exe.dev](/platforms/exe-dev.md)
 
 ## 常用链接
 
-- 安装指南: [开始使用](/start/getting-started)
-- 网关操作手册: [网关](/gateway)
-- 网关配置: [配置](/gateway/configuration)
+- 安装指南: [开始使用](/start/getting-started.md)
+- 网关操作手册: [网关](/gateway/index.md)
+- 网关配置: [配置](/gateway/configuration.md)
 - 服务状态: `clawdbot gateway status`
 
 ## 网关服务安装（CLI）

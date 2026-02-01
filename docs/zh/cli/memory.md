@@ -10,11 +10,11 @@ read_when:
 由活动记忆插件提供（默认：`memory-core`；设置 `plugins.slots.memory = "none"` 以禁用）。
 
 相关：
-- 记忆概念：[Memory](/concepts/memory)
+- 记忆概念：[Memory](/concepts/memory.md)
  - 插件：[Plugins](/plugins)
 
 ## 示例
-``````bash
+```bash
 clawdbot memory status
 clawdbot memory status --deep
 clawdbot memory status --deep --index
@@ -39,3 +39,4 @@ clawdbot memory index --agent main --verbose
 - `memory status --deep` 探测向量和嵌入的可用性。
 - `memory status --deep --index` 如果存储已损坏，则执行重新索引。
 - `memory index --verbose` 输出每个阶段的详细信息（提供者、模型、源、批次活动）。
+```

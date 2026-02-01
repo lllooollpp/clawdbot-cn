@@ -23,7 +23,7 @@ json5
     }
   }
 }
-`````````
+```
 ### 设置
 1) 在 https://api.slack.com/apps 上创建一个 Slack 应用程序（从零开始）。
 2) **Socket Mode** → 打开。然后进入 **基本信息** → **应用级令牌** → **生成令牌和作用域**，选择作用域 `connections:write`。复制 **应用令牌**（`xapp-...`）。
@@ -42,7 +42,7 @@ json5
 
 使用下面的清单来确保作用域和事件保持同步。
 
-多账户支持：使用 `channels.slack.accounts`，并为每个账户提供令牌和可选的 `name`。有关共享模式，请参见 [`gateway/configuration`](/gateway/configuration#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。
+多账户支持：使用 `channels.slack.accounts`，并为每个账户提供令牌和可选的 `name`。有关共享模式，请参见 [`gateway/configuration`](/gateway/configuration.md#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。
 
 ### Clawdbot 配置（最小）
 
@@ -50,7 +50,8 @@ json5
 - `SLACK_APP_TOKEN=xapp-...`
 - `SLACK_BOT_TOKEN=xoxb-...`
 
-或者通过配置文件设置：```json5
+或者通过配置文件设置：
+```json5
 {
   channels: {
     slack: {
@@ -78,8 +79,9 @@ json5
     }
   }
 }
-`````````
-示例中显式设置了 userTokenReadOnly（允许用户令牌写入）：```json5
+```
+示例中显式设置了 userTokenReadOnly（允许用户令牌写入）：
+```json5
 {
   channels: {
     slack: {
@@ -128,11 +130,12 @@ json5
     }
   }
 }
-`````````
+```
 多账户 HTTP 模式：设置 `channels.slack.accounts.<id>.mode = "http"`，并为每个账户提供唯一的 `webhookPath`，以便每个 Slack 应用可以指向其自己的 URL。
 
 ### 清单文件（可选）
-使用此 Slack 应用清单文件快速创建应用（如需，可调整名称/命令）。如果计划配置用户令牌，请包含用户作用域。```json
+使用此 Slack 应用清单文件快速创建应用（如需，可调整名称/命令）。如果计划配置用户令牌，请包含用户作用域。
+```json
 {
   "display_information": {
     "name": "Clawdbot",
@@ -312,7 +315,8 @@ json
     "textChunkLimit": 4000,
     "mediaMaxMb": 20
   }
-}``````
+}
+```
 也可以通过环境变量提供令牌：
 - `SLACK_BOT_TOKEN`
 - `SLACK_APP_TOKEN`
@@ -336,7 +340,8 @@ json
 此模式适用于自动回复和代理工具调用（`slack sendMessage`）。
 
 ### 按聊天类型配置线程
-你可以通过设置 `channels.slack.replyToModeByChatType` 来为不同的聊天类型配置不同的线程行为：```json5
+你可以通过设置 `channels.slack.replyToModeByChatType` 来为不同的聊天类型配置不同的线程行为：
+```json5
 {
   channels: {
     slack: {
@@ -372,8 +377,10 @@ json5
       replyToModeByChatType: { direct: "all" }
     }
   }
-}``````
-线程组 DM，但将频道保留在根目录：```json5
+}
+```
+线程组 DM，但将频道保留在根目录：
+```json5
 {
   channels: {
     slack: {
@@ -403,7 +410,7 @@ json5
 - 斜杠命令使用 `agent:<agentId>:slack:slash:<userId>` 会话（前缀可通过 `channels.slack.slashCommand.sessionPrefix` 配置）。
 - 如果 Slack 没有提供 `channel_type`，Clawdbot 会根据频道 ID 前缀（`D`、`C`、`G`）进行推断，并默认为 `channel` 以保持会话键的稳定。
 - 原生命令注册使用 `commands.native`（全局默认为 `"auto"` → 禁用 Slack）并且可以按工作区覆盖 `channels.slack.commands.native`。文本命令需要独立的 `/...` 消息，并可以通过 `commands.text: false` 禁用。Slack 斜杠命令由 Slack 应用管理，不会自动移除。使用 `commands.useAccessGroups: false` 可以绕过命令的访问组检查。
-- 完整命令列表 + 配置：[斜杠命令](/tools/slash-commands)
+- 完整命令列表 + 配置：[斜杠命令](/tools/slash-commands.md)
 
 ## 私聊安全（配对）
 - 默认：`channels.slack.dm.policy="pairing"` — 未知私聊发送者会收到一个配对码（1 小时后过期）。
@@ -459,5 +466,6 @@ Slack 工具操作可以通过 `channels.slack.actions.*` 进行控制：
 - 反应通知遵循 `channels.slack.reactionNotifications`（使用 `reactionAllowlist` 时选择 `allowlist` 模式）。
 - 机器人撰写的消息默认被忽略；可通过 `channels.slack.allowBots` 或 `channels.slack.channels.<id>.allowBots` 启用。
 - 警告：如果你允许回复其他机器人（`channels.slack.allowBots=true` 或 `channels.slack.channels.<id>.allowBots=true`），请通过 `requireMention`、`channels.slack.channels.<id>.users` 白名单和/或在 `AGENTS.md` 和 `SOUL.md` 中清除防护机制，以防止机器人之间的回复循环。
-- 对于 Slack 工具，反应移除语义在 [/tools/reactions](/tools/reactions) 中有说明。
+- 对于 Slack 工具，反应移除语义在 [/tools/reactions](/tools/reactions.md) 中有说明。
 - 当允许且大小在限制内时，附件会被下载到媒体存储中。
+```

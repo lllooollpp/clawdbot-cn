@@ -35,7 +35,7 @@ last_updated: "2026-01-05"
 - 提供商枚举在网关、CLI、UI 和 macOS 选择器中现在保持一致。
 - Control UI 使用网关的 `jobs` 计数字段来显示状态。
 
-更多信息请参见 [Cron 任务](/automation/cron-jobs) 中的规范化结构和示例。
+更多信息请参见 [Cron 任务](/automation/cron-jobs.md) 中的规范化结构和示例。
 
 ## 当前行为
 

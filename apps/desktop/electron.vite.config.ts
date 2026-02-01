@@ -8,12 +8,8 @@ const workspaceRoot = resolve(__dirname, '../..')
 export default defineConfig({
   main: {
     plugins: [
-      // externalizeDepsPlugin 会将所有 node_modules 标记为 external
-      // 但我们需要将 openclaw 及其依赖打包进来
-      externalizeDepsPlugin({
-        // 只排除无法打包的原生模块
-        exclude: ['openclaw']
-      })
+      // Disable automatic externalization to bundle dependencies (including openclaw)
+      // externalizeDepsPlugin({ exclude: ['openclaw'] })
     ],
     resolve: {
       alias: {

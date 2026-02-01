@@ -11,12 +11,12 @@ read_when:
 ## 支持快照
 - 角色：辅助节点应用（Android 不托管网关）。
 - 需要网关：是（在 macOS、Linux 或 Windows 通过 WSL2 运行）。
-- 安装：[开始使用](/start/getting-started) + [配对](/gateway/pairing)。
-- 网关：[运行手册](/gateway) + [配置](/gateway/configuration)。
-  - 协议：[网关协议](/gateway/protocol)（节点 + 控制平面）。
+- 安装：[开始使用](/start/getting-started.md) + [配对](/gateway/pairing.md)。
+- 网关：[运行手册](/gateway/index.md) + [配置](/gateway/configuration.md)。
+  - 协议：[网关协议](/gateway/protocol.md)（节点 + 控制平面）。
 
 ## 系统控制
-系统控制（launchd/systemd）位于网关主机上。详见 [网关](/gateway)。
+系统控制（launchd/systemd）位于网关主机上。详见 [网关](/gateway/index.md)。
 
 ## 连接运行手册
 
@@ -36,7 +36,7 @@ Android 直接连接到网关的 WebSocket（默认 `ws://<host>:18789`），并
 ### 1）启动网关
 bash
 clawdbot gateway --port 18789 --verbose
-``````
+```
 在日志中确认你看到类似以下内容：
 - `listening on ws://0.0.0.0:18789`
 
@@ -47,10 +47,11 @@ clawdbot gateway --port 18789 --verbose
 
 ### 2) 验证发现功能（可选）
 
-从网关机器上执行：```bash
+从网关机器上执行：
+```bash
 dns-sd -B _clawdbot-gw._tcp local.
 ```
-更多调试笔记：[Bonjour](/gateway/bonjour)。
+更多调试笔记：[Bonjour](/gateway/bonjour.md)。
 
 #### Tailnet（维也纳 ⇄ 伦敦）通过单播 DNS-SD 进行发现
 
@@ -59,7 +60,7 @@ Android 的 NSD/mDNS 发现无法跨网络工作。如果你的 Android 节点�
 1) 在网关主机上设置一个 DNS-SD 区域（例如 `clawdbot.internal.`），并发布 `_clawdbot-gw._tcp` 记录。
 2) 为 `clawdbot.internal` 配置 Tailscale 的 Split DNS，并指向该 DNS 服务器。
 
-详细信息和示例 CoreDNS 配置：[Bonjour](/gateway/bonjour)。
+详细信息和示例 CoreDNS 配置：[Bonjour](/gateway/bonjour.md)。
 
 ### 3）从 Android 连接
 
@@ -80,18 +81,22 @@ Android 的 NSD/mDNS 发现无法跨网络工作。如果你的 Android 节点�
 bash
 clawdbot nodes pending
 clawdbot nodes approve <requestId>
-``````
-配对详情：[网关配对](/gateway/pairing)。
+```
+配对详情：[网关配对](/gateway/pairing.md)。
 
 ### 5）验证节点是否已连接
 
-- 通过节点状态：  ```bash
+- 通过节点状态：  
+```bash
   clawdbot nodes status
-  ```
+  
+```
 - 通过网关：
 bash
   clawdbot gateway call node.list --params "{}"
-  ```  ```
+  
+```  
+```
 ### 6) 聊天 + 历史记录
 
 Android 节点的 Chat 表使用网关的 **主会话密钥** (`main`)，因此历史记录和回复与 WebChat 及其他客户端共享：
@@ -110,7 +115,8 @@ Android 节点的 Chat 表使用网关的 **主会话密钥** (`main`)，因此�
 
 1) 在网关主机上创建 `~/clawd/canvas/index.html`。
 
-2) 将节点导航到该文件（局域网）：```bash
+2) 将节点导航到该文件（局域网）：
+```bash
 clawdbot nodes invoke --node "<Android Node>" --command canvas.navigate --params '{"url":"http://<gateway-hostname>.local:18793/__clawdbot__/canvas/"}'
 ```
 Tailnet（可选）：如果两台设备都在 Tailscale 上，可以使用 MagicDNS 名称或 tailnet IP 而不是 `.local`，例如 `http://<gateway-magicdns>:18793/__clawdbot__/canvas/`。
@@ -126,4 +132,4 @@ Canvas 命令（仅限前台）：
 - `camera.snap`（jpg 格式）
 - `camera.clip`（mp4 格式）
 
-有关参数和 CLI 辅助工具，请参见 [相机节点](/nodes/camera)。
+有关参数和 CLI 辅助工具，请参见 [相机节点](/nodes/camera.md)。

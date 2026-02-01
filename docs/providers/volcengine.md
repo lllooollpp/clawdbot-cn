@@ -13,12 +13,15 @@ Clawdbot 支持通过火山引擎的 **火山方舟 (Ark)** API 使用多种模�
 
 1. 从 [火山引擎控制台](https://console.volcengine.com/ark) 获取 API Key。
 2. 设置环境变量：
-   ```bash
+   
+```bash
    export VOLCENGINE_API_KEY="您的API密钥"
-   ```
+   
+```
 
    或者在 `clawdbot.json` 中配置：
-   ```json5
+   
+```json5
    {
      "models": {
        "providers": {
@@ -28,7 +31,8 @@ Clawdbot 支持通过火山引擎的 **火山方舟 (Ark)** API 使用多种模�
        }
      }
    }
-   ```
+   
+```
 
 ## 模型发现 (Automated Discovery)
 
@@ -79,5 +83,5 @@ Clawdbot 支持自动获取您的推理接入点（Endpoint）列表：
 
 ## 相关内容
 
-- [模型提供者](/providers) - 所有支持的后端概述
-- [配置](/gateway/configuration) - 完整参考
+- [模型提供者](/providers/index.md) - 所有支持的后端概述
+- [配置](/gateway/configuration.md) - 完整参考

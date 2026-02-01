@@ -69,7 +69,7 @@ read_when:
 
 ## 与其他限制的交互
 - 内置工具会自动截断自己的输出；会话修剪是另一层机制，防止长时间运行的对话在模型上下文中积累过多的工具输出。
-- 压缩是独立的：压缩会进行总结并保存，而修剪是每次请求的临时操作。详见 [/concepts/compaction](/concepts/compaction)。
+- 压缩是独立的：压缩会进行总结并保存，而修剪是每次请求的临时操作。详见 [/concepts/compaction](/concepts/compaction.md)。
 
 ## 默认值（启用时）
 - `ttl`: `"5m"`
@@ -87,8 +87,10 @@ json5
   agent: {
     contextPruning: { mode: "off" }
   }
-}``````
-启用TTL感知的清理：```json5
+}
+```
+启用TTL感知的清理：
+```json5
 {
   agent: {
     contextPruning: { mode: "cache-ttl", ttl: "5m" }
@@ -103,3 +105,4 @@ json5
     }
   }
 }
+```

@@ -54,7 +54,7 @@ clawdbot gateway --tailscale serve
 默认情况下，Serve 请求可以通过 Tailscale 身份头（`tailscale-user-login`）进行身份验证，当 `gateway.auth.allowTailscale` 为 `true` 时有效。Clawdbot 仅在请求通过环回地址（loopback）并带有 Tailscale 的 `x-forwarded-*` 头时接受这些身份验证方式。如果你希望即使是 Serve 流量也需要令牌/密码，可以将 `gateway.auth.allowTailscale` 设置为 `false`（或强制设置 `gateway.auth.mode: "password"`）。
 bash
 clawdbot gateway --bind tailnet --token "$(openssl rand -hex 32)"
-``````
+```
 然后打开：
 - `http://<tailscale-ip>:18789/`（或你配置的 `gateway.controlUi.basePath`）
 
@@ -70,7 +70,8 @@ Clawdbot **会阻止**没有设备身份的Control UI连接。
 - `https://<magicdns>/`（Serve）
 - `http://127.0.0.1:18789/`（在网关主机上）
 
-**降级示例（仅通过HTTP使用令牌）：**```json5
+**降级示例（仅通过HTTP使用令牌）：**
+```json5
 {
   gateway: {
     controlUi: { allowInsecureAuth: true },
@@ -81,17 +82,18 @@ Clawdbot **会阻止**没有设备身份的Control UI连接。
 ```
 这会禁用控制UI的设备身份验证和配对功能（即使在HTTPS下也如此）。仅在您信任网络的情况下使用。
 
-有关HTTPS设置的指导，请参阅 [Tailscale](/gateway/tailscale)。
+有关HTTPS设置的指导，请参阅 [Tailscale](/gateway/tailscale.md)。
 bash
 pnpm ui:build # 首次运行时会自动安装UI依赖项
-``````
-可选的绝对基础路径（当你需要固定资产 URL 时）：```bash
+```
+可选的绝对基础路径（当你需要固定资产 URL 时）：
+```bash
 CLAWDBOT_CONTROL_UI_BASE_PATH=/clawdbot/ pnpm ui:build
 ```
 对于本地开发（独立的开发服务器）：
 bash
 pnpm ui:dev # 首次运行时会自动安装 UI 依赖
-``````
+```
 然后将 UI 指向你的网关 WS 地址（例如 `ws://127.0.0.1:18789`）。
 
 ## 调试/测试：开发服务器 + 远程网关
@@ -99,14 +101,16 @@ pnpm ui:dev # 首次运行时会自动安装 UI 依赖
 Control UI 是静态文件；WebSocket 的目标地址是可配置的，可以与 HTTP 原始地址不同。这在你希望本地使用 Vite 开发服务器而网关运行在其他地方时非常方便。
 
 1) 启动 UI 开发服务器：`pnpm ui:dev`
-2) 打开一个类似这样的网址：```text
+2) 打开一个类似这样的网址：
+```text
 http://localhost:5173/?gatewayUrl=ws://<gateway-host>:18789
 ```
 可选的一次性认证（如需的话）：
 text
 http://localhost:5173/?gatewayUrl=wss://<gateway-host>:18789&token=<gateway-token>
-``````
+```
 说明：
 - `gatewayUrl` 在加载后存储在 localStorage 中，并从 URL 中移除。
 - `token` 存储在 localStorage 中；`password` 仅保留在内存中。
 - 当网关位于 TLS（Tailscale Serve、HTTPS 代理等）之后时，使用 `wss://`。
+```

@@ -40,12 +40,13 @@ const AUTH_CHOICE_GROUP_DEFS: {
 }[] = [
   {
     value: "domestic",
-    label: "Domestic / Local Alternatives (国内优先 🇨🇳)",
-    hint: "DeepSeek, SiliconFlow, Volcengine, Bocha, Ollama",
+    label: "国内优先 / 本地模型 (Domestic Priority 🇨🇳)",
+    hint: "DeepSeek, SiliconFlow, 智谱 AI, 火山引擎, 博查, Ollama",
     choices: [
       "deepseek-api-key",
       "siliconflow-api-key",
       "volcengine-api-key",
+      "zhipu-api-key",
       "bocha-api-key",
       "ollama",
     ],
@@ -53,79 +54,79 @@ const AUTH_CHOICE_GROUP_DEFS: {
   {
     value: "openai",
     label: "OpenAI",
-    hint: "Codex OAuth + API key",
+    hint: "Codex OAuth + API 密钥",
     choices: ["codex-cli", "openai-codex", "openai-api-key"],
   },
   {
     value: "anthropic",
     label: "Anthropic",
-    hint: "Claude Code CLI + API key",
+    hint: "Claude Code CLI + API 密钥",
     choices: ["token", "claude-cli", "apiKey"],
   },
   {
     value: "minimax",
-    label: "MiniMax",
-    hint: "M2.1 (recommended)",
+    label: "MiniMax (海螺 AI)",
+    hint: "推荐使用 M2.1",
     choices: ["minimax-api", "minimax-api-lightning"],
   },
   {
     value: "qwen",
-    label: "Qwen",
-    hint: "OAuth",
+    label: "通义千问 (Qwen)",
+    hint: "OAuth 授权",
     choices: ["qwen-portal"],
   },
   {
     value: "synthetic",
-    label: "Synthetic",
-    hint: "Anthropic-compatible (multi-model)",
+    label: "Synthetic (合成接口)",
+    hint: "兼容 Anthropic 的多模型接口",
     choices: ["synthetic-api-key"],
   },
   {
     value: "venice",
     label: "Venice AI",
-    hint: "Privacy-focused (uncensored models)",
+    hint: "更注重隐私的模型 (无审查)",
     choices: ["venice-api-key"],
   },
   {
     value: "google",
     label: "Google",
-    hint: "Gemini API key + OAuth",
+    hint: "Gemini API 密钥 + OAuth",
     choices: ["gemini-api-key", "google-antigravity", "google-gemini-cli"],
   },
   {
     value: "copilot",
     label: "Copilot",
-    hint: "GitHub + local proxy",
+    hint: "GitHub + 本地代理",
     choices: ["github-copilot", "copilot-proxy"],
   },
   {
     value: "openrouter",
     label: "OpenRouter",
-    hint: "API key",
+    hint: "API 密钥",
     choices: ["openrouter-api-key"],
   },
   {
     value: "ai-gateway",
     label: "Vercel AI Gateway",
-    hint: "API key",
+    hint: "API 密钥",
     choices: ["ai-gateway-api-key"],
   },
   {
     value: "moonshot",
-    label: "Moonshot AI",
+    label: "Moonshot AI (月之暗面)",
     hint: "Kimi K2 + Kimi Code",
     choices: ["moonshot-api-key", "kimi-code-api-key"],
   },
   {
     value: "zai",
-    label: "Z.AI (GLM 4.7)",
-    hint: "API key",
+    label: "Z.AI (智谱清言 GLM 4.7)",
+    hint: "API 密钥",
     choices: ["zai-api-key"],
   },
   {
     value: "opencode-zen",
     label: "OpenCode Zen",
-    hint: "API key",
+    hint: "API 密钥",
     choices: ["opencode-zen"],
   },
 ];
@@ -133,15 +134,15 @@ const AUTH_CHOICE_GROUP_DEFS: {
 function formatOAuthHint(expires?: number, opts?: { allowStale?: boolean }): string {
   const rich = isRich();
   if (!expires) {
-    return colorize(rich, theme.muted, "token unavailable");
+    return colorize(rich, theme.muted, "令牌不可用");
   }
   const now = Date.now();
   const remaining = expires - now;
   if (remaining <= 0) {
     if (opts?.allowStale) {
-      return colorize(rich, theme.warn, "token present · refresh on use");
+      return colorize(rich, theme.warn, "令牌已存在 · 使用时刷新");
     }
-    return colorize(rich, theme.error, "token expired");
+    return colorize(rich, theme.error, "令牌已过期");
   }
   const minutes = Math.round(remaining / (60 * 1000));
   const duration =
@@ -150,7 +151,7 @@ function formatOAuthHint(expires?: number, opts?: { allowStale?: boolean }): str
       : minutes >= 60
         ? "1h"
         : `${Math.max(minutes, 1)}m`;
-  const label = `token ok · expires in ${duration}`;
+  const label = `令牌正常 · ${duration} 后过期`;
   if (minutes <= 10) {
     return colorize(rich, theme.warn, label);
   }
@@ -179,21 +180,21 @@ export function buildAuthChoiceOptions(params: {
   if (claudeCli?.type === "oauth" || claudeCli?.type === "token") {
     options.push({
       value: "claude-cli",
-      label: "Anthropic token (Claude Code CLI)",
-      hint: `reuses existing Claude Code auth · ${formatOAuthHint(claudeCli.expires)}`,
+      label: "Anthropic 令牌 (Claude Code CLI)",
+      hint: `复用现有的 Claude Code 认证 · ${formatOAuthHint(claudeCli.expires)}`,
     });
   } else if (params.includeClaudeCliIfMissing && platform === "darwin") {
     options.push({
       value: "claude-cli",
-      label: "Anthropic token (Claude Code CLI)",
-      hint: "reuses existing Claude Code auth · requires Keychain access",
+      label: "Anthropic 令牌 (Claude Code CLI)",
+      hint: "复用现有的 Claude Code 认证 · 需要访问钥匙串",
     });
   }
 
   options.push({
     value: "token",
-    label: "Anthropic token (paste setup-token)",
-    hint: "run `claude setup-token` elsewhere, then paste the token here",
+    label: "Anthropic 令牌 (粘贴 setup-token)",
+    hint: "在其他地方运行 `claude setup-token`，然后将得到的令牌粘贴到此处",
   });
 
   options.push({
@@ -201,83 +202,88 @@ export function buildAuthChoiceOptions(params: {
     label: "OpenAI Codex (ChatGPT OAuth)",
   });
   options.push({ value: "chutes", label: "Chutes (OAuth)" });
-  options.push({ value: "openai-api-key", label: "OpenAI API key" });
-  options.push({ value: "openrouter-api-key", label: "OpenRouter API key" });
+  options.push({ value: "openai-api-key", label: "OpenAI API 密钥" });
+  options.push({ value: "openrouter-api-key", label: "OpenRouter API 密钥" });
   options.push({
     value: "ai-gateway-api-key",
-    label: "Vercel AI Gateway API key",
+    label: "Vercel AI Gateway API 密钥",
   });
-  options.push({ value: "moonshot-api-key", label: "Moonshot AI API key" });
-  options.push({ value: "kimi-code-api-key", label: "Kimi Code API key" });
+  options.push({ value: "moonshot-api-key", label: "Moonshot AI (Kimi) API 密钥" });
+  options.push({ value: "kimi-code-api-key", label: "Kimi Code API 密钥" });
   options.push({
     value: "deepseek-api-key",
-    label: "DeepSeek API key",
-    hint: "DeepSeek V3/R1 (🇨🇳)",
+    label: "DeepSeek API 密钥",
+    hint: "DeepSeek V3/R1 (国内首选 🇨🇳)",
   });
   options.push({
     value: "siliconflow-api-key",
-    label: "SiliconFlow API key",
-    hint: "Aggregated models (🇨🇳)",
+    label: "SiliconFlow (硅基流动) API 密钥",
+    hint: "聚合国内主流开源模型 (🇨🇳)",
   });
   options.push({
     value: "volcengine-api-key",
     label: "Volcengine Ark (火山引擎方舟) 🇨🇳",
-    hint: "ByteDance Ark platform (豆包/Doubao models)",
+    hint: "字节跳动 Ark 平台 (豆包/Doubao 系列模型)",
+  });
+  options.push({
+    value: "zhipu-api-key",
+    label: "Zhipu AI (智谱清言) API 密钥 🇨🇳",
+    hint: "GLM-4 系列模型 (国产 LLM 标杆)",
   });
   options.push({
     value: "bocha-api-key",
-    label: "Bocha Search API key (博查 🇨🇳)",
-    hint: "Web search alternative (Brave search alternative)",
+    label: "Bocha Search (博查搜索) API 密钥 🇨🇳",
+    hint: "国内联网搜索替代方案",
   });
   options.push({
     value: "ollama",
-    label: "Ollama (Local LLM 🏠)",
-    hint: "Run models locally on your machine",
+    label: "Ollama (本地大模型 🏠)",
+    hint: "在您自己的机器上运行开源模型",
   });
-  options.push({ value: "synthetic-api-key", label: "Synthetic API key" });
+  options.push({ value: "synthetic-api-key", label: "Synthetic API 密钥" });
   options.push({
     value: "venice-api-key",
-    label: "Venice AI API key",
-    hint: "Privacy-focused inference (uncensored models)",
+    label: "Venice AI API 密钥",
+    hint: "注重隐私的推理 (无审查模型)",
   });
   options.push({
     value: "github-copilot",
-    label: "GitHub Copilot (GitHub device login)",
-    hint: "Uses GitHub device flow",
+    label: "GitHub Copilot (设备登录授权)",
+    hint: "使用 GitHub Device 认证流程",
   });
-  options.push({ value: "gemini-api-key", label: "Google Gemini API key" });
+  options.push({ value: "gemini-api-key", label: "Google Gemini API 密钥" });
   options.push({
     value: "google-antigravity",
     label: "Google Antigravity OAuth",
-    hint: "Uses the bundled Antigravity auth plugin",
+    hint: "使用内置的 Antigravity 认证插件",
   });
   options.push({
     value: "google-gemini-cli",
     label: "Google Gemini CLI OAuth",
-    hint: "Uses the bundled Gemini CLI auth plugin",
+    hint: "使用内置的 Gemini CLI 认证插件",
   });
-  options.push({ value: "zai-api-key", label: "Z.AI (GLM 4.7) API key" });
-  options.push({ value: "qwen-portal", label: "Qwen OAuth" });
+  options.push({ value: "zai-api-key", label: "Z.AI (GLM 4.7) API 密钥" });
+  options.push({ value: "qwen-portal", label: "通义千问 (Qwen) OAuth" });
   options.push({
     value: "copilot-proxy",
-    label: "Copilot Proxy (local)",
-    hint: "Local proxy for VS Code Copilot models",
+    label: "Copilot 代理 (本地)",
+    hint: "VS Code Copilot 模型的本地代理",
   });
-  options.push({ value: "apiKey", label: "Anthropic API key" });
+  options.push({ value: "apiKey", label: "Anthropic API 密钥" });
   // Token flow is currently Anthropic-only; use CLI for advanced providers.
   options.push({
     value: "opencode-zen",
-    label: "OpenCode Zen (multi-model proxy)",
-    hint: "Claude, GPT, Gemini via opencode.ai/zen",
+    label: "OpenCode Zen (多模型代理)",
+    hint: "通过 opencode.ai/zen 访问 Claude, GPT, Gemini",
   });
   options.push({ value: "minimax-api", label: "MiniMax M2.1" });
   options.push({
     value: "minimax-api-lightning",
     label: "MiniMax M2.1 Lightning",
-    hint: "Faster, higher output cost",
+    hint: "更快的响应，更高的输出成本",
   });
   if (params.includeSkip) {
-    options.push({ value: "skip", label: "Skip for now" });
+    options.push({ value: "skip", label: "暂不设置" });
   }
 
   return options;
@@ -308,7 +314,7 @@ export function buildAuthChoiceGroups(params: {
   }));
 
   const skipOption = params.includeSkip
-    ? ({ value: "skip", label: "Skip for now" } satisfies AuthChoiceOption)
+    ? ({ value: "skip", label: "暂不设置" } satisfies AuthChoiceOption)
     : undefined;
 
   return { groups, skipOption };

@@ -15,7 +15,7 @@ Clawdbot 通过 JSON-RPC 集成外部 CLI。目前使用了两种模式。
 - 健康检查接口：`/api/v1/check`。
 - 当 `channels.signal.autoStart=true` 时，Clawdbot 负责管理生命周期。
 
-有关设置和端点，请参见 [Signal](/channels/signal)。
+有关设置和端点，请参见 [Signal](/channels/signal.md)。
 
 ## 模式 B：标准输入输出子进程（imsg）
 - Clawdbot 启动 `imsg rpc` 作为子进程。
@@ -28,7 +28,7 @@ Clawdbot 通过 JSON-RPC 集成外部 CLI。目前使用了两种模式。
 - `send`
 - `chats.list`（探测/诊断）
 
-有关设置和地址（`chat_id` 优先），请参见 [iMessage](/channels/imessage)。
+有关设置和地址（`chat_id` 优先），请参见 [iMessage](/channels/imessage.md)。
 
 ## 适配器指南
 - 网关负责管理进程（启动/停止与提供者生命周期绑定）。

@@ -10,7 +10,7 @@ read_when:
 
 TypeBox 是一个以 TypeScript 为先的模式库。我们使用它来定义 **Gateway WebSocket 协议**（握手、请求/响应、服务器事件）。这些模式用于 **运行时验证**、**JSON Schema 导出** 以及 **Swift 代码生成**，用于 macOS 应用程序。一个事实来源；其他一切均由其生成。
 
-如果你想了解更高层次的协议背景，可以从 [Gateway 架构](/concepts/architecture) 开始。
+如果你想了解更高层次的协议背景，可以从 [Gateway 架构](/concepts/architecture.md) 开始。
 
 ## 思维模型（30 秒）
 
@@ -29,7 +29,8 @@ Client                    Gateway
   |<---- res:hello-ok --------|
   |<---- event:tick ----------|
   |---- req:health ---------->|
-  |<---- res:health ----------|``````
+  |<---- res:health ----------|
+```
 常用方法 + 事件：
 
 | 分类 | 示例 | 说明 |
@@ -65,7 +66,8 @@ Client                    Gateway
 
 - **服务器端**：每个传入的帧都会通过 AJV 验证。握手阶段仅接受参数符合 `ConnectParams` 的 `connect` 请求。
 - **客户端**：JS 客户端会在使用事件和响应帧之前进行验证。
-- **方法接口**：网关在 `hello-ok` 中声明支持的 `methods` 和 `events`。```json
+- **方法接口**：网关在 `hello-ok` 中声明支持的 `methods` 和 `events`。
+```json
 {
   "type": "req",
   "id": "c1",
@@ -96,7 +98,8 @@ Client                    Gateway
     "snapshot": { "presence": [], "health": {}, "stateVersion": { "presence": 0, "health": 0 }, "uptimeMs": 0 },
     "policy": { "maxPayload": 1048576, "maxBufferedBytes": 1048576, "tickIntervalMs": 30000 }
   }
-}```
+}
+```
 "
 json
 { "type": "res", "id": "r1", "ok": true, "payload": { "ok": true } }
@@ -108,10 +111,12 @@ json
     "ts": 1730000000
   },
   "seq": 12
-}```
+}
+```
 ## 最小客户端（Node.js）
 
-最小的有用流程：连接 + 健康检查。```ts
+最小的有用流程：连接 + 健康检查。
+```ts
 import { WebSocket } from "ws";
 
 const ws = new WebSocket("ws://127.0.0.1:18789");
@@ -162,8 +167,10 @@ export const SystemEchoParamsSchema = Type.Object(
 export const SystemEchoResultSchema = Type.Object(
   { ok: Type.Boolean(), text: NonEmptyString },
   { additionalProperties: false },
-);``````
-将两者都添加到 `ProtocolSchemas` 并导出类型：```ts
+);
+```
+将两者都添加到 `ProtocolSchemas` 并导出类型：
+```ts
   SystemEchoParams: SystemEchoParamsSchema,
   SystemEchoResult: SystemEchoResultSchema,
 ```
@@ -176,10 +183,12 @@ export type SystemEchoResult = Static<typeof SystemEchoResultSchema>;
 在 `src/gateway/protocol/index.ts` 中，导出一个 AJV 验证器：
 ts
 export const validateSystemEchoParams =
-  ajv.compile<SystemEchoParams>(SystemEchoParamsSchema);``````
+  ajv.compile<SystemEchoParams>(SystemEchoParamsSchema);
+```
 3) **服务器行为**
 
-在 `src/gateway/server-methods/system.ts` 中添加一个处理程序：```ts
+在 `src/gateway/server-methods/system.ts` 中添加一个处理程序：
+```ts
 export const systemHandlers: GatewayRequestHandlers = {
   "system.echo": ({ params, respond }) => {
     const text = String(params.text ?? "");
@@ -192,7 +201,8 @@ export const systemHandlers: GatewayRequestHandlers = {
 
 4) **重新生成**
 bash
-pnpm protocol:check``````
+pnpm protocol:check
+```
 5) **Tests + docs**
 
 在 `src/gateway/server.*.test.ts` 中添加一个服务器测试，并在文档中注明该方法。

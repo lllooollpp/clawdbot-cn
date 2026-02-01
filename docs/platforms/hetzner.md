@@ -29,7 +29,7 @@ Hetzner 的价格可能会变化；选择最小的 Debian/Ubuntu VPS，并在遇
 
 本指南假设你在 Hetzner 上使用的是 Ubuntu 或 Debian。  
 如果你使用的是其他 Linux VPS，请相应地映射软件包。  
-关于通用的 Docker 流程，请参阅 [Docker](/install/docker)。
+关于通用的 Docker 流程，请参阅 [Docker](/install/docker.md)。
 
 ---
 
@@ -60,13 +60,14 @@ Hetzner 的价格可能会变化；选择最小的 Debian/Ubuntu VPS，并在遇
   - Gmail OAuth
 bash
 ssh root@YOUR_VPS_IP
-``````
+```
 本指南假设 VPS 是有状态的。
 不要将其视为可丢弃的基础设施。
 
 ---
 
-## 2）安装 Docker（在 VPS 上）```bash
+## 2）安装 Docker（在 VPS 上）
+```bash
 apt-get update
 apt-get install -y git curl ca-certificates
 curl -fsSL https://get.docker.com | sh
@@ -75,8 +76,9 @@ curl -fsSL https://get.docker.com | sh
 bash
 docker --version
 docker compose version
-``````
-## 3) 克隆 Clawdbot 仓库```bash
+```
+## 3) 克隆 Clawdbot 仓库
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 ```
@@ -95,10 +97,11 @@ mkdir -p /root/clawd
 # 将所有权设置为容器用户（uid 1000）：
 chown -R 1000:1000 /root/.clawdbot
 chown -R 1000:1000 /root/clawd
-``````
+```
 ## 5）配置环境变量
 
-在仓库根目录下创建 `.env` 文件。```bash
+在仓库根目录下创建 `.env` 文件。
+```bash
 CLAWDBOT_IMAGE=clawdbot:latest
 CLAWDBOT_GATEWAY_TOKEN=change-me-now
 CLAWDBOT_GATEWAY_BIND=lan
@@ -111,14 +114,16 @@ GOG_KEYRING_PASSWORD=change-me-now
 XDG_CONFIG_HOME=/home/node/.clawdbot
 ```
 生成强密钥：
-openssl rand -hex 32```
+openssl rand -hex 32
+```
 **不要提交此文件。**
 
 ---
 
 ## 6) Docker Compose 配置
 
-创建或更新 `docker-compose.yml`。```yaml
+创建或更新 `docker-compose.yml`。
+```yaml
 services:
   clawdbot-gateway:
     image: ${CLAWDBOT_IMAGE}
@@ -216,8 +221,9 @@ RUN pnpm ui:build
 ENV NODE_ENV=production
 
 CMD ["node", "dist/index.js"]
-``````
-## 8) 构建与启动```bash
+```
+## 8) 构建与启动
+```bash
 docker compose build
 docker compose up -d clawdbot-gateway
 ```
@@ -226,19 +232,23 @@ bash
 docker compose exec clawdbot-gateway which gog
 docker compose exec clawdbot-gateway which goplaces
 docker compose exec clawdbot-gateway which wacli
-``````
+```
 ```md
 /usr/local/bin/gog
 /usr/local/bin/goplaces
-/usr/local/bin/wacli```
-## 9) 验证网关```bash
+/usr/local/bin/wacli
+```
+## 9) 验证网关
+```bash
 docker compose logs -f clawdbot-gateway
 ```
 "成功：
 
 [gateway] 正在监听 ws://0.0.0.0:18789
-"```
-从你的笔记本电脑：```bash
+"
+```
+从你的笔记本电脑：
+```bash
 ssh -N -L 18789:127.0.0.1:18789 root@YOUR_VPS_IP
 ```
 打开：
@@ -266,3 +276,4 @@ Clawdbot 在 Docker 中运行，但 Docker 并不是真相来源。
 | Node 运行时 | 容器文件系统 | Docker 镜像 | 每次镜像构建时都会重新构建 |
 | OS 软件包 | 容器文件系统 | Docker 镜像 | 不要在运行时安装 |
 | Docker 容器 | 临时 | 可重启 | 可以安全地删除 |
+```

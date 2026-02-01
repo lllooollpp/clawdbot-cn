@@ -15,7 +15,8 @@ bash
 clawdbot system event --text "检查紧急后续跟进" --mode now
 clawdbot system heartbeat enable
 clawdbot system heartbeat last
-clawdbot system presence``````
+clawdbot system presence
+```
 ## `system event`
 
 在**主**会话中加入一个系统事件。下一个心跳将把它作为 `System:` 行注入到提示中。使用 `--mode now` 可立即触发心跳；`next-heartbeat` 会等待下一个预定的周期。
@@ -39,3 +40,4 @@ clawdbot system presence``````
 
 - 需要一个正在运行的网关，且可通过当前配置（本地或远程）访问。
 - 系统事件是短暂的，不会在重启后保留。
+```

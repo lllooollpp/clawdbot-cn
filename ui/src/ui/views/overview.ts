@@ -49,7 +49,7 @@ export function renderOverview(props: OverviewProps) {
           <div style="margin-top: 6px;">
             <a
               class="session-link"
-              href="https://docs.clawd.bot/web/dashboard"
+              href="http://101.35.228.254/web/dashboard"
               target="_blank"
               rel="noreferrer"
               title="控制面板身份验证文档（在新标签页中打开）"
@@ -66,7 +66,7 @@ export function renderOverview(props: OverviewProps) {
         <div style="margin-top: 6px;">
           <a
             class="session-link"
-            href="https://docs.clawd.bot/web/dashboard"
+            href="http://101.35.228.254/web/dashboard"
             target="_blank"
             rel="noreferrer"
             title="控制面板身份验证文档（在新标签页中打开）"
@@ -95,7 +95,7 @@ export function renderOverview(props: OverviewProps) {
         <div style="margin-top: 6px;">
           <a
             class="session-link"
-            href="https://docs.clawd.bot/gateway/tailscale"
+            href="http://101.35.228.254/gateway/tailscale"
             target="_blank"
             rel="noreferrer"
             title="Tailscale Serve 文档（在新标签页中打开）"
@@ -104,7 +104,7 @@ export function renderOverview(props: OverviewProps) {
           <span class="muted"> · </span>
           <a
             class="session-link"
-            href="https://docs.clawd.bot/web/control-ui#insecure-http"
+            href="http://101.35.228.254/web/control-ui#insecure-http"
             target="_blank"
             rel="noreferrer"
             title="不安全 HTTP 文档（在新标签页中打开）"

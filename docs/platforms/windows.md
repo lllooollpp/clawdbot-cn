@@ -1,8 +1,7 @@
 ﻿---
+layout: default
+title: Windows
 summary: "Windows support (Desktop app + WSL2)"
-read_when:
-  - Installing Clawdbot on Windows
-  - Looking for Windows desktop app or WSL2 guide
 ---
 
 # Windows
@@ -16,18 +15,18 @@ read_when:
 
 原生 Windows 支持，无需 WSL2。
 
-- [桌面版安装与使用指南](/install/desktop)
+- [桌面版安装与使用指南](/install/desktop.md)
 - 下载地址：[GitHub Releases](https://github.com/clawdbot/clawdbot/releases)
 
 ## 2) WSL2 安装 (高级/开发)
 
-- [快速入门](/start/getting-started)（在 WSL 中使用）
-- [安装与更新](/install/updating)
+- [快速入门](/start/getting-started.md)（在 WSL 中使用）
+- [安装与更新](/install/updating.md)
 - 官方 WSL2 指南（微软）：https://learn.microsoft.com/windows/wsl/install
 
 ## 网关
-- [网关操作手册](/gateway)
-- [配置](/gateway/configuration)
+- [网关操作手册](/gateway/index.md)
+- [配置](/gateway/configuration.md)
 
 ## 网关服务安装（CLI）
 
@@ -84,7 +83,7 @@ wsl --install
 wsl --install -d Ubuntu-24.04
 ```
 
-### 2) 启用 systemd (网关安装所需)
+## 2) 启用 systemd (网关安装所需)
 
 在你的 WSL 终端中：
 ```bash
@@ -107,4 +106,4 @@ pnpm build
 clawdbot onboard
 ```
 
-完整指南：[入门指南](/start/getting-started)
+完整指南：[入门指南](/start/getting-started.md)

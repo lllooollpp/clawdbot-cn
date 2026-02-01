@@ -78,10 +78,10 @@ async function promptManualModel(params: {
   initialValue?: string;
 }): Promise<PromptDefaultModelResult> {
   const modelInput = await params.prompter.text({
-    message: params.allowBlank ? "Default model (blank to keep)" : "Default model",
+    message: params.allowBlank ? "默认模型 (留空则保留当前设置)" : "默认模型",
     initialValue: params.initialValue,
-    placeholder: "provider/model",
-    validate: params.allowBlank ? undefined : (value) => (value?.trim() ? undefined : "Required"),
+    placeholder: "提供商/模型 (例如: zhipu/glm-4)",
+    validate: params.allowBlank ? undefined : (value) => (value?.trim() ? undefined : "必填项目"),
   });
   const model = String(modelInput ?? "").trim();
   if (!model) return {};
@@ -149,15 +149,15 @@ export async function promptDefaultModel(
     !hasPreferredProvider && providers.length > 1 && models.length > PROVIDER_FILTER_THRESHOLD;
   if (shouldPromptProvider) {
     const selection = await params.prompter.select({
-      message: "Filter models by provider",
+      message: "按提供商筛选模型",
       options: [
-        { value: "*", label: "All providers" },
+        { value: "*", label: "所有提供商" },
         ...providers.map((provider) => {
           const count = models.filter((entry) => entry.provider === provider).length;
           return {
             value: provider,
             label: provider,
-            hint: `${count} model${count === 1 ? "" : "s"}`,
+            hint: `${count} 个模型`,
           };
         }),
       ],
@@ -188,14 +188,13 @@ export async function promptDefaultModel(
     options.push({
       value: KEEP_VALUE,
       label: configuredRaw
-        ? `Keep current (${configuredRaw})`
-        : `Keep current (default: ${resolvedKey})`,
-      hint:
-        configuredRaw && configuredRaw !== resolvedKey ? `resolves to ${resolvedKey}` : undefined,
+        ? `保留当前设置 (${configuredRaw})`
+        : `保留当前设置 (默认: ${resolvedKey})`,
+      hint: configuredRaw && configuredRaw !== resolvedKey ? `解析为 ${resolvedKey}` : undefined,
     });
   }
   if (includeManual) {
-    options.push({ value: MANUAL_VALUE, label: "Enter model manually" });
+    options.push({ value: MANUAL_VALUE, label: "手动输入模型" });
   }
 
   const seen = new Set<string>();
@@ -212,11 +211,11 @@ export async function promptDefaultModel(
     if (HIDDEN_ROUTER_MODELS.has(key)) return;
     const hints: string[] = [];
     if (entry.name && entry.name !== entry.id) hints.push(entry.name);
-    if (entry.contextWindow) hints.push(`ctx ${formatTokenK(entry.contextWindow)}`);
-    if (entry.reasoning) hints.push("reasoning");
+    if (entry.contextWindow) hints.push(`上下文 ${formatTokenK(entry.contextWindow)}`);
+    if (entry.reasoning) hints.push("推理");
     const aliases = aliasIndex.byKey.get(key);
-    if (aliases?.length) hints.push(`alias: ${aliases.join(", ")}`);
-    if (!hasAuth(entry.provider)) hints.push("auth missing");
+    if (aliases?.length) hints.push(`别名: ${aliases.join(", ")}`);
+    if (!hasAuth(entry.provider)) hints.push("未授权");
     options.push({
       value: key,
       label: key,
@@ -231,7 +230,7 @@ export async function promptDefaultModel(
     options.push({
       value: configuredKey,
       label: configuredKey,
-      hint: "current (not in catalog)",
+      hint: "当前 (不在目录中)",
     });
   }
 
@@ -249,7 +248,7 @@ export async function promptDefaultModel(
   }
 
   const selection = await params.prompter.select({
-    message: params.message ?? "Default model",
+    message: params.message ?? "选择默认模型",
     options,
     initialValue,
   });
@@ -295,11 +294,9 @@ export async function promptModelAllowlist(params: {
   const catalog = await loadModelCatalog({ config: cfg, useCache: false });
   if (catalog.length === 0 && allowedKeys.length === 0) {
     const raw = await params.prompter.text({
-      message:
-        params.message ??
-        "Allowlist models (comma-separated provider/model; blank to keep current)",
+      message: params.message ?? "模型白名单 (逗号分隔 提供商/模型；留空则保留当前设置)",
       initialValue: existingKeys.join(", "),
-      placeholder: "openai-codex/gpt-5.2, anthropic/claude-opus-4-5",
+      placeholder: "openai-codex/gpt-4o, anthropic/claude-3-5-sonnet",
     });
     const parsed = String(raw ?? "")
       .split(",")
@@ -339,11 +336,11 @@ export async function promptModelAllowlist(params: {
     if (HIDDEN_ROUTER_MODELS.has(key)) return;
     const hints: string[] = [];
     if (entry.name && entry.name !== entry.id) hints.push(entry.name);
-    if (entry.contextWindow) hints.push(`ctx ${formatTokenK(entry.contextWindow)}`);
-    if (entry.reasoning) hints.push("reasoning");
+    if (entry.contextWindow) hints.push(`上下文 ${formatTokenK(entry.contextWindow)}`);
+    if (entry.reasoning) hints.push("推理");
     const aliases = aliasIndex.byKey.get(key);
-    if (aliases?.length) hints.push(`alias: ${aliases.join(", ")}`);
-    if (!hasAuth(entry.provider)) hints.push("auth missing");
+    if (aliases?.length) hints.push(`别名: ${aliases.join(", ")}`);
+    if (!hasAuth(entry.provider)) hints.push("未授权");
     options.push({
       value: key,
       label: key,
@@ -364,7 +361,7 @@ export async function promptModelAllowlist(params: {
     options.push({
       value: key,
       label: key,
-      hint: allowedKeySet ? "allowed (not in catalog)" : "configured (not in catalog)",
+      hint: allowedKeySet ? "允许 (不在目录中)" : "已配置 (不在目录中)",
     });
     seen.add(key);
   }
@@ -372,7 +369,7 @@ export async function promptModelAllowlist(params: {
   if (options.length === 0) return {};
 
   const selection = await params.prompter.multiselect({
-    message: params.message ?? "Models in /model picker (multi-select)",
+    message: params.message ?? "在 /model 选择器中显示的模型 (多选)",
     options,
     initialValues: initialKeys.length > 0 ? initialKeys : undefined,
   });
@@ -380,7 +377,7 @@ export async function promptModelAllowlist(params: {
   if (selected.length > 0) return { models: selected };
   if (existingKeys.length === 0) return { models: [] };
   const confirmClear = await params.prompter.confirm({
-    message: "Clear the model allowlist? (shows all models)",
+    message: "清空模型白名单？ (将显示所有可用模型)",
     initialValue: false,
   });
   if (!confirmClear) return {};

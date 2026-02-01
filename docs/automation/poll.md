@@ -28,7 +28,8 @@ clawdbot message poll --channel discord --target channel:123456789 \
 
 # MS Teams
 clawdbot message poll --channel msteams --target conversation:19:abc@thread.tacv2 \
-  --poll-question "午餐？" --poll-option "披萨" --poll-option "寿司"``````
+  --poll-question "午餐？" --poll-option "披萨" --poll-option "寿司"
+```
 选项：
 - `--channel`: `whatsapp`（默认）、`discord` 或 `msteams`
 - `--poll-multi`: 允许选择多个选项
@@ -57,3 +58,4 @@ clawdbot message poll --channel msteams --target conversation:19:abc@thread.tacv
 
 注意：Discord 没有“恰好选择 N 个”的模式；`pollMulti` 映射为多选。
 Teams 的投票会以 Adaptive Card 的形式展示，并且需要网关保持在线以在 `~/.clawdbot/msteams-polls.json` 中记录投票结果。
+```

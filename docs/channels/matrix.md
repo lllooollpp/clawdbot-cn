@@ -17,14 +17,15 @@ Matrix 作为插件提供，并不包含在核心安装中。
 通过 CLI（npm 仓库）安装：
 bash
 clawdbot plugins install @clawdbot/matrix
-`````````
-本地结账（当从 git 仓库运行时）：```bash
+```
+本地结账（当从 git 仓库运行时）：
+```bash
 clawdbot plugins install ./extensions/matrix
 ```
 如果在配置/接入过程中选择 Matrix，并且检测到 git 检出，  
 Clawdbot 将会自动提供本地安装路径。
 
-详情：[插件](/plugin)
+详情：[插件](/plugin.md)
 
 ## 设置
 
@@ -75,7 +76,7 @@ json5
     }
   }
 }
-``````
+```
 E2EE 配置（端到端加密已启用）：
 json5
 {
@@ -89,7 +90,7 @@ json5
     }
   }
 }
-``````
+```
 ## 端到端加密（E2EE）
 
 通过 Rust 加密 SDK 实现的端到端加密是 **支持的**。
@@ -143,7 +144,7 @@ json5
     }
   }
 }
-``````
+```
 - `requireMention: false` 启用该房间的自动回复功能。
 - `groups."*"` 可以为所有房间设置提及门控的默认值。
 - `groupAllowFrom` 限制哪些发送者可以触发房间中的机器人（可选）。
@@ -178,7 +179,7 @@ json5
 
 ## 配置参考（Matrix）
 
-完整配置：[配置](/gateway/configuration)
+完整配置：[配置](/gateway/configuration.md)
 
 提供者选项：
 

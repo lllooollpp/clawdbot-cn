@@ -12,23 +12,26 @@ read_when:
 ## 快速开始
 bash
 clawdbot doctor
-``````
-### 无头/自动化```bash
+```
+### 无头/自动化
+```bash
 clawdbot doctor --yes
 ```
 接受默认设置，不进行提示（在适用时包括重启/服务/沙盒修复步骤）。
 bash
 clawdbot doctor --repair
-``````
-无需提示即可应用推荐的修复措施（在安全的情况下进行修复和重启）。```bash
+```
+无需提示即可应用推荐的修复措施（在安全的情况下进行修复和重启）。
+```bash
 clawdbot doctor --repair --force
 ```
 应用激进修复（会覆盖自定义的 supervisor 配置）。
 bash
 clawdbot doctor --non-interactive
-``````
+```
 无需提示，仅应用安全迁移（配置规范化 + 磁盘状态移动）。跳过需要人工确认的重启/服务/沙箱操作。
-当检测到旧版状态迁移时，会自动运行。```bash
+当检测到旧版状态迁移时，会自动运行。
+```bash
 clawdbot doctor --deep
 ```
 扫描系统服务中的额外网关安装（launchd/systemd/schtasks）。
@@ -36,7 +39,7 @@ clawdbot doctor --deep
 如果想在写入之前查看更改，请先打开配置文件：
 bash
 cat ~/.clawdbot/clawdbot.json
-``````
+```
 ```md
 ## 它的功能（摘要）
 - 可选的预飞行更新（仅适用于 git 安装，交互模式下）。
@@ -180,4 +183,5 @@ Doctor 会保存任何配置更改，并添加向导元数据以记录 Doctor �
 ### 19）工作区提示（备份 + 内存系统）
 当缺少工作区内存系统时，Doctor 会提出建议，并在工作区尚未在 Git 管理下时打印备份提示。
 
-有关工作区结构和 Git 备份的完整指南，请参阅 [/concepts/agent-workspace](/concepts/agent-workspace)（推荐使用私有的 GitHub 或 GitLab 仓库）。
+有关工作区结构和 Git 备份的完整指南，请参阅 [/concepts/agent-workspace](/concepts/agent-workspace.md)（推荐使用私有的 GitHub 或 GitLab 仓库）。
+```

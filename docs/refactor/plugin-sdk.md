@@ -130,7 +130,7 @@ export type PluginRuntime = {
     resolveStateDir(cfg: ClawdbotConfig): string;
   };
 };
-``````
+```
 注意事项：
 - 运行时（Runtime）是唯一可以访问核心行为的方式。
 - SDK 被有意设计得小巧且稳定。
@@ -187,4 +187,5 @@ export type PluginRuntime = {
 - 新的连接器模板仅依赖 SDK + 运行时。
 - 外部插件可以在不访问核心源码的情况下进行开发和更新。
 
-相关文档：[插件](/plugin)，[频道](/channels/index)，[配置](/gateway/configuration)。
+相关文档：[插件](/plugin.md)，[频道](/channels/index.md)，[配置](/gateway/configuration.md)。
+```

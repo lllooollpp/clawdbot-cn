@@ -10,11 +10,13 @@ read_when:
 打开连接到网关的终端用户界面。
 
 相关：
-- TUI指南：[TUI](/tui)
+- TUI指南：[TUI](/tui.md)
 
 ## 示例
 bash
 clawdbot tui
 clawdbot tui --url ws://127.0.0.1:18789 --token <token>
-clawdbot tui --session main --deliver``````
+clawdbot tui --session main --deliver
+```
 "
+```

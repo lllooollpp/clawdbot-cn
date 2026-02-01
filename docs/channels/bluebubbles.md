@@ -35,12 +35,15 @@ json5
     }
   }
 }
-```   ```   ```
+```   
+```   
+```
 4. 将 BlueBubbles 的 Webhook 指向您的网关（例如：`https://your-gateway-host:3000/bluebubbles-webhook?password=<password>`）。
 5. 启动网关；它会注册 Webhook 处理器并开始配对。
 
 ## 上线流程
-BlueBubbles 可在交互式设置向导中使用：```
+BlueBubbles 可在交互式设置向导中使用：
+```
 clawdbot onboard
 ```
 向导提示需要填写：
@@ -52,7 +55,8 @@ clawdbot onboard
 
 你也可以通过 CLI 添加 BlueBubbles：
 
-clawdbot channels add bluebubbles --http-url http://192.168.1.100:1234 --password <password>``````
+clawdbot channels add bluebubbles --http-url http://192.168.1.100:1234 --password <password>
+```
 ## 访问控制（私信 + 群组）
 私信：
 - 默认值：`channels.bluebubbles.dmPolicy = "pairing"`。
@@ -60,7 +64,7 @@ clawdbot channels add bluebubbles --http-url http://192.168.1.100:1234 --passwor
 - 批准方式：
   - `clawdbot pairing list bluebubbles`
   - `clawdbot pairing approve bluebubbles <CODE>`
-- 配对是默认的令牌交换方式。详情：[配对](/start/pairing)
+- 配对是默认的令牌交换方式。详情：[配对](/start/pairing.md)
 
 群组：
 - `channels.bluebubbles.groupPolicy = open | allowlist | disabled`（默认：`allowlist`）。
@@ -72,7 +76,8 @@ BlueBubbles 支持群组聊天中的提及限制，行为与 iMessage/WhatsApp �
 - 当群组启用了 `requireMention` 时，代理只会回应被提及的消息。
 - 来自授权发件人的控制命令可以绕过提及限制。
 
-按群组配置：```json5
+按群组配置：
+```json5
 {
   channels: {
     bluebubbles: {
@@ -103,9 +108,10 @@ json5
     }
   }
 }
-`````````
+```
 ## 高级操作
-当在配置中启用时，BlueBubbles 支持高级消息操作：```json5
+当在配置中启用时，BlueBubbles 支持高级消息操作：
+```json5
 {
   channels: {
     bluebubbles: {
@@ -151,7 +157,7 @@ Clawdbot 可能会显示 *短* 消息 ID（例如 `1`、`2`）以节省令牌。
 - 模板：`{{MessageSidFull}}`，`{{ReplyToIdFull}}`
 - 上下文：在入站负载中使用 `MessageSidFull` / `ReplyToIdFull`
 
-有关模板变量，请参阅 [配置](/gateway/configuration)。
+有关模板变量，请参阅 [配置](/gateway/configuration.md)。
 json5
 {
   channels: {
@@ -159,14 +165,15 @@ json5
       blockStreaming: true  // 启用阻塞流（默认行为）
     }
   }
-}``````
+}
+```
 ## 媒体 + 限制
 - 入站附件会下载并存储在媒体缓存中。
 - 媒体限制通过 `channels.bluebubbles.mediaMaxMb` 设置（默认：8 MB）。
 - 出站文本按 `channels.bluebubbles.textChunkLimit` 分块（默认：4000 个字符）。
 
 ## 配置参考
-完整配置：[Configuration](/gateway/configuration)
+完整配置：[Configuration](/gateway/configuration.md)
 
 提供者选项：
 - `channels.bluebubbles.enabled`: 启用/禁用该通道。
@@ -214,4 +221,4 @@ json5
 - Clawdbot 会根据 BlueBubbles 服务器的 macOS 版本自动隐藏已知损坏的操作。如果在 macOS 26（Tahoe）上编辑功能仍然显示，请手动禁用它：`channels.bluebubbles.actions.edit=false`。
 - 查看状态/健康信息：使用 `clawdbot status --all` 或 `clawdbot status --deep`。
 
-有关通用频道工作流程的参考，请参阅 [频道](/channels) 和 [插件](/plugins) 指南。
+有关通用频道工作流程的参考，请参阅 [频道](/channels/index.md) 和 [插件](/plugins) 指南。

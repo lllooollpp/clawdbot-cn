@@ -382,6 +382,7 @@ export {
   resolveWeComAccount,
 } from "../wecom/accounts.js";
 export type { ResolvedWeComAccount } from "../wecom/types.js";
+export { wecomOnboardingAdapter } from "../channels/plugins/onboarding/wecom.js";
 
 // Media utilities
 export { loadWebMedia, type WebMediaResult } from "../web/media.js";

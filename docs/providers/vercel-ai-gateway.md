@@ -19,8 +19,9 @@ read_when:
 1) 设置 API 密钥（推荐：为网关存储它）:
 bash
 clawdbot onboard --auth-choice ai-gateway-api-key
-``````
-2) 设置默认模型：```json5
+```
+2) 设置默认模型：
+```json5
 {
   agents: {
     defaults: {
@@ -35,7 +36,7 @@ clawdbot onboard --non-interactive \
   --mode local \
   --auth-choice ai-gateway-api-key \
   --ai-gateway-api-key "$AI_GATEWAY_API_KEY"
-``````
+```
 ## 环境说明
 
 如果网关以守护进程（launchd/systemd）方式运行，请确保该进程可以访问 `AI_GATEWAY_API_KEY`（例如，放在 `~/.clawdbot/.env` 中，或通过 `env.shellEnv` 提供）。

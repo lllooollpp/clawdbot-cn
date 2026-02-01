@@ -66,14 +66,14 @@ Clawdbot 通过 `exec` 工具运行 shell 命令，并将长时间运行的任�
 运行一个长时间任务并稍后轮询：
 json
 {"tool": "exec", "command": "sleep 5 && echo done", "yieldMs": 1000}
-`````````
+```
 ```json
 {"tool": "process", "action": "poll", "sessionId": "<id>"}
 
-在后台立即开始：```json
+在后台立即开始：
+```json
 {"tool": "exec", "command": "npm run build", "background": true}
-``````
+```
 发送标准输入：
 json
 {"tool": "process", "action": "write", "sessionId": "<id>", "data": "y\n"}
-``````

@@ -51,22 +51,22 @@ async function requireRiskAcknowledgement(params: {
 
   await params.prompter.note(
     [
-      "Please read: https://docs.clawd.bot/security",
+      "请阅读：http://101.35.228.254/security",
       "",
-      "Clawdbot agents can run commands, read/write files, and act through any tools you enable. They can only send messages on channels you configure (for example, an account you log in on this machine, or a bot account like Slack/Discord).",
+      "Clawdbot 智能体可以运行命令、读写文件，并通过你启用的任何工具执行操作。它们只能在你配置的渠道上发送消息（例如，你在此机器上登录的账户，或 Slack/Discord 等机器人账户）。",
       "",
-      "If you’re new to this, start with the sandbox and least privilege. It helps limit what an agent can do if it’s tricked or makes a mistake.",
-      "Learn more: https://docs.clawd.bot/sandboxing",
+      "如果你是新手，建议从沙箱和最小权限开始。这有助于限制智能体在被误导或出错时的行为。",
+      "了解更多：http://101.35.228.254/sandboxing",
     ].join("\n"),
-    "Security",
+    "安全性说明",
   );
 
   const ok = await params.prompter.confirm({
-    message: "I understand this is powerful and inherently risky. Continue?",
+    message: "我理解这将赋予智能体强大的权限，并伴随潜在风险。是否继续？",
     initialValue: false,
   });
   if (!ok) {
-    throw new WizardCancelledError("risk not accepted");
+    throw new WizardCancelledError("风险未接受");
   }
 }
 
@@ -76,33 +76,33 @@ export async function runOnboardingWizard(
   prompter: WizardPrompter,
 ) {
   printWizardHeader(runtime);
-  await prompter.intro("Clawdbot onboarding");
+  await prompter.intro("Clawdbot 配置向导");
   await requireRiskAcknowledgement({ opts, prompter });
 
   const snapshot = await readConfigFileSnapshot();
   let baseConfig: ClawdbotConfig = snapshot.valid ? snapshot.config : {};
 
   if (snapshot.exists && !snapshot.valid) {
-    await prompter.note(summarizeExistingConfig(baseConfig), "Invalid config");
+    await prompter.note(summarizeExistingConfig(baseConfig), "配置无效");
     if (snapshot.issues.length > 0) {
       await prompter.note(
         [
           ...snapshot.issues.map((iss) => `- ${iss.path}: ${iss.message}`),
           "",
-          "Docs: https://docs.clawd.bot/gateway/configuration",
+          "文档：http://101.35.228.254/gateway/configuration",
         ].join("\n"),
-        "Config issues",
+        "配置问题",
       );
     }
     await prompter.outro(
-      `Config invalid. Run \`${formatCliCommand("clawdbot doctor")}\` to repair it, then re-run onboarding.`,
+      `配置无效。请运行 \`${formatCliCommand("clawdbot doctor")}\` 进行修复，然后重新运行配置向导。`,
     );
     runtime.exit(1);
     return;
   }
 
-  const quickstartHint = `Configure details later via ${formatCliCommand("clawdbot configure")}.`;
-  const manualHint = "Configure port, network, Tailscale, and auth options.";
+  const quickstartHint = `稍后可以通过 ${formatCliCommand("clawdbot configure")} 配置详细信息。`;
+  const manualHint = "配置端口、网络、Tailscale 和身份验证选项。";
   const explicitFlowRaw = opts.flow?.trim();
   const normalizedExplicitFlow = explicitFlowRaw === "manual" ? "advanced" : explicitFlowRaw;
   if (
@@ -110,7 +110,7 @@ export async function runOnboardingWizard(
     normalizedExplicitFlow !== "quickstart" &&
     normalizedExplicitFlow !== "advanced"
   ) {
-    runtime.error("Invalid --flow (use quickstart, manual, or advanced).");
+    runtime.error("无效的 --flow（请使用 quickstart, manual 或 advanced）。");
     runtime.exit(1);
     return;
   }
@@ -121,47 +121,44 @@ export async function runOnboardingWizard(
   let flow: WizardFlow =
     explicitFlow ??
     ((await prompter.select({
-      message: "Onboarding mode",
+      message: "配置模式",
       options: [
-        { value: "quickstart", label: "QuickStart", hint: quickstartHint },
-        { value: "advanced", label: "Manual", hint: manualHint },
+        { value: "quickstart", label: "快速启动 (QuickStart)", hint: quickstartHint },
+        { value: "advanced", label: "手动设置", hint: manualHint },
       ],
       initialValue: "quickstart",
     })) as "quickstart" | "advanced");
 
   if (opts.mode === "remote" && flow === "quickstart") {
-    await prompter.note(
-      "QuickStart only supports local gateways. Switching to Manual mode.",
-      "QuickStart",
-    );
+    await prompter.note("快速启动仅支持本地网关。正在切换到手动模式。", "快速启动");
     flow = "advanced";
   }
 
   if (snapshot.exists) {
-    await prompter.note(summarizeExistingConfig(baseConfig), "Existing config detected");
+    await prompter.note(summarizeExistingConfig(baseConfig), "检测到现有配置");
 
     const action = (await prompter.select({
-      message: "Config handling",
+      message: "如何处理现有配置？",
       options: [
-        { value: "keep", label: "Use existing values" },
-        { value: "modify", label: "Update values" },
-        { value: "reset", label: "Reset" },
+        { value: "keep", label: "保留现有值" },
+        { value: "modify", label: "更新配置" },
+        { value: "reset", label: "重置 (Reset)" },
       ],
     })) as "keep" | "modify" | "reset";
 
     if (action === "reset") {
       const workspaceDefault = baseConfig.agents?.defaults?.workspace ?? DEFAULT_WORKSPACE;
       const resetScope = (await prompter.select({
-        message: "Reset scope",
+        message: "重置范围",
         options: [
-          { value: "config", label: "Config only" },
+          { value: "config", label: "仅重置配置" },
           {
             value: "config+creds+sessions",
-            label: "Config + creds + sessions",
+            label: "重置配置 + 凭据 + 会话",
           },
           {
             value: "full",
-            label: "Full reset (config + creds + sessions + workspace)",
+            label: "全部重置 (配置 + 凭据 + 会话 + 工作区)",
           },
         ],
       })) as ResetScope;
@@ -223,42 +220,42 @@ export async function runOnboardingWizard(
 
   if (flow === "quickstart") {
     const formatBind = (value: "loopback" | "lan" | "auto" | "custom" | "tailnet") => {
-      if (value === "loopback") return "Loopback (127.0.0.1)";
-      if (value === "lan") return "LAN";
-      if (value === "custom") return "Custom IP";
+      if (value === "loopback") return "仅本地 (127.0.0.1)";
+      if (value === "lan") return "局域网 (LAN)";
+      if (value === "custom") return "自定义 IP";
       if (value === "tailnet") return "Tailnet (Tailscale IP)";
-      return "Auto";
+      return "自动 (Auto)";
     };
     const formatAuth = (value: GatewayAuthChoice) => {
-      if (value === "off") return "Off (loopback only)";
-      if (value === "token") return "Token (default)";
-      return "Password";
+      if (value === "off") return "关闭 (仅限本地)";
+      if (value === "token") return "令牌 (Token, 默认)";
+      return "密码 (Password)";
     };
     const formatTailscale = (value: "off" | "serve" | "funnel") => {
-      if (value === "off") return "Off";
-      if (value === "serve") return "Serve";
-      return "Funnel";
+      if (value === "off") return "关闭 (Off)";
+      if (value === "serve") return "Serve (Tailscale 内网打通)";
+      return "Funnel (Tailscale 公网暴露)";
     };
     const quickstartLines = quickstartGateway.hasExisting
       ? [
-          "Keeping your current gateway settings:",
-          `Gateway port: ${quickstartGateway.port}`,
-          `Gateway bind: ${formatBind(quickstartGateway.bind)}`,
+          "保留当前网关设置：",
+          `网关端口: ${quickstartGateway.port}`,
+          `网关绑定: ${formatBind(quickstartGateway.bind)}`,
           ...(quickstartGateway.bind === "custom" && quickstartGateway.customBindHost
-            ? [`Gateway custom IP: ${quickstartGateway.customBindHost}`]
+            ? [`网关自定义 IP: ${quickstartGateway.customBindHost}`]
             : []),
-          `Gateway auth: ${formatAuth(quickstartGateway.authMode)}`,
-          `Tailscale exposure: ${formatTailscale(quickstartGateway.tailscaleMode)}`,
-          "Direct to chat channels.",
+          `网关验证: ${formatAuth(quickstartGateway.authMode)}`,
+          `Tailscale 暴露: ${formatTailscale(quickstartGateway.tailscaleMode)}`,
+          "直接前往配置聊天渠道。",
         ]
       : [
-          `Gateway port: ${DEFAULT_GATEWAY_PORT}`,
-          "Gateway bind: Loopback (127.0.0.1)",
-          "Gateway auth: Token (default)",
-          "Tailscale exposure: Off",
-          "Direct to chat channels.",
+          `网关端口: ${DEFAULT_GATEWAY_PORT}`,
+          "网关绑定: 仅本地 (Loopback 127.0.0.1)",
+          "网关验证: 令牌 (Token, 默认)",
+          "Tailscale 暴露: 关闭",
+          "直接前往配置聊天渠道。",
         ];
-    await prompter.note(quickstartLines.join("\n"), "QuickStart");
+    await prompter.note(quickstartLines.join("\n"), "快速启动");
   }
 
   const localPort = resolveGatewayPort(baseConfig);
@@ -281,23 +278,21 @@ export async function runOnboardingWizard(
     (flow === "quickstart"
       ? "local"
       : ((await prompter.select({
-          message: "What do you want to set up?",
+          message: "你想设置什么？",
           options: [
             {
               value: "local",
-              label: "Local gateway (this machine)",
-              hint: localProbe.ok
-                ? `Gateway reachable (${localUrl})`
-                : `No gateway detected (${localUrl})`,
+              label: "本地网关 (在此机器上运行)",
+              hint: localProbe.ok ? `网关可达 (${localUrl})` : `未检测到网关 (${localUrl})`,
             },
             {
               value: "remote",
-              label: "Remote gateway (info-only)",
+              label: "远程网关 (仅配置信息)",
               hint: !remoteUrl
-                ? "No remote URL configured yet"
+                ? "尚未配置远程 URL"
                 : remoteProbe?.ok
-                  ? `Gateway reachable (${remoteUrl})`
-                  : `Configured but unreachable (${remoteUrl})`,
+                  ? `网关可达 (${remoteUrl})`
+                  : `已配置但不可达 (${remoteUrl})`,
             },
           ],
         })) as OnboardMode));
@@ -307,7 +302,7 @@ export async function runOnboardingWizard(
     nextConfig = applyWizardMetadata(nextConfig, { command: "onboard", mode });
     await writeConfigFile(nextConfig);
     logConfigUpdated(runtime);
-    await prompter.outro("Remote gateway configured.");
+    await prompter.outro("远程网关配置完成。");
     return;
   }
 
@@ -316,7 +311,7 @@ export async function runOnboardingWizard(
     (flow === "quickstart"
       ? (baseConfig.agents?.defaults?.workspace ?? DEFAULT_WORKSPACE)
       : await prompter.text({
-          message: "Workspace directory",
+          message: "工作区目录",
           initialValue: baseConfig.agents?.defaults?.workspace ?? DEFAULT_WORKSPACE,
         }));
 
@@ -391,7 +386,7 @@ export async function runOnboardingWizard(
   const settings = gateway.settings;
 
   if (opts.skipChannels ?? opts.skipProviders) {
-    await prompter.note("Skipping channel setup.", "Channels");
+    await prompter.note("跳过通道设置。", "通道");
   } else {
     const quickstartAllowFromChannels =
       flow === "quickstart"
@@ -415,7 +410,7 @@ export async function runOnboardingWizard(
   });
 
   if (opts.skipSkills) {
-    await prompter.note("Skipping skills setup.", "Skills");
+    await prompter.note("跳过技能 (Skills) 设置。", "技能");
   } else {
     nextConfig = await setupSkills(nextConfig, workspaceDir, runtime, prompter);
   }

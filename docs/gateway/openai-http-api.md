@@ -48,10 +48,11 @@ json5
     }
   }
 }
-``````
+```
 ## 禁用端点
 
-将 `gateway.http.endpoints.chatCompletions.enabled` 设置为 `false`：```json5
+将 `gateway.http.endpoints.chatCompletions.enabled` 设置为 `false`：
+```json5
 {
   gateway: {
     http: {
@@ -88,8 +89,9 @@ curl -sS http://127.0.0.1:18789/v1/chat/completions \
     "model": "clawdbot",
     "messages": [{"role":"user","content":"hi"}]
   }'
-``````
-流式传输：```bash
+```
+流式传输：
+```bash
 curl -N http://127.0.0.1:18789/v1/chat/completions \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \

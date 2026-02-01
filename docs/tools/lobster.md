@@ -45,8 +45,9 @@ bash
 inbox list --json
 inbox categorize --json
 inbox apply --json
-``````
-"```json
+```
+"
+```json
 {
   "action": "run",
   "pipeline": "exec --json --shell 'inbox list --json' | exec --stdin json --shell 'inbox categorize --json' | exec --stdin json --shell 'inbox apply --json' | approve --preview-from-stdin --limit 5 --prompt 'Apply changes?'",
@@ -60,10 +61,11 @@ json
   "token": "<resumeToken>",
   "approve": true
 }
-``````
+```
 AI 触发工作流；龙虾执行步骤。审批节点保持副作用显式且可审计。
 
-示例：将输入项映射到工具调用：```bash
+示例：将输入项映射到工具调用：
+```bash
 gog.gmail.search --query 'newer_than:1d' \
   | clawd.invoke --tool message --action send --each --item-key message --args-json '{"provider":"telegram","to":"..."}'
 ```
@@ -88,8 +90,9 @@ json
     ]
   }
 }
-``````
-在管道中使用它：```lobster
+```
+在管道中使用它：
+```lobster
 clawd.invoke --tool llm-task --action json --args-json '{
   "prompt": "Given the input email, return intent and draft.",
   "input": { "subject": "Hello", "body": "Can you help?" },
@@ -104,7 +107,7 @@ clawd.invoke --tool llm-task --action json --args-json '{
   }
 }'
 ```
-有关详细信息和配置选项，请参见 [LLM Task](/tools/llm-task)。
+有关详细信息和配置选项，请参见 [LLM Task](/tools/llm-task.md)。
 
 ## 工作流文件 (.lobster)
 
@@ -128,7 +131,7 @@ steps:
     command: inbox apply --execute
     stdin: $categorize.stdout
     condition: $approve.approved
-``````
+```
 注意事项：
 
 - `stdin: $step.stdout` 和 `stdin: $step.json` 用于传递上一步骤的输出。
@@ -141,7 +144,8 @@ steps:
 
 ## 启用工具
 
-Lobster 是一个 **可选** 的插件工具（默认未启用）。请为每个代理单独启用它。```json
+Lobster 是一个 **可选** 的插件工具（默认未启用）。请为每个代理单独启用它。
+```json
 {
   "agents": {
     "list": [
@@ -171,8 +175,9 @@ User: "Check my email and draft replies"
 → User: "send #2"
 → clawd 调用 gmail.send
 (每天重复，不会记住之前处理过的内容)
-``````
-使用龙虾：```json
+```
+使用龙虾：
+```json
 {
   "action": "run",
   "pipeline": "email.triage --limit 20",
@@ -189,8 +194,10 @@ User: "Check my email and draft replies"
     "items": [],
     "resumeToken": "..."
   }
-}```
-用户批准 → 恢复：```json
+}
+```
+用户批准 → 恢复：
+```json
 {
   "action": "resume",
   "token": "<resumeToken>",
@@ -212,8 +219,9 @@ json
   "timeoutMs": 30000,
   "maxStdoutBytes": 512000
 }
-``````
-使用参数运行工作流文件：```json
+```
+使用参数运行工作流文件：
+```json
 {
   "action": "run",
   "pipeline": "/path/to/inbox-triage.lobster",
@@ -229,7 +237,7 @@ json
   "token": "<resumeToken>",
   "approve": true
 }
-``````
+```
 ### 可选输入
 
 - `lobsterPath`: Lobster 二进制文件的绝对路径（省略以使用 `PATH`）。
@@ -259,7 +267,7 @@ Lobster 返回一个 JSON 封装，包含三种状态之一：
 
 ## OpenProse
 
-OpenProse 与 Lobster 配合良好：使用 `/prose` 协调多代理预处理，然后运行 Lobster 流水线进行确定性审批。如果 Prose 程序需要 Lobster，请通过 `tools.subagents.tools` 允许子代理使用 `lobster` 工具。参见 [OpenProse](/prose)。
+OpenProse 与 Lobster 配合良好：使用 `/prose` 协调多代理预处理，然后运行 Lobster 流水线进行确定性审批。如果 Prose 程序需要 Lobster，请通过 `tools.subagents.tools` 允许子代理使用 `lobster` 工具。参见 [OpenProse](/prose.md)。
 
 ## 安全性
 
@@ -277,8 +285,8 @@ OpenProse 与 Lobster 配合良好：使用 `/prose` 协调多代理预处理，
 
 ## 了解更多
 
-- [插件](/plugin)
-- [插件工具开发](/plugins/agent-tools)
+- [插件](/plugin.md)
+- [插件工具开发](/plugins/agent-tools.md)
 
 ## 案例研究：社区工作流
 

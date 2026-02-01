@@ -10,6 +10,7 @@ read_when:
 使用当前身份验证打开控制界面。
 bash
 clawdbot dashboard
-clawdbot dashboard --no-open``````
+clawdbot dashboard --no-open
+```
 ```md
 """

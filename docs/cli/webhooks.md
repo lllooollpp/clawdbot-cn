@@ -10,11 +10,13 @@ read_when:
 Webhook 辅助工具和集成（Gmail Pub/Sub，Webhook 辅助工具）。
 
 相关：
-- Webhook：[Webhook](/automation/webhook)
-- Gmail Pub/Sub：[Gmail Pub/Sub](/automation/gmail-pubsub)
+- Webhook：[Webhook](/automation/webhook.md)
+- Gmail Pub/Sub：[Gmail Pub/Sub](/automation/gmail-pubsub.md)
 
 ## Gmail
 bash
 clawdbot webhooks gmail setup --account you@example.com
-clawdbot webhooks gmail run``````
-有关详细信息，请参阅 [Gmail Pub/Sub 文档](/automation/gmail-pubsub)。
+clawdbot webhooks gmail run
+```
+有关详细信息，请参阅 [Gmail Pub/Sub 文档](/automation/gmail-pubsub.md)。
+```

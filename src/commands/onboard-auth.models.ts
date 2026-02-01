@@ -22,6 +22,12 @@ export const KIMI_CODE_COMPAT = { supportsDeveloperRole: false } as const;
 
 export const ZAI_DEFAULT_MODEL_REF = "zai/glm-4.7";
 
+export const ZHIPU_BASE_URL = "https://open.bigmodel.cn/api/paas/v4";
+export const ZHIPU_DEFAULT_MODEL_ID = "glm-4-flash";
+export const ZHIPU_DEFAULT_MODEL_REF = `zhipu/${ZHIPU_DEFAULT_MODEL_ID}`;
+export const ZHIPU_DEFAULT_CONTEXT_WINDOW = 128000;
+export const ZHIPU_DEFAULT_MAX_TOKENS = 4096;
+
 export const DEEPSEEK_BASE_URL = "https://api.deepseek.com";
 export const DEEPSEEK_DEFAULT_MODEL_ID = "deepseek-chat";
 export const DEEPSEEK_DEFAULT_MODEL_REF = `deepseek/${DEEPSEEK_DEFAULT_MODEL_ID}`;
@@ -190,5 +196,17 @@ export function buildOllamaModelDefinition(modelId?: string): ModelDefinitionCon
     cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     contextWindow: OLLAMA_DEFAULT_CONTEXT_WINDOW,
     maxTokens: OLLAMA_DEFAULT_MAX_TOKENS,
+  };
+}
+
+export function buildZhipuModelDefinition(): ModelDefinitionConfig {
+  return {
+    id: ZHIPU_DEFAULT_MODEL_ID,
+    name: "GLM-4 Flash (Zhipu AI)",
+    reasoning: false,
+    input: ["text"],
+    cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, // Free/Low cost
+    contextWindow: ZHIPU_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: ZHIPU_DEFAULT_MAX_TOKENS,
   };
 }

@@ -51,7 +51,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 队列选项
 这些选项适用于 `followup`、`collect` 和 `steer-backlog`（以及当 `steer` 回退到 `followup` 时）：
 - `debounceMs`: 在开始下一轮 followup 之前等待静默时间（防止“继续，继续”）。
@@ -72,3 +72,4 @@ json5
 - 可能存在其他流程（例如 `cron`、`subagent`），以便后台任务可以并行运行而不会阻塞入站回复。
 - 每个会话的流程保证同一时间只有一个代理运行会触碰该会话。
 - 不依赖外部服务或后台线程；纯 TypeScript + promises 实现。
+```

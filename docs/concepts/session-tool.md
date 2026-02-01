@@ -112,7 +112,7 @@ json
     }
   }
 }
-`````````
+```
 运行时覆盖（每个会话条目）：
 - `sendPolicy: "allow" | "deny"`（未设置 = 继承配置）
 - 可通过 `sessions.patch` 或所有者专用的 `/send on|off|inherit`（独立消息）设置。
@@ -147,7 +147,8 @@ json
 - 在通知步骤中回复 `ANNOUNCE_SKIP` 以保持静默。
 - 通知回复会被归一化为 `Status`/`Result`/`Notes`；`Status` 来自运行时结果（不是模型文本）。
 - 子代理会话在 `agents.defaults.subagents.archiveAfterMinutes`（默认：60 分钟）后自动归档。
-- 通知回复包含统计信息行（运行时间、token 数、sessionKey/sessionId、对话路径，以及可选的费用）。```json5
+- 通知回复包含统计信息行（运行时间、token 数、sessionKey/sessionId、对话路径，以及可选的费用）。
+```json5
 {
   agents: {
     defaults: {
@@ -158,4 +159,3 @@ json
     }
   }
 }
-```

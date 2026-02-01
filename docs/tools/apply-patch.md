@@ -21,7 +21,7 @@ read_when:
 +new line
 *** Delete File: obsolete.txt
 *** End Patch
-``````
+```
 ## 参数
 
 - `input` (必填): 包含 `*** Begin Patch` 和 `*** End Patch` 的完整补丁内容。
@@ -33,9 +33,9 @@ read_when:
 - `*** End of File` 在需要时标记一个仅EOF的插入。
 - 实验性功能，默认情况下已禁用。通过 `tools.exec.applyPatch.enabled` 启用。
 - 仅适用于 OpenAI（包括 OpenAI Codex）。可通过 `tools.exec.applyPatch.allowModels` 选择性地根据模型进行限制。
-- 配置仅在 `tools.exec` 下。```json
+- 配置仅在 `tools.exec` 下。
+```json
 {
   "tool": "apply_patch",
   "input": "*** Begin Patch\n*** Update File: src/index.ts\n@@\n-const foo = 1\n+const foo = 2\n*** End Patch"
 }
-```

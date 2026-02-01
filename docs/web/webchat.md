@@ -29,7 +29,7 @@ read_when:
 - 您不需要运行单独的 WebChat 服务器。
 
 ## 配置参考（WebChat）
-完整配置：[配置](/gateway/configuration)
+完整配置：[配置](/gateway/configuration.md)
 
 频道选项：
 - 没有专门的 `webchat.*` 块。WebChat 使用网关端点 + 下面的认证设置。

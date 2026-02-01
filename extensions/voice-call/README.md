@@ -8,8 +8,8 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.clawd.bot/plugins/voice-call`
-Plugin system: `https://docs.clawd.bot/plugin`
+Docs: `http://101.35.228.254/plugins/voice-call`
+Plugin system: `http://101.35.228.254/plugin`
 
 ## Install (local dev)
 

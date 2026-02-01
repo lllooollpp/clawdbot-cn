@@ -11,6 +11,7 @@ read_when:
 bash
 clawdbot uninstall
 clawdbot uninstall --all --yes
-clawdbot uninstall --dry-run``````
+clawdbot uninstall --dry-run
+```
 ```md
 """

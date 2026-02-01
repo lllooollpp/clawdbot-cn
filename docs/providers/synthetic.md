@@ -15,8 +15,9 @@ Synthetic 提供与 Anthropic 兼容的端点。Clawdbot 将其注册为 `synthe
 2) 运行入门流程：
 bash
 clawdbot onboard --auth-choice synthetic-api-key
-``````
-默认模型已设置为：```
+```
+默认模型已设置为：
+```
 synthetic/hf:MiniMaxAI/MiniMax-M2.1
 ```
 {
@@ -48,7 +49,8 @@ synthetic/hf:MiniMaxAI/MiniMax-M2.1
       }
     }
   }
-}```
+}
+```
 注意：Clawdbot 的 Anthropic 客户端会在基础 URL 后添加 `/v1`，因此请使用 `https://api.synthetic.new/anthropic`（而不是 `/anthropic/v1`）。如果 Synthetic 更改了其基础 URL，请覆盖 `models.providers.synthetic.baseUrl`。
 
 ## 模型目录
@@ -81,4 +83,4 @@ synthetic/hf:MiniMaxAI/MiniMax-M2.1
 
 - 模型引用使用 `synthetic/<modelId>`。
 - 如果启用了模型白名单（`agents.defaults.models`），请添加您计划使用的每一个模型。
-- 有关提供方规则，请参阅 [模型提供方](/concepts/model-providers)。
+- 有关提供方规则，请参阅 [模型提供方](/concepts/model-providers.md)。

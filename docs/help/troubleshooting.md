@@ -16,8 +16,9 @@ clawdbot status --all
 clawdbot gateway probe
 clawdbot logs --follow
 clawdbot doctor
-``````
-如果网关可到达，则进行深度探测：```bash
+```
+如果网关可到达，则进行深度探测：
+```bash
 clawdbot status --deep
 ```
 ## 常见的“it broke”情况
@@ -26,28 +27,29 @@ clawdbot status --deep
 
 几乎总是由于 Node/npm 的 PATH 问题。请从这里开始排查：
 
-- [安装（Node/npm PATH 检查）](/install#nodejs--npm-path-sanity)
+- [安装（Node/npm PATH 检查）](/install/index.md#nodejs--npm-path-sanity)
 
 ### 安装程序失败（或你需要完整的日志）
 
 以详细模式重新运行安装程序，查看完整的日志和 npm 输出：
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --verbose
-``````
-对于测试版安装：```bash
+```
+对于测试版安装：
+```bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --beta --verbose
 ```
 你也可以通过设置 `CLAWDBOT_VERBOSE=1` 来代替该标志。
 
 ### 网关显示“unauthorized”，无法连接，或不断重新连接
 
-- [网关故障排除](/gateway/troubleshooting)
-- [网关认证](/gateway/authentication)
+- [网关故障排除](/gateway/troubleshooting.md)
+- [网关认证](/gateway/authentication.md)
 
 ### 控制 UI 在 HTTP 上失败（需要设备身份）
 
-- [网关故障排除](/gateway/troubleshooting)
-- [控制 UI](/web/control-ui#insecure-http)
+- [网关故障排除](/gateway/troubleshooting.md)
+- [控制 UI](/web/control-ui.md#insecure-http)
 
 ### `docs.clawd.bot` 显示 SSL 错误（Comcast/Xfinity）
 
@@ -59,13 +61,13 @@ curl -fsSL https://clawd.bot/install.sh | bash -s -- --beta --verbose
 
 ### 服务显示正在运行，但 RPC 探针失败
 
-- [网关故障排除](/gateway/troubleshooting)
-- [后台进程 / 服务](/gateway/background-process)
+- [网关故障排除](/gateway/troubleshooting.md)
+- [后台进程 / 服务](/gateway/background-process.md)
 
 ### 模型/认证失败（速率限制、计费、“所有模型都失败”）
 
-- [模型](/cli/models)
-- [OAuth / 认证概念](/concepts/oauth)
+- [模型](/cli/models.md)
+- [OAuth / 认证概念](/concepts/oauth.md)
 
 ### `/model` 显示 `model not allowed`
 
@@ -81,5 +83,6 @@ curl -fsSL https://clawd.bot/install.sh | bash -s -- --beta --verbose
 粘贴一个安全的报告：
 bash
 clawdbot status --all
-``````
+```
 如果你可以，请包含 `clawdbot logs --follow` 的相关日志尾部。
+```

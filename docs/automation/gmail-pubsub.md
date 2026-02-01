@@ -13,7 +13,7 @@ read_when:
 
 - 安装并登录了 `gcloud`（[安装指南](https://docs.cloud.google.com/sdk/docs/install-sdk)）。
 - 安装并授权了 `gog`（gogcli）用于 Gmail 账户（[gogcli.sh](https://gogcli.sh/)）。
-- Clawdbot 的 Webhook 功能已启用（参见 [Webhooks](/automation/webhook)）。
+- Clawdbot 的 Webhook 功能已启用（参见 [Webhooks](/automation/webhook.md)）。
 - 已登录 `tailscale`（[tailscale.com](https://tailscale.com/)）。我们支持的设置使用 Tailscale Funnel 提供公共 HTTPS 端点。
   其他隧道服务也可以使用，但需要自行配置/不提供支持，并且需要手动设置。
   目前，我们仅支持 Tailscale。
@@ -28,8 +28,9 @@ json5
     presets: ["gmail"]
   }
 }
-`````````
-要将Gmail摘要发送到聊天界面，请覆盖预设，使用一个映射来设置 `deliver` + 可选的 `channel`/`to`：```json5
+```
+要将Gmail摘要发送到聊天界面，请覆盖预设，使用一个映射来设置 `deliver` + 可选的 `channel`/`to`：
+```json5
 {
   hooks: {
     enabled: true,
@@ -67,17 +68,18 @@ json5
     }
   }
 }
-`````````
+```
 注意事项：
 - 在映射中的每个钩子 `model`/`thinking` 仍然会覆盖这些默认值。
 - 回退顺序：`hooks.gmail.model` → `agents.defaults.model.fallbacks` → 主要（认证/速率限制/超时）。
 - 如果设置了 `agents.defaults.models`，则 Gmail 模型必须在允许列表中。
 
-如需进一步自定义负载处理，请在 `hooks.transformsDir` 下添加 `hooks.mappings` 或一个 JS/TS 转换模块（参见 [Webhooks](/automation/webhook)）。
+如需进一步自定义负载处理，请在 `hooks.transformsDir` 下添加 `hooks.mappings` 或一个 JS/TS 转换模块（参见 [Webhooks](/automation/webhook.md)）。
 
 ## 智者（推荐）
 
-使用 Clawdbot 辅助工具将所有内容连接起来（在 macOS 上通过 brew 安装依赖）：```bash
+使用 Clawdbot 辅助工具将所有内容连接起来（在 macOS 上通过 brew 安装依赖）：
+```bash
 clawdbot webhooks gmail setup \
   --account clawdbot@gmail.com
 ```
@@ -101,10 +103,11 @@ clawdbot webhooks gmail setup \
 手动守护进程（启动 `gog gmail watch serve` + 自动续订）：
 bash
 clawdbot webhooks gmail run
-`````````
+```
 ## 一次性设置
 
-1) 选择 **使用 `gog` 的 OAuth 客户端所属的 GCP 项目**。```bash
+1) 选择 **使用 `gog` 的 OAuth 客户端所属的 GCP 项目**。
+```bash
 gcloud auth login
 gcloud config set project <project-id>
 ```
@@ -112,16 +115,20 @@ gcloud config set project <project-id>
 
 2) 启用 API：
 bash
-gcloud services enable gmail.googleapis.com pubsub.googleapis.com``````
-3) 创建一个主题：```bash
+gcloud services enable gmail.googleapis.com pubsub.googleapis.com
+```
+3) 创建一个主题：
+```bash
 gcloud pubsub topics create gog-gmail-watch
 ```
 4) 允许 Gmail 推送以进行发布：
 bash
 gcloud pubsub topics add-iam-policy-binding gog-gmail-watch \
   --member=serviceAccount:gmail-api-push@system.gserviceaccount.com \
-  --role=roles/pubsub.publisher``````
-## 开始计时```bash
+  --role=roles/pubsub.publisher
+```
+## 开始计时
+```bash
 gog gmail watch start \
   --account clawdbot@gmail.com \
   --label INBOX \
@@ -142,7 +149,8 @@ gog gmail watch serve \
   --hook-url http://127.0.0.1:18789/hooks/gmail \
   --hook-token CLAWDBOT_HOOK_TOKEN \
   --include-body \
-  --max-bytes 20000``````
+  --max-bytes 20000
+```
 说明：
 - `--token` 保护推送端点（`x-gog-token` 或 `?token=`）。
 - `--hook-url` 指向 Clawdbot 的 `/hooks/gmail`（已映射；独立运行 + 摘要到主分支）。
@@ -152,7 +160,8 @@ gog gmail watch serve \
 
 ## 暴露处理程序（高级，不支持）
 
-如果你不需要 Tailscale 隧道，可以手动连接，并在推送订阅中使用公共 URL（不支持，没有保护机制）：```bash
+如果你不需要 Tailscale 隧道，可以手动连接，并在推送订阅中使用公共 URL（不支持，没有保护机制）：
+```bash
 cloudflared tunnel --url http://127.0.0.1:8788 --no-autoupdate
 ```
 使用生成的 URL 作为推送端点：
@@ -163,7 +172,8 @@ gcloud pubsub subscriptions create gog-gmail-watch-push \
 
 生产环境：使用稳定的 HTTPS 端点并配置 Pub/Sub OIDC JWT，然后运行：  
 bash  
-gog gmail watch serve --verify-oidc --oidc-email <svc@...>```
+gog gmail watch serve --verify-oidc --oidc-email <svc@...>
+```
 ## 测试
 
 向监视的收件箱发送一条消息：
@@ -173,10 +183,11 @@ gog gmail send \
   --to clawdbot@gmail.com \
   --subject "watch test" \
   --body "ping"
-``````
+```
 检查手表状态和历史记录：
 gog gmail watch status --account clawdbot@gmail.com
-gog gmail history --account clawdbot@gmail.com --since <historyId>```
+gog gmail history --account clawdbot@gmail.com --since <historyId>
+```
 ## 故障排除
 
 - `无效的topicName`：项目不匹配（主题不在OAuth客户端项目中）。
@@ -188,4 +199,5 @@ bash
 gog gmail watch stop --account clawdbot@gmail.com
 gcloud pubsub subscriptions delete gog-gmail-watch-push
 gcloud pubsub topics delete gog-gmail-watch
-``````
+```
+

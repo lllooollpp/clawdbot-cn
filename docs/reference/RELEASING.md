@@ -52,9 +52,9 @@ read_when:
 - [ ] 构建并签名 macOS 应用，然后将其压缩用于分发。
 - [ ] 生成 Sparkle appcast（通过 [`scripts/make_appcast.sh`](https://github.com/clawdbot/clawdbot/blob/main/scripts/make_appcast.sh) 生成 HTML 说明），并更新 `appcast.xml`。
 - [ ] 保留应用 zip 文件（以及可选的 dSYM zip 文件）以便附加到 GitHub 发布中。
-- [ ] 按照 [macOS 发布指南](/platforms/mac/release) 执行具体命令和所需环境变量。
+- [ ] 按照 [macOS 发布指南](/platforms/mac/release.md) 执行具体命令和所需环境变量。
   - `APP_BUILD` 必须是数字且单调递增（不能带 `-beta`），以便 Sparkle 正确比较版本。
-  - 如果需要公证，使用通过 App Store Connect API 环境变量创建的 `clawdbot-notary` 密钥链配置文件（参见 [macOS 发布指南](/platforms/mac/release)）。
+  - 如果需要公证，使用通过 App Store Connect API 环境变量创建的 `clawdbot-notary` 密钥链配置文件（参见 [macOS 发布指南](/platforms/mac/release.md)）。
 
 6) **发布（npm）**
 - [ ] 确认 git 状态为干净；如有需要，提交并推送更改。

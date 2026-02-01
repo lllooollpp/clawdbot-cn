@@ -15,7 +15,7 @@ read_when:
 一键安装命令：
 bash
 curl -fsSL https://raw.githubusercontent.com/clawdbot/clawdbot-ansible/main/install.sh | bash
-``````
+```
 > **📦 完整指南：[github.com/clawdbot/clawdbot-ansible](https://github.com/clawdbot/clawdbot-ansible)**  
 >
 > clawdbot-ansible 仓库是 Ansible 部署的权威来源。本页面为快速概览。
@@ -47,7 +47,8 @@ Ansible playbook 将安装并配置以下内容：
 5. **Clawdbot**（基于主机的部署，非容器化）
 6. **Systemd 服务**（开机自动启动并进行安全加固）
 
-注意：网关**直接运行在主机上**（非 Docker 容器中），但代理沙盒使用 Docker 实现隔离。详情请参见 [沙盒化](/gateway/sandboxing)。```bash
+注意：网关**直接运行在主机上**（非 Docker 容器中），但代理沙盒使用 Docker 实现隔离。详情请参见 [沙盒化](/gateway/sandboxing.md)。
+```bash
 sudo -i -u clawdbot
 ```
 安装后的脚本将引导你完成以下步骤：
@@ -71,7 +72,7 @@ sudo systemctl restart clawdbot
 # 服务商登录（以 clawdbot 用户身份运行）
 sudo -i -u clawdbot
 clawdbot channels login
-``````
+```
 ## 安全架构
 
 ### 四层防御
@@ -83,7 +84,8 @@ clawdbot channels login
 
 ### 验证
 
-测试外部攻击面：```bash
+测试外部攻击面：
+```bash
 nmap -p- YOUR_SERVER_IP
 ```
 应仅开放 **端口 22**（SSH）。所有其他服务（网关、Docker）均被限制。
@@ -92,7 +94,7 @@ nmap -p- YOUR_SERVER_IP
 
 Docker 用于 **代理沙盒**（隔离的工具执行），而不是用于运行网关本身。网关仅绑定到本地主机，并可通过 Tailscale VPN 访问。
 
-有关沙盒配置，请参见 [多代理沙盒与工具](/multi-agent-sandbox-tools)。
+有关沙盒配置，请参见 [多代理沙盒与工具](/multi-agent-sandbox-tools.md)。
 bash
 # 1. 安装前置条件
 sudo apt update && sudo apt install -y ansible git
@@ -109,12 +111,13 @@ ansible-galaxy collection install -r requirements.yml
 
 # 或直接运行（然后手动执行 /tmp/clawdbot-setup.sh）
 # ansible-playbook playbook.yml --ask-become-pass
-``````
+```
 ## 更新 Clawdbot
 
-Ansible 安装程序为手动更新设置好了 Clawdbot。有关标准更新流程，请参阅 [更新](/install/updating)。
+Ansible 安装程序为手动更新设置好了 Clawdbot。有关标准更新流程，请参阅 [更新](/install/updating.md)。
 
-要重新运行 Ansible playbook（例如，进行配置更改）：```bash
+要重新运行 Ansible playbook（例如，进行配置更改）：
+```bash
 cd clawdbot-ansible
 ./run-playbook.sh
 ```
@@ -139,8 +142,9 @@ sudo ls -la /opt/clawdbot
 sudo -i -u clawdbot
 cd ~/clawdbot
 pnpm start
-``````
-### Docker沙盒问题```bash
+```
+## Docker沙盒问题
+```bash
 # Verify Docker is running
 sudo systemctl status docker
 
@@ -151,12 +155,13 @@ sudo docker images | grep clawdbot-sandbox
 cd /opt/clawdbot/clawdbot
 sudo -u clawdbot ./scripts/sandbox-setup.sh
 ```
-### 提供者登录失败
+## 提供者登录失败
 
 确保你以 `clawdbot` 用户身份运行：
 bash
 sudo -i -u clawdbot
-clawdbot channels login```
+clawdbot channels login
+```
 ## 高级配置
 
 有关详细的安全架构和故障排除信息：
@@ -167,6 +172,7 @@ clawdbot channels login```
 ## 相关内容
 
 - [clawdbot-ansible](https://github.com/clawdbot/clawdbot-ansible) — 完整的部署指南
-- [Docker](/install/docker) — 基于容器的网关设置
-- [沙箱隔离](/gateway/sandboxing) — 代理沙箱配置
-- [多代理沙箱与工具](/multi-agent-sandbox-tools) — 每个代理的隔离配置
+- [Docker](/install/docker.md) — 基于容器的网关设置
+- [沙箱隔离](/gateway/sandboxing.md) — 代理沙箱配置
+- [多代理沙箱与工具](/multi-agent-sandbox-tools.md) — 每个代理的隔离配置
+```

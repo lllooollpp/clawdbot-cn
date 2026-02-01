@@ -10,9 +10,9 @@ read_when:
 管理配对的节点（设备）并调用节点功能。
 
 相关：
-- 节点概览：[节点](/nodes)
-- 摄像头：[摄像头节点](/nodes/camera)
-- 图像：[图像节点](/nodes/images)
+- 节点概览：[节点](/nodes/index.md)
+- 摄像头：[摄像头节点](/nodes/camera.md)
+- 图像：[图像节点](/nodes/images.md)
 
 常用选项：
 - `--url`，`--token`，`--timeout`，`--json`
@@ -26,9 +26,11 @@ clawdbot nodes pending
 clawdbot nodes approve <requestId>
 clawdbot nodes status
 clawdbot nodes status --connected
-clawdbot nodes status --last-connected 24h``````
+clawdbot nodes status --last-connected 24h
+```
 `nodes list` 会显示挂起/配对的表格。已配对的行包括最近的连接时间（Last Connect）。
-使用 `--connected` 仅显示当前已连接的节点。使用 `--last-connected <duration>` 可以筛选出在指定时间段内连接过的节点（例如 `24h`、`7d`）。```bash
+使用 `--connected` 仅显示当前已连接的节点。使用 `--last-connected <duration>` 可以筛选出在指定时间段内连接过的节点（例如 `24h`、`7d`）。
+```bash
 clawdbot nodes invoke --node <id|name|ip> --command <command> --params <json>
 clawdbot nodes run --node <id|name|ip> <command...>
 clawdbot nodes run --raw "git status"
@@ -57,3 +59,4 @@ clawdbot nodes run --agent main --node <id|name|ip> --raw "git status"
 - `--raw <command>`：运行一个 shell 字符串（`/bin/sh -lc` 或 `cmd.exe /c`）。
 - `--agent <id>`：代理作用域的审批/允许列表（默认使用配置的代理）。
 - `--ask <off|on-miss|always>`，`--security <deny|allowlist|full>`：覆盖设置。
+```

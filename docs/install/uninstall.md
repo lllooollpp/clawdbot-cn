@@ -15,8 +15,9 @@ read_when:
 推荐使用内置的卸载程序：
 bash
 clawdbot uninstall
-``````
-非交互式（自动化 / npx）：```bash
+```
+非交互式（自动化 / npx）：
+```bash
 clawdbot uninstall --all --yes --non-interactive
 npx -y clawdbot uninstall --all --yes --non-interactive
 ```
@@ -25,17 +26,19 @@ npx -y clawdbot uninstall --all --yes --non-interactive
 1) 停止网关服务：
 bash
 clawdbot gateway stop
-``````
-2) 卸载网关服务（launchd/systemd/schtasks）：```bash
+```
+2) 卸载网关服务（launchd/systemd/schtasks）：
+```bash
 clawdbot gateway uninstall
 ```
 3) 删除状态 + 配置：
 bash
 rm -rf "${CLAWDBOT_STATE_DIR:-$HOME/.clawdbot}"
-``````
+```
 如果您将 `CLAWDBOT_CONFIG_PATH` 设置为超出状态目录的自定义路径，请一并删除该文件。
 
-4) 删除您的工作区（可选，将移除代理文件）：```bash
+4) 删除您的工作区（可选，将移除代理文件）：
+```bash
 rm -rf ~/clawd
 ```
 5) 卸载 CLI 安装（选择你使用的那个）：
@@ -43,8 +46,9 @@ bash
 npm rm -g clawdbot
 pnpm remove -g clawdbot
 bun remove -g clawdbot
-``````
-6) 如果你安装了 macOS 应用程序：```bash
+```
+6) 如果你安装了 macOS 应用程序：
+```bash
 rm -rf /Applications/Clawdbot.app
 ```
 ## 注意事项：
@@ -61,12 +65,13 @@ rm -rf /Applications/Clawdbot.app
 bash
 launchctl bootout gui/$UID/com.clawdbot.gateway
 rm -f ~/Library/LaunchAgents/com.clawdbot.gateway.plist
-``````
+```
 如果您使用了配置文件，请将标签和 plist 名称替换为 `com.clawdbot.<profile>`。
 
 ### Linux（systemd 用户单元）
 
-默认的单元名称为 `clawdbot-gateway.service`（或 `clawdbot-gateway-<profile>.service`）：```bash
+默认的单元名称为 `clawdbot-gateway.service`（或 `clawdbot-gateway-<profile>.service`）：
+```bash
 systemctl --user disable --now clawdbot-gateway.service
 rm -f ~/.config/systemd/user/clawdbot-gateway.service
 systemctl --user daemon-reload
@@ -78,7 +83,7 @@ systemctl --user daemon-reload
 powershell
 schtasks /Delete /F /TN "Clawdbot Gateway"
 Remove-Item -Force "$env:USERPROFILE\.clawdbot\gateway.cmd"
-``````
+```
 如果你使用了某个配置文件，请删除对应的任务名称和 `~\.clawdbot-<profile>\gateway.cmd` 文件。
 
 ## 正常安装 vs 源码克隆

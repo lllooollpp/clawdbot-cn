@@ -11,45 +11,45 @@ read_when:
 
 ## 命令列表
 
-- [`setup`](/cli/setup)
-- [`onboard`](/cli/onboard)
-- [`configure`](/cli/configure)
-- [`config`](/cli/config)
-- [`doctor`](/cli/doctor)
-- [`dashboard`](/cli/dashboard)
-- [`reset`](/cli/reset)
-- [`uninstall`](/cli/uninstall)
-- [`update`](/cli/update)
-- [`message`](/cli/message)
-- [`agent`](/cli/agent)
-- [`agents`](/cli/agents)
-- [`acp`](/cli/acp)
-- [`status`](/cli/status)
-- [`health`](/cli/health)
-- [`sessions`](/cli/sessions)
-- [`gateway`](/cli/gateway)
-- [`logs`](/cli/logs)
-- [`system`](/cli/system)
-- [`models`](/cli/models)
-- [`memory`](/cli/memory)
-- [`nodes`](/cli/nodes)
-- [`devices`](/cli/devices)
-- [`node`](/cli/node)
-- [`approvals`](/cli/approvals)
-- [`sandbox`](/cli/sandbox)
-- [`tui`](/cli/tui)
-- [`browser`](/cli/browser)
-- [`cron`](/cli/cron)
-- [`dns`](/cli/dns)
-- [`docs`](/cli/docs)
-- [`hooks`](/cli/hooks)
-- [`webhooks`](/cli/webhooks)
-- [`pairing`](/cli/pairing)
-- [`plugins`](/cli/plugins)（插件命令）
-- [`channels`](/cli/channels)
-- [`security`](/cli/security)
-- [`skills`](/cli/skills)
-- [`voicecall`](/cli/voicecall)（插件；如果已安装）
+- [`setup`](/cli/setup.md)
+- [`onboard`](/cli/onboard.md)
+- [`configure`](/cli/configure.md)
+- [`config`](/cli/config.md)
+- [`doctor`](/cli/doctor.md)
+- [`dashboard`](/cli/dashboard.md)
+- [`reset`](/cli/reset.md)
+- [`uninstall`](/cli/uninstall.md)
+- [`update`](/cli/update.md)
+- [`message`](/cli/message.md)
+- [`agent`](/cli/agent.md)
+- [`agents`](/cli/agents.md)
+- [`acp`](/cli/acp.md)
+- [`status`](/cli/status.md)
+- [`health`](/cli/health.md)
+- [`sessions`](/cli/sessions.md)
+- [`gateway`](/cli/gateway.md)
+- [`logs`](/cli/logs.md)
+- [`system`](/cli/system.md)
+- [`models`](/cli/models.md)
+- [`memory`](/cli/memory.md)
+- [`nodes`](/cli/nodes.md)
+- [`devices`](/cli/devices.md)
+- [`node`](/cli/node.md)
+- [`approvals`](/cli/approvals.md)
+- [`sandbox`](/cli/sandbox.md)
+- [`tui`](/cli/tui.md)
+- [`browser`](/cli/browser.md)
+- [`cron`](/cli/cron.md)
+- [`dns`](/cli/dns.md)
+- [`docs`](/cli/docs.md)
+- [`hooks`](/cli/hooks.md)
+- [`webhooks`](/cli/webhooks.md)
+- [`pairing`](/cli/pairing.md)
+- [`plugins`](/cli/plugins.md)（插件命令）
+- [`channels`](/cli/channels.md)
+- [`security`](/cli/security.md)
+- [`skills`](/cli/skills.md)
+- [`voicecall`](/cli/voicecall.md)（插件；如果已安装）
 
 ## 全局标志
 
@@ -230,7 +230,8 @@ clawdbot [--dev] [--profile <name>] <command>
   文档
   DNS
     设置
-  TUI``````
+  TUI
+```
 注意：插件可以添加额外的顶级命令（例如 `clawdbot voicecall`）。
 
 ## 安全性
@@ -249,7 +250,7 @@ clawdbot [--dev] [--profile <name>] <command>
 - `clawdbot plugins enable <id>` / `disable <id>` — 切换 `plugins.entries.<id>.enabled` 状态。
 - `clawdbot plugins doctor` — 报告插件加载错误。
 
-大多数插件更改需要重启网关。请参见 [/plugin](/plugin)。
+大多数插件更改需要重启网关。请参见 [/plugin](/plugin.md)。
 
 ## 内存
 
@@ -261,7 +262,7 @@ clawdbot [--dev] [--profile <name>] <command>
 
 ## 聊天斜杠命令
 
-聊天消息支持 `/...` 命令（文本和原生命令）。请参见 [/tools/slash-commands](/tools/slash-commands)。
+聊天消息支持 `/...` 命令（文本和原生命令）。请参见 [/tools/slash-commands](/tools/slash-commands.md)。
 
 亮点：
 - `/status` 用于快速诊断。
@@ -372,9 +373,10 @@ OAuth 同步源：
   - Linux/Windows：`~/.claude/.credentials.json`
 - `~/.codex/auth.json` → `openai-codex:codex-cli`
 
-更多信息：[/concepts/oauth](/concepts/oauth)
+更多信息：[/concepts/oauth](/concepts/oauth.md)
 
-示例：```bash
+示例：
+```bash
 clawdbot channels add --channel telegram --account alerts --name "Alerts Bot" --token $TELEGRAM_BOT_TOKEN
 clawdbot channels add --channel discord --account work --name "Work Bot" --token $DISCORD_BOT_TOKEN
 clawdbot channels remove --channel discord --account work --delete
@@ -405,14 +407,14 @@ clawdbot status --deep
 - `pairing approve <channel> <code> [--notify]`
 
 ### `webhooks gmail`
-Gmail Pub/Sub 钩子设置 + 运行器。参见 [/automation/gmail-pubsub](/automation/gmail-pubsub)。
+Gmail Pub/Sub 钩子设置 + 运行器。参见 [/automation/gmail-pubsub](/automation/gmail-pubsub.md)。
 
 子命令：
 - `webhooks gmail setup`（需要 `--account <email>`；支持 `--project`, `--topic`, `--subscription`, `--label`, `--hook-url`, `--hook-token`, `--push-token`, `--bind`, `--port`, `--path`, `--include-body`, `--max-bytes`, `--renew-minutes`, `--tailscale`, `--tailscale-path`, `--tailscale-target`, `--push-endpoint`, `--json`）
 - `webhooks gmail run`（运行时覆盖相同的标志）
 
 ### `dns setup`
-广域发现 DNS 辅助工具（CoreDNS + Tailscale）。参见 [/gateway/discovery](/gateway/discovery)。
+广域发现 DNS 辅助工具（CoreDNS + Tailscale）。参见 [/gateway/discovery](/gateway/discovery.md)。
 
 选项：
 - `--apply`: 安装/更新 CoreDNS 配置（需要 sudo；仅限 macOS）。
@@ -422,7 +424,7 @@ Gmail Pub/Sub 钩子设置 + 运行器。参见 [/automation/gmail-pubsub](/auto
 ### `message`
 统一的出站消息 + 频道操作。
 
-参见：[/cli/message](/cli/message)
+参见：[/cli/message](/cli/message.md)
 
 子命令：
 - `message send|poll|react|reactions|read|edit|delete|pin|unpin|pins|permissions|search|timeout|kick|ban`
@@ -489,7 +491,7 @@ Gmail Pub/Sub 钩子设置 + 运行器。参见 [/automation/gmail-pubsub](/auto
 ### `acp`
 运行 ACP 桥接器，将 IDE 连接到网关。
 
-详见 [`acp`](/cli/acp) 了解完整的选项和示例。
+详见 [`acp`](/cli/acp.md) 了解完整的选项和示例。
 
 ### `status`
 显示已连接的会话健康状态和最近的接收者。
@@ -518,7 +520,7 @@ Gmail Pub/Sub 钩子设置 + 运行器。参见 [/automation/gmail-pubsub](/auto
 - 数据直接来自提供方的使用情况端点（无估算）。
 - 提供方包括：Anthropic、GitHub Copilot、OpenAI Codex OAuth，以及在启用了相应插件时的 Gemini CLI/Antigravity。
 - 如果没有匹配的凭据，将隐藏使用情况。
-- 详情：参见 [使用情况跟踪](/concepts/usage-tracking)。
+- 详情：参见 [使用情况跟踪](/concepts/usage-tracking.md)。
 
 ### `health`
 从正在运行的网关获取健康状态。
@@ -645,7 +647,7 @@ clawdbot logs --no-color### `gateway <子命令>`
 bash
 claude setup-token
 clawdbot models status
-``````
+```
 ### `models`（根目录）
 `clawdbot models` 是 `models status` 的别名。
 
@@ -757,7 +759,7 @@ clawdbot models status
 - `--url`，`--token`，`--timeout`，`--expect-final`
 
 ## 定时任务
-管理定时任务（Gateway RPC）。详见 [/automation/cron-jobs](/automation/cron-jobs)。
+管理定时任务（Gateway RPC）。详见 [/automation/cron-jobs](/automation/cron-jobs.md)。
 
 子命令：
 - `cron 状态 [--json]`
@@ -774,7 +776,7 @@ clawdbot models status
 
 ## 节点主机
 
-`node` 运行一个 **无头节点主机** 或将其作为后台服务进行管理。详见 [`clawdbot node`](/cli/node)。
+`node` 运行一个 **无头节点主机** 或将其作为后台服务进行管理。详见 [`clawdbot node`](/cli/node.md)。
 
 子命令：
 - `node 运行 --host <网关主机> --port 18789`
@@ -786,7 +788,7 @@ clawdbot models status
 
 ## 节点
 
-`nodes` 与网关通信并管理配对的节点。详见 [/nodes](/nodes)。
+`nodes` 与网关通信并管理配对的节点。详见 [/nodes](/nodes/index.md)。
 
 ```md
 通用选项：
@@ -823,7 +825,7 @@ Canvas + 屏幕：
 
 ## 浏览器
 
-浏览器控制 CLI（专用于 Chrome/Brave/Edge/Chromium）。请参阅 [`clawdbot browser`](/cli/browser) 和 [浏览器工具](/tools/browser)。
+浏览器控制 CLI（专用于 Chrome/Brave/Edge/Chromium）。请参阅 [`clawdbot browser`](/cli/browser.md) 和 [浏览器工具](/tools/browser.md)。
 
 通用选项：
 - `--url <controlUrl>`

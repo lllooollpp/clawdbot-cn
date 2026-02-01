@@ -13,13 +13,13 @@ Docker 是 **可选的**。只有当你需要容器化的网关或验证 Docker 
 
 - **是的**：你想要一个隔离的、可丢弃的网关环境，或者在没有本地安装的主机上运行 Clawdbot。
 - **不是**：你是在自己的机器上运行，并且只是想要最快的开发循环。请改用正常的安装流程。
-- **沙箱说明**：代理沙箱也使用 Docker，但 **不需要** 网关完全运行在 Docker 中。请参阅 [沙箱](/gateway/sandboxing)。
+- **沙箱说明**：代理沙箱也使用 Docker，但 **不需要** 网关完全运行在 Docker 中。请参阅 [沙箱](/gateway/sandboxing.md)。
 
 本指南涵盖：
 - 容器化的网关（完整的 Clawdbot 在 Docker 中）
 - 每个会话的代理沙箱（主机网关 + Docker 隔离的代理工具）
 
-沙箱详细信息：[沙箱](/gateway/sandboxing)
+沙箱详细信息：[沙箱](/gateway/sandboxing.md)
 
 ## 要求
 
@@ -33,7 +33,7 @@ Docker 是 **可选的**。只有当你需要容器化的网关或验证 Docker 
 从仓库根目录开始：
 bash
 ./docker-setup.sh
-``````
+```
 这个脚本：
 - 构建网关镜像
 - 运行设置向导
@@ -54,7 +54,8 @@ bash
 - `~/.clawdbot/`
 - `~/clawd`
 
-在 VPS 上运行？请参阅 [Hetzner（Docker VPS）](/platforms/hetzner)。```bash
+在 VPS 上运行？请参阅 [Hetzner（Docker VPS）](/platforms/hetzner.md)。
+```bash
 docker build -t clawdbot:local -f Dockerfile .
 docker compose run --rm clawdbot-cli onboard
 docker compose up -d clawdbot-gateway
@@ -67,7 +68,7 @@ docker compose up -d clawdbot-gateway
 bash
 export CLAWDBOT_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/home/node/github:rw"
 ./docker-setup.sh
-``````
+```
 注意事项：
 - 路径必须在 macOS/Windows 上与 Docker Desktop 共享。
 - 如果你修改了 `CLAWDBOT_EXTRA_MOUNTS`，请重新运行 `docker-setup.sh` 以重新生成额外的 compose 文件。
@@ -77,7 +78,8 @@ export CLAWDBOT_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/ho
 
 如果你希望 `/home/node` 在容器重建后仍然保留，请通过 `CLAWDBOT_HOME_VOLUME` 设置一个命名卷。这将创建一个 Docker 卷，并将其挂载到 `/home/node`，同时保留标准的配置/工作区绑定挂载。此处使用命名卷（而非绑定路径）；如需绑定挂载，请使用 `CLAWDBOT_EXTRA_MOUNTS`。
 
-示例：```bash
+示例：
+```bash
 export CLAWDBOT_HOME_VOLUME="clawdbot_home"
 ./docker-setup.sh
 ```
@@ -85,7 +87,8 @@ export CLAWDBOT_HOME_VOLUME="clawdbot_home"
 bash  
 export CLAWDBOT_HOME_VOLUME="clawdbot_home"  
 export CLAWDBOT_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/home/node/github:rw"  
-./docker-setup.sh```
+./docker-setup.sh
+```
 注意事项：
 - 如果你更改了 `CLAWDBOT_HOME_VOLUME`，请重新运行 `docker-setup.sh` 以重新生成额外的 compose 文件。
 - 命名的卷会一直存在，直到使用 `docker volume rm <name>` 命令将其删除。
@@ -95,7 +98,8 @@ export CLAWDBOT_EXTRA_MOUNTS="$HOME/.codex:/home/node/.codex:ro,$HOME/github:/ho
 如果你需要在镜像中安装系统包（例如构建工具或媒体库），请在运行 `docker-setup.sh` 之前设置 `CLAWDBOT_DOCKER_APT_PACKAGES`。
 这会在镜像构建过程中安装这些包，因此即使删除容器，它们也会保留。
 
-示例：```bash
+示例：
+```bash
 export CLAWDBOT_DOCKER_APT_PACKAGES="ffmpeg build-essential"
 ./docker-setup.sh
 ```
@@ -133,34 +137,37 @@ RUN pnpm ui:build
 ENV NODE_ENV=production
 
 CMD ["node","dist/index.js"]
-``````
-### 通道设置（可选）
+```
+## 通道设置（可选）
 
 使用 CLI 容器来配置通道，如需的话，然后重启网关。
 
-WhatsApp（二维码）：```bash
+WhatsApp（二维码）：
+```bash
 docker compose run --rm clawdbot-cli channels login
 ```
 Telegram（机器人令牌）：
 bash
 docker compose run --rm clawdbot-cli channels add --channel telegram --token "<token>"
-``````
-Discord（机器人令牌）：```bash
+```
+Discord（机器人令牌）：
+```bash
 docker compose run --rm clawdbot-cli channels add --channel discord --token "<token>"
 ```
-"文档：[WhatsApp](/channels/whatsapp), [Telegram](/channels/telegram), [Discord](/channels/discord)
+"文档：[WhatsApp](/channels/whatsapp.md), [Telegram](/channels/telegram.md), [Discord](/channels/discord.md)
 
 ### 健康检查
 ```bash
 docker compose exec clawdbot-gateway node dist/index.js health --token "$CLAWDBOT_GATEWAY_TOKEN"
-``````
-### 端到端烟雾测试（Docker）```bash
+```
+### 端到端烟雾测试（Docker）
+```bash
 scripts/e2e/onboard-docker.sh
 ```
 ### QR 导入烟雾测试（Docker）
 bash
 pnpm test:docker:qr
-``````
+```
 ### 注意事项
 
 - 网关默认为容器使用设置为 `lan`。
@@ -168,7 +175,7 @@ pnpm test:docker:qr
 
 ## 代理沙盒（主机网关 + Docker 工具）
 
-深入解析：[沙盒化](/gateway/sandboxing)
+深入解析：[沙盒化](/gateway/sandboxing.md)
 
 ### 它的作用
 
@@ -190,7 +197,7 @@ pnpm test:docker:qr
 - 只读工具 + 只读工作区（家庭/工作代理）
 - 无文件系统/Shell 工具（公共代理）
 
-有关示例、优先级和故障排除，请参阅 [多代理沙盒与工具](/multi-agent-sandbox-tools)。
+有关示例、优先级和故障排除，请参阅 [多代理沙盒与工具](/multi-agent-sandbox-tools.md)。
 
 ### 默认行为
 
@@ -210,7 +217,8 @@ pnpm test:docker:qr
 - 默认 `docker.network` 是 `"none"`（无出站网络）。
 - `readOnlyRoot: true` 会阻止包的安装。
 - `user` 必须为 root 才能使用 `apt-get`（可以省略 `user` 或设置 `user: "0:0"`）。
-Clawdbot 在 `setupCommand`（或 Docker 配置）更改时会自动重新创建容器，除非该容器 **最近被使用过**（约 5 分钟内）。热容器会记录一条警告信息，显示具体的 `clawdbot sandbox recreate ...` 命令。```json5
+Clawdbot 在 `setupCommand`（或 Docker 配置）更改时会自动重新创建容器，除非该容器 **最近被使用过**（约 5 分钟内）。热容器会记录一条警告信息，显示具体的 `clawdbot sandbox recreate ...` 命令。
+```json5
 {
   agents: {
     defaults: {
@@ -269,11 +277,13 @@ Clawdbot 在 `setupCommand`（或 Docker 配置）更改时会自动重新创建
 ### 构建默认沙箱镜像
 bash
 scripts/sandbox-setup.sh
-```"```
+```"
+```
 这将使用 `Dockerfile.sandbox` 构建 `clawdbot-sandbox:bookworm-slim` 镜像。
 
 ### 可选的沙箱通用镜像
-如果您需要一个包含常见构建工具（如 Node、Go、Rust 等）的沙箱镜像，请构建通用镜像：```bash
+如果您需要一个包含常见构建工具（如 Node、Go、Rust 等）的沙箱镜像，请构建通用镜像：
+```bash
 scripts/sandbox-common-setup.sh
 ```
 这将构建 `clawdbot-sandbox-common:bookworm-slim`。要使用它，请执行以下操作：
@@ -281,10 +291,11 @@ json5
 {
   agents: { defaults: { sandbox: { docker: { image: "clawdbot-sandbox-common:bookworm-slim" } } } }
 }
-``````
+```
 ### 沙盒浏览器镜像
 
-要在沙盒中运行浏览器工具，请构建浏览器镜像：```bash
+要在沙盒中运行浏览器工具，请构建浏览器镜像：
+```bash
 scripts/sandbox-browser-setup.sh
 ```
 这将使用 `Dockerfile.sandbox-browser` 构建 `clawdbot-sandbox-browser:bookworm-slim` 镜像。该容器运行带有 CDP 功能的 Chromium，并可选地包含一个 noVNC 观察器（通过 Xvfb 实现有头模式）。
@@ -305,8 +316,9 @@ json5
     }
   }
 }
-``````
-自定义浏览器图像：```json5
+```
+自定义浏览器图像：
+```json5
 {
   agents: {
     defaults: {
@@ -323,7 +335,7 @@ json5
 修剪规则（`agents.defaults.sandbox.prune`）同样适用于浏览器容器。
 bash
 docker build -t my-clawdbot-sbx -f Dockerfile.sandbox .
-``````
+```
 ```md
 {
   agents: {
@@ -331,7 +343,8 @@ docker build -t my-clawdbot-sbx -f Dockerfile.sandbox .
       sandbox: { docker: { image: "my-clawdbot-sbx" } }
     }
   }
-}```
+}
+```
 ### 工具策略（允许/拒绝）
 
 - `deny` 优先于 `allow`。
@@ -362,3 +375,4 @@ docker build -t my-clawdbot-sbx -f Dockerfile.sandbox .
 - 容器未运行：它将在每次会话需要时自动创建。
 - 沙箱中的权限错误：设置 `docker.user` 为与你挂载的工作区所有权匹配的 UID:GID（或使用 `chown` 修改工作区文件夹）。
 - 自定义工具未找到：Clawdbot 使用 `sh -lc`（登录 shell）运行命令，这会加载 `/etc/profile` 并可能重置 PATH。可以设置 `docker.env.PATH` 来在路径前添加你的自定义工具路径（例如 `/custom/bin:/usr/local/share/npm-global/bin`），或在 Dockerfile 中添加脚本到 `/etc/profile.d/` 目录下。
+```

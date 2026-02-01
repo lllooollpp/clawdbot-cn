@@ -25,7 +25,7 @@ Clawdbot 可以在 **Docker 容器中运行工具**，以减少影响范围。
 - 网关进程本身。
 - 任何明确允许在主机上运行的工具（例如 `tools.elevated`）。
   - **提升权限的执行在主机上运行，并绕过沙箱隔离。**
-  - 如果沙箱隔离关闭，`tools.elevated` 不会影响执行（因为已经在主机上运行）。详见 [提升模式](/tools/elevated)。
+  - 如果沙箱隔离关闭，`tools.elevated` 不会影响执行（因为已经在主机上运行）。详见 [提升模式](/tools/elevated.md)。
 
 ## 模式
 `agents.defaults.sandbox.mode` 控制 **何时** 使用沙箱隔离：
@@ -79,12 +79,13 @@ json5
     ]
   }
 }
-``````
+```
 安全注意事项：
 - 绑定（binds）会绕过沙盒文件系统：它们会暴露主机路径，无论你设置什么模式（`:ro` 或 `:rw`）。
 - 敏感挂载（例如 `docker.sock`、秘密文件、SSH 密钥）应设置为 `:ro`，除非绝对必要。
 - 如果你只需要对工作区的只读访问，请结合 `workspaceAccess: "ro"` 使用；绑定模式是独立的。
-- 了解 [沙盒 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated)，以查看绑定如何与工具策略和提升权限交互。```bash
+- 了解 [沙盒 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated.md)，以查看绑定如何与工具策略和提升权限交互。
+```bash
 scripts/sandbox-setup.sh
 ```
 注意：默认镜像不包含 Node。如果某个技能需要 Node（或其他运行时），请通过以下方式处理：
@@ -94,12 +95,12 @@ scripts/sandbox-setup.sh
 沙箱浏览器镜像：
 bash
 scripts/sandbox-browser-setup.sh
-``````
+```
 默认情况下，沙盒容器以 **无网络** 的方式运行。
 可以通过 `agents.defaults.sandbox.docker.network` 进行覆盖。
 
 Docker 安装和容器化网关位于此处：
-[Docker](/install/docker)
+[Docker](/install/docker.md)
 
 ## setupCommand（一次性容器设置）
 `setupCommand` 在沙盒容器创建后 **仅运行一次**（不是每次运行时都执行）。
@@ -122,15 +123,16 @@ Docker 安装和容器化网关位于此处：
 
 调试：
 - 使用 `clawdbot sandbox explain` 来检查生效的沙盒模式、工具策略和修复配置项。
-- 有关“为什么被阻止？”的思维模型，请参阅 [沙盒 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated)。
+- 有关“为什么被阻止？”的思维模型，请参阅 [沙盒 vs 工具策略 vs 提升权限](/gateway/sandbox-vs-tool-policy-vs-elevated.md)。
 保持安全限制。
 
 ## 多代理覆盖
 每个代理都可以覆盖沙盒和工具设置：
 `agents.list[].sandbox` 和 `agents.list[].tools`（以及 `agents.list[].tools.sandbox.tools` 用于沙盒工具策略）。
-有关优先级，请参阅 [多代理沙盒与工具](/multi-agent-sandbox-tools)。
+有关优先级，请参阅 [多代理沙盒与工具](/multi-agent-sandbox-tools.md)。
 
-## 最小启用示例```json5
+## 最小启用示例
+```json5
 {
   agents: {
     defaults: {
@@ -144,6 +146,6 @@ Docker 安装和容器化网关位于此处：
 }
 ```
 ## 相关文档
-- [沙箱配置](/gateway/configuration#agentsdefaults-sandbox)
-- [多智能体沙箱与工具](/multi-agent-sandbox-tools)
-- [安全](/gateway/security)
+- [沙箱配置](/gateway/configuration.md#agentsdefaults-sandbox)
+- [多智能体沙箱与工具](/multi-agent-sandbox-tools.md)
+- [安全](/gateway/security.md)

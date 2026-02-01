@@ -65,6 +65,13 @@ import {
   loadConfigSchema,
 } from "./controllers/config";
 import {
+  advanceWizard,
+  cancelWizard,
+  startWizard,
+  type WizardSessionStatus,
+  type WizardStep,
+} from "./controllers/wizard";
+import {
   handleAbortChat as handleAbortChatInternal,
   handleSendChat as handleSendChatInternal,
   removeQueuedMessage as removeQueuedMessageInternal,
@@ -108,6 +115,12 @@ export class ClawdbotApp extends LitElement {
   @state() password = "";
   @state() tab: Tab = "chat";
   @state() onboarding = resolveOnboardingMode();
+  @state() onboardingWizardSessionId: string | null = null;
+  @state() onboardingWizardStep: WizardStep | null = null;
+  @state() onboardingWizardStatus: WizardSessionStatus | null = null;
+  @state() onboardingWizardError: string | null = null;
+  @state() onboardingWizardBusy = false;
+  @state() onboardingWizardDraft: unknown = null;
   @state() connected = false;
   @state() theme: ThemeMode = this.settings.theme ?? "system";
   @state() themeResolved: ResolvedTheme = "dark";
@@ -263,6 +276,7 @@ export class ClawdbotApp extends LitElement {
   private logsScrollFrame: number | null = null;
   private toolStreamById = new Map<string, ToolStreamEntry>();
   private toolStreamOrder: string[] = [];
+  private onboardingWizardAutoStarted = false;
   basePath = "";
   private popStateHandler = () =>
     onPopStateInternal(
@@ -295,6 +309,15 @@ export class ClawdbotApp extends LitElement {
       this as unknown as Parameters<typeof handleUpdated>[0],
       changed,
     );
+    if (
+      this.onboarding &&
+      this.connected &&
+      !this.onboardingWizardAutoStarted &&
+      !this.onboardingWizardSessionId
+    ) {
+      this.onboardingWizardAutoStarted = true;
+      void this.handleOnboardingStart();
+    }
   }
 
   connect() {
@@ -335,6 +358,32 @@ export class ClawdbotApp extends LitElement {
 
   async loadAssistantIdentity() {
     await loadAssistantIdentityInternal(this);
+  }
+
+  async handleOnboardingStart() {
+    await startWizard(this, { mode: "local" });
+  }
+
+  async handleOnboardingNext() {
+    await advanceWizard(this, this.onboardingWizardDraft);
+  }
+
+  async handleOnboardingCancel() {
+    await cancelWizard(this);
+  }
+
+  handleOnboardingDraftChange(value: unknown) {
+    this.onboardingWizardDraft = value;
+  }
+
+  handleOnboardingExit() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("onboarding");
+    window.history.replaceState(null, "", url.toString());
+    this.onboarding = false;
+    if (this.tab === "onboarding") {
+      this.setTab("chat");
+    }
   }
 
   applySettings(next: UiSettings) {

@@ -11,7 +11,8 @@ Clawdbot 通过 `clawdbot models status` 暴露 OAuth 过期的健康状态。�
 
 ## 推荐：CLI 检查（可移植）
 bash
-clawdbot models status --check``````
+clawdbot models status --check
+```
 退出代码：
 - `0`: 正常
 - `1`: 凭据已过期或缺失
@@ -33,3 +34,4 @@ clawdbot models status --check``````
 - `scripts/termux-sync-widget.sh`: 同步 Claude Code 凭据到 Clawdbot。
 
 如果你不需要手机自动化或 systemd 定时器，请跳过这些脚本。
+```

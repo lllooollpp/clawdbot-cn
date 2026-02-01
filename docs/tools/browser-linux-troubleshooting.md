@@ -8,7 +8,8 @@ read_when: "Browser control fails on Linux, especially with snap Chromium"
 ## 问题： "Failed to start Chrome CDP on port 18800"
 
 Clawdbot 的浏览器控制服务器在启动 Chrome/Brave/Edge/Chromium 时出现错误：
-"``````
+"
+```
 {"error":"Error: Failed to start Chrome CDP on port 18800 for profile \"clawd\"."}
 ```
 ### 根本原因
@@ -19,12 +20,13 @@ Clawdbot 的浏览器控制服务器在启动 Chrome/Brave/Edge/Chromium 时出�
 
 Note, selecting 'chromium-browser' instead of 'chromium'
 chromium-browser is already the newest version (2:1snap1-0ubuntu2).
-``````
+```
 这并不是一个真正的浏览器——它只是一个包装器。
 
 ### 解决方案 1：安装 Google Chrome（推荐）
 
-安装官方的 Google Chrome `.deb` 安装包，该安装包不会被 snap 沙盒限制：```bash
+安装官方的 Google Chrome `.deb` 安装包，该安装包不会被 snap 沙盒限制：
+```bash
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 sudo apt --fix-broken install -y  # if there are dependency errors
@@ -37,12 +39,14 @@ sudo apt --fix-broken install -y  # if there are dependency errors
     "headless": true,
     "noSandbox": true
   }
-}```
+}
+```
 ### 解决方案 2：使用 Snap Chromium 的仅附加模式
 
 如果你必须使用 Snap 版本的 Chromium，请配置 Clawdbot 以附加到手动启动的浏览器：
 
-1. 更新配置：```json
+1. 更新配置：
+```json
 {
   "browser": {
     "enabled": true,
@@ -58,8 +62,9 @@ chromium-browser --headless --no-sandbox --disable-gpu \
   --remote-debugging-port=18800 \
   --user-data-dir=$HOME/.clawdbot/browser/clawd/user-data \
   about:blank &
-``````
-3. 可选地创建一个 systemd 用户服务以自动启动 Chrome：```ini
+```
+3. 可选地创建一个 systemd 用户服务以自动启动 Chrome：
+```ini
 # ~/.config/systemd/user/clawd-browser.service
 [Unit]
 Description=Clawd Browser (Chrome CDP)
@@ -75,13 +80,14 @@ WantedBy=default.target
 ```
 启用方式：`systemctl --user enable --now clawd-browser.service`
 
-### 验证浏览器是否正常工作
+## 验证浏览器是否正常工作
 
 检查状态：
 bash
 curl -s http://127.0.0.1:18791/ | jq '{running, pid, chosenBrowser}'
-``````
-浏览测试：```bash
+```
+浏览测试：
+```bash
 curl -s -X POST http://127.0.0.1:18791/start
 curl -s http://127.0.0.1:18791/tabs
 ```

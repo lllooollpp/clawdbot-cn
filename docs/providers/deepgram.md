@@ -19,8 +19,9 @@ Deepgram 是一个语音转文字 API。在 Clawdbot 中，它通过 `tools.medi
 1) 设置你的 API 密钥：
 
 DEEPGRAM_API_KEY=dg_...
-``````
-2) 启用提供者：```json5
+```
+2) 启用提供者：
+```json5
 {
   tools: {
     media: {
@@ -73,7 +74,7 @@ json5
     }
   }
 }
-``````
+```
 ```md
 ## 说明
 

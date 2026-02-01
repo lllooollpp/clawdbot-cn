@@ -9,8 +9,8 @@ read_when:
 管理独立的代理（工作区 + 认证 + 路由）。
 
 相关：
-- 多代理路由：[多代理路由](/concepts/multi-agent)
-- 代理工作区：[代理工作区](/concepts/agent-workspace)
+- 多代理路由：[多代理路由](/concepts/multi-agent.md)
+- 代理工作区：[代理工作区](/concepts/agent-workspace.md)
 
 ## 示例
 bash
@@ -18,7 +18,8 @@ clawdbot agents list
 clawdbot agents add work --workspace ~/clawd-work
 clawdbot agents set-identity --workspace ~/clawd --from-identity
 clawdbot agents set-identity --agent main --avatar avatars/clawd.png
-clawdbot agents delete work``````
+clawdbot agents delete work
+```
 ## 身份文件
 
 每个代理工作区可以在工作区根目录包含一个 `IDENTITY.md` 文件：
@@ -35,15 +36,18 @@ clawdbot agents delete work``````
 - `emoji`
 - `avatar`（工作区相对路径、http(s) URL 或数据 URI）
 
-从 `IDENTITY.md` 加载：```bash
+从 `IDENTITY.md` 加载：
+```bash
 clawdbot agents set-identity --workspace ~/clawd --from-identity
 ```
 ```md
 "显式覆盖字段：
 bash
 clawdbot agents set-identity --agent main --name "Clawd" --emoji "🦞" --avatar avatars/clawd.png
-"``````
-配置示例：```json5
+"
+```
+配置示例：
+```json5
 {
   agents: {
     list: [
@@ -59,4 +63,6 @@ clawdbot agents set-identity --agent main --name "Clawd" --emoji "🦞" --avatar
     ]
   }
 }
+```
+
 ```

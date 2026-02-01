@@ -12,11 +12,11 @@ read_when:
 - http://127.0.0.1:18789/（或 http://localhost:18789/）
 
 关键参考：
-- [控制界面](/web/control-ui) 用于使用和界面功能。
-- [Tailscale](/gateway/tailscale) 用于 Serve/Funnel 自动化。
-- [Web 表面](/web) 用于绑定模式和安全注意事项。
+- [控制界面](/web/control-ui.md) 用于使用和界面功能。
+- [Tailscale](/gateway/tailscale.md) 用于 Serve/Funnel 自动化。
+- [Web 表面](/web/index.md) 用于绑定模式和安全注意事项。
 
-通过 `connect.params.auth`（令牌或密码）在 WebSocket 握手时强制进行身份验证。参见 [网关配置](/gateway/configuration) 中的 `gateway.auth`。
+通过 `connect.params.auth`（令牌或密码）在 WebSocket 握手时强制进行身份验证。参见 [网关配置](/gateway/configuration.md) 中的 `gateway.auth`。
 
 ## 快速路径（推荐）
 
@@ -28,7 +28,7 @@ read_when:
 
 - **本地主机**：打开 `http://127.0.0.1:18789/`。如果你看到“未授权”，请运行 `clawdbot dashboard` 并使用带令牌的链接（`?token=...`）。
 - **令牌来源**：`gateway.auth.token`（或 `CLAWDBOT_GATEWAY_TOKEN`）；仪表盘在首次加载后会存储该令牌。
-- **非本地主机**：使用 Tailscale Serve（如果 `gateway.auth.allowTailscale: true`，则无需令牌）、tailnet 绑定并使用令牌，或通过 SSH 隧道。参见 [Web 表面](/web)。
+- **非本地主机**：使用 Tailscale Serve（如果 `gateway.auth.allowTailscale: true`，则无需令牌）、tailnet 绑定并使用令牌，或通过 SSH 隧道。参见 [Web 表面](/web/index.md)。
 
 ## 如果看到“未授权” / 1008
 

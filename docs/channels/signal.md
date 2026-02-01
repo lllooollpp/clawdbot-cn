@@ -29,7 +29,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 它是什么
 - 通过 `signal-cli` 的信号通道（非嵌入式 libsignal）。
 - 确定性路由：回复始终返回到 Signal。
@@ -38,7 +38,8 @@ json5
 ## 配置写入
 默认情况下，Signal 被允许写入由 `/config set|unset` 触发的配置更新（需要 `commands.config: true`）。
 
-禁用方式为：```json5
+禁用方式为：
+```json5
 {
   channels: { signal: { configWrites: false } }
 }
@@ -67,11 +68,12 @@ json5
     }
   }
 }
-`````````
-多账户支持：使用 `channels.signal.accounts` 并为每个账户配置选项以及可选的 `name`。有关共享模式，请参见 [`gateway/configuration`](/gateway/configuration#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。
+```
+多账户支持：使用 `channels.signal.accounts` 并为每个账户配置选项以及可选的 `name`。有关共享模式，请参见 [`gateway/configuration`](/gateway/configuration.md#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。
 
 ## 外部守护进程模式（httpUrl）
-如果你想自己管理 `signal-cli`（例如，为了避免缓慢的 JVM 冷启动、容器初始化或共享 CPU 的问题），请单独运行守护进程，并将其指向 Clawdbot：```json5
+如果你想自己管理 `signal-cli`（例如，为了避免缓慢的 JVM 冷启动、容器初始化或共享 CPU 的问题），请单独运行守护进程，并将其指向 Clawdbot：
+```json5
 {
   channels: {
     signal: {
@@ -90,7 +92,7 @@ json5
 - 批准方式：
   - `clawdbot pairing list signal`
   - `clawdbot pairing approve signal <CODE>`
-- 配对是 Signal 私信的默认令牌交换方式。详情：[配对](/start/pairing)
+- 配对是 Signal 私信的默认令牌交换方式。详情：[配对](/start/pairing.md)
 - 仅 UUID 发送者（来自 `sourceUuid`）会被存储为 `uuid:<id>`，在 `channels.signal.allowFrom` 中。
 
 群组：
@@ -125,7 +127,8 @@ json5
 
 message action=react channel=signal target=uuid:123e4567-e89b-12d3-a456-426614174000 messageId=1737630212345 emoji=🔥
 message action=react channel=signal target=+15551234567 messageId=1737630212345 emoji=🔥 remove=true
-message action=react channel=signal target=signal:group:<groupId> targetAuthor=uuid:<sender-uuid> messageId=1737630212345 emoji=✅``````
+message action=react channel=signal target=signal:group:<groupId> targetAuthor=uuid:<sender-uuid> messageId=1737630212345 emoji=✅
+```
 配置：
 - `channels.signal.actions.reactions`: 启用/禁用反应操作（默认为 true）。
 - `channels.signal.reactionLevel`: `off | ack | minimal | extensive`。
@@ -141,7 +144,7 @@ message action=react channel=signal target=signal:group:<groupId> targetAuthor=u
 - 用户名：`username:<name>`（如果您的 Signal 账户支持）。
 
 ## 配置参考（Signal）
-完整配置：[配置](/gateway/configuration)
+完整配置：[配置](/gateway/configuration.md)
 
 提供者选项：
 - `channels.signal.enabled`: 启用/禁用频道启动。
@@ -169,3 +172,4 @@ message action=react channel=signal target=signal:group:<groupId> targetAuthor=u
 - `agents.list[].groupChat.mentionPatterns`（Signal 不支持原生@提及）。
 - `messages.groupChat.mentionPatterns`（全局回退）。
 - `messages.responsePrefix`。
+```

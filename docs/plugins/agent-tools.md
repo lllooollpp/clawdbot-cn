@@ -25,10 +25,11 @@ export default function (api) {
     },
   });
 }
-``````
+```
 ## 可选工具（需主动启用）
 
-可选工具 **始终** 不会自动启用。用户必须将它们添加到代理的允许列表中。```ts
+可选工具 **始终** 不会自动启用。用户必须将它们添加到代理的允许列表中。
+```ts
 export default function (api) {
   api.registerTool(
     {
@@ -67,7 +68,7 @@ json5
     ]
   }
 }
-``````
+```
 影响工具可用性的其他配置选项：
 - 仅列出插件工具的允许列表（allowlist）被视为插件的启用选项；核心工具默认保持启用，除非你也在允许列表中包含核心工具或工具组。
 - `tools.profile` / `agents.list[].tools.profile`（基础允许列表）

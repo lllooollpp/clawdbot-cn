@@ -10,6 +10,7 @@ read_when:
 bash
 clawdbot sessions
 clawdbot sessions --active 120
-clawdbot sessions --json``````
+clawdbot sessions --json
+```
 ```md
 """

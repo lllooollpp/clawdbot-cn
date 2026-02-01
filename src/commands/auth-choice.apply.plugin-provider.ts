@@ -105,7 +105,7 @@ export async function applyAuthChoicePluginProvider(
   let nextConfig = enableResult.config;
   if (!enableResult.enabled) {
     await params.prompter.note(
-      `${options.label} plugin is disabled (${enableResult.reason ?? "blocked"}).`,
+      `${options.label} 插件已禁用（${enableResult.reason ?? "被拦截"}）。`,
       options.label,
     );
     return { config: nextConfig };
@@ -123,7 +123,7 @@ export async function applyAuthChoicePluginProvider(
   const provider = resolveProviderMatch(providers, options.providerId);
   if (!provider) {
     await params.prompter.note(
-      `${options.label} auth plugin is not available. Enable it and re-run the wizard.`,
+      `${options.label} 认证插件不可用。请启用它并重新运行向导。`,
       options.label,
     );
     return { config: nextConfig };
@@ -131,7 +131,7 @@ export async function applyAuthChoicePluginProvider(
 
   const method = pickAuthMethod(provider, options.methodId) ?? provider.auth[0];
   if (!method) {
-    await params.prompter.note(`${options.label} auth method missing.`, options.label);
+    await params.prompter.note(`${options.label} 认证方法缺失。`, options.label);
     return { config: nextConfig };
   }
 
@@ -176,18 +176,18 @@ export async function applyAuthChoicePluginProvider(
   if (result.defaultModel) {
     if (params.setDefaultModel) {
       nextConfig = applyDefaultModel(nextConfig, result.defaultModel);
-      await params.prompter.note(`Default model set to ${result.defaultModel}`, "Model configured");
+      await params.prompter.note(`默认模型已设置为 ${result.defaultModel}`, "模型配置完成");
     } else if (params.agentId) {
       agentModelOverride = result.defaultModel;
       await params.prompter.note(
-        `Default model set to ${result.defaultModel} for agent "${params.agentId}".`,
-        "Model configured",
+        `代理 "${params.agentId}" 的默认模型已设置为 ${result.defaultModel}。`,
+        "模型配置完成",
       );
     }
   }
 
   if (result.notes && result.notes.length > 0) {
-    await params.prompter.note(result.notes.join("\n"), "Provider notes");
+    await params.prompter.note(result.notes.join("\n"), "服务商提示");
   }
 
   return { config: nextConfig, agentModelOverride };

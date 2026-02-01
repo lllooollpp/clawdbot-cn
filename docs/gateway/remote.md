@@ -27,7 +27,7 @@ read_when:
 
 - **最佳用户体验：** 保持 `gateway.bind: "loopback"`，并通过 **Tailscale Serve** 为控制界面提供服务。
 - **备用方案：** 保持本地回环 + 从任何需要访问的机器建立 SSH 隧道。
-- **示例：** [exe.dev](/platforms/exe-dev)（易于使用的虚拟机）或 [Hetzner](/platforms/hetzner)（生产用 VPS）。
+- **示例：** [exe.dev](/platforms/exe-dev.md)（易于使用的虚拟机）或 [Hetzner](/platforms/hetzner.md)（生产用 VPS）。
 
 当你的笔记本电脑经常休眠但你希望代理始终在线时，这种设置非常理想。
 
@@ -38,7 +38,7 @@ read_when:
 - 使用 macOS 应用程序的 **通过 SSH 远程访问** 模式（设置 → 常规 → “Clawdbot 运行”）。
 - 应用程序会打开并管理隧道，因此 WebChat 和健康检查“直接可用”。
 
-操作手册：[macOS 远程访问](/platforms/mac/remote)。
+操作手册：[macOS 远程访问](/platforms/mac/remote.md)。
 
 ### 3）笔记本运行网关，其他机器进行远程访问
 
@@ -47,7 +47,7 @@ read_when:
 - 从其他机器通过 SSH 隧道连接到笔记本，或者
 - 通过 Tailscale 为控制界面提供服务，并保持网关仅绑定本地回环地址。
 
-指南：[Tailscale](/gateway/tailscale) 和 [Web 概览](/web)。
+指南：[Tailscale](/gateway/tailscale.md) 和 [Web 概览](/web/index.md)。
 
 ## 命令流程（在哪里运行什么）
 
@@ -60,15 +60,17 @@ read_when:
 - 节点返回结果；网关将其回复回 Telegram。
 
 注意事项：
-- **节点不运行网关服务。** 每个主机上只能运行一个网关，除非你有意运行隔离的配置文件（参见 [多个网关](/gateway/multiple-gateways)）。
+- **节点不运行网关服务。** 每个主机上只能运行一个网关，除非你有意运行隔离的配置文件（参见 [多个网关](/gateway/multiple-gateways.md)）。
 - macOS 应用程序的“节点模式”只是通过网关 WebSocket 的节点客户端。
 bash
-ssh -N -L 18789:127.0.0.1:18789 user@host```
+ssh -N -L 18789:127.0.0.1:18789 user@host
+```
 当隧道已开启时：
 - `clawdbot health` 和 `clawdbot status --deep` 现在会通过 `ws://127.0.0.1:18789` 连接到远程网关。
 - `clawdbot gateway {status,health,send,agent,call}` 也可以在需要时通过 `--url` 指定转发的 URL。
 
-注意：将 `18789` 替换为你的配置中的 `gateway.port`（或 `--port`/`CLAWDBOT_GATEWAY_PORT`）。```json5
+注意：将 `18789` 替换为你的配置中的 `gateway.port`（或 `--port`/`CLAWDBOT_GATEWAY_PORT`）。
+```json5
 {
   gateway: {
     mode: "remote",
@@ -92,7 +94,7 @@ WebChat 不再使用单独的 HTTP 端口。SwiftUI 的聊天界面直接连接�
 
 macOS 菜单栏应用可以端到端地驱动相同的设置（远程状态检查、WebChat 和语音唤醒转发）。
 
-运行手册：[macOS 远程访问](/platforms/mac/remote)。
+运行手册：[macOS 远程访问](/platforms/mac/remote.md)。
 
 ## 安全规则（远程/VPN）
 
@@ -106,4 +108,5 @@ macOS 菜单栏应用可以端到端地驱动相同的设置（远程状态检�
   如果你希望使用令牌/密码，请将其设置为 `false`。
 - 将 `browser.controlUrl` 视为管理 API：仅限 tailnet + 令牌认证。
 
-深入解析：[安全](/gateway/security)。
+深入解析：[安全](/gateway/security.md)。
+```

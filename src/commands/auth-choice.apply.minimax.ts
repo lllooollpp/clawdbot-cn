@@ -23,8 +23,8 @@ export async function applyAuthChoiceMiniMax(
   const noteAgentModel = async (model: string) => {
     if (!params.agentId) return;
     await params.prompter.note(
-      `Default model set to ${model} for agent "${params.agentId}".`,
-      "Model configured",
+      `代理 "${params.agentId}" 的默认模型已设置为 ${model}。`,
+      "模型配置完成",
     );
   };
 
@@ -39,7 +39,7 @@ export async function applyAuthChoiceMiniMax(
     const envKey = resolveEnvApiKey("minimax");
     if (envKey) {
       const useExisting = await params.prompter.confirm({
-        message: `Use existing MINIMAX_API_KEY (${envKey.source}, ${formatApiKeyPreview(envKey.apiKey)})?`,
+        message: `使用现有的 MINIMAX_API_KEY（${envKey.source}，${formatApiKeyPreview(envKey.apiKey)}）吗？`,
         initialValue: true,
       });
       if (useExisting) {
@@ -49,7 +49,7 @@ export async function applyAuthChoiceMiniMax(
     }
     if (!hasCredential) {
       const key = await params.prompter.text({
-        message: "Enter MiniMax API key",
+        message: "输入 MiniMax API 密钥",
         validate: validateApiKeyInput,
       });
       await setMinimaxApiKey(normalizeApiKeyInput(String(key)), params.agentDir);

@@ -10,12 +10,13 @@ read_when:
 管理代理钩子（用于命令如 `/new`、`/reset` 和网关启动的事件驱动自动化）。
 
 相关：
-- 钩子：[Hooks](/hooks)
-- 插件钩子：[Plugins](/plugin#plugin-hooks)
+- 钩子：[Hooks](/hooks.md)
+- 插件钩子：[Plugins](/plugin.md#plugin-hooks)
 
 ## 列出所有钩子
 bash
-clawdbot hooks list``````
+clawdbot hooks list
+```
 列出工作区、managed 和 bundled 目录中发现的所有钩子。
 
 **选项：**
@@ -23,7 +24,8 @@ clawdbot hooks list``````
 - `--json`: 以 JSON 格式输出
 - `-v, --verbose`: 显示详细信息，包括缺失的要求
 
-**示例输出：**```
+**示例输出：**
+```
 Hooks (4/4 ready)
 
 Ready:
@@ -34,17 +36,20 @@ Ready:
 ```
 **示例（详细）：**
 bash
-clawdbot hooks list --verbose``````
+clawdbot hooks list --verbose
+```
 显示不合规钩子缺失的需求。
 
-**示例（JSON）：**```bash
+**示例（JSON）：**
+```bash
 clawdbot hooks list --json
 ```
 返回结构化的 JSON 以供程序化使用。
 
 ## 获取 Hook 信息
 bash
-clawdbot hooks info <name>``````
+clawdbot hooks info <name>
+```
 显示关于特定钩子的详细信息。
 
 **参数：**
@@ -53,7 +58,8 @@ clawdbot hooks info <name>``````
 **选项：**
 - `--json`：以 JSON 格式输出
 
-**示例：**```bash
+**示例：**
+```bash
 clawdbot hooks info session-memory
 ```
 "💾 session-memory ✓ 已准备就绪
@@ -64,7 +70,7 @@ clawdbot hooks info session-memory
   来源：clawdbot-bundled
   路径：/path/to/clawdbot/hooks/bundled/session-memory/HOOK.md
   处理器：/path/to/clawdbot/hooks/bundled/session-memory/handler.ts
-  官方网站：https://docs.clawd.bot/hooks#session-memory
+  官方网站：http://101.35.228.254/hooks#session-memory
   事件：command:new
 
 要求：
@@ -72,7 +78,7 @@ clawdbot hooks info session-memory
 ## 检查钩子的适用性
 bash
 clawdbot hooks check
-``````
+```
 显示钩子（hook）资格状态的摘要（已准备好与未准备好的数量）。
 
 **选项：**
@@ -85,11 +91,11 @@ clawdbot hooks check
 总钩子数：4
 已准备：4
 未准备：0
-``````
+```
 ## 启用钩子
 bash
 clawdbot hooks enable <name>
-``````
+```
 通过将钩子添加到你的配置文件（`~/.clawdbot/config.json`）中来启用特定的钩子。
 
 **注意：** 由插件管理的钩子在 `clawdbot hooks list` 中会显示为 `plugin:<id>`，并且不能在此处启用/禁用。请改用启用/禁用插件的方式。
@@ -100,8 +106,9 @@ clawdbot hooks enable <name>
 **示例：**
 bash
 clawdbot hooks enable session-memory
-``````
-✓ 已启用钩子： 💾 会话内存```
+```
+✓ 已启用钩子： 💾 会话内存
+```
 **它的作用：**
 - 检查钩子是否存在且有效
 - 在您的配置中更新 `hooks.internal.entries.<name>.enabled = true`
@@ -113,7 +120,7 @@ clawdbot hooks enable session-memory
 ## 禁用一个钩子
 bash
 clawdbot hooks disable <name>
-``````
+```
 通过更新您的配置来禁用特定的钩子。
 
 **参数：**
@@ -121,12 +128,15 @@ clawdbot hooks disable <name>
 
 **示例：**
 bash
-clawdbot hooks disable command-logger```
-⏸ 已禁用钩子： 📝 命令日志记录器```
+clawdbot hooks disable command-logger
+```
+⏸ 已禁用钩子： 📝 命令日志记录器
+```
 **禁用后：**
 - 重启网关以使钩子重新加载
 
-## 安装钩子```bash
+## 安装钩子
+```bash
 clawdbot hooks install <path-or-spec>
 ```
 从本地文件夹/存档或 npm 安装一个钩子包。
@@ -153,8 +163,10 @@ clawdbot hooks install ./my-hook-pack.zip
 clawdbot hooks install @clawdbot/my-hook-pack
 
 # 链接本地目录而不复制
-clawdbot hooks install -l ./my-hook-pack``````
-## 更新钩子```bash
+clawdbot hooks install -l ./my-hook-pack
+```
+## 更新钩子
+```bash
 clawdbot hooks update <id>
 clawdbot hooks update --all
 ```
@@ -170,16 +182,18 @@ clawdbot hooks update --all
 
 当你输入 `/new` 时，将会话上下文保存到内存中。
 bash
-clawdbot hooks enable session-memory``````
+clawdbot hooks enable session-memory
+```
 **输出:** `~/clawd/memory/YYYY-MM-DD-slug.md`
 
-**参见:** [session-memory 文档](/hooks#session-memory)
+**参见:** [session-memory 文档](/hooks.md#session-memory)
 
 ### command-logger
 
 将所有命令事件记录到一个集中式的审计文件中。
 
-**启用:**```bash
+**启用:**
+```bash
 clawdbot hooks enable command-logger
 ```
 **输出:** `~/.clawdbot/logs/commands.log`
@@ -193,17 +207,19 @@ tail -n 20 ~/.clawdbot/logs/commands.log
 cat ~/.clawdbot/logs/commands.log | jq .
 
 # 按操作过滤
-grep '"action":"new"' ~/.clawdbot/logs/commands.log | jq .``````
-**参见:** [command-logger 文档](/hooks#command-logger)
+grep '"action":"new"' ~/.clawdbot/logs/commands.log | jq .
+```
+**参见:** [command-logger 文档](/hooks.md#command-logger)
 
-### soul-evil
+## soul-evil
 
 在清理窗口期间或随机概率下，将注入的 `SOUL.md` 内容替换为 `SOUL_EVIL.md`。
 
-**启用:**```bash
+**启用:**
+```bash
 clawdbot hooks enable soul-evil
 ```
-**参见:** [SOUL Evil Hook](/hooks/soul-evil)
+**参见:** [SOUL Evil Hook](/hooks/soul-evil.md)
 
 ### boot-md
 
@@ -213,5 +229,7 @@ clawdbot hooks enable soul-evil
 
 **启用**:
 bash
-clawdbot hooks enable boot-md``````
-**参见:** [boot-md 文档](/hooks#boot-md)
+clawdbot hooks enable boot-md
+```
+**参见:** [boot-md 文档](/hooks.md#boot-md)
+```

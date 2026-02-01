@@ -22,7 +22,7 @@ read_when:
 bash
 launchctl kickstart -k gui/$UID/com.clawdbot.gateway
 launchctl bootout gui/$UID/com.clawdbot.gateway
-``````
+```
 将标签替换为 `com.clawdbot.<profile>`，当运行命名的配置文件时。
 
 ## 未签名的开发构建
@@ -31,7 +31,8 @@ launchctl bootout gui/$UID/com.clawdbot.gateway
 
 - 写入 `~/.clawdbot/disable-launchagent`。
 
-对 `scripts/restart-mac.sh` 的签名运行会清除此覆盖（如果存在标记文件）。如需手动重置：```bash
+对 `scripts/restart-mac.sh` 的签名运行会清除此覆盖（如果存在标记文件）。如需手动重置：
+```bash
 rm ~/.clawdbot/disable-launchagent
 ```
 ## 仅附加模式
@@ -49,3 +50,4 @@ rm ~/.clawdbot/disable-launchagent
 - 可预测的日志和监控。
 
 如果将来再次需要真正的子进程模式，应将其记录为一个单独的、明确的开发专用模式。
+```

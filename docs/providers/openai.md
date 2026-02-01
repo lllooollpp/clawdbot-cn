@@ -19,8 +19,9 @@ bash
 clawdbot onboard --auth-choice openai-api-key
 # 或非交互模式
 clawdbot onboard --openai-api-key "$OPENAI_API_KEY"
-``````
-### 配置片段```json5
+```
+## 配置片段
+```json5
 {
   env: { OPENAI_API_KEY: "sk-..." },
   agents: { defaults: { model: { primary: "openai/gpt-5.2" } } }
@@ -40,13 +41,14 @@ clawdbot onboard --auth-choice codex-cli
 
 # 或者在向导中运行 Codex OAuth
 clawdbot onboard --auth-choice openai-codex
-``````
-### 配置片段```json5
+```
+## 配置片段
+```json5
 {
   agents: { defaults: { model: { primary: "openai-codex/gpt-5.2" } } }
 }
 ```
 ## 注意事项
 
-- 模型引用始终使用 `provider/model`（参见 [/concepts/models](/concepts/models)）。
-- 认证详情和复用规则请参见 [/concepts/oauth](/concepts/oauth)。
+- 模型引用始终使用 `provider/model`（参见 [/concepts/models](/concepts/models.md)）。
+- 认证详情和复用规则请参见 [/concepts/oauth](/concepts/oauth.md)。

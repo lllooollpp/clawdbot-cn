@@ -17,10 +17,11 @@ read_when:
 
 clawdbot devices list
 clawdbot devices list --json
-`````````
+```
 ### `clawdbot devices approve <requestId>`
 
-批准一个待处理的设备配对请求。```
+批准一个待处理的设备配对请求。
+```
 clawdbot devices approve <requestId>
 ```
 ### `clawdbot devices reject <requestId>`
@@ -31,13 +32,14 @@ clawdbot devices approve <requestId>
 ### `clawdbot devices rotate --device <id> --role <role> [--scope <scope...>]`
 
 为特定角色旋转设备令牌（可选地更新作用域）。
-clawdbot devices rotate --device <deviceId> --role operator --scope operator.read --scope operator.write```
+clawdbot devices rotate --device <deviceId> --role operator --scope operator.read --scope operator.write
+```
 ### `clawdbot devices revoke --device <id> --role <role>`
 
 撤销特定角色的设备令牌。
 
 clawdbot devices revoke --device <deviceId> --role node
-``````
+```
 ## 常用选项
 
 - `--url <url>`: 网关 WebSocket 地址（当配置了 `gateway.remote.url` 时默认使用该值）。
@@ -50,3 +52,4 @@ clawdbot devices revoke --device <deviceId> --role node
 
 - 令牌轮换会返回一个新的令牌（敏感信息）。请将其视为秘密处理。
 - 这些命令需要 `operator.pairing`（或 `operator.admin`）权限。
+```

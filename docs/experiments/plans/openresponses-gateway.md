@@ -9,7 +9,7 @@ last_updated: "2026-01-19"
 
 ## 背景
 
-Clawdbot 网关目前在 `/v1/chat/completions` 路径上提供了最小化的 OpenAI 兼容 Chat Completions 端点（参见 [OpenAI Chat Completions](/gateway/openai-http-api)）。
+Clawdbot 网关目前在 `/v1/chat/completions` 路径上提供了最小化的 OpenAI 兼容 Chat Completions 端点（参见 [OpenAI Chat Completions](/gateway/openai-http-api.md)）。
 
 Open Responses 是一个基于 OpenAI Responses API 的开放推理标准。它专为代理工作流设计，并使用基于项目的输入以及语义流事件。OpenResponses 规范定义了 `/v1/responses`，而不是 `/v1/chat/completions`。
 

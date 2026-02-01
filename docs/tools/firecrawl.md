@@ -32,7 +32,7 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - 当存在 API 密钥时，`firecrawl.enabled` 默认为 true。
 - `maxAgeMs` 控制缓存结果可以有多旧（单位：毫秒）。默认是 2 天。
@@ -50,4 +50,5 @@ Clawdbot 对 Firecrawl 请求始终使用 `proxy: "auto"` 加上 `storeInCache: 
 2) Firecrawl（如果已配置）
 3) 基本 HTML 清理（最后的备选方案）
 
-有关完整的 web 工具设置，请参见 [Web 工具](/tools/web)。
+有关完整的 web 工具设置，请参见 [Web 工具](/tools/web.md)。
+```

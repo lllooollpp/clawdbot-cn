@@ -10,13 +10,15 @@ read_when:
 初始化 `~/.clawdbot/clawdbot.json` 和代理工作区。
 
 相关：
-- 入门指南：[入门指南](/start/getting-started)
-- 向导：[入门引导](/start/onboarding)
+- 入门指南：[入门指南](/start/getting-started.md)
+- 向导：[入门引导](/start/onboarding.md)
 
 bash
 clawdbot setup
-clawdbot setup --workspace ~/clawd``````
-通过安装程序运行向导：```bash
+clawdbot setup --workspace ~/clawd
+```
+通过安装程序运行向导：
+```bash
 clawdbot setup --wizard
 ```
 ```md

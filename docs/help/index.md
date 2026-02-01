@@ -9,12 +9,12 @@ read_when:
 
 如果你想快速“解决问题”的流程，请从这里开始：
 
-- **故障排除:** [从这里开始](/help/troubleshooting)
-- **安装 sanity (Node/npm/PATH):** [安装](/install#nodejs--npm-path-sanity)
-- **网关问题:** [网关故障排除](/gateway/troubleshooting)
-- **日志:** [日志记录](/logging) 和 [网关日志记录](/gateway/logging)
-- **修复:** [医生](/gateway/doctor)
+- **故障排除:** [从这里开始](/help/troubleshooting.md)
+- **安装 sanity (Node/npm/PATH):** [安装](/install/index.md#nodejs--npm-path-sanity)
+- **网关问题:** [网关故障排除](/gateway/troubleshooting.md)
+- **日志:** [日志记录](/logging.md) 和 [网关日志记录](/gateway/logging.md)
+- **修复:** [医生](/gateway/doctor.md)
 
 如果你在寻找概念性问题（不是“某样东西坏了”）：
 
-- [FAQ（概念）](/help/faq)
+- [FAQ（概念）](/help/faq.md)

@@ -14,8 +14,9 @@ Clawdbot 为代理使用一个专用的工作空间目录。默认值：`~/clawd
 1) 如果尚不存在，请创建工作空间：
 bash
 mkdir -p ~/clawd
-``````
-2) 将默认的工作区模板复制到工作区中：```bash
+```
+2) 将默认的工作区模板复制到工作区中：
+```bash
 cp docs/reference/templates/AGENTS.md ~/clawd/AGENTS.md
 cp docs/reference/templates/SOUL.md ~/clawd/SOUL.md
 cp docs/reference/templates/TOOLS.md ~/clawd/TOOLS.md
@@ -23,8 +24,10 @@ cp docs/reference/templates/TOOLS.md ~/clawd/TOOLS.md
 "3) 可选：如果您想要个人助手技能清单，请用此文件替换 AGENTS.md：
 bash
 cp docs/reference/AGENTS.default.md ~/clawd/AGENTS.md
-"```
-4) 可选：通过设置 `agents.defaults.workspace` 选择不同的工作区（支持 `~`）：```json5
+"
+```
+4) 可选：通过设置 `agents.defaults.workspace` 选择不同的工作区（支持 `~`）：
+```json5
 {
   agents: { defaults: { workspace: "~/clawd" } }
 }
@@ -65,7 +68,7 @@ git init
 git add AGENTS.md
 git commit -m "Add Clawd workspace"
 # Optional: add a private remote + push
-``````
+```
 ## Clawdbot 的功能
 - 运行 WhatsApp 网关 + Pi 编码代理，使助手能够读取/写入聊天、获取上下文并通过主机 Mac 运行技能。
 - macOS 应用程序管理权限（屏幕录制、通知、麦克风），并通过其捆绑的二进制文件暴露 `clawdbot` CLI。
@@ -99,3 +102,4 @@ git commit -m "Add Clawd workspace"
 - 对于浏览器驱动的验证，请使用 `clawdbot browser`（标签页/状态/截图）并配合 clawd 管理的 Chrome 配置文件。
 - 对于 DOM 检查，请使用 `clawdbot browser eval|query|dom|snapshot`（当需要机器可读输出时使用 `--json`/`--out`）。
 - 对于交互操作，请使用 `clawdbot browser click|type|hover|drag|select|upload|press|wait|navigate|back|evaluate|run`（`click`/`type` 需要快照引用；使用 `evaluate` 进行 CSS 选择器操作）。
+```

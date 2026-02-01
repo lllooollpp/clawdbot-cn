@@ -1,4 +1,3 @@
-````markdown
 ---
 summary: "Bocha Search (博查搜索) API setup for web_search"
 read_when:
@@ -47,5 +46,4 @@ Or configure in `clawdbot.json`:
 - **maxResults**: Number of search results to return (default: 8).
 - **timeoutSeconds**: Request timeout (default: 30).
 
-See [Web tools](/tools/web) for more details on search integration.
-````
+See [Web tools](/tools/web.md) for more details on search integration.

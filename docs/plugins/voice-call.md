@@ -28,10 +28,11 @@ read_when:
 如果你使用的是远程网关，请在 **运行网关的机器上** 安装和配置插件，然后重启网关以加载它。
 bash
 clawdbot plugins install @clawdbot/voice-call
-``````
+```
 重启网关后继续操作。
 
-### 选项 B：从本地文件夹安装（开发模式，无需复制）```bash
+### 选项 B：从本地文件夹安装（开发模式，无需复制）
+```bash
 clawdbot plugins install ./extensions/voice-call
 cd ./extensions/voice-call && pnpm install
 ```
@@ -85,7 +86,7 @@ json5
     }
   }
 }
-``````
+```
 注意事项：
 - Twilio/Telnyx 需要一个 **可公开访问的** Webhook URL。
 - Plivo 需要一个 **可公开访问的** Webhook URL。
@@ -94,7 +95,8 @@ json5
 
 ## 通话中的 TTS
 
-语音通话使用核心的 `messages.tts` 配置（OpenAI 或 ElevenLabs）来实现通话中的语音流。你可以在插件配置中覆盖它，使用的是 **相同的结构** —— 它会与 `messages.tts` 进行深度合并。```json5
+语音通话使用核心的 `messages.tts` 配置（OpenAI 或 ElevenLabs）来实现通话中的语音流。你可以在插件配置中覆盖它，使用的是 **相同的结构** —— 它会与 `messages.tts` 进行深度合并。
+```json5
 {
   tts: {
     provider: "elevenlabs",
@@ -117,8 +119,9 @@ json5
     }
   }
 }
-``````
-覆盖到 ElevenLabs 仅用于通话（其他地方保持核心默认）：```json5
+```
+覆盖到 ElevenLabs 仅用于通话（其他地方保持核心默认）：
+```json5
 {
   plugins: {
     entries: {
@@ -156,10 +159,11 @@ json5
     }
   }
 }
-``````
+```
 ## 入站呼叫
 
-入站策略默认设置为 `已禁用`。要启用入站呼叫，请设置：```json5
+入站策略默认设置为 `已禁用`。要启用入站呼叫，请设置：
+```json5
 {
   inboundPolicy: "allowlist",
   allowFrom: ["+15550001234"],
@@ -180,7 +184,8 @@ clawdbot voicecall end --call-id <id>
 clawdbot voicecall status --call-id <id>
 clawdbot voicecall tail
 clawdbot voicecall expose --mode funnel
-```"```
+```"
+```
 ## Agent 工具
 
 工具名称: `voice_call`

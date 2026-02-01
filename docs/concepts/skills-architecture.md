@@ -1,3 +1,7 @@
+---
+summary: "Skills Architecture documentation"
+---
+
 # Clawdbot Skills 系统架构文档
 
 ## 1. 系统概览

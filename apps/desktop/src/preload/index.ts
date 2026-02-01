@@ -4,6 +4,7 @@ import { exposeElectronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   getGatewayLogBuffer: () => ipcRenderer.invoke('gateway-log-buffer'),
+  getOnboardingNeeded: () => ipcRenderer.invoke('get-onboarding-needed'),
   onGatewayLog: (listener: (line: string) => void) => {
     const handler = (_event: Electron.IpcRendererEvent, line: string) => listener(line)
     ipcRenderer.on('gateway-log', handler)

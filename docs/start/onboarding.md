@@ -74,8 +74,9 @@ macOS 应用支持 Anthropic OAuth（Claude Pro/Max）。流程如下：
 - 将身份信息和偏好写入 `IDENTITY.md`、`USER.md`、`SOUL.md`  
 - 完成后删除 `BOOTSTRAP.md`，确保仅运行一次
 bash
-clawdbot webhooks gmail setup --account you@gmail.com```
-详见 [/automation/gmail-pubsub](/automation/gmail-pubsub)。
+clawdbot webhooks gmail setup --account you@gmail.com
+```
+详见 [/automation/gmail-pubsub](/automation/gmail-pubsub.md)。
 
 ## 远程模式注意事项
 
@@ -83,3 +84,4 @@ clawdbot webhooks gmail setup --account you@gmail.com```
 
 - `~/.clawdbot/credentials/oauth.json`
 - `~/.clawdbot/agents/<agentId>/agent/auth-profiles.json`
+```

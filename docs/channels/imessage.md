@@ -28,7 +28,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 它是什么
 - 基于 `imsg` 的 macOS 上的 iMessage 通道。
 - 确定性路由：回复始终返回到 iMessage。
@@ -38,7 +38,8 @@ json5
 ## 配置写入
 默认情况下，iMessage 允许通过 `/config set|unset` 触发的配置更新（需要 `commands.config: true`）。
 
-禁用方法为：```json5
+禁用方法为：
+```json5
 {
   channels: { imessage: { configWrites: false } }
 }
@@ -76,8 +77,10 @@ set -euo pipefail
 # 首先运行一次交互式 SSH 以接受主机密钥：
 #   ssh <bot-macos-user>@localhost true
 exec /usr/bin/ssh -o BatchMode=yes -o ConnectTimeout=5 -T <bot-macos-user>@localhost \
-  "/usr/local/bin/imsg" "$@"``````
-示例配置：```json5
+  "/usr/local/bin/imsg" "$@"
+```
+示例配置：
+```json5
 {
   channels: {
     imessage: {
@@ -96,12 +99,14 @@ exec /usr/bin/ssh -o BatchMode=yes -o ConnectTimeout=5 -T <bot-macos-user>@local
 ```
 对于单账户设置，请使用平铺选项（`channels.imessage.cliPath`、`channels.imessage.dbPath`），而不是 `accounts` 映射。
 
-### 远程/SSH 变体（可选）
+## 远程/SSH 变体（可选）
 如果你想在另一台 Mac 上使用 iMessage，请将 `channels.imessage.cliPath` 设置为在一个运行在远程 macOS 主机上的 SSH 会话中执行 `imsg` 的包装脚本。Clawdbot 仅需要标准输入输出。
 bash
 #!/usr/bin/env bash
-exec ssh -T gateway-host imsg "$@"``````
-**远程附件**：当 `cliPath` 通过 SSH 指向远程主机时，Messages 数据库中的附件路径会引用远程机器上的文件。Clawdbot 可以通过设置 `channels.imessage.remoteHost` 自动通过 SCP 获取这些文件：```json5
+exec ssh -T gateway-host imsg "$@"
+```
+**远程附件**：当 `cliPath` 通过 SSH 指向远程主机时，Messages 数据库中的附件路径会引用远程机器上的文件。Clawdbot 可以通过设置 `channels.imessage.remoteHost` 自动通过 SCP 获取这些文件：
+```json5
 {
   channels: {
     imessage: {
@@ -114,7 +119,7 @@ exec ssh -T gateway-host imsg "$@"``````
 ```
 如果未设置 `remoteHost`，Clawdbot 会尝试通过解析你在包装脚本中的 SSH 命令来自动检测它。为了保证可靠性，建议进行显式配置。
 
-#### 通过 Tailscale 连接远程 Mac（示例）
+### 通过 Tailscale 连接远程 Mac（示例）
 如果网关运行在 Linux 主机/虚拟机上，但 iMessage 必须在 Mac 上运行，Tailscale 是最简单的桥梁：网关通过 tailnet 与 Mac 通信，通过 SSH 运行 `imsg`，并将附件通过 SCP 传回。
 
 ┌──────────────────────────────┐          SSH (imsg rpc)          ┌──────────────────────────┐
@@ -125,8 +130,10 @@ exec ssh -T gateway-host imsg "$@"``````
               ▲
               │ Tailscale tailnet（主机名或 100.x.y.z）
               ▼
-        user@gateway-host``````
-混凝土配置示例（Tailscale 主机名）：```json5
+        user@gateway-host
+```
+混凝土配置示例（Tailscale 主机名）：
+```json5
 {
   channels: {
     imessage: {
@@ -149,7 +156,7 @@ exec ssh -T bot@mac-mini.tailnet-1234.ts.net imsg "$@"
 - 使用 SSH 密钥，使得 `ssh bot@mac-mini.tailnet-1234.ts.net` 可以无需提示直接登录。
 - `remoteHost` 应该与 SSH 目标匹配，以便 SCP 可以获取附件。
 
-多账号支持：使用 `channels.imessage.accounts` 进行每个账号的配置，并可选地设置 `name`。有关共享模式，请参阅 [`gateway/configuration`](/gateway/configuration#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。不要提交 `~/.clawdbot/clawdbot.json`（其中通常包含令牌）。
+多账号支持：使用 `channels.imessage.accounts` 进行每个账号的配置，并可选地设置 `name`。有关共享模式，请参阅 [`gateway/configuration`](/gateway/configuration.md#telegramaccounts--discordaccounts--slackaccounts--signalaccounts--imessageaccounts)。不要提交 `~/.clawdbot/clawdbot.json`（其中通常包含令牌）。
 
 ## 访问控制（私聊 + 群组）
 私聊：
@@ -158,7 +165,7 @@ exec ssh -T bot@mac-mini.tailnet-1234.ts.net imsg "$@"
 - 批准方式：
   - `clawdbot pairing list imessage`
   1. `clawdbot pairing approve imessage <CODE>`
-- 配对是 iMessage 私聊的默认令牌交换方式。详情请参阅：[配对](/start/pairing)
+- 配对是 iMessage 私聊的默认令牌交换方式。详情请参阅：[配对](/start/pairing.md)
 
 群组：
 - `channels.imessage.groupPolicy = open | allowlist | disabled`。
@@ -190,8 +197,8 @@ json5
     }
   }
 }
-``````
-这在您希望为特定线程提供隔离的个性/模型时很有用（参见 [多代理路由](/concepts/multi-agent)）。关于文件系统隔离，请参见 [沙箱](/gateway/sandboxing)。
+```
+这在您希望为特定线程提供隔离的个性/模型时很有用（参见 [多代理路由](/concepts/multi-agent.md)）。关于文件系统隔离，请参见 [沙箱](/gateway/sandboxing.md)。
 
 ## 媒体 + 限制
 - 通过 `channels.imessage.includeAttachments` 可选地接收附件。
@@ -212,9 +219,9 @@ json5
 列出聊天：
 
 imsg chats --limit 20
-``````
+```
 ## 配置参考（iMessage）
-完整配置：[配置](/gateway/configuration)
+完整配置：[配置](/gateway/configuration.md)
 
 提供者选项：
 - `channels.imessage.enabled`: 启用/禁用该频道。

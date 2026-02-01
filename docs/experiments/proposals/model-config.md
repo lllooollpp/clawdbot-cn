@@ -7,9 +7,9 @@ read_when:
 # 模型配置（探索）
 
 本文档记录了**未来模型配置**的**想法**。这不是一个最终规格。如需了解当前行为，请参阅：
-- [模型](/concepts/models)
-- [模型故障转移](/concepts/model-failover)
-- [OAuth + 资料](/concepts/oauth)
+- [模型](/concepts/models.md)
+- [模型故障转移](/concepts/model-failover.md)
+- [OAuth + 资料](/concepts/oauth.md)
 
 ## 动机
 

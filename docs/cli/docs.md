@@ -9,8 +9,10 @@ read_when:
 搜索实时文档索引。
 bash
 clawdbot 文档 浏览器扩展
-clawdbot 文档沙盒 allowHostControl``````
+clawdbot 文档沙盒 allowHostControl
+```
 ```md
 ```md
 "" 
 """
+```

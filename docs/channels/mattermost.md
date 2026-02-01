@@ -15,13 +15,15 @@ Mattermost 作为插件提供，并未包含在核心安装中。
 
 通过 CLI 安装（npm 仓库）：
 bash
-clawdbot plugins install @clawdbot/mattermost``````
-本地签出（当从 git 仓库运行时）：```bash
+clawdbot plugins install @clawdbot/mattermost
+```
+本地签出（当从 git 仓库运行时）：
+```bash
 clawdbot plugins install ./extensions/mattermost
 ```
 如果您在配置/引导过程中选择使用 Mattermost，并且检测到 git 检出，Clawdbot 将会自动提供本地安装路径。
 
-详情：[插件](/plugin)
+详情：[插件](/plugin.md)
 
 ## 快速设置
 1) 安装 Mattermost 插件。
@@ -41,7 +43,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 环境变量（默认账户）
 如果在网关主机上希望使用环境变量，请设置以下内容：
 
@@ -57,7 +59,8 @@ Mattermost 会自动回复私信。频道行为由 `chatmode` 控制：
 - `onmessage`：回复每个频道消息。
 - `onchar`：当消息以触发前缀开头时回复。
 
-配置示例：```json5
+配置示例：
+```json5
 {
   channels: {
     mattermost: {
@@ -102,8 +105,9 @@ json5
     }
   }
 }
-`````````
+```
 ## 故障排除
 - 频道中没有回复：确保机器人在频道中并@它（oncall），使用触发前缀（onchar），或设置 `chatmode: "onmessage"`。
 - 认证错误：检查机器人的令牌、基础URL以及账户是否已启用。
 - 多账户问题：环境变量仅适用于 `default` 账户。
+```

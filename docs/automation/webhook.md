@@ -17,7 +17,8 @@ json5
     token: "shared-secret",
     path: "/hooks"
   }
-}``````
+}
+```
 说明：
 - 当 `hooks.enabled=true` 时，`hooks.token` 是必需的。
 - `hooks.path` 的默认值为 `/hooks`。
@@ -27,7 +28,8 @@ json5
 每个请求都必须包含 hook 令牌：
 - `Authorization: Bearer <token>`
 - 或 `x-clawdbot-token: <token>`
-- 或 `?token=<token>````json
+- 或 `?token=<token>
+```json
 { "text": "System line", "mode": "now" }
 ```
 - `text` **必须** (字符串): 事件的描述（例如：“收到新邮件”）。
@@ -53,7 +55,7 @@ json
   "thinking": "low",
   "timeoutSeconds": 120
 }
-`````````
+```
 - `message` **必需** (字符串): 代理要处理的提示或消息。
 - `name` 可选 (字符串): 钩子的可读名称（例如："GitHub"），在会话摘要中用作前缀。
 - `sessionKey` 可选 (字符串): 用于标识代理会话的键。默认为随机生成的 `hook:<uuid>`。使用一致的键可以在钩子上下文中实现多轮对话。
@@ -82,7 +84,7 @@ json
 - TS 转换需要 TS 加载器（例如：`bun` 或 `tsx`）或运行时预编译的 `.js` 文件。
 - 在映射中设置 `deliver: true` + `channel`/`to` 可以将回复路由到聊天界面（`channel` 默认为 `last`，并回退到 WhatsApp）。
 - `clawdbot webhooks gmail setup` 会为 `clawdbot webhooks gmail run` 写入 `hooks.gmail` 配置。
-参见 [Gmail Pub/Sub](/automation/gmail-pubsub) 了解完整的 Gmail 监听流程。
+参见 [Gmail Pub/Sub](/automation/gmail-pubsub.md) 了解完整的 Gmail 监听流程。
 
 ## 响应
 
@@ -90,7 +92,8 @@ json
 - `/hooks/agent` 返回 `202`（异步运行已启动）
 - 认证失败返回 `401`
 - 无效负载返回 `400`
-- 负载过大返回 `413````bash
+- 负载过大返回 `413
+```bash
 curl -X POST http://127.0.0.1:18789/hooks/wake \
   -H 'Authorization: Bearer SECRET' \
   -H 'Content-Type: application/json' \
@@ -109,8 +112,10 @@ bash
 curl -X POST http://127.0.0.1:18789/hooks/agent \
   -H 'x-clawdbot-token: SECRET' \
   -H 'Content-Type: application/json' \
-  -d '{"message":"Summarize inbox","name":"Email","model":"openai/gpt-5.2-mini"}'``````
-如果您强制使用 `agents.defaults.models`，请确保覆盖模型包含在其中。```bash
+  -d '{"message":"Summarize inbox","name":"Email","model":"openai/gpt-5.2-mini"}'
+```
+如果您强制使用 `agents.defaults.models`，请确保覆盖模型包含在其中。
+```bash
 curl -X POST http://127.0.0.1:18789/hooks/gmail \
   -H 'Authorization: Bearer SECRET' \
   -H 'Content-Type: application/json' \
@@ -121,3 +126,4 @@ curl -X POST http://127.0.0.1:18789/hooks/gmail \
 - 将 hook 端点置于环回地址（loopback）、内网（tailnet）或受信任的反向代理之后。
 - 使用专用的 hook 令牌；不要复用网关的认证令牌。
 - 避免在 webhook 日志中包含敏感的原始数据。
+```

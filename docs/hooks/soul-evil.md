@@ -18,8 +18,9 @@ SOUL Evil Hook 在清理窗口期间或随机概率下，将 **注入的** `SOUL
 ## 启用
 bash
 clawdbot hooks enable soul-evil
-``````
-然后设置配置：```json
+```
+然后设置配置：
+```json
 {
   "hooks": {
     "internal": {
@@ -56,4 +57,5 @@ clawdbot hooks enable soul-evil
 
 ## 参见
 
-- [钩子](/hooks)
+- [钩子](/hooks.md)
+```

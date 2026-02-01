@@ -32,7 +32,7 @@ macOS 应用是 Clawdbot 的 **菜单栏伴侣**。它拥有权限，管理/连�
 bash
 launchctl kickstart -k gui/$UID/com.clawdbot.gateway
 launchctl bootout gui/$UID/com.clawdbot.gateway
-``````
+```
 当运行命名配置文件时，将标签替换为 `com.clawdbot.<profile>`。
 
 如果未安装 LaunchAgent，请从应用程序中启用它，或运行
@@ -53,7 +53,8 @@ Node 服务 + 应用程序 IPC：
 - 当无头 Node 主机服务运行（远程模式）时，它会作为 Node 连接到 Gateway WS。
 - `system.run` 在 macOS 应用程序（UI/TCC 上下文）中通过本地 Unix 套接字执行；提示信息和输出将保留在应用程序中。
 
-图示（SCI）：```
+图示（SCI）：
+```
 Gateway -> Node Service (WS)
                  |  IPC (UDS + token + HMAC + TTL)
                  v
@@ -65,7 +66,7 @@ Gateway -> Node Service (WS)
 安全 + 询问 + 允许列表数据本地存储在 Mac 上，路径为：
 
 ~/.clawdbot/exec-approvals.json
-``````
+```
 ```md
 {
   "version": 1,
@@ -82,7 +83,8 @@ Gateway -> Node Service (WS)
       ]
     }
   }
-}```
+}
+```
 注意事项：
 - `allowlist` 条目是已解析二进制路径的通配符模式。
 - 在提示中选择“始终允许”会将该命令添加到允许列表中。
@@ -94,7 +96,8 @@ Gateway -> Node Service (WS)
 
 ### `clawdbot://agent`
 
-触发一个网关 `agent` 请求。```bash
+触发一个网关 `agent` 请求。
+```bash
 open 'clawdbot://agent?message=Hello%20from%20deep%20link'
 ```
 查询参数：
@@ -129,7 +132,7 @@ bash
 cd apps/macos
 swift run clawdbot-mac connect --json
 swift run clawdbot-mac discover --timeout 3000 --json
-``````
+```
 连接选项：
 - `--url <ws://host:port>`：覆盖配置
 - `--mode <local|remote>`：从配置中解析（默认：配置或 local）
@@ -154,13 +157,14 @@ swift run clawdbot-mac discover --timeout 3000 --json
 - **远程端口：** 远程主机上的相同网关端口。
 - **行为：** 不使用随机本地端口；如果需要，应用会复用已有的健康隧道或重新启动它。
 - **SSH 配置：** `ssh -N -L <local>:127.0.0.1:<remote>`，包含 BatchMode + ExitOnForwardFailure + keepalive 选项。
-- **IP 报告：** SSH 隧道使用环回地址，因此网关会看到节点 IP 为 `127.0.0.1`。如果希望显示真实的客户端 IP，请使用 **Direct (ws/wss)** 传输方式（参见 [macOS 远程访问](/platforms/mac/remote)）。
+- **IP 报告：** SSH 隧道使用环回地址，因此网关会看到节点 IP 为 `127.0.0.1`。如果希望显示真实的客户端 IP，请使用 **Direct (ws/wss)** 传输方式（参见 [macOS 远程访问](/platforms/mac/remote.md)）。
 
-有关设置步骤，请参见 [macOS 远程访问](/platforms/mac/remote)。有关协议细节，请参见 [网关协议](/gateway/protocol)。
+有关设置步骤，请参见 [macOS 远程访问](/platforms/mac/remote.md)。有关协议细节，请参见 [网关协议](/gateway/protocol.md)。
 
 ## 相关文档
 
-- [网关运行手册](/gateway)
-- [网关（macOS）](/platforms/mac/bundled-gateway)
-- [macOS 权限](/platforms/mac/permissions)
-- [Canvas](/platforms/mac/canvas)
+- [网关运行手册](/gateway/index.md)
+- [网关（macOS）](/platforms/mac/bundled-gateway.md)
+- [macOS 权限](/platforms/mac/permissions.md)
+- [Canvas](/platforms/mac/canvas.md)
+```

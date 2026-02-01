@@ -32,10 +32,10 @@ Clawdbot 将 **每个代理的单个直接聊天会话** 视为主要会话。�
 
 ## 会话清理
 Clawdbot 默认在调用 LLM 之前会从内存上下文中 **清理旧的工具结果**。
-这 **不会** 重写 JSONL 历史记录。请参见 [/concepts/session-pruning](/concepts/session-pruning)。
+这 **不会** 重写 JSONL 历史记录。请参见 [/concepts/session-pruning](/concepts/session-pruning.md)。
 
 ## 预压缩内存刷新
-当会话接近自动压缩时，Clawdbot 可以执行一个 **无声内存刷新**，提醒模型将持久化的笔记写入磁盘。这仅在工作区可写时运行。请参见 [Memory](/concepts/memory) 和 [Compaction](/concepts/compaction)。
+当会话接近自动压缩时，Clawdbot 可以执行一个 **无声内存刷新**，提醒模型将持久化的笔记写入磁盘。这仅在工作区可写时运行。请参见 [Memory](/concepts/memory.md) 和 [Compaction](/concepts/compaction.md)。
 
 ## 传输方式 → 会话密钥映射
 - 私聊遵循 `session.dmScope`（默认为 `main`）。
@@ -77,13 +77,15 @@ json5
       default: "允许"
     }
   }
-}``````
+}
+```
 运行时覆盖（仅限拥有者）：
 - `/send on` → 允许当前会话
 - `/send off` → 拒绝当前会话
 - `/send inherit` → 清除覆盖并使用配置规则
 
-请将这些命令作为独立消息发送，以便注册。```json5
+请将这些命令作为独立消息发送，以便注册。
+```json5
 // ~/.clawdbot/clawdbot.json
 {
   session: {
@@ -120,7 +122,7 @@ json5
 - 在聊天中单独发送 `/status` 消息，查看代理是否可达、会话上下文使用情况、当前的思考/详细模式切换，以及 WhatsApp Web 凭据最后一次刷新时间（有助于发现是否需要重新连接）。
 - 发送 `/context list` 或 `/context detail` 查看系统提示中包含的内容和注入的工作区文件（以及最大的上下文贡献者）。
 - 单独发送 `/stop` 消息以中止当前运行，清除该会话的待处理后续操作，并停止从该会话派生的所有子代理运行（回复中会包含中止的数量）。
-- 单独发送 `/compact`（可选指令）以总结较旧的上下文并腾出窗口空间。详见 [/concepts/compaction](/concepts/compaction)。
+- 单独发送 `/compact`（可选指令）以总结较旧的上下文并腾出窗口空间。详见 [/concepts/compaction](/concepts/compaction.md)。
 - JSONL 格式的对话记录可以直接打开以查看完整的对话回合。
 
 ## 小贴士
@@ -135,3 +137,4 @@ json5
 - `accountId`: 提供商账户 ID（当支持多账户时）
 - `threadId`: 当频道支持时的线程/话题 ID
 来源字段适用于直接消息、频道和群组。如果一个连接器仅用于更新传递路由（例如，保持一对一主会话的活跃状态），它仍应提供入站上下文，以使会话保持其解释器元数据。扩展可以通过在入站上下文中发送 `ConversationLabel`、`GroupSubject`、`GroupChannel`、`GroupSpace` 和 `SenderName`，并调用 `recordSessionMetaFromInbound`（或向 `updateLastRoute` 传递相同的上下文）来实现这一点。
+```

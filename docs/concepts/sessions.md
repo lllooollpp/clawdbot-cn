@@ -6,4 +6,4 @@ read_when:
 
 # 会话
 
-有关会话管理的规范文档，请参见 [会话管理](/concepts/session)。
+有关会话管理的规范文档，请参见 [会话管理](/concepts/session.md)。

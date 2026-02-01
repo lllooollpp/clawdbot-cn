@@ -8,9 +8,9 @@ read_when:
 
 # 节点
 
-**节点** 是一个配套设备（macOS/iOS/Android/无头设备），通过 `role: "node"` 连接到网关的 **WebSocket**（与操作员使用相同的端口），并通过 `node.invoke` 暴露命令接口（例如 `canvas.*`, `camera.*`, `system.*`）。协议详情：[网关协议](/gateway/protocol)。
+**节点** 是一个配套设备（macOS/iOS/Android/无头设备），通过 `role: "node"` 连接到网关的 **WebSocket**（与操作员使用相同的端口），并通过 `node.invoke` 暴露命令接口（例如 `canvas.*`, `camera.*`, `system.*`）。协议详情：[网关协议](/gateway/protocol.md)。
 
-旧版传输方式：[桥接协议](/gateway/bridge-protocol)（TCP JSONL；已弃用/移除，不再适用于当前节点）。
+旧版传输方式：[桥接协议](/gateway/bridge-protocol.md)（TCP JSONL；已弃用/移除，不再适用于当前节点）。
 
 macOS 也可以在 **节点模式** 下运行：菜单栏应用连接到网关的 WS 服务器，并将其本地的 canvas/camera 命令作为节点暴露出来（因此 `clawdbot nodes …` 命令可以在这台 Mac 上运行）。
 
@@ -23,7 +23,7 @@ clawdbot devices approve <requestId>
 clawdbot devices reject <requestId>
 clawdbot nodes status
 clawdbot nodes describe --node <idOrNameOrIp>
-``````
+```
 注意事项：
 - `nodes status` 在设备配对角色包含 `node` 时，会将节点标记为 **已配对**。
 - `node.pair.*`（CLI：`clawdbot nodes pending/approve/reject`）是一个由网关拥有独立的节点配对存储；它**不会**控制 WS 的 `connect` 握手过程。
@@ -39,17 +39,19 @@ clawdbot nodes describe --node <idOrNameOrIp>
 
 ### 启动节点主机（前台运行）
 
-在节点机器上执行：```bash
+在节点机器上执行：
+```bash
 clawdbot node run --host <gateway-host> --port 18789 --display-name "Build Node"
 ```
 ### 启动节点主机（服务）
 bash
 clawdbot node install --host <gateway-host> --port 18789 --display-name "构建节点"
 clawdbot node restart
-``````
+```
 ### Pair + 名称
 
-在网关主机上：```bash
+在网关主机上：
+```bash
 clawdbot nodes pending
 clawdbot nodes approve <requestId>
 clawdbot nodes list
@@ -64,12 +66,13 @@ clawdbot nodes list
 bash
 clawdbot approvals allowlist add --node <id|name|ip> "/usr/bin/uname"
 clawdbot approvals allowlist add --node <id|name|ip> "/usr/bin/sw_vers"
-``````
+```
 批准信息存储在节点主机上的 `~/.clawdbot/exec-approvals.json` 文件中。
 
 ### 将 exec 指向节点
 
-配置默认值（网关配置）：```bash
+配置默认值（网关配置）：
+```bash
 clawdbot config set tools.exec.host node
 clawdbot config set tools.exec.security allowlist
 clawdbot config set tools.exec.node "<id-or-name>"
@@ -77,17 +80,18 @@ clawdbot config set tools.exec.node "<id-or-name>"
 或按会话：
 
 /exec host=node security=allowlist node=<id-or-name>
-``````
+```
 一旦设置，任何带有 `host=node` 的 `exec` 调用都会在节点主机上运行（受节点允许列表/批准限制）。
 
 相关：
-- [节点主机 CLI](/cli/node)
-- [Exec 工具](/tools/exec)
-- [Exec 批准](/tools/exec-approvals)
+- [节点主机 CLI](/cli/node.md)
+- [Exec 工具](/tools/exec.md)
+- [Exec 批准](/tools/exec-approvals.md)
 
 ## 调用命令
 
-低级（原始 RPC）：```bash
+低级（原始 RPC）：
+```bash
 clawdbot nodes invoke --node <idOrNameOrIp> --command canvas.eval --params '{"javaScript":"location.href"}'
 ```
 存在更高层次的辅助工具，用于常见的“给代理提供 MEDIA 附件”工作流程。
@@ -100,8 +104,9 @@ CLI 辅助工具（将截图写入临时文件并输出 `MEDIA:<path>`）：
 ```bash
 clawdbot nodes canvas snapshot --node <idOrNameOrIp> --format png
 clawdbot nodes canvas snapshot --node <idOrNameOrIp> --format jpg --max-width 1200 --quality 0.9
-``````
-### 画布控制```bash
+```
+### 画布控制
+```bash
 clawdbot nodes canvas present --node <idOrNameOrIp> --target https://example.com
 clawdbot nodes canvas hide --node <idOrNameOrIp>
 clawdbot nodes canvas navigate https://example.com --node <idOrNameOrIp>
@@ -116,13 +121,14 @@ bash
 clawdbot nodes canvas a2ui push --node <idOrNameOrIp> --text "Hello"
 clawdbot nodes canvas a2ui push --node <idOrNameOrIp> --jsonl ./payload.jsonl
 clawdbot nodes canvas a2ui reset --node <idOrNameOrIp>
-``````
+```
 注意事项：
 - 仅支持 A2UI v0.8 的 JSONL 格式（v0.9/createSurface 被拒绝）。
 
 ## 照片 + 视频（节点 camera）
 
-照片（`jpg`）：```bash
+照片（`jpg`）：
+```bash
 clawdbot nodes camera list --node <idOrNameOrIp>
 clawdbot nodes camera snap --node <idOrNameOrIp>            # default: both facings (2 MEDIA lines)
 clawdbot nodes camera snap --node <idOrNameOrIp> --facing front
@@ -130,11 +136,13 @@ clawdbot nodes camera snap --node <idOrNameOrIp> --facing front
 视频剪辑（`mp4`）：
 bash
 clawdbot nodes camera clip --node <idOrNameOrIp> --duration 10s
-clawdbot nodes camera clip --node <idOrNameOrIp> --duration 3000 --no-audio```
+clawdbot nodes camera clip --node <idOrNameOrIp> --duration 3000 --no-audio
+```
 注意事项：
 - 该节点必须处于**前台**状态，才能使用 `canvas.*` 和 `camera.*`（后台调用会返回 `NODE_BACKGROUND_UNAVAILABLE`）。
 - 录制时长会被限制（目前为 `<= 60s`），以避免过大的 base64 数据负载。
-- 在 Android 上，当可能时会提示请求 `CAMERA`/`RECORD_AUDIO` 权限；如果权限被拒绝，则会以 `*_PERMISSION_REQUIRED` 失败。```bash
+- 在 Android 上，当可能时会提示请求 `CAMERA`/`RECORD_AUDIO` 权限；如果权限被拒绝，则会以 `*_PERMISSION_REQUIRED` 失败。
+```bash
 clawdbot nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10
 clawdbot nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10 --no-audio
 ```
@@ -151,7 +159,7 @@ clawdbot nodes screen record --node <idOrNameOrIp> --duration 10s --fps 10 --no-
 bash
 clawdbot nodes location get --node <idOrNameOrIp>
 clawdbot nodes location get --node <idOrNameOrIp> --accuracy precise --max-age 15000 --location-timeout 10000
-``````
+```
 备注：
 - 位置信息默认是**关闭**的。
 - “始终”选项需要系统权限；后台获取是**尽力而为**的。
@@ -161,7 +169,8 @@ clawdbot nodes location get --node <idOrNameOrIp> --accuracy precise --max-age 1
 
 当用户授予 **短信** 权限且设备支持电话功能时，Android 节点可以暴露 `sms.send` 接口。
 
-低级别调用：```bash
+低级别调用：
+```bash
 clawdbot nodes invoke --node <idOrNameOrIp> --command sms.send --params '{"to":"+15555550123","message":"Hello from Clawdbot"}'
 ```
 ## 注意事项：
@@ -177,7 +186,7 @@ macOS 节点支持 `system.run`、`system.notify` 和 `system.execApprovals.get/
 bash
 clawdbot nodes run --node <idOrNameOrIp> -- echo "Hello from mac node"
 clawdbot nodes notify --node <idOrNameOrIp> --title "Ping" --body "Gateway ready"
-``````
+```
 注意事项：
 - `system.run` 在 payload 中返回 stdout/stderr/退出代码。
 - `system.notify` 会尊重 macOS 应用中的通知权限状态。
@@ -193,15 +202,17 @@ clawdbot nodes notify --node <idOrNameOrIp> --title "Ping" --body "Gateway ready
 当有多个节点可用时，可以将执行绑定到特定节点。
 这会设置 `exec host=node` 的默认节点（也可以在每个代理中覆盖）。
 
-全局默认：```bash
+全局默认：
+```bash
 clawdbot config set tools.exec.node "node-id-or-name"
 ```
 单个代理覆盖：
 bash
 clawdbot config get agents.list
 clawdbot config set agents.list[0].tools.exec.node "node-id-or-name"
-``````
-取消设置以允许任何节点：```bash
+```
+取消设置以允许任何节点：
+```bash
 clawdbot config unset tools.exec.node
 clawdbot config unset agents.list[0].tools.exec.node
 ```
@@ -214,12 +225,12 @@ clawdbot config unset agents.list[0].tools.exec.node
 Clawdbot 可以运行一个 **无头节点主机**（无用户界面），连接到网关的 WebSocket，并暴露 `system.run` / `system.which`。这在 Linux/Windows 上非常有用，或者用于在运行服务器的同时启动一个最小节点。
 bash
 clawdbot node run --host <gateway-host> --port 18789
-``````
+```
 注意事项：
 - 配对仍然是必需的（网关会显示节点批准提示）。
 - 节点主机将它的节点 ID、令牌、显示名称和网关连接信息存储在 `~/.clawdbot/node.json` 文件中。
 - 执行批准通过 `~/.clawdbot/exec-approvals.json` 在本地强制执行
-  （参见 [执行批准](/tools/exec-approvals)）。
+  （参见 [执行批准](/tools/exec-approvals.md)）。
 - 在 macOS 上，无头节点主机在可到达时优先使用配套应用的执行主机，如果应用不可用则回退到本地执行。设置 `CLAWDBOT_NODE_EXEC_HOST=app` 可强制使用应用，或设置 `CLAWDBOT_NODE_EXEC_FALLBACK=0` 来禁用回退。
 - 当网关 WS 使用 TLS 时，添加 `--tls` / `--tls-fingerprint` 参数。
 

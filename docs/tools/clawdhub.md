@@ -31,15 +31,16 @@ ClawdHub 是 **Clawdbot 的公共技能注册表**。这是一项免费服务：
 4) 启动一个新的 Clawdbot 会话，以便它能够识别新安装的技能。
 bash
 npm i -g clawdhub
-``````
+```
 ```md
-pnpm add -g clawdhub```
+pnpm add -g clawdhub
+```
 ## 它如何融入 Clawdbot
 
 默认情况下，CLI 会将技能安装到当前工作目录下的 `./skills` 文件夹中。如果配置了 Clawdbot 工作区，`clawdhub` 会回退到该工作区，除非你通过 `--workdir`（或 `CLAWDHUB_WORKDIR`）覆盖设置。Clawdbot 会从 `<workspace>/skills` 加载工作区中的技能，并会在 **下一次** 会话中使用它们。如果你已经使用 `~/.clawdbot/skills` 或打包的技能，工作区中的技能将具有优先级。
 
 有关技能如何加载、共享和受控的更多细节，请参见
-[Skills](/tools/skills)。
+[Skills](/tools/skills.md)。
 
 ## 该服务提供的功能（特性）
 
@@ -123,14 +124,16 @@ pnpm add -g clawdhub```
 
 ## 代理的常见工作流程
 
-### 搜索技能```bash
+### 搜索技能
+```bash
 clawdhub search "postgres backups"
 ```
 ### 下载新技能
 bash
 clawdhub install my-skill-pack
-``````
-更新已安装的技能```bash
+```
+更新已安装的技能
+```bash
 clawdhub update --all
 ```
 ### 备份您的技能（发布或同步）
@@ -138,8 +141,9 @@ clawdhub update --all
 对于单个技能文件夹：
 bash
 clawdhub publish ./my-skill --slug my-skill --name "My Skill" --version 1.0.0 --tags latest
-``````
-一次性扫描并备份多项技能：```bash
+```
+一次性扫描并备份多项技能：
+```bash
 clawdhub sync --all
 ```
 ## 高级细节（技术相关）
@@ -168,7 +172,7 @@ clawdhub sync --all
 当你在登录状态下运行 `clawdhub sync` 时，CLI 会发送一个最小的快照以计算安装数量。你可以完全禁用此功能：
 bash
 export CLAWDHUB_DISABLE_TELEMETRY=1
-``````
+```
 ## 环境变量
 
 - `CLAWDHUB_SITE`: 覆盖站点 URL。

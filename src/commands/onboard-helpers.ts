@@ -30,7 +30,7 @@ import type { NodeManagerChoice, OnboardMode, ResetScope } from "./onboard-types
 
 export function guardCancel<T>(value: T | symbol, runtime: RuntimeEnv): T {
   if (isCancel(value)) {
-    cancel(stylePromptTitle("Setup cancelled.") ?? "Setup cancelled.");
+    cancel(stylePromptTitle("设置已取消。") ?? "设置已取消。");
     runtime.exit(0);
   }
   return value as T;
@@ -39,23 +39,23 @@ export function guardCancel<T>(value: T | symbol, runtime: RuntimeEnv): T {
 export function summarizeExistingConfig(config: ClawdbotConfig): string {
   const rows: string[] = [];
   const defaults = config.agents?.defaults;
-  if (defaults?.workspace) rows.push(shortenHomeInString(`workspace: ${defaults.workspace}`));
+  if (defaults?.workspace) rows.push(shortenHomeInString(`工作区: ${defaults.workspace}`));
   if (defaults?.model) {
     const model = typeof defaults.model === "string" ? defaults.model : defaults.model.primary;
-    if (model) rows.push(shortenHomeInString(`model: ${model}`));
+    if (model) rows.push(shortenHomeInString(`模型: ${model}`));
   }
-  if (config.gateway?.mode) rows.push(shortenHomeInString(`gateway.mode: ${config.gateway.mode}`));
+  if (config.gateway?.mode) rows.push(shortenHomeInString(`网关模式: ${config.gateway.mode}`));
   if (typeof config.gateway?.port === "number") {
-    rows.push(shortenHomeInString(`gateway.port: ${config.gateway.port}`));
+    rows.push(shortenHomeInString(`网关端口: ${config.gateway.port}`));
   }
-  if (config.gateway?.bind) rows.push(shortenHomeInString(`gateway.bind: ${config.gateway.bind}`));
+  if (config.gateway?.bind) rows.push(shortenHomeInString(`网关绑定: ${config.gateway.bind}`));
   if (config.gateway?.remote?.url) {
-    rows.push(shortenHomeInString(`gateway.remote.url: ${config.gateway.remote.url}`));
+    rows.push(shortenHomeInString(`远程网关 URL: ${config.gateway.remote.url}`));
   }
   if (config.skills?.install?.nodeManager) {
-    rows.push(shortenHomeInString(`skills.nodeManager: ${config.skills.install.nodeManager}`));
+    rows.push(shortenHomeInString(`技能包管理器: ${config.skills.install.nodeManager}`));
   }
-  return rows.length ? rows.join("\n") : "No key settings detected.";
+  return rows.length ? rows.join("\n") : "未检测到关键设置。";
 }
 
 export function randomToken(): string {
@@ -171,14 +171,14 @@ export function formatControlUiSshHint(params: {
   const authedUrl = params.token ? `${localUrl}${tokenParam}` : undefined;
   const sshTarget = resolveSshTargetHint();
   return [
-    "No GUI detected. Open from your computer:",
+    "未检测到图形界面。请从您的电脑运行以下命令进行转发：",
     `ssh -N -L ${params.port}:127.0.0.1:${params.port} ${sshTarget}`,
-    "Then open:",
+    "然后打开浏览器访问：",
     localUrl,
     authedUrl,
-    "Docs:",
-    "https://docs.clawd.bot/gateway/remote",
-    "https://docs.clawd.bot/web/control-ui",
+    "文档：",
+    "http://101.35.228.254/gateway/remote",
+    "http://101.35.228.254/web/control-ui",
   ]
     .filter(Boolean)
     .join("\n");
@@ -241,10 +241,10 @@ export async function ensureWorkspaceAndSessions(
     dir: workspaceDir,
     ensureBootstrapFiles: !options?.skipBootstrap,
   });
-  runtime.log(`Workspace OK: ${shortenHomePath(ws.dir)}`);
+  runtime.log(`工作区检查 OK: ${shortenHomePath(ws.dir)}`);
   const sessionsDir = resolveSessionTranscriptsDirForAgent(options?.agentId);
   await fs.mkdir(sessionsDir, { recursive: true });
-  runtime.log(`Sessions OK: ${shortenHomePath(sessionsDir)}`);
+  runtime.log(`会话目录检查 OK: ${shortenHomePath(sessionsDir)}`);
 }
 
 export function resolveNodeManagerOptions(): Array<{
@@ -267,9 +267,9 @@ export async function moveToTrash(pathname: string, runtime: RuntimeEnv): Promis
   }
   try {
     await runCommandWithTimeout(["trash", pathname], { timeoutMs: 5000 });
-    runtime.log(`Moved to Trash: ${shortenHomePath(pathname)}`);
+    runtime.log(`已移至回收站: ${shortenHomePath(pathname)}`);
   } catch {
-    runtime.log(`Failed to move to Trash (manual delete): ${shortenHomePath(pathname)}`);
+    runtime.log(`移至回收站失败 (请手动删除): ${shortenHomePath(pathname)}`);
   }
 }
 

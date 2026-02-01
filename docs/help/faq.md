@@ -4,7 +4,7 @@ summary: "Frequently asked questions about Clawdbot setup, configuration, and us
 
 # 常见问题
 
-快速解答以及针对实际部署（本地开发、VPS、多代理、OAuth/API 密钥、模型故障转移）的深入排查。关于运行时诊断，请参阅 [故障排除](/gateway/troubleshooting)。关于完整的配置参考，请参阅 [配置](/gateway/configuration)。
+快速解答以及针对实际部署（本地开发、VPS、多代理、OAuth/API 密钥、模型故障转移）的深入排查。关于运行时诊断，请参阅 [故障排除](/gateway/troubleshooting.md)。关于完整的配置参考，请参阅 [配置](/gateway/configuration.md)。
 
 ## 目录
 
@@ -199,42 +199,54 @@ summary: "Frequently asked questions about Clawdbot setup, configuration, and us
 1) **快速状态检查（第一次检查）**
 bash
 clawdbot status
-```   ```
+```   
+```
 快速本地摘要：操作系统 + 更新，网关/服务可达性，代理/会话，提供者配置 + 运行时问题（当网关可达时）。
 
-2) **可复制报告（可安全共享）**   ```bash
+2) **可复制报告（可安全共享）**   
+```bash
    clawdbot status --all
-   ```
+   
+```
 "只读诊断（日志尾部，标记了部分令牌）。
 
 3) **守护进程 + 端口状态**
 bash
    clawdbot gateway status
-```   ```
+```   
+```
 显示了 supervisor 运行时与 RPC 可达性的关系、探测目标 URL 以及服务可能使用的配置。
-4) **深度探测**   ```bash
+4) **深度探测**   
+```bash
    clawdbot status --deep
-   ```
-执行网关健康检查 + 供应商探测（需要可访问的网关）。参见 [健康状态](/gateway/health)。
+   
+```
+执行网关健康检查 + 供应商探测（需要可访问的网关）。参见 [健康状态](/gateway/health.md)。
 
 5) **查看最新日志**
 bash
    clawdbot logs --follow
-```   ```
-如果 RPC 不可用，则回退到：   ```bash
+```   
+```
+如果 RPC 不可用，则回退到：   
+```bash
    tail -f "$(ls -t /tmp/clawdbot/clawdbot-*.log | head -1)"
-   ```
-"文件日志与服务日志是分开的；请参阅 [日志](/logging) 和 [故障排除](/gateway/troubleshooting)。
+   
+```
+"文件日志与服务日志是分开的；请参阅 [日志](/logging.md) 和 [故障排除](/gateway/troubleshooting.md)。
 
 6) **运行医生检查（修复）**   
-clawdbot doctor   ```
-修复/迁移配置/状态并运行健康检查。参见 [Doctor](/gateway/doctor)。
+clawdbot doctor   
+```
+修复/迁移配置/状态并运行健康检查。参见 [Doctor](/gateway/doctor.md)。
 
-7) **网关快照**   ```bash
+7) **网关快照**   
+```bash
    clawdbot health --json
    clawdbot health --verbose   # shows the target URL + config path on errors
-   ```
-向运行中的网关请求完整快照（仅限WS）。参见 [健康状态](/gateway/health)。
+   
+```
+向运行中的网关请求完整快照（仅限WS）。参见 [健康状态](/gateway/health.md)。
 
 ## 快速入门和首次运行设置
 
@@ -248,7 +260,7 @@ clawdbot doctor   ```
 这些工具可以读取仓库、运行命令、检查日志，并帮助修复你的机器级设置（PATH、服务、权限、认证文件）。通过可被修改的（git）安装方式，向它们提供**完整的源代码检查**。
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git
-``````
+```
 这将从 **git 检出** 安装 Clawdbot，因此代理可以读取代码 + 文档，并了解你正在运行的确切版本。你可以随时通过不带 `--install-method git` 参数重新运行安装程序来切换回稳定版本。
 
 提示：让代理 **计划并监督** 修复过程（分步骤），然后仅执行必要的命令。这样可以保持更改较小，更易于审计。
@@ -257,7 +269,8 @@ curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git
 https://github.com/clawdbot/clawdbot/issues
 https://github.com/clawdbot/clawdbot/pulls
 
-从以下命令开始（寻求帮助时请分享输出）：```bash
+从以下命令开始（寻求帮助时请分享输出）：
+```bash
 clawdbot status
 clawdbot models status
 clawdbot doctor
@@ -271,7 +284,7 @@ clawdbot doctor
 `clawdbot gateway status`，`clawdbot health --verbose`。
 
 快速调试循环：[如果出现问题的前60秒](#first-60-seconds-if-somethings-broken)。  
-安装文档：[安装](/install)，[安装程序标志](/install/installer)，[更新](/install/updating)。
+安装文档：[安装](/install/index.md)，[安装程序标志](/install/installer.md)，[更新](/install/updating.md)。
 
 ### 推荐的安装和设置 Clawdbot 的方式
 
@@ -279,8 +292,9 @@ clawdbot doctor
 bash
 curl -fsSL https://clawd.bot/install.sh | bash
 clawdbot onboard --install-daemon
-``````
-魔法师还可以自动生成UI资源。完成入门设置后，通常会在端口 **18789** 上运行网关。```bash
+```
+魔法师还可以自动生成UI资源。完成入门设置后，通常会在端口 **18789** 上运行网关。
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 pnpm install
@@ -306,7 +320,7 @@ clawdbot onboard
 - **Tailnet 绑定**：运行 `clawdbot gateway --bind tailnet --token "<token>"`，打开 `http://<tailscale-ip>:18789/`，然后在仪表板设置中粘贴令牌。
 - **SSH 隧道**：运行 `ssh -N -L 18789:127.0.0.1:18789 user@host`，然后从 `clawdbot dashboard` 打开 `http://127.0.0.1:18789/?token=...`。
 
-有关绑定模式和认证的详细信息，请参阅 [仪表板](/web/dashboard) 和 [Web 表面](/web)。
+有关绑定模式和认证的详细信息，请参阅 [仪表板](/web/dashboard.md) 和 [Web 表面](/web/index.md)。
 
 ### 我需要什么运行时环境
 
@@ -318,7 +332,7 @@ clawdbot onboard
 
 如果你想为日志、媒体或其他服务留出更多空间，推荐使用 **2GB 内存**，但这不是硬性最低要求。
 
-提示：一个小的树莓派/VPS 可以托管网关，你可以在笔记本电脑/手机上运行 **节点**，用于本地屏幕/摄像头/画布或命令执行。参见 [节点](/nodes)。
+提示：一个小的树莓派/VPS 可以托管网关，你可以在笔记本电脑/手机上运行 **节点**，用于本地屏幕/摄像头/画布或命令执行。参见 [节点](/nodes/index.md)。
 
 ### 树莓派安装有什么提示吗
 
@@ -329,7 +343,7 @@ clawdbot onboard
 - 初次启动时不要加载通道/技能，然后逐个添加。
 - 如果遇到奇怪的二进制问题，通常是 **ARM 兼容性** 问题。
 
-文档：[Linux](/platforms/linux)、[安装](/install)。
+文档：[Linux](/platforms/linux.md)、[安装](/install/index.md)。
 
 ### 我卡在“唤醒我的朋友”上线界面，无法继续怎么办
 
@@ -338,8 +352,9 @@ clawdbot onboard
 1) 重新启动网关：
 bash
 clawdbot gateway restart
-``````
-"2) 检查状态 + 认证：```bash
+```
+"2) 检查状态 + 认证：
+```bash
 clawdbot status
 clawdbot models status
 clawdbot logs --follow
@@ -347,8 +362,8 @@ clawdbot logs --follow
 3) 如果仍然卡住，请运行：
 bash
 clawdbot doctor
-``````
-如果网关是远程的，请确保隧道/Tailscale连接已启动，并且UI指向正确的网关。参见[远程访问](/gateway/remote)。
+```
+如果网关是远程的，请确保隧道/Tailscale连接已启动，并且UI指向正确的网关。参见[远程访问](/gateway/remote.md)。
 
 ### 我可以将我的设置迁移到新的Mac mini机器上而无需重新进行引导设置吗？
 
@@ -363,7 +378,7 @@ clawdbot doctor
 
 **重要：** 如果您只将工作区提交/推送到GitHub，您备份的是 **内存 + 引导文件**，但 **不包括会话历史或认证信息**。这些信息存储在 `~/.clawdbot/` 下（例如 `~/.clawdbot/agents/<agentId>/sessions/`）。
 
-相关：[文件在磁盘上的存储位置](/help/faq#where-does-clawdbot-store-its-data)，[代理工作区](/concepts/agent-workspace)，[Doctor](/gateway/doctor)，[远程模式](/gateway/remote)。
+相关：[文件在磁盘上的存储位置](/help/faq.md#where-does-clawdbot-store-its-data)，[代理工作区](/concepts/agent-workspace.md)，[Doctor](/gateway/doctor.md)，[远程模式](/gateway/remote.md)。
 
 ### 我在哪里可以看到最新版本的更新内容？
 
@@ -374,7 +389,7 @@ https://github.com/clawdbot/clawdbot/blob/main/CHANGELOG.md
 
 ### 我无法访问 docs.clawdbot 出现 SSL 错误，该怎么办？
 
-一些Comcast/Xfinity的连接会错误地通过Xfinity高级安全功能阻止 `docs.clawd.bot`。请禁用它或在白名单中添加 `docs.clawd.bot`，然后重试。更多信息：[故障排除](/help/troubleshooting#docsclawdbot-shows-an-ssl-error-comcastxfinity)。  
+一些Comcast/Xfinity的连接会错误地通过Xfinity高级安全功能阻止 `docs.clawd.bot`。请禁用它或在白名单中添加 `docs.clawd.bot`，然后重试。更多信息：[故障排除](/help/troubleshooting.md#docsclawdbot-shows-an-ssl-error-comcastxfinity)。  
 请通过此链接帮助我们解除阻止：https://spa.xfinity.com/check_url_status。
 
 如果您仍然无法访问该网站，文档已镜像在GitHub上：  
@@ -401,14 +416,16 @@ bash
 npm install clawdbot@beta
 ``` 或  
 ```bash
-npm install clawdbot@dev```bash
+npm install clawdbot@dev
+```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install.sh | bash -s -- --beta
 ```
-curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install.sh | bash -s -- --install-method git```
+curl -fsSL --proto '=https' --tlsv1.2 https://clawd.bot/install.sh | bash -s -- --install-method git
+```
 Windows 安装程序（PowerShell）:
 https://clawd.bot/install.ps1
 
-更多详情: [开发频道](/install/development-channels) 和 [安装程序标志](/install/installer)。
+更多详情: [开发频道](/install/development-channels.md) 和 [安装程序标志](/install/installer.md)。
 
 ### 安装和注册通常需要多长时间
 
@@ -416,8 +433,9 @@ https://clawd.bot/install.ps1
 - **安装:** 2-5 分钟
 - **注册:** 5-15 分钟，具体取决于您配置的频道/模型数量
 
-如果安装卡住，请使用 [安装程序卡住](/help/faq#installer-stuck-how-do-i-get-more-feedback)
-以及 [我卡住了](/help/faq#im-stuck--whats-the-fastest-way-to-get-unstuck) 中的快速调试循环。```bash
+如果安装卡住，请使用 [安装程序卡住](/help/faq.md#installer-stuck-how-do-i-get-more-feedback)
+以及 [我卡住了](/help/faq.md#im-stuck--whats-the-fastest-way-to-get-unstuck) 中的快速调试循环。
+```bash
 clawdbot update --channel dev
 ```
 这将切换到 `main` 分支并从源代码更新。
@@ -425,30 +443,33 @@ clawdbot update --channel dev
 2) **可修改安装（从安装程序网站）：**
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git
-``````
+```
 这将为你提供一个本地仓库，你可以进行编辑，然后通过 git 更新。
 
-如果你更倾向于手动克隆一个干净的版本，请使用：```bash
+如果你更倾向于手动克隆一个干净的版本，请使用：
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 pnpm install
 pnpm build
 ```
-文档：[更新](/cli/update)，[开发渠道](/install/development-channels)，[安装](/install)。
+文档：[更新](/cli/update.md)，[开发渠道](/install/development-channels.md)，[安装](/install/index.md)。
 
 ### 安装程序卡住，该如何获取更多反馈
 
 以**详细输出**模式重新运行安装程序：
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --verbose
-``````
-带有详细信息的 Beta 安装：```bash
+```
+带有详细信息的 Beta 安装：
+```bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --beta --verbose
 ```
 对于可通过 Git 破解的安装：
 bash
-curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git --verbose```
-更多选项：[安装程序标志](/install/installer)。
+curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git --verbose
+```
+更多选项：[安装程序标志](/install/installer.md)。
 
 ### Windows 安装时提示 git 未找到或 clawdbot 未被识别
 
@@ -460,54 +481,57 @@ curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git --verb
 
 **2) 安装后提示 clawdbot 未被识别**
 - 你的 npm 全局 bin 文件夹未添加到 PATH 中。
-- 检查路径：  ```powershell
+- 检查路径：  
+```powershell
   npm config get prefix
-  ```
+  
+```
 - 确保 `<prefix>\bin` 在 PATH 中（在大多数系统上，它位于 `%AppData%\npm`）。
 - 在更新 PATH 后关闭并重新打开 PowerShell。
 
 如果你想获得更顺畅的 Windows 设置体验，建议使用 **WSL2** 而不是原生 Windows。
-文档：[Windows](/platforms/windows)。
+文档：[Windows](/platforms/windows.md)。
 
 ### 文档没有回答我的问题，如何获得更好的答案
 
 使用 **可修改（git）安装**，这样你就可以在本地拥有完整的源代码和文档，然后从该文件夹中向你的 bot（或 Claude/Codex）提问，这样它就可以读取仓库并给出更准确的答案。
 bash
 curl -fsSL https://clawd.bot/install.sh | bash -s -- --install-method git
-``````
-更多详情：[安装](/install) 和 [安装程序标志](/install/installer)。
+```
+更多详情：[安装](/install/index.md) 和 [安装程序标志](/install/installer.md)。
 
 ### 如何在 Linux 上安装 Clawdbot
 
 简短回答：按照 Linux 指南操作，然后运行引导向导。
 
-- Linux 快速路径 + 服务安装：[Linux](/platforms/linux)。
-- 完整教程：[开始使用](/start/getting-started)。
-- 安装程序 + 更新：[安装与更新](/install/updating)。
+- Linux 快速路径 + 服务安装：[Linux](/platforms/linux.md)。
+- 完整教程：[开始使用](/start/getting-started.md)。
+- 安装程序 + 更新：[安装与更新](/install/updating.md)。
 
 ### 如何在 VPS 上安装 Clawdbot
 
 任何 Linux VPS 都可以使用。在服务器上安装，然后通过 SSH/Tailscale 访问网关（Gateway）。
 
-指南：[exe.dev](/platforms/exe-dev)、[Hetzner](/platforms/hetzner)、[Fly.io](/platforms/fly)。  
-远程访问：[网关远程访问](/gateway/remote)。
+指南：[exe.dev](/platforms/exe-dev.md)、[Hetzner](/platforms/hetzner.md)、[Fly.io](/platforms/fly.md)。  
+远程访问：[网关远程访问](/gateway/remote.md)。
 
 ### 云 VPS 的安装指南在哪里
 
 我们维护了一个 **托管中心**，包含常见的提供商。选择一个并按照指南操作：
 
-- [VPS 托管](/vps)（在一个地方汇总所有提供商）
+- [VPS 托管](/vps.md)（在一个地方汇总所有提供商）
 - [Railway](/railway)（一键式、基于浏览器的设置）
-- [Fly.io](/platforms/fly)
-- [Hetzner](/platforms/hetzner)
-- [exe.dev](/platforms/exe-dev)
+- [Fly.io](/platforms/fly.md)
+- [Hetzner](/platforms/hetzner.md)
+- [exe.dev](/platforms/exe-dev.md)
 
 在云端的工作方式：**网关运行在服务器上**，你可以通过控制界面（或 Tailscale/SSH）从笔记本电脑/手机访问它。你的状态和工作区都保存在服务器上，因此请将主机视为真实数据源并进行备份。
 
 你可以将 **节点**（Mac/iOS/Android/无头设备）与该云网关配对，以访问本地屏幕/摄像头/画布或在你的笔记本电脑上运行命令，同时保持网关在云端。
 
-中心：[平台](/platforms)。远程访问：[网关远程访问](/gateway/remote)。  
-节点：[节点](/nodes)、[节点 CLI](/cli/nodes)。```bash
+中心：[平台](/platforms/index.md)。远程访问：[网关远程访问](/gateway/remote.md)。  
+节点：[节点](/nodes/index.md)、[节点 CLI](/cli/nodes.md)。
+```bash
 clawdbot update
 clawdbot update status
 clawdbot update --channel stable|beta|dev
@@ -517,8 +541,9 @@ clawdbot update --no-restart
 如果您必须从代理进行自动化操作：
 bash  
 clawdbot update --yes --no-restart  
-clawdbot gateway restart```
-文档：[更新](/cli/update), [更新说明](/install/updating)。
+clawdbot gateway restart
+```
+文档：[更新](/cli/update.md), [更新说明](/install/updating.md)。
 
 ### onboard 向导到底做了什么
 
@@ -537,7 +562,7 @@ clawdbot gateway restart```
 
 不需要。你可以使用 **API 密钥**（Anthropic/OpenAI/其他）或者 **仅本地模型** 来运行 Clawdbot，这样你的数据会保留在你的设备上。订阅（Claude Pro/Max 或 OpenAI Codex）只是可选的认证方式。
 
-文档：[Anthropic](/providers/anthropic), [OpenAI](/providers/openai), [本地模型](/gateway/local-models), [模型](/concepts/models)。
+文档：[Anthropic](/providers/anthropic.md), [OpenAI](/providers/openai.md), [本地模型](/gateway/local-models.md), [模型](/concepts/models.md)。
 
 ### 我可以不用 API 密钥使用 Claude Max 订阅吗
 
@@ -547,16 +572,17 @@ Claude Pro/Max 订阅 **不包含 API 密钥**，因此这是适用于订阅账�
 
 ### Anthropic setup-token 认证是如何工作的
 
-`claude setup-token` 通过 **Claude Code CLI** 生成一个 **令牌字符串**（在网页控制台中不可用）。你可以在 **任何机器** 上运行它。如果网关主机上已存在 Claude Code CLI 的凭证，Clawdbot 可以复用它们；否则，选择 **Anthropic 令牌（粘贴 setup-token）** 并粘贴该字符串。该令牌将作为 **anthropic** 提供者的认证配置文件存储，并像 API 密钥或 OAuth 配置文件一样使用。更多细节：[OAuth](/concepts/oauth)。
+`claude setup-token` 通过 **Claude Code CLI** 生成一个 **令牌字符串**（在网页控制台中不可用）。你可以在 **任何机器** 上运行它。如果网关主机上已存在 Claude Code CLI 的凭证，Clawdbot 可以复用它们；否则，选择 **Anthropic 令牌（粘贴 setup-token）** 并粘贴该字符串。该令牌将作为 **anthropic** 提供者的认证配置文件存储，并像 API 密钥或 OAuth 配置文件一样使用。更多细节：[OAuth](/concepts/oauth.md)。
 
-Clawdbot 会将 `auth.profiles["anthropic:claude-cli"].mode` 保持为 `"oauth"`，因此该配置文件可以接受 OAuth 或 setup-token 凭证；旧的 `"token"` 模式配置会自动迁移。```bash
+Clawdbot 会将 `auth.profiles["anthropic:claude-cli"].mode` 保持为 `"oauth"`，因此该配置文件可以接受 OAuth 或 setup-token 凭证；旧的 `"token"` 模式配置会自动迁移。
+```bash
 claude setup-token
 ```
-复制它输出的 token，然后在向导中选择 **Anthropic token (粘贴 setup-token)**。如果你想在网关主机上运行，使用 `clawdbot models auth setup-token --provider anthropic`。如果你在其他地方运行了 `claude setup-token`，请通过 `clawdbot models auth paste-token --provider anthropic` 在网关主机上粘贴它。详见 [Anthropic](/providers/anthropic)。
+复制它输出的 token，然后在向导中选择 **Anthropic token (粘贴 setup-token)**。如果你想在网关主机上运行，使用 `clawdbot models auth setup-token --provider anthropic`。如果你在其他地方运行了 `claude setup-token`，请通过 `clawdbot models auth paste-token --provider anthropic` 在网关主机上粘贴它。详见 [Anthropic](/providers/anthropic.md)。
 
 ### 你们支持 Claude 订阅认证（Claude Code OAuth）吗？
 
-是的。Clawdbot 可以 **复用 Claude Code CLI 凭证**（OAuth），同时也支持 **setup-token**。如果你有 Claude 订阅，我们建议使用 **setup-token** 用于长期运行的设置（需要 Claude Pro/Max + `claude` CLI）。你可以在任何地方生成它，然后粘贴到网关主机上。OAuth 复用是受支持的，但请避免通过 Clawdbot 和 Claude Code 分别登录，以防止 token 冲突。详见 [Anthropic](/providers/anthropic) 和 [OAuth](/concepts/oauth)。
+是的。Clawdbot 可以 **复用 Claude Code CLI 凭证**（OAuth），同时也支持 **setup-token**。如果你有 Claude 订阅，我们建议使用 **setup-token** 用于长期运行的设置（需要 Claude Pro/Max + `claude` CLI）。你可以在任何地方生成它，然后粘贴到网关主机上。OAuth 复用是受支持的，但请避免通过 Clawdbot 和 Claude Code 分别登录，以防止 token 冲突。详见 [Anthropic](/providers/anthropic.md) 和 [OAuth](/concepts/oauth.md)。
 
 注意：Claude 订阅访问由 Anthropic 的条款管理。对于生产环境或多人使用的工作负载，API 密钥通常是更安全的选择。
 
@@ -565,21 +591,21 @@ claude setup-token
 这意味着你的 **Anthropic 配额/速率限制** 在当前窗口内已耗尽。如果你使用的是 **Claude 订阅**（setup-token 或 Claude Code OAuth），请等待窗口重置或升级你的计划。如果你使用的是 **Anthropic API 密钥**，请检查 Anthropic 控制台中的使用情况/账单，并根据需要提高限制。
 
 提示：设置一个 **备用模型**，这样当某个提供方被速率限制时，Clawdbot 仍可以继续回复。
-详见 [Models](/cli/models) 和 [OAuth](/concepts/oauth)。
+详见 [Models](/cli/models.md) 和 [OAuth](/concepts/oauth.md)。
 
 ### 是否支持 AWS Bedrock？
 
-是的——通过 pi-ai 的 **Amazon Bedrock (Converse)** 提供商进行 **手动配置**。你必须在网关主机上提供 AWS 凭证/区域，并在你的模型配置中添加一个 Bedrock 提供商条目。详见 [Amazon Bedrock](/bedrock) 和 [Model providers](/providers/models)。如果你希望使用托管密钥流程，可以在 Bedrock 前面使用一个 OpenAI 兼容的代理仍然是一个有效选项。
+是的——通过 pi-ai 的 **Amazon Bedrock (Converse)** 提供商进行 **手动配置**。你必须在网关主机上提供 AWS 凭证/区域，并在你的模型配置中添加一个 Bedrock 提供商条目。详见 [Amazon Bedrock](/bedrock.md) 和 [Model providers](/providers/models.md)。如果你希望使用托管密钥流程，可以在 Bedrock 前面使用一个 OpenAI 兼容的代理仍然是一个有效选项。
 
 ### Codex 认证是如何工作的？
 
-Clawdbot 通过 OAuth 或复用你的 Codex CLI 登录（`~/.codex/auth.json`）支持 **OpenAI Code (Codex)**。向导可以导入 CLI 登录或运行 OAuth 流程，并在适当的时候将默认模型设置为 `openai-codex/gpt-5.2`。详见 [Model providers](/concepts/model-providers) 和 [Wizard](/start/wizard)。
+Clawdbot 通过 OAuth 或复用你的 Codex CLI 登录（`~/.codex/auth.json`）支持 **OpenAI Code (Codex)**。向导可以导入 CLI 登录或运行 OAuth 流程，并在适当的时候将默认模型设置为 `openai-codex/gpt-5.2`。详见 [Model providers](/concepts/model-providers.md) 和 [Wizard](/start/wizard.md)。
 
 ### 你们支持 OpenAI 订阅认证（Codex OAuth）吗？
 
 是的。Clawdbot 完全支持 **OpenAI Code (Codex) 订阅 OAuth**，并且还可以在网关主机上复用现有的 Codex CLI 登录（`~/.codex/auth.json`）。入门向导可以为你导入 CLI 登录或运行 OAuth 流程。
 
-详见 [OAuth](/concepts/oauth)、[Model providers](/concepts/model-providers) 和 [Wizard](/start/wizard)。
+详见 [OAuth](/concepts/oauth.md)、[Model providers](/concepts/model-providers.md) 和 [Wizard](/start/wizard.md)。
 
 ### 我如何设置 Gemini CLI OAuth？
 
@@ -589,11 +615,11 @@ Gemini CLI 使用 **插件认证流程**，而不是 `clawdbot.json` 中的客�
 1) 启用插件：`clawdbot plugins enable google-gemini-cli-auth`
 2) 登录：`clawdbot models auth login --provider google-gemini-cli --set-default`
 
-这会在网关主机上存储 OAuth 令牌到认证配置文件中。详情：[模型提供者](/concepts/model-providers)。
+这会在网关主机上存储 OAuth 令牌到认证配置文件中。详情：[模型提供者](/concepts/model-providers.md)。
 
 ### 本地模型是否适合日常聊天
 
-通常不行。Clawdbot 需要大上下文 + 强大的安全性；小型模型会截断并泄露信息。如果必须使用，请在本地运行你所能运行的 **最大** 的 MiniMax M2.1 版本（通过 LM Studio），并查看 [/gateway/local-models](/gateway/local-models)。更小或量化后的模型会增加提示注入的风险 - 详见 [安全](/gateway/security)。
+通常不行。Clawdbot 需要大上下文 + 强大的安全性；小型模型会截断并泄露信息。如果必须使用，请在本地运行你所能运行的 **最大** 的 MiniMax M2.1 版本（通过 LM Studio），并查看 [/gateway/local-models](/gateway/local-models.md)。更小或量化后的模型会增加提示注入的风险 - 详见 [安全](/gateway/security.md)。
 
 ### 如何确保托管模型的流量在特定区域
 
@@ -605,7 +631,7 @@ Gemini CLI 使用 **插件认证流程**，而不是 `clawdbot.json` 中的客�
 
 你只需要 Mac **用于仅 macOS 工具**。对于 iMessage，你可以将网关运行在 Linux 上，并通过 SSH 在任意 Mac 上运行 `imsg`，只需将 `channels.imessage.cliPath` 指向一个运行 `imsg` 的 SSH 包装器。如果你想使用其他仅 macOS 的工具，请在 Mac 上运行网关或连接一个 macOS 节点。
 
-文档：[iMessage](/channels/imessage)，[节点](/nodes)，[Mac 远程模式](/platforms/mac/remote)。
+文档：[iMessage](/channels/imessage.md)，[节点](/nodes/index.md)，[Mac 远程模式](/platforms/mac/remote.md)。
 
 ### 我需要 Mac mini 来支持 iMessage 吗
 
@@ -615,7 +641,7 @@ Gemini CLI 使用 **插件认证流程**，而不是 `clawdbot.json` 中的客�
 - 将网关运行在 Linux/VPS 上，并将 `channels.imessage.cliPath` 指向一个通过 SSH 运行 `imsg` 的包装器。
 - 如果你想要最简单的单机设置，可以在 Mac 上运行所有内容。
 
-文档：[iMessage](/channels/imessage)，[BlueBubbles](/channels/bluebubbles)，[Mac 远程模式](/platforms/mac/remote)。
+文档：[iMessage](/channels/imessage.md)，[BlueBubbles](/channels/bluebubbles.md)，[Mac 远程模式](/platforms/mac/remote.md)。
 
 ### 如果我购买了一台 Mac mini 来运行 Clawdbot，我能否连接到我的 MacBook Pro
 
@@ -626,7 +652,7 @@ Gemini CLI 使用 **插件认证流程**，而不是 `clawdbot.json` 中的客�
 - MacBook Pro 运行 macOS 应用或节点主机，并与网关配对。
 - 使用 `clawdbot nodes status` / `clawdbot nodes list` 查看节点状态。
 
-文档：[节点](/nodes)，[节点 CLI](/cli/nodes)。
+文档：[节点](/nodes/index.md)，[节点 CLI](/cli/nodes.md)。
 
 ### 我可以使用 Bun 吗
 
@@ -647,15 +673,15 @@ Gemini CLI 使用 **插件认证流程**，而不是 `clawdbot.json` 中的客�
 第三方方式（隐私性较差）：
 - 向 `@userinfobot` 或 `@getidsbot` 发送私信。
 
-详见 [/channels/telegram](/channels/telegram#access-control-dms--groups)。
+详见 [/channels/telegram](/channels/telegram.md#access-control-dms--groups)。
 
 ### 多个人能否使用同一个 WhatsApp 号码并搭配不同的 Clawdbots
 
-可以，通过 **多代理路由** 实现。将每个发送者的 WhatsApp **私信**（peer `kind: "dm"`，发送者 E.164 格式如 `+15551234567`）绑定到不同的 `agentId`，这样每个人都可以拥有自己的工作区和会话存储。回复仍然来自 **同一个 WhatsApp 账号**，并且 DM 访问控制（`channels.whatsapp.dmPolicy` / `channels.whatsapp.allowFrom`）是针对 WhatsApp 账号全局的。详见 [多代理路由](/concepts/multi-agent) 和 [WhatsApp](/channels/whatsapp)。
+可以，通过 **多代理路由** 实现。将每个发送者的 WhatsApp **私信**（peer `kind: "dm"`，发送者 E.164 格式如 `+15551234567`）绑定到不同的 `agentId`，这样每个人都可以拥有自己的工作区和会话存储。回复仍然来自 **同一个 WhatsApp 账号**，并且 DM 访问控制（`channels.whatsapp.dmPolicy` / `channels.whatsapp.allowFrom`）是针对 WhatsApp 账号全局的。详见 [多代理路由](/concepts/multi-agent.md) 和 [WhatsApp](/channels/whatsapp.md)。
 
 ### 我能否同时运行一个快速聊天代理和一个用于编程的 Opus 代理
 
-可以。使用 **多代理路由**：为每个代理分配其自己的默认模型，然后将入站路由（提供者账号或特定发送者）绑定到每个代理。示例配置位于 [多代理路由](/concepts/multi-agent) 中。也可参考 [模型](/concepts/models) 和 [配置](/gateway/configuration)。
+可以。使用 **多代理路由**：为每个代理分配其自己的默认模型，然后将入站路由（提供者账号或特定发送者）绑定到每个代理。示例配置位于 [多代理路由](/concepts/multi-agent.md) 中。也可参考 [模型](/concepts/models.md) 和 [配置](/gateway/configuration.md)。
 
 ### Homebrew 是否支持 Linux
 
@@ -665,7 +691,7 @@ bash
 echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.profile
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew install <formula>
-``````
+```
 如果通过 systemd 运行 Clawdbot，请确保服务的 PATH 包含 `/home/linuxbrew/.linuxbrew/bin`（或你的 brew 安装路径），以便在非登录 shell 中解析 `brew` 安装的工具。
 最近的构建版本还会在 Linux systemd 服务中添加常见的用户 bin 目录（例如 `~/.local/bin`、`~/.npm-global/bin`、`~/.local/share/pnpm`、`~/.bun/bin`），并且在设置时会尊重 `PNPM_HOME`、`NPM_CONFIG_PREFIX`、`BUN_INSTALL`、`VOLTA_HOME`、`ASDF_DATA_DIR`、`NVM_DIR` 和 `FNM_DIR`。
 
@@ -676,14 +702,15 @@ brew install <formula>
 - **npm 安装：** 全局 CLI 安装，无需仓库，最适合“直接运行”。
   更新来自 npm 的 dist-tags。
 
-文档：[开始入门](/start/getting-started)，[更新指南](/install/updating)。
+文档：[开始入门](/start/getting-started.md)，[更新指南](/install/updating.md)。
 
 ### 我可以在之后切换 npm 和 git 安装吗？
 
 可以。安装另一种方式，然后运行 Doctor，使网关服务指向新的入口点。
 这**不会删除你的数据** - 它只会更改 Clawdbot 的代码安装。你的状态文件（`~/.clawdbot`）和工作区（`~/clawd`）将保持不变。
 
-从 npm 切换到 git：```bash
+从 npm 切换到 git：
+```bash
 git clone https://github.com/clawdbot/clawdbot.git
 cd clawdbot
 pnpm install
@@ -696,10 +723,10 @@ bash
 npm install -g clawdbot@latest
 clawdbot doctor
 clawdbot gateway restart
-``````
+```
 医生检测到网关服务入口点不匹配，并提供重写服务配置以匹配当前安装（在自动化中使用 `--repair`）。
 
-备份提示：参见 [备份策略](/help/faq#whats-the-recommended-backup-strategy)。
+备份提示：参见 [备份策略](/help/faq.md#whats-the-recommended-backup-strategy)。
 
 ### 我应该在笔记本电脑还是 VPS 上运行网关
 
@@ -713,7 +740,7 @@ clawdbot gateway restart
 - **优点：** 始终在线，网络稳定，没有笔记本睡眠问题，更容易保持运行。
 - **缺点：** 通常无头运行（使用截图），只能远程访问文件，更新需要通过 SSH。
 
-**Clawdbot 特定说明：** WhatsApp/Telegram/Slack/Mattermost（插件）/Discord 从 VPS 上都可以正常运行。唯一的真正权衡是 **无头浏览器** 与可见窗口之间的选择。参见 [浏览器](/tools/browser)。
+**Clawdbot 特定说明：** WhatsApp/Telegram/Slack/Mattermost（插件）/Discord 从 VPS 上都可以正常运行。唯一的真正权衡是 **无头浏览器** 与可见窗口之间的选择。参见 [浏览器](/tools/browser.md)。
 
 **推荐默认设置：** 如果你之前遇到过网关断开的情况，建议使用 VPS。当你正在积极使用 Mac 并需要本地文件访问或可见浏览器的 UI 自动化时，本地运行是非常好的选择。
 
@@ -724,8 +751,8 @@ clawdbot gateway restart
 - **专用主机（VPS/Mac mini/Pi）：** 始终在线，较少的睡眠/重启中断，权限更清晰，更容易保持运行。
 - **共享笔记本/桌面：** 对于测试和日常使用完全没问题，但当机器睡眠或更新时可能会有暂停。
 
-如果你想兼顾两者，可以在专用主机上运行网关，并将你的笔记本作为 **节点** 用于本地屏幕/摄像头/执行工具。参见 [节点](/nodes)。
-关于安全指导，请阅读 [安全](/gateway/security)。
+如果你想兼顾两者，可以在专用主机上运行网关，并将你的笔记本作为 **节点** 用于本地屏幕/摄像头/执行工具。参见 [节点](/nodes/index.md)。
+关于安全指导，请阅读 [安全](/gateway/security.md)。
 
 ### Clawdbot 的最低 VPS 要求和推荐的 OS
 
@@ -736,7 +763,7 @@ Clawdbot 是轻量级的。对于基本的网关 + 一个聊天频道：
 
 操作系统：使用 **Ubuntu LTS**（或任何现代的 Debian/Ubuntu）。Linux 安装路径在该系统上经过最充分的测试。
 
-文档：[Linux](/platforms/linux)，[VPS 托管](/vps)。
+文档：[Linux](/platforms/linux.md)，[VPS 托管](/vps.md)。
 
 ### 我可以在虚拟机中运行 Clawdbot 吗？有什么要求
 
@@ -747,8 +774,8 @@ Clawdbot 是轻量级的。对于基本的网关 + 一个聊天频道：
 - **推荐配置：** 如果你运行多个频道、浏览器自动化或媒体工具，建议至少 2GB 内存。
 - **操作系统：** Ubuntu LTS 或其他现代的 Debian/Ubuntu。
 
-如果你使用 Windows，**WSL2 是最容易设置的虚拟机方式**，并且具有最好的工具兼容性。参见 [Windows](/platforms/windows)，[VPS 托管](/vps)。
-如果你在虚拟机中运行 macOS，请参见 [macOS 虚拟机](/platforms/macos-vm)。
+如果你使用 Windows，**WSL2 是最容易设置的虚拟机方式**，并且具有最好的工具兼容性。参见 [Windows](/platforms/windows.md)，[VPS 托管](/vps.md)。
+如果你在虚拟机中运行 macOS，请参见 [macOS 虚拟机](/platforms/macos-vm.md)。
 
 ## 什么是 Clawdbot？
 
@@ -768,7 +795,7 @@ Clawdbot 不仅仅是“一个 Claude 的封装器”。它是一个 **以本地
 - **多代理路由**：每个渠道、账户或任务都有独立的代理，每个代理都有自己的工作区和默认设置。
 - **开源且可自定义**：可以查看、扩展和自托管，避免供应商锁定。
 
-文档：[Gateway](/gateway)，[Channels](/channels)，[多代理](/concepts/multi-agent)，[记忆](/concepts/memory)。
+文档：[Gateway](/gateway/index.md)，[Channels](/channels/index.md)，[多代理](/concepts/multi-agent.md)，[记忆](/concepts/memory.md)。
 
 ### 我刚刚设置好了，接下来应该做什么
 
@@ -795,7 +822,7 @@ Clawdbot 不仅仅是“一个 Claude 的封装器”。它是一个 **以本地
 
 但 **对于推广或广告执行**，请保持有人在流程中。避免垃圾邮件，遵守当地法律和平台政策，并在发送前审查所有内容。最安全的做法是让 Clawdbot 撰写内容，然后由你进行审核。
 
-文档：[安全](/gateway/security)。
+文档：[安全](/gateway/security.md)。
 
 ### 与 Claude Code 相比，Clawdbot 在 Web 开发方面有哪些优势
 
@@ -827,7 +854,7 @@ Clawdbot 是一个 **个人助手** 和协调层，而不是 IDE 的替代品。
 - **子代理**：将任务路由到具有不同默认模型的独立代理。
 - **按需切换**：在聊天中使用 `/model` 命令随时切换当前会话的模型。
 
-参见 [定时任务](/automation/cron-jobs)、[多代理路由](/concepts/multi-agent) 和 [斜杠命令](/tools/slash-commands)。
+参见 [定时任务](/automation/cron-jobs.md)、[多代理路由](/concepts/multi-agent.md) 和 [斜杠命令](/tools/slash-commands.md)。
 
 ### 机器人在执行重任务时会卡住，如何卸载
 
@@ -838,7 +865,7 @@ Clawdbot 是一个 **个人助手** 和协调层，而不是 IDE 的替代品。
 
 令牌提示：长时间任务和子代理都会消耗令牌。如果成本是关注点，可以通过 `agents.defaults.subagents.model` 为子代理设置更便宜的模型。
 
-文档：[子代理](/tools/subagents)。
+文档：[子代理](/tools/subagents.md)。
 
 ### 定时任务或提醒未触发，我应该检查什么
 
@@ -849,11 +876,12 @@ Clawdbot 是一个 **个人助手** 和协调层，而不是 IDE 的替代品。
 - 检查网关是否全天候运行（不休眠/重启）。
 - 验证任务的时间区设置（`--tz` 与主机时间区）。
 
-调试：```bash
+调试：
+```bash
 clawdbot cron run <jobId> --force
 clawdbot cron runs --id <jobId> --limit 50
 ```
-"文档：[定时任务](/automation/cron-jobs)，[Cron 与 Heartbeat](/automation/cron-vs-heartbeat)。
+"文档：[定时任务](/automation/cron-jobs.md)，[Cron 与 Heartbeat](/automation/cron-vs-heartbeat.md)。
 
 ### 如何在 Linux 上安装技能
 
@@ -863,9 +891,11 @@ clawdbot cron runs --id <jobId> --limit 50
 安装 ClawdHub CLI（选择一个包管理器）：
 bash
 npm i -g clawdhub
-```"```
+```"
+```
 ```md
-pnpm add -g clawdhub```
+pnpm add -g clawdhub
+```
 ### Clawdbot 是否可以在计划任务或后台持续运行任务
 
 是的。使用网关调度器：
@@ -874,7 +904,7 @@ pnpm add -g clawdhub```
 - **心跳机制** 用于“主会话”的周期性检查。
 - **隔离任务** 用于自主代理，用于发布摘要或向聊天发送内容。
 
-文档：[Cron 任务](/automation/cron-jobs)，[Cron 与心跳机制的区别](/automation/cron-vs-heartbeat)，[心跳机制](/gateway/heartbeat)。
+文档：[Cron 任务](/automation/cron-jobs.md)，[Cron 与心跳机制的区别](/automation/cron-vs-heartbeat.md)，[心跳机制](/gateway/heartbeat.md)。
 
 **能否仅在 macOS 上运行的技能在 Linux 上运行**
 
@@ -891,11 +921,13 @@ pnpm add -g clawdhub```
 **选项 C - 通过 SSH 代理 macOS 二进制文件（高级）。**  
 在 Linux 上保持网关运行，但让所需的 CLI 二进制文件通过 SSH 包装器在 Mac 上运行。然后覆盖技能设置，使 Linux 保持技能的可用性。
   
-1) 为二进制文件创建一个 SSH 包装器（例如：`imsg`）：   ```bash
+1) 为二进制文件创建一个 SSH 包装器（例如：`imsg`）：   
+```bash
    #!/usr/bin/env bash
    set -euo pipefail
    exec ssh -T user@mac-host /opt/homebrew/bin/imsg "$@"
-   ```
+   
+```
 2) 将包装器添加到 Linux 主机的 `PATH` 中（例如 `~/bin/imsg`）。
 3) 覆盖技能元数据（工作区或 `~/.clawdbot/skills`）以允许 Linux：---
 name: imsg
@@ -903,7 +935,7 @@ description: 用于列出聊天、历史记录、监控和发送 iMessage/SMS �
 metadata: {"clawdbot":{"os":["darwin","linux"],"requires":{"bins":["imsg"]}}}
 ---4) 启动一个新的会话以使技能快照刷新。
 
-对于 iMessage 特别来说，你也可以将 `channels.imessage.cliPath` 指向一个 SSH 包装器（Clawdbot 只需要 stdio 即可）。请参阅 [iMessage](/channels/imessage)。
+对于 iMessage 特别来说，你也可以将 `channels.imessage.cliPath` 指向一个 SSH 包装器（Clawdbot 只需要 stdio 即可）。请参阅 [iMessage](/channels/imessage.md)。
 
 ### 你有 Notion 或 HeyGen 的集成吗？
 
@@ -921,18 +953,19 @@ metadata: {"clawdbot":{"os":["darwin","linux"],"requires":{"bins":["imsg"]}}}
 bash
 clawdhub install <skill-slug>
 clawdhub update --all
-``````
-ClawdHub 安装到当前目录下的 `./skills` 文件夹中（或回退到您配置的 Clawdbot 工作空间）；在下一次会话中，Clawdbot 会将该文件夹视为 `<workspace>/skills`。对于多个代理共享的技能，请将其放置在 `~/.clawdbot/skills/<name>/SKILL.md` 中。一些技能需要通过 Homebrew 安装二进制文件；在 Linux 上这意味着需要使用 Linuxbrew（请参见上面的 Homebrew Linux 常见问题解答）。请参阅 [Skills](/tools/skills) 和 [ClawdHub](/tools/clawdhub)。
+```
+ClawdHub 安装到当前目录下的 `./skills` 文件夹中（或回退到您配置的 Clawdbot 工作空间）；在下一次会话中，Clawdbot 会将该文件夹视为 `<workspace>/skills`。对于多个代理共享的技能，请将其放置在 `~/.clawdbot/skills/<name>/SKILL.md` 中。一些技能需要通过 Homebrew 安装二进制文件；在 Linux 上这意味着需要使用 Linuxbrew（请参见上面的 Homebrew Linux 常见问题解答）。请参阅 [Skills](/tools/skills.md) 和 [ClawdHub](/tools/clawdhub.md)。
 
 ### 如何安装浏览器接管的 Chrome 扩展
 
-使用内置安装程序，然后在 Chrome 中加载未打包的扩展程序：```bash
+使用内置安装程序，然后在 Chrome 中加载未打包的扩展程序：
+```bash
 clawdbot browser extension install
 clawdbot browser extension path
 ```
 然后在 Chrome 中 → `chrome://extensions` → 启用“开发者模式” → 点击“加载解压的扩展程序” → 选择该文件夹。
 
-完整指南（包括通过 Tailscale 的远程网关 + 安全注意事项）：[Chrome 扩展程序](/tools/chrome-extension)
+完整指南（包括通过 Tailscale 的远程网关 + 安全注意事项）：[Chrome 扩展程序](/tools/chrome-extension.md)
 
 如果网关与 Chrome 在同一台机器上运行（默认设置），通常 **不需要** 使用 `clawdbot browser serve`。
 你仍然需要点击你想要控制的标签页上的扩展程序按钮（它不会自动附加）。
@@ -941,7 +974,7 @@ clawdbot browser extension path
 
 ### 是否有专门的沙箱文档
 
-是的。请参阅 [沙箱](/gateway/sandboxing)。对于 Docker 特定的设置（完整网关在 Docker 中或沙箱镜像中），请参阅 [Docker](/install/docker)。
+是的。请参阅 [沙箱](/gateway/sandboxing.md)。对于 Docker 特定的设置（完整网关在 Docker 中或沙箱镜像中），请参阅 [Docker](/install/docker.md)。
 
 **我可以保留 DM 为私有，但让群组在同一个代理下公开沙箱化吗**
 
@@ -949,13 +982,13 @@ clawdbot browser extension path
 
 使用 `agents.defaults.sandbox.mode: "non-main"`，这样群组/频道会话（非主密钥）会在 Docker 中运行，而主 DM 会话则保持在主机上。然后通过 `tools.sandbox.tools` 限制沙箱会话中可用的工具。
 
-设置步骤 + 示例配置：[群组：私有 DM + 公共群组](/concepts/groups#pattern-personal-dms-public-groups-single-agent)
+设置步骤 + 示例配置：[群组：私有 DM + 公共群组](/concepts/groups.md#pattern-personal-dms-public-groups-single-agent)
 
-关键配置参考：[网关配置](/gateway/configuration#agentsdefaultssandbox)
+关键配置参考：[网关配置](/gateway/configuration.md#agentsdefaultssandbox)
 
 ### 如何将主机文件夹绑定到沙箱中
 
-将 `agents.defaults.sandbox.docker.binds` 设置为 `["host:path:mode"]`（例如，`"/home/user/src:/src:ro"`）。全局绑定和按代理绑定会合并；当 `scope: "shared"` 时，按代理绑定会被忽略。对于任何敏感内容，请使用 `:ro`，并记住绑定会绕过沙箱的文件系统隔离。参见 [沙箱](/gateway/sandboxing#custom-bind-mounts) 和 [沙箱 vs 工具策略 vs 提权](/gateway/sandbox-vs-tool-policy-vs-elevated#bind-mounts-security-quick-check) 获取示例和安全注意事项。
+将 `agents.defaults.sandbox.docker.binds` 设置为 `["host:path:mode"]`（例如，`"/home/user/src:/src:ro"`）。全局绑定和按代理绑定会合并；当 `scope: "shared"` 时，按代理绑定会被忽略。对于任何敏感内容，请使用 `:ro`，并记住绑定会绕过沙箱的文件系统隔离。参见 [沙箱](/gateway/sandboxing.md#custom-bind-mounts) 和 [沙箱 vs 工具策略 vs 提权](/gateway/sandbox-vs-tool-policy-vs-elevated.md#bind-mounts-security-quick-check) 获取示例和安全注意事项。
 
 ### 内存是如何工作的
 
@@ -963,7 +996,7 @@ Clawdbot 的内存只是代理工作区中的 Markdown 文件：
 - 每日笔记在 `memory/YYYY-MM-DD.md`
 - 人工整理的长期笔记在 `MEMORY.md`（仅主/私人会话）
 
-Clawdbot 还会运行一个 **无声的预压缩内存刷新**，以提醒模型在自动压缩前写入持久化笔记。这仅在工作区可写时运行（只读沙箱会跳过它）。参见 [内存](/concepts/memory)。
+Clawdbot 还会运行一个 **无声的预压缩内存刷新**，以提醒模型在自动压缩前写入持久化笔记。这仅在工作区可写时运行（只读沙箱会跳过它）。参见 [内存](/concepts/memory.md)。
 
 ### 内存总是忘记东西，如何让它记住
 
@@ -971,7 +1004,7 @@ Clawdbot 还会运行一个 **无声的预压缩内存刷新**，以提醒模型
 
 这仍然是我们正在改进的领域。提醒模型存储记忆会有帮助；它会知道该怎么做。如果它仍然忘记，请确认网关在每次运行时都使用相同的 workspace。
 
-文档：[内存](/concepts/memory)，[代理工作区](/concepts/agent-workspace)。
+文档：[内存](/concepts/memory.md)，[代理工作区](/concepts/agent-workspace.md)。
 
 ### 语义内存搜索是否需要 OpenAI API 密钥
 
@@ -979,13 +1012,13 @@ Clawdbot 还会运行一个 **无声的预压缩内存刷新**，以提醒模型
 
 如果你没有显式设置提供者，当 Clawdbot 能够解析 API 密钥（认证配置文件、`models.providers.*.apiKey` 或环境变量）时，它会自动选择一个提供者。它会优先选择 OpenAI，如果 OpenAI 密钥可用；否则会选择 Gemini。如果两者密钥都不可用，记忆搜索将保持禁用，直到你进行配置。如果你配置了本地模型路径并且该路径存在，Clawdbot 会优先选择 `local`。
 
-如果你想保持本地模式，可以设置 `memorySearch.provider = "local"`（并可选设置 `memorySearch.fallback = "none"`）。如果你想使用 Gemini 嵌入，可以设置 `memorySearch.provider = "gemini"` 并提供 `GEMINI_API_KEY`（或 `memorySearch.remote.apiKey`）。我们支持 **OpenAI、Gemini 或本地** 嵌入模型 - 请参阅 [Memory](/concepts/memory) 了解具体的配置细节。
+如果你想保持本地模式，可以设置 `memorySearch.provider = "local"`（并可选设置 `memorySearch.fallback = "none"`）。如果你想使用 Gemini 嵌入，可以设置 `memorySearch.provider = "gemini"` 并提供 `GEMINI_API_KEY`（或 `memorySearch.remote.apiKey`）。我们支持 **OpenAI、Gemini 或本地** 嵌入模型 - 请参阅 [Memory](/concepts/memory.md) 了解具体的配置细节。
 
 ### 记忆是否永久保存？有哪些限制？
 
 记忆文件存储在磁盘上，并会一直存在直到你手动删除它们。限制取决于你的存储空间，而不是模型本身。**会话上下文** 仍然受限于模型的上下文窗口，因此长时间的对话可能会被压缩或截断。这就是为什么需要记忆搜索的原因——它只将相关部分重新拉入上下文中。
 
-文档：[Memory](/concepts/memory)，[Context](/concepts/context)。
+文档：[Memory](/concepts/memory.md)，[Context](/concepts/context.md)。
 
 ## 数据在磁盘上的存储位置
 
@@ -997,7 +1030,7 @@ Clawdbot 还会运行一个 **无声的预压缩内存刷新**，以提醒模型
 - **必要时远程存储**：你发送给模型提供者（如 Anthropic/OpenAI 等）的消息会发送到它们的 API，而聊天平台（如 WhatsApp/Telegram/Slack 等）则会将其消息数据存储在它们的服务器上。
 - **你控制数据范围**：使用本地模型时，提示信息会保留在你的机器上，但频道流量仍会经过频道的服务器。
 
-相关：[Agent 工作区](/concepts/agent-workspace)，[Memory](/concepts/memory)。
+相关：[Agent 工作区](/concepts/agent-workspace.md)，[Memory](/concepts/memory.md)。
 
 ### Clawdbot 将数据存储在哪里？
 
@@ -1032,12 +1065,12 @@ json5
 {
   agents: { defaults: { workspace: "~/clawd" } }
 }
-``````
+```
 如果机器人在重启后“遗忘”，请确认网关在每次启动时都使用相同的workspace（请注意：远程模式使用的是**网关主机的**workspace，而不是你本地的笔记本电脑）。
 
 提示：如果你想让机器人保持持久的行为或偏好，请让机器人将内容**写入AGENTS.md或MEMORY.md**，而不是依赖聊天记录。
 
-参见[代理工作区](/concepts/agent-workspace)和[记忆](/concepts/memory)。
+参见[代理工作区](/concepts/agent-workspace.md)和[记忆](/concepts/memory.md)。
 
 ### 推荐的备份策略是什么？
 
@@ -1045,17 +1078,18 @@ json5
 
 不要提交任何位于`~/.clawdbot`下的内容（凭证、会话、令牌）。如果你需要完整恢复，请分别备份工作区和状态目录（参见上面的迁移问题）。
 
-文档：[代理工作区](/concepts/agent-workspace)。
+文档：[代理工作区](/concepts/agent-workspace.md)。
 
 ### 如何彻底卸载Clawdbot？
 
-参见专用指南：[卸载](/install/uninstall)。
+参见专用指南：[卸载](/install/uninstall.md)。
 
 ### 代理是否可以在工作区外运行？
 
-可以。工作区是**默认的工作目录**和记忆锚点，而不是一个严格的沙盒。相对路径会在工作区内解析，但绝对路径可以访问主机上的其他位置，除非启用了沙盒功能。如果你需要隔离环境，请使用[`agents.defaults.sandbox`](/gateway/sandboxing)或每个代理的沙盒设置。如果你想让某个仓库成为默认工作目录，请将该代理的`workspace`指向仓库根目录。Clawdbot仓库只是源代码；除非你有意让代理在其中运行，否则请将工作区保持独立。
+可以。工作区是**默认的工作目录**和记忆锚点，而不是一个严格的沙盒。相对路径会在工作区内解析，但绝对路径可以访问主机上的其他位置，除非启用了沙盒功能。如果你需要隔离环境，请使用[`agents.defaults.sandbox`](/gateway/sandboxing.md)或每个代理的沙盒设置。如果你想让某个仓库成为默认工作目录，请将该代理的`workspace`指向仓库根目录。Clawdbot仓库只是源代码；除非你有意让代理在其中运行，否则请将工作区保持独立。
 
-示例（仓库作为默认工作目录）：```json5
+示例（仓库作为默认工作目录）：
+```json5
 {
   agents: {
     defaults: {
@@ -1066,7 +1100,7 @@ json5
 ```
 ### 我处于远程模式，会话存储在哪里
 
-会话状态由 **网关主机** 拥有。如果你处于远程模式，你关心的会话存储在远程机器上，而不是你的本地笔记本电脑上。请参阅 [会话管理](/concepts/session)。
+会话状态由 **网关主机** 拥有。如果你处于远程模式，你关心的会话存储在远程机器上，而不是你的本地笔记本电脑上。请参阅 [会话管理](/concepts/session.md)。
 
 ## 配置基础
 
@@ -1075,12 +1109,13 @@ json5
 Clawdbot 会从 `$CLAWDBOT_CONFIG_PATH`（默认值：`~/.clawdbot/clawdbot.json`）读取一个可选的 **JSON5** 配置文件：
 
 $CLAWDBOT_CONFIG_PATH
-``````
+```
 如果文件缺失，将使用较为安全的默认值（包括默认工作目录为 `~/clawd`）。
 
 ### 我设置了 gatewaybind 为 lan 或 tailnet，但现在没有任何监听，UI 显示未经授权
 
-非回环地址的绑定 **需要认证**。请配置 `gateway.auth.mode` 和 `gateway.auth.token`（或者使用环境变量 `CLAWDBOT_GATEWAY_TOKEN`）。```json5
+非回环地址的绑定 **需要认证**。请配置 `gateway.auth.mode` 和 `gateway.auth.token`（或者使用环境变量 `CLAWDBOT_GATEWAY_TOKEN`）。
+```json5
 {
   gateway: {
     bind: "lan",
@@ -1126,13 +1161,13 @@ json5
     }
   }
 }
-``````
+```
 备注：
 - 如果使用允许列表，请添加 `web_search`/`web_fetch` 或 `group:web`。
 - `web_fetch` 默认是启用的（除非显式禁用）。
 - 守护进程会从 `~/.clawdbot/.env`（或服务环境）读取环境变量。
 
-文档：[网络工具](/tools/web)。
+文档：[网络工具](/tools/web.md)。
 
 ### 如何在不同设备上运行一个中心网关和专门的工作者
 
@@ -1144,11 +1179,12 @@ json5
 - **子代理**：当需要并行处理时，可以从主代理中派生出后台工作。
 - **TUI**：连接到网关并切换代理/会话。
 
-文档：[节点](/nodes)，[远程访问](/gateway/remote)，[多代理路由](/concepts/multi-agent)，[子代理](/tools/subagents)，[TUI](/tui)。
+文档：[节点](/nodes/index.md)，[远程访问](/gateway/remote.md)，[多代理路由](/concepts/multi-agent.md)，[子代理](/tools/subagents.md)，[TUI](/tui.md)。
 
 ### Clawdbot 浏览器可以无头运行吗？
 
-可以。这是一个配置选项：```json5
+可以。这是一个配置选项：
+```json5
 {
   browser: { headless: true },
   agents: {
@@ -1158,7 +1194,7 @@ json5
   }
 }
 ```
-默认值为 `false`（有头模式）。无头模式在一些网站上更可能触发反机器人检查。请参阅 [Browser](/tools/browser)。
+默认值为 `false`（有头模式）。无头模式在一些网站上更可能触发反机器人检查。请参阅 [Browser](/tools/browser.md)。
 
 无头模式使用相同的 **Chromium 引擎**，并且适用于大多数自动化操作（表单填写、点击、爬取、登录）。主要区别如下：
 - 没有可见的浏览器窗口（如需视觉效果，请使用截图）。
@@ -1168,7 +1204,7 @@ json5
 ### 如何使用 Brave 浏览器进行浏览器控制
 
 将 `browser.executablePath` 设置为你的 Brave 可执行文件路径（或任何基于 Chromium 的浏览器），然后重启 Gateway。
-有关完整的配置示例，请参阅 [Browser](/tools/browser#use-brave-or-another-chromium-based-browser)。
+有关完整的配置示例，请参阅 [Browser](/tools/browser.md#use-brave-or-another-chromium-based-browser)。
 
 ## 远程网关 + 节点
 
@@ -1193,12 +1229,13 @@ Telegram → 网关 → 代理 → `node.*` → 节点 → 网关 → Telegram
 bash
    clawdbot nodes pending
    clawdbot nodes approve <requestId>
-```   ```
+```   
+```
 无需单独的 TCP 桥接；节点通过网关 WebSocket 连接。
 
-安全提醒：配对 macOS 节点将允许在该机器上运行 `system.run`。请仅配对你信任的设备，并查阅 [安全](/gateway/security)。
+安全提醒：配对 macOS 节点将允许在该机器上运行 `system.run`。请仅配对你信任的设备，并查阅 [安全](/gateway/security.md)。
 
-文档：[节点](/nodes)，[网关协议](/gateway/protocol)，[macOS 远程模式](/platforms/mac/remote)，[安全](/gateway/security)。
+文档：[节点](/nodes/index.md)，[网关协议](/gateway/protocol.md)，[macOS 远程模式](/platforms/mac/remote.md)，[安全](/gateway/security.md)。
 
 ### Tailscale 已连接，但我收不到回复，现在该怎么办？
 
@@ -1212,7 +1249,7 @@ bash
 - 如果通过 SSH 隧道连接，请确认本地隧道已启动，并指向正确的端口。
 - 确认你的允许列表（DM 或群组）中包含你的账户。
 
-文档：[Tailscale](/gateway/tailscale)，[远程访问](/gateway/remote)，[通道](/channels)。
+文档：[Tailscale](/gateway/tailscale.md)，[远程访问](/gateway/remote.md)，[通道](/channels/index.md)。
 
 ### 两个 Clawdbot 能否在本地 VPS 上互相通信？
 
@@ -1220,14 +1257,15 @@ bash
 
 **最简单的方法**：使用一个两个机器人都能访问的普通聊天通道（如 Telegram/Slack/WhatsApp）。让 Bot A 向 Bot B 发送消息，然后 Bot B 正常回复即可。
 
-**CLI 桥接（通用方法）**：运行一个脚本，通过 `clawdbot agent --message ... --deliver` 调用另一个网关，并指向另一个机器人监听的聊天通道。如果其中一个机器人在 Railway/VPS 上，可以通过 SSH/Tailscale（见 [远程访问](/gateway/remote)）连接到该远程网关。
+**CLI 桥接（通用方法）**：运行一个脚本，通过 `clawdbot agent --message ... --deliver` 调用另一个网关，并指向另一个机器人监听的聊天通道。如果其中一个机器人在 Railway/VPS 上，可以通过 SSH/Tailscale（见 [远程访问](/gateway/remote.md)）连接到该远程网关。
 
-示例模式（从可以访问目标网关的机器上运行）：```bash
+示例模式（从可以访问目标网关的机器上运行）：
+```bash
 clawdbot agent --message "Hello from local bot" --deliver --channel telegram --reply-to <chat-id>
 ```
 提示：添加一个护栏以防止两个机器人无限循环（仅提及、频道允许列表或“不要回复机器人消息”的规则）。
 
-文档：[远程访问](/gateway/remote)，[Agent CLI](/cli/agent)，[Agent send](/tools/agent-send)。
+文档：[远程访问](/gateway/remote.md)，[Agent CLI](/cli/agent.md)，[Agent send](/tools/agent-send.md)。
 
 ### 我需要为多个代理程序单独安装 VPS 吗？
 
@@ -1246,7 +1284,7 @@ clawdbot agent --message "Hello from local bot" --deliver --channel telegram --r
 
 SSH 适用于临时 shell 访问，但对于持续的代理工作流和设备自动化，节点更简单。
 
-文档：[节点](/nodes)，[节点 CLI](/cli/nodes)，[Chrome 插件](/tools/chrome-extension)。
+文档：[节点](/nodes/index.md)，[节点 CLI](/cli/nodes.md)，[Chrome 插件](/tools/chrome-extension.md)。
 
 ### 我应该在第二台笔记本电脑上安装还是只是添加一个节点？
 
@@ -1254,11 +1292,11 @@ SSH 适用于临时 shell 访问，但对于持续的代理工作流和设备自
 
 只有在你需要 **硬隔离** 或两个完全独立的机器人时，才安装第二个 Gateway。
 
-文档：[节点](/nodes)，[节点 CLI](/cli/nodes)，[多个 Gateway](/gateway/multiple-gateways)。
+文档：[节点](/nodes/index.md)，[节点 CLI](/cli/nodes.md)，[多个 Gateway](/gateway/multiple-gateways.md)。
 
 ### 节点会运行一个 Gateway 服务吗？
 
-不会。每个主机上应只运行一个 Gateway，除非你有意运行隔离的配置文件（参见 [多个 Gateway](/gateway/multiple-gateways)）。节点是连接到 Gateway 的外围设备（如 iOS/Android 节点，或在菜单栏应用中的 macOS“节点模式”）。对于无头节点主机和 CLI 控制，请参见 [节点主机 CLI](/cli/node)。
+不会。每个主机上应只运行一个 Gateway，除非你有意运行隔离的配置文件（参见 [多个 Gateway](/gateway/multiple-gateways.md)）。节点是连接到 Gateway 的外围设备（如 iOS/Android 节点，或在菜单栏应用中的 macOS“节点模式”）。对于无头节点主机和 CLI 控制，请参见 [节点主机 CLI](/cli/node.md)。
 
 `gateway`、`discovery` 和 `canvasHost` 的更改都需要重启。
 
@@ -1280,7 +1318,7 @@ SSH 适用于临时 shell 访问，但对于持续的代理工作流和设备自
 - 对于小的更改，请使用 `clawdbot config set`。
 - 对于交互式编辑，请使用 `clawdbot configure`。
 
-文档：[配置](/cli/config), [配置编辑](/cli/configure), [医生](/gateway/doctor)。
+文档：[配置](/cli/config.md), [配置编辑](/cli/configure.md), [医生](/gateway/doctor.md)。
 
 ### 什么是首次安装的最小合理配置
 json5
@@ -1288,17 +1326,19 @@ json5
   agents: { defaults: { workspace: "~/clawd" } },
   channels: { whatsapp: { allowFrom: ["+15555550123"] } }
 }
-``````
+```
 这将设置您的工作区并限制谁可以触发机器人。
 
 ### 如何在 VPS 上安装 Tailscale 并从我的 Mac 连接
 
 简化的步骤如下：
 
-1) **在 VPS 上安装并登录**   ```bash
+1) **在 VPS 上安装并登录**   
+```bash
    curl -fsSL https://tailscale.com/install.sh | sh
    sudo tailscale up
-   ```
+   
+```
 2) **在你的 Mac 上安装并登录**
    - 使用 Tailscale 应用程序，并登录到同一个 tailnet。
 3) **启用 MagicDNS（推荐）**
@@ -1309,8 +1349,9 @@ json5
 
 如果你想在不使用 SSH 的情况下使用控制界面，请在 VPS 上使用 Tailscale Serve：
 bash
-clawdbot gateway --tailscale serve```
-这会将网关绑定到环回地址，并通过 Tailscale 暴露 HTTPS。请参见 [Tailscale](/gateway/tailscale)。
+clawdbot gateway --tailscale serve
+```
+这会将网关绑定到环回地址，并通过 Tailscale 暴露 HTTPS。请参见 [Tailscale](/gateway/tailscale.md)。
 
 ### 如何将 Mac 节点连接到远程网关的 Tailscale 服务
 
@@ -1320,11 +1361,13 @@ Serve 暴露了 **网关控制 UI + WS**。节点通过相同的网关 WS 端点
 1) **确保 VPS 和 Mac 处于同一个 tailnet 中**。
 2) **使用 macOS 应用程序的远程模式**（SSH 目标可以是 tailnet 主机名）。
    该应用程序会将网关端口进行隧道传输，并作为节点进行连接。
-3) **在网关上批准该节点**：   ```bash
+3) **在网关上批准该节点**：   
+```bash
    clawdbot nodes pending
    clawdbot nodes approve <requestId>
-   ```
-"文档：[网关协议](/gateway/protocol)，[发现](/gateway/discovery)，[macOS 远程模式](/platforms/mac/remote)。
+   
+```
+"文档：[网关协议](/gateway/protocol.md)，[发现](/gateway/discovery.md)，[macOS 远程模式](/platforms/mac/remote.md)。
 
 ## 环境变量与 .env 文件加载
 
@@ -1345,15 +1388,16 @@ json5
     vars: { GROQ_API_KEY: "gsk-..." }
   }
 }
-``````
-请参阅 [/environment](/environment) 以获取完整的优先级和来源信息。
+```
+请参阅 [/environment](/environment.md) 以获取完整的优先级和来源信息。
 
 ### 我通过服务启动了 Gateway，但环境变量丢失了，现在该怎么办
 
 两种常见的解决方法：
 
 1) 将丢失的键放入 `~/.clawdbot/.env` 中，这样即使服务没有继承你的 shell 环境变量，也能被正确读取。
-2) 启用 shell 导入（需主动选择以获得便利）：```json5
+2) 启用 shell 导入（需主动选择以获得便利）：
+```json5
 {
   env: {
     shellEnv: {
@@ -1375,21 +1419,23 @@ json5
 1) 将 token 放入 `~/.clawdbot/.env` 中：
 
    COPILOT_GITHUB_TOKEN=...
-```   ```
+```   
+```
 2) 或启用 shell 导入（`env.shellEnv.enabled: true`）。
 3) 或将其添加到你的配置 `env` 块中（仅在缺失时生效）。
 
-然后重启网关并重新检查：```bash
+然后重启网关并重新检查：
+```bash
 clawdbot models status
 ```
 Copilot 会从 `COPILOT_GITHUB_TOKEN`（也包括 `GH_TOKEN` / `GITHUB_TOKEN`）中读取 token。  
-参见 [/concepts/model-providers](/concepts/model-providers) 和 [/environment](/environment)。
+参见 [/concepts/model-providers](/concepts/model-providers.md) 和 [/environment](/environment.md)。
 
 ## 会话与多轮对话
 
 ### 如何开始一轮新的对话
 
-发送 `/new` 或 `/reset` 作为独立消息。参见 [会话管理](/concepts/session)。
+发送 `/new` 或 `/reset` 作为独立消息。参见 [会话管理](/concepts/session.md)。
 
 ### 如果我从未发送新消息，会话会自动重置吗？
 
@@ -1400,14 +1446,14 @@ json5
     idleMinutes: 240
   }
 }
-``````
+```
 ### 是否可以创建一个由Clawdbots组成的团队，其中有一个CEO和多个代理
 
 是的，可以通过 **多代理路由** 和 **子代理** 实现。你可以创建一个协调代理和多个工作代理，每个代理都有自己的工作空间和模型。
 
 不过，这种情况最好被视为一个 **有趣的实验**。这种方式会消耗较多的token，并且通常比使用一个代理进行多个会话的效率要低。我们通常设想的是一个代理，你可以与它交谈，并为并行任务使用不同的会话。该代理在需要时也可以生成子代理。
 
-文档：[多代理路由](/concepts/multi-agent)，[子代理](/tools/subagents)，[代理CLI](/cli/agents)。
+文档：[多代理路由](/concepts/multi-agent.md)，[子代理](/tools/subagents.md)，[代理CLI](/cli/agents.md)。
 
 ### 为什么任务进行中上下文会被截断？如何防止这种情况
 
@@ -1418,18 +1464,20 @@ json5
 - 在进行长时间任务之前使用 `/compact` 命令，在切换主题时使用 `/new`。
 - 将重要上下文保存在工作空间中，并让代理重新读取它。
 - 对于长时间或并行任务，使用子代理，以保持主聊天窗口较小。
-- 如果这种情况经常发生，可以选择一个具有更大上下文窗口的模型。```bash
+- 如果这种情况经常发生，可以选择一个具有更大上下文窗口的模型。
+```bash
 clawdbot reset
 ```
 非交互式完全重置：
 bash
 clawdbot reset --scope full --yes --non-interactive
-``````
-然后重新运行引导流程：```bash
+```
+然后重新运行引导流程：
+```bash
 clawdbot onboard --install-daemon
 ```
 注意事项：
-- 如果启动向导检测到已有的配置，它还会提供 **重置** 选项。详见 [向导](/start/wizard)。
+- 如果启动向导检测到已有的配置，它还会提供 **重置** 选项。详见 [向导](/start/wizard.md)。
 - 如果你使用了配置文件（`--profile` / `CLAWDBOT_PROFILE`），请为每个状态目录重置（默认路径为 `~/.clawdbot-<profile>`）。
 - 开发环境重置：`clawdbot gateway --dev --reset`（仅限开发环境；会清除开发配置、凭证、会话和工作区）。
 
@@ -1440,18 +1488,21 @@ clawdbot onboard --install-daemon
 - **压缩**（保留对话内容，但对较早的对话进行摘要）：
 
   /compact
-```  ```
+```  
+```
 或 `/compact <instructions>` 用于指导摘要。
 
-- **重置**（为相同的聊天密钥生成新的会话ID）：  ```
+- **重置**（为相同的聊天密钥生成新的会话ID）：  
+```
   /new
   /reset
-  ```
+  
+```
 如果问题持续发生：
 - 启用或调整 **会话裁剪** (`agents.defaults.contextPruning`) 以清理旧的工具输出。
 - 使用具有更大上下文窗口的模型。
 
-文档：[压缩](/concepts/compaction)，[会话裁剪](/concepts/session-pruning)，[会话管理](/concepts/session)。
+文档：[压缩](/concepts/compaction.md)，[会话裁剪](/concepts/session-pruning.md)，[会话管理](/concepts/session.md)。
 
 ### 为什么我会看到 LLM 请求被拒绝的消息：contentXtooluseinput 字段是必填项
 
@@ -1468,18 +1519,19 @@ json5
     }
   }
 }
-``````
+```
 如果 `HEARTBEAT.md` 存在但实际上为空（只有空行和 Markdown 标题如 `# 标题`），Clawdbot 会跳过心跳运行以节省 API 调用次数。
 如果该文件缺失，心跳仍然会运行，由模型决定如何处理。
 
-每个代理的覆盖设置使用 `agents.list[].heartbeat`。文档：[心跳](/gateway/heartbeat)。
+每个代理的覆盖设置使用 `agents.list[].heartbeat`。文档：[心跳](/gateway/heartbeat.md)。
 
 ### 我需要将机器人账户添加到 WhatsApp 群组中吗？
 
 不需要。Clawdbot 在 **你的个人账户** 上运行，所以如果你在该群组中，Clawdbot 也能看到它。
 默认情况下，群组回复会被阻止，直到你允许发送者（`groupPolicy: "allowlist"`）。
 
-如果你想只有 **你自己** 能够触发群组回复：```json5
+如果你想只有 **你自己** 能够触发群组回复：
+```json5
 {
   channels: {
     whatsapp: {
@@ -1494,14 +1546,15 @@ json5
 选项 1（最快）：查看日志并在群组中发送测试消息：
 bash
 clawdbot logs --follow --json
-``````
+```
 查找以 `@g.us` 结尾的 `chatId`（或 `from`），例如：
 `1234567890-1234567890@g.us`。
 
-选项 2（如果已配置/已加入白名单）：从配置中列出群组：```bash
+选项 2（如果已配置/已加入白名单）：从配置中列出群组：
+```bash
 clawdbot directory groups list --channel whatsapp
 ```
-文档：[WhatsApp](/channels/whatsapp)，[目录](/cli/directory)，[日志](/cli/logs)。
+文档：[WhatsApp](/channels/whatsapp.md)，[目录](/cli/directory.md)，[日志](/cli/logs.md)。
 
 ### 为什么Clawdbot在群组中不回复
 
@@ -1509,11 +1562,11 @@ clawdbot directory groups list --channel whatsapp
 - 有人@提醒功能已开启（默认开启）。你必须@提及机器人（或匹配 `mentionPatterns`）。
 - 你配置了 `channels.whatsapp.groups` 但没有包含 `"*"`，并且该群组未被允许使用。
 
-参见 [群组](/concepts/groups) 和 [群组消息](/concepts/group-messages)。
+参见 [群组](/concepts/groups.md) 和 [群组消息](/concepts/group-messages.md)。
 
 ### 群组/线程是否与私信（DMs）共享上下文
 
-默认情况下，私信会合并到主会话中。群组/频道有自己独立的会话密钥，Telegram 的主题 / Discord 的线程是独立的会话。参见 [群组](/concepts/groups) 和 [群组消息](/concepts/group-messages)。
+默认情况下，私信会合并到主会话中。群组/频道有自己独立的会话密钥，Telegram 的主题 / Discord 的线程是独立的会话。参见 [群组](/concepts/groups.md) 和 [群组消息](/concepts/group-messages.md)。
 
 ### 我可以创建多少个工作区和代理
 
@@ -1540,7 +1593,7 @@ clawdbot directory groups list --channel whatsapp
 - 将 Slack 频道绑定到这些代理。
 - 需要时通过扩展中继（或节点）使用本地浏览器。
 
-文档：[多代理路由](/concepts/multi-agent)，[Slack](/channels/slack)，[浏览器](/tools/browser)，[Chrome 扩展](/tools/chrome-extension)，[节点](/nodes)。
+文档：[多代理路由](/concepts/multi-agent.md)，[Slack](/channels/slack.md)，[浏览器](/tools/browser.md)，[Chrome 扩展](/tools/chrome-extension.md)，[节点](/nodes/index.md)。
 
 ## 模型：默认设置、选择、别名、切换
 
@@ -1548,7 +1601,8 @@ clawdbot directory groups list --channel whatsapp
 
 Clawdbot 的默认模型是你设置的：
 yaml
-model: "gpt-4o"``````
+model: "gpt-4o"
+```
 agents.defaults.model.primary
 ```
 模型以 `provider/model` 的形式引用（例如：`anthropic/claude-opus-4-5`）。如果你省略了提供者，Clawdbot 当前会暂时默认使用 `anthropic` 作为回退方案——但你仍然应该**明确地**设置 `provider/model`。
@@ -1560,13 +1614,13 @@ agents.defaults.model.primary
 **可靠（字符更少）：** `openai/gpt-5.2` - 几乎和 Opus 一样好，只是个性稍弱。  
 **预算型：** `zai/glm-4.7`。
 
-MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax) 和 [本地模型](/gateway/local-models)。
+MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax.md) 和 [本地模型](/gateway/local-models.md)。
 
-一般建议：对于高风险工作，使用你负担得起的**最佳模型**；对于日常聊天或摘要，使用更便宜的模型。你可以为每个代理设置不同的模型，并使用子代理来并行处理长时间任务（每个子代理都会消耗 tokens）。详见 [模型](/concepts/models) 和 [子代理](/tools/subagents)。
+一般建议：对于高风险工作，使用你负担得起的**最佳模型**；对于日常聊天或摘要，使用更便宜的模型。你可以为每个代理设置不同的模型，并使用子代理来并行处理长时间任务（每个子代理都会消耗 tokens）。详见 [模型](/concepts/models.md) 和 [子代理](/tools/subagents.md)。
 
-强烈警告：较弱或过度量化（over-quantized）的模型更容易受到提示注入（prompt injection）和不安全行为的影响。详见 [安全](/gateway/security)。
+强烈警告：较弱或过度量化（over-quantized）的模型更容易受到提示注入（prompt injection）和不安全行为的影响。详见 [安全](/gateway/security.md)。
 
-更多背景信息：[模型](/concepts/models)。
+更多背景信息：[模型](/concepts/models.md)。
 
 ### 我可以使用自托管的模型（llamacpp、vLLM、Ollama）吗？
 
@@ -1574,7 +1628,7 @@ MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax) 和 [本�
 
 安全提示：较小的或经过重度量化（heavily quantized）的模型更容易受到提示注入攻击。我们强烈建议**大型模型**用于任何可以使用工具的机器人。如果你仍然想使用小型模型，请启用沙箱模式和严格的工具允许列表。
 
-文档：[Ollama](/providers/ollama)、[本地模型](/gateway/local-models)、[模型提供者](/concepts/model-providers)、[安全](/gateway/security)、[沙箱](/gateway/sandboxing)。
+文档：[Ollama](/providers/ollama.md)、[本地模型](/gateway/local-models.md)、[模型提供者](/concepts/model-providers.md)、[安全](/gateway/security.md)、[沙箱](/gateway/sandboxing.md)。
 
 ### 如何在不重置配置的情况下切换模型？
 
@@ -1588,28 +1642,31 @@ MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax) 和 [本�
 
 避免使用 `config.apply` 传入部分对象，除非你打算完全替换整个配置。如果你不小心覆盖了配置，请从备份恢复或重新运行 `clawdbot doctor` 来修复。
 
-文档：[模型](/concepts/models)、[配置](/cli/configure)、[配置](/cli/config)、[修复](/gateway/doctor)。
+文档：[模型](/concepts/models.md)、[配置](/cli/configure.md)、[配置](/cli/config.md)、[修复](/gateway/doctor.md)。
 
 ### Clawd、Flawd 和 Krill 使用什么模型？
 
-- **Clawd + Flawd:** 使用 Anthropic Opus (`anthropic/claude-opus-4-5`) - 详见 [Anthropic](/providers/anthropic)。
-- **Krill:** 使用 MiniMax M2.1 (`minimax/MiniMax-M2.1`) - 详见 [MiniMax](/providers/minimax)。```
+- **Clawd + Flawd:** 使用 Anthropic Opus (`anthropic/claude-opus-4-5`) - 详见 [Anthropic](/providers/anthropic.md)。
+- **Krill:** 使用 MiniMax M2.1 (`minimax/MiniMax-M2.1`) - 详见 [MiniMax](/providers/minimax.md)。
+```
 你可以使用 `/model`、`/model list` 或 `/model status` 列出可用的模型。
 
-`/model`（以及 `/model list`）会显示一个简洁的编号选择器。通过编号进行选择：```
+`/model`（以及 `/model list`）会显示一个简洁的编号选择器。通过编号进行选择：
+```
 /model 3
 ```
 你也可以为提供者（每个会话）强制指定特定的认证配置文件：
 
 /model opus@anthropic:claude-cli  
 /model opus@anthropic:default  
-``````
+```
 提示：`/model status` 显示当前激活的代理、正在使用的 `auth-profiles.json` 文件，以及下一个将尝试的认证配置文件。
 当可用时，它还会显示配置的提供者端点（`baseUrl`）和 API 模式（`api`）。
 
 **如何取消固定我之前设置的配置文件**
 
-重新运行 `/model` **不要加上** `@profile` 后缀：```
+重新运行 `/model` **不要加上** `@profile` 后缀：
+```
 /model anthropic/claude-opus-4-5
 ```
 如果想要恢复默认模型，请从 `/model` 中选择（或发送 `/model <默认提供者/模型>`）。
@@ -1623,8 +1680,9 @@ MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax) 和 [本�
 - **默认 + 切换：** 将 `agents.defaults.model.primary` 设置为 `openai-codex/gpt-5.2`，然后在编码时切换为 `openai-codex/gpt-5.2-codex`（或反过来）。
 - **子代理：** 将编码任务路由到使用不同默认模型的子代理。
 
-详见 [Models](/concepts/models) 和 [Slash 命令](/tools/slash-commands)。
-"provider/model" 模型不允许使用。请使用 `/model` 列出可用模型。```
+详见 [Models](/concepts/models.md) 和 [Slash 命令](/tools/slash-commands.md)。
+"provider/model" 模型不允许使用。请使用 `/model` 列出可用模型。
+```
 返回此错误 **而非正常回复**。修复方法：将模型添加到 `agents.defaults.models`，移除允许列表，或从 `/model list` 中选择一个模型。
 
 ### 为什么我会看到 Unknown model minimaxMiniMaxM21
@@ -1635,12 +1693,14 @@ MiniMax M2.1 有自己独立的文档：[MiniMax](/providers/minimax) 和 [本�
 1) 升级到 **2026.1.12**（或从源码 `main` 分支运行），然后重启网关。
 2) 确保已配置 MiniMax（通过向导或 JSON 文件），或者确保在环境/认证配置文件中存在 MiniMax 的 API 密钥，以便提供者能够被注入。
 3) 使用精确的模型 ID（区分大小写）：`minimax/MiniMax-M2.1` 或 `minimax/MiniMax-M2.1-lightning`。
-4) 运行：   ```bash
+4) 运行：   
+```bash
    clawdbot models list
-   ```
+   
+```
 并从列表中选择（或在聊天中使用 `/model list`）。
 
-查看 [MiniMax](/providers/minimax) 和 [模型](/concepts/models)。
+查看 [MiniMax](/providers/minimax.md) 和 [模型](/concepts/models.md)。
 
 ### 我可以将 MiniMax 设置为默认模型，并在复杂任务中使用 OpenAI 吗？
 
@@ -1659,8 +1719,9 @@ json5
     }
   }
 }
-``````
-然后：```
+```
+然后：
+```
 /model gpt
 ```
 **选项 B：独立代理**
@@ -1668,7 +1729,7 @@ json5
 - 代理 B 默认：OpenAI
 - 按代理路由或使用 `/agent` 切换
 
-文档：[模型](/concepts/models), [多代理路由](/concepts/multi-agent), [MiniMax](/providers/minimax), [OpenAI](/providers/openai)。
+文档：[模型](/concepts/models.md), [多代理路由](/concepts/multi-agent.md), [MiniMax](/providers/minimax.md), [OpenAI](/providers/openai.md)。
 
 ### opus、sonnet、gpt 是内置的快捷方式吗？
 
@@ -1699,11 +1760,12 @@ json5
     }
   }
 }
-``````
+```
 然后 `/model sonnet`（或在支持时使用 `/<alias>`）将解析为该模型ID。
 
 ### 如何添加来自其他提供者（如OpenRouter或ZAI）的模型
-OpenRouter（按token计费；包含多个模型）：```json5
+OpenRouter（按token计费；包含多个模型）：
+```json5
 {
   agents: {
     defaults: {
@@ -1725,12 +1787,13 @@ json5
   },
   env: { ZAI_API_KEY: "..." }
 }
-``````
+```
 如果你引用了一个提供者/模型，但缺少所需的提供者密钥，你会在运行时收到认证错误（例如：`No API key found for provider "zai"`）。
 
 **在添加新代理后找不到提供者 API 密钥**
 
-这通常意味着 **新代理** 的认证信息存储为空。认证信息是按代理存储的，存储路径为：```
+这通常意味着 **新代理** 的认证信息存储为空。认证信息是按代理存储的，存储路径为：
+```
 ~/.clawdbot/agents/<agentId>/agent/auth-profiles.json
 ```
 修复选项：
@@ -1751,7 +1814,8 @@ json5
 对于失败的认证配置会应用冷却时间（指数退避机制），因此即使某个提供者被限流或暂时失败，Clawdbot 仍可以继续响应。 
 
 ### 这个错误意味着什么
-No credentials found for profile "anthropic:default"```
+No credentials found for profile "anthropic:default"
+```
 这意味着系统尝试使用身份验证配置文件 ID `anthropic:default`，但在预期的身份验证存储中找不到相应的凭据。
 
 ### 未找到 anthropicdefault 配置文件凭据的修复检查清单
@@ -1779,9 +1843,11 @@ No credentials found for profile "anthropic:default"```
   - `auth.profiles["anthropic:claude-cli"].mode` 必须为 `"oauth"`（令牌模式会拒绝 OAuth 凭据）。
 - **如果你想使用 API 密钥代替**
   - 在 **网关主机** 上的 `~/.clawdbot/.env` 中放入 `ANTHROPIC_API_KEY`。
-  - 清除任何强制使用 `anthropic:claude-cli` 的固定订单配置：    ```bash
+  - 清除任何强制使用 `anthropic:claude-cli` 的固定订单配置：    
+```bash
     clawdbot models auth order clear --provider anthropic
-    ```
+    
+```
 - **确认你在网关主机上运行命令**
   - 在远程模式下，认证配置文件位于网关机器上，而不是你的笔记本电脑上。
 
@@ -1795,7 +1861,8 @@ No credentials found for profile "anthropic:default"```
 
 原因：会话历史中包含 **没有签名的思考块**（通常来自中断/部分流式响应）。Google Antigravity 要求思考块必须带有签名。
 
-解决方法：现在 Clawdbot 会移除没有签名的思考块以适配 Google Antigravity Claude。如果问题仍然存在，请启动一个 **新会话**，或为该代理设置 `/thinking off`。```
+解决方法：现在 Clawdbot 会移除没有签名的思考块以适配 Google Antigravity Claude。如果问题仍然存在，请启动一个 **新会话**，或为该代理设置 `/thinking off`。
+```
 ### 什么是典型的配置文件 ID
 
 Clawdbot 使用带有提供者前缀的 ID，例如：
@@ -1810,7 +1877,8 @@ Clawdbot 使用带有提供者前缀的 ID，例如：
 
 如果某个配置文件处于短期的**冷却状态**（速率限制/超时/认证失败）或更长的**禁用状态**（账单问题/信用不足），Clawdbot 可能会暂时跳过该配置文件。要检查这些状态，请运行 `clawdbot models status --json` 并查看 `auth.unusableProfiles`。调整参数：`auth.cooldowns.billingBackoffHours*`。
 
-你也可以通过 CLI 为**每个代理**设置尝试顺序的覆盖（存储在该代理的 `auth-profiles.json` 中）：```bash
+你也可以通过 CLI 为**每个代理**设置尝试顺序的覆盖（存储在该代理的 `auth-profiles.json` 中）：
+```bash
 # Defaults to the configured default agent (omit --agent)
 clawdbot models auth order get --provider anthropic
 
@@ -1826,8 +1894,8 @@ clawdbot models auth order clear --provider anthropic
 要针对特定代理：
 bash
 clawdbot models auth order set --provider anthropic --agent main anthropic:claude-cli
-``````
-### OAuth 与 API 密钥的区别
+```
+## OAuth 与 API 密钥的区别
 
 Clawdbot 支持以下两种方式：
 
@@ -1842,7 +1910,8 @@ Clawdbot 支持以下两种方式：
 
 `gateway.port` 控制用于 WebSocket + HTTP 的单一多路复用端口（控制 UI、钩子等）。
 
-优先级：```
+优先级：
+```
 --port > CLAWDBOT_GATEWAY_PORT > gateway.port > default 18789
 ```
 ### 为什么 clawdbot 网关状态显示 Runtime 运行但 RPC 探针失败？
@@ -1861,7 +1930,7 @@ Clawdbot 支持以下两种方式：
 修复方法：
 bash
 clawdbot gateway install --force
-``````
+```
 从你希望服务使用的相同 `--profile` / 环境中运行它。
 
 ### “另一个网关实例已经在监听”是什么意思
@@ -1872,7 +1941,8 @@ Clawdbot 在启动时会立即绑定 WebSocket 监听器以实施运行时锁定
 
 ### 如何在远程模式下运行 Clawdbot，客户端连接到其他地方的网关
 
-设置 `gateway.mode: "remote"`，并指向一个远程的 WebSocket URL，可选地加上令牌/密码：```json5
+设置 `gateway.mode: "remote"`，并指向一个远程的 WebSocket URL，可选地加上令牌/密码：
+```json5
 {
   gateway: {
     mode: "remote",
@@ -1902,7 +1972,7 @@ Clawdbot 在启动时会立即绑定 WebSocket 监听器以实施运行时锁定
 - 如果是远程连接：先建立隧道：`ssh -N -L 18789:127.0.0.1:18789 user@host`，然后打开 `http://127.0.0.1:18789/?token=...`。
 - 在网关主机上设置 `gateway.auth.token`（或 `CLAWDBOT_GATEWAY_TOKEN`）。
 - 在控制 UI 设置中粘贴相同的令牌（或使用一次性 `?token=...` 链接刷新）。
-- 如果仍然无法解决？运行 `clawdbot status --all` 并按照 [故障排查](/gateway/troubleshooting) 进行操作。查看 [仪表盘](/web/dashboard) 获取认证详细信息。
+- 如果仍然无法解决？运行 `clawdbot status --all` 并按照 [故障排查](/gateway/troubleshooting.md) 进行操作。查看 [仪表盘](/web/dashboard.md) 获取认证详细信息。
 
 ### 我设置了 gatewaybind tailnet，但无法绑定，没有服务监听
 
@@ -1931,7 +2001,7 @@ Clawdbot 在启动时会立即绑定 WebSocket 监听器以实施运行时锁定
 - 为每个实例安装服务：`clawdbot --profile <name> gateway install`。
 
 配置文件还会在服务名称后添加后缀（`com.clawdbot.<profile>`，`clawdbot-gateway-<profile>.service`，`Clawdbot Gateway (<profile>)`）。
-完整指南：[多个网关](/gateway/multiple-gateways)。
+完整指南：[多个网关](/gateway/multiple-gateways.md)。
 
 ### “无效的握手代码 1008” 是什么意思
 
@@ -1950,14 +2020,15 @@ Clawdbot 在启动时会立即绑定 WebSocket 监听器以实施运行时锁定
 如果你使用的是 CLI 或 TUI，URL 应该如下所示：
 
 clawdbot tui --url ws://<host>:18789 --token <token>
-``````
-协议详情：[网关协议](/gateway/protocol)。
+```
+协议详情：[网关协议](/gateway/protocol.md)。
 
 ## 日志和调试
 
 ### 日志位置
 
-文件日志（结构化）：```
+文件日志（结构化）：
+```
 /tmp/clawdbot/clawdbot-YYYY-MM-DD.log
 ```
 你可以通过 `logging.file` 设置一个稳定的日志路径。文件日志级别由 `logging.level` 控制。控制台的详细程度由 `--verbose` 和 `logging.consoleLevel` 控制。
@@ -1965,21 +2036,22 @@ clawdbot tui --url ws://<host>:18789 --token <token>
 最快的日志尾随方式：
 bash
 clawdbot logs --follow
-``````
+```
 服务/监督日志（当网关通过 launchd/systemd 运行时）：
 - macOS: `$CLAWDBOT_STATE_DIR/logs/gateway.log` 和 `gateway.err.log`（默认路径：`~/.clawdbot/logs/...`；配置文件使用 `~/.clawdbot-<profile>/logs/...`）
 - Linux: `journalctl --user -u clawdbot-gateway[-<profile>].service -n 200 --no-pager`
 - Windows: `schtasks /Query /TN "Clawdbot Gateway (<profile>)" /V /FO LIST`
 
-更多详情请参见 [故障排除](/gateway/troubleshooting#log-locations)。
+更多详情请参见 [故障排除](/gateway/troubleshooting.md#log-locations)。
 
 ### 如何启动、停止或重启网关服务
 
-使用网关的辅助工具：```bash
+使用网关的辅助工具：
+```bash
 clawdbot gateway status
 clawdbot gateway restart
 ```
-如果手动运行网关，`clawdbot gateway --force` 可以释放端口。参见 [网关](/gateway)。
+如果手动运行网关，`clawdbot gateway --force` 可以释放端口。参见 [网关](/gateway/index.md)。
 
 ### 我在 Windows 上关闭了终端，如何重新启动 Clawdbot
 
@@ -1992,8 +2064,9 @@ powershell
 wsl
 clawdbot gateway status
 clawdbot gateway restart
-``````
-如果您从未安装过该服务，请在前台启动它：```bash
+```
+如果您从未安装过该服务，请在前台启动它：
+```bash
 clawdbot gateway run
 ```
 **2) 原生 Windows（不推荐）：** 网关直接在 Windows 中运行。
@@ -2002,11 +2075,12 @@ clawdbot gateway run
 powershell
 clawdbot gateway status
 clawdbot gateway restart
-``````
-如果你手动运行它（不作为服务运行），请使用：```powershell
+```
+如果你手动运行它（不作为服务运行），请使用：
+```powershell
 clawdbot gateway run
 ```
-文档：[Windows (WSL2)](/platforms/windows)，[网关服务运行手册](/gateway)。
+文档：[Windows (WSL2)](/platforms/windows.md)，[网关服务运行手册](/gateway/index.md)。
 
 ### 网关已启动但未收到响应 应该检查什么
 
@@ -2016,7 +2090,7 @@ clawdbot status
 clawdbot models status
 clawdbot channels status
 clawdbot logs --follow
-``````
+```
 常见原因：
 - 在 **网关主机** 上未加载模型（检查 `models status`）。
 - 通道配对/允许列表阻止了回复（检查通道配置 + 日志）。
@@ -2024,7 +2098,7 @@ clawdbot logs --follow
 
 如果你是远程连接，请确认隧道/Tailscale 连接是否正常，并且网关的 WebSocket 是否可达。
 
-文档：[通道](/channels)，[故障排除](/gateway/troubleshooting)，[远程访问](/gateway/remote)。
+文档：[通道](/channels/index.md)，[故障排除](/gateway/troubleshooting.md)，[远程访问](/gateway/remote.md)。
 
 ### 与网关断开连接，但没有提示原因
 
@@ -2035,10 +2109,11 @@ clawdbot logs --follow
 3) UI 是否具有正确的令牌？ `clawdbot dashboard`
 4) 如果是远程连接，隧道/Tailscale 是否已连接？
 
-然后查看日志：```bash
+然后查看日志：
+```bash
 clawdbot logs --follow
 ```
-文档：[仪表板](/web/dashboard)，[远程访问](/gateway/remote)，[故障排除](/gateway/troubleshooting)。
+文档：[仪表板](/web/dashboard.md)，[远程访问](/gateway/remote.md)，[故障排除](/gateway/troubleshooting.md)。
 
 ### 在使用 setMyCommands 时出现网络错误，应该检查什么
 
@@ -2046,36 +2121,39 @@ clawdbot logs --follow
 bash
 clawdbot channels status
 clawdbot channels logs --channel telegram
-``````
+```
 如果您在 VPS 或者代理后面，请确认允许出站 HTTPS 并且 DNS 正常工作。
 如果网关是远程的，请确保您在网关主机上查看日志。
 
-文档：[Telegram](/channels/telegram)，[频道故障排除](/channels/troubleshooting)。
+文档：[Telegram](/channels/telegram.md)，[频道故障排除](/channels/troubleshooting.md)。
 
 ### TUI 没有输出怎么办？应该检查什么
 
-首先确认网关是否可达，并且代理可以正常运行：```bash
+首先确认网关是否可达，并且代理可以正常运行：
+```bash
 clawdbot status
 clawdbot models status
 clawdbot logs --follow
 ```
 在 TUI 中，使用 `/status` 查看当前状态。如果你期望在聊天频道中收到回复，请确保已启用消息传递 (`/deliver on`)。
 
-文档：[TUI](/tui)，[斜杠命令](/tools/slash-commands)。
+文档：[TUI](/tui.md)，[斜杠命令](/tools/slash-commands.md)。
 
 ### 如何完全停止然后启动网关
 
 如果你已安装该服务：
 bash
 clawdbot gateway stop
-clawdbot gateway start```
+clawdbot gateway start
+```
 这将停止/启动 **受监督的服务**（在 macOS 上为 launchd，在 Linux 上为 systemd）。
 当网关以后台守护进程形式运行时，请使用此命令。
 
-如果您以前台模式运行，请使用 Ctrl-C 停止，然后执行以下操作：```bash
+如果您以前台模式运行，请使用 Ctrl-C 停止，然后执行以下操作：
+```bash
 clawdbot gateway run
 ```
-文档：[网关服务运行手册](/gateway)。
+文档：[网关服务运行手册](/gateway/index.md)。
 
 ### ELI5 clawdbot 网关重启 与 clawdbot 网关 的区别
 
@@ -2092,17 +2170,17 @@ clawdbot gateway run
 
 ### 我的技能生成了图片/PDF，但什么都没发送
 
-代理发出的附件必须包含一行 `MEDIA:<路径或URL>`（单独一行）。参见 [Clawdbot 助手设置](/start/clawd) 和 [代理发送](/tools/agent-send)。
+代理发出的附件必须包含一行 `MEDIA:<路径或URL>`（单独一行）。参见 [Clawdbot 助手设置](/start/clawd.md) 和 [代理发送](/tools/agent-send.md)。
 
 命令行发送：
 bash
 clawdbot message send --target +15555550123 --message "Here you go" --media /path/to/file.png
-``````
+```
 另外请检查：
 - 目标频道支持出站媒体，并且未被允许列表阻止。
 - 文件在提供方的大小限制内（图片最大调整为2048像素）。
 
-查看 [Images](/nodes/images)。
+查看 [Images](/nodes/images.md)。
 
 ## 安全与访问控制
 
@@ -2129,7 +2207,7 @@ clawdbot message send --target +15555550123 --message "Here you go" --media /pat
 - 对于启用了工具的代理，关闭 `web_search` / `web_fetch` / `browser`
 - 对工具进行沙箱隔离和严格允许列表控制
 
-详情：[Security](/gateway/security)。
+详情：[Security](/gateway/security.md)。
 
 ### 我的机器人是否应该拥有自己的 GitHub 邮箱账号或手机号？
 
@@ -2137,7 +2215,7 @@ clawdbot message send --target +15555550123 --message "Here you go" --media /pat
 
 从小处开始。仅给予机器人你实际需要的工具和账号权限，如有需要再逐步扩展。
 
-文档：[Security](/gateway/security)、[Pairing](/start/pairing)。
+文档：[Security](/gateway/security.md)、[Pairing](/start/pairing.md)。
 
 ### 我可以让机器人自主处理我的短信吗？这样安全吗？
 
@@ -2146,15 +2224,16 @@ clawdbot message send --target +15555550123 --message "Here you go" --media /pat
 - 如果你希望它代表你发送消息，请使用 **单独的号码或账号**。
 - 让它起草内容，然后在发送前进行 **人工审批**。
 
-如果你想进行实验，请在专用账号上进行，并保持隔离。查看 [Security](/gateway/security)。
+如果你想进行实验，请在专用账号上进行，并保持隔离。查看 [Security](/gateway/security.md)。
 
 ### 我可以使用更便宜的模型来执行个人助手任务吗？
 
-可以，**如果** 该代理仅用于聊天且输入是可信的。较小的模型层级更容易受到指令劫持的影响，因此不建议用于启用了工具的代理或读取不可信内容的场景。如果必须使用较小的模型，请严格限制工具并运行在沙箱环境中。查看 [Security](/gateway/security)。
+可以，**如果** 该代理仅用于聊天且输入是可信的。较小的模型层级更容易受到指令劫持的影响，因此不建议用于启用了工具的代理或读取不可信内容的场景。如果必须使用较小的模型，请严格限制工具并运行在沙箱环境中。查看 [Security](/gateway/security.md)。
 
 当未知发件人向机器人发送消息且启用 `dmPolicy: "pairing"` 时，才会发送配对代码。单独的 `/start` 命令不会生成代码。
 
-检查待处理的请求：```bash
+检查待处理的请求：
+```bash
 clawdbot pairing list telegram
 ```
 如果你想要立即访问，请将你的发件人ID加入白名单或为该账户设置 `dmPolicy: "open"`。
@@ -2166,8 +2245,9 @@ clawdbot pairing list telegram
 批准配对的方式如下：
 bash
 clawdbot pairing approve whatsapp <code>
-``````
-列出待处理的请求：```bash
+```
+列出待处理的请求：
+```bash
 clawdbot pairing list whatsapp
 ```
 **Wizard 电话号码提示**：用于设置你的 **允许列表/所有者**，以便允许你的私人消息。它不用于自动发送。如果你使用个人 WhatsApp 电话号码，请使用该号码并启用 `channels.whatsapp.selfChatMode`。
@@ -2182,14 +2262,15 @@ clawdbot pairing list whatsapp
 
 /verbose off  
 /reasoning off  
-``````
+```
 如果仍然存在噪音，请在 Control UI 中检查会话设置，并将 verbose 设置为 **inherit**。同时确认您没有使用一个在配置中将 `verboseDefault` 设置为 `on` 的机器人配置文件。
 
-文档：[思考与详细输出](/tools/thinking)，[安全](/gateway/security#groups-中的推理--详细输出)。
+文档：[思考与详细输出](/tools/thinking.md)，[安全](/gateway/security.md#groups-中的推理--详细输出)。
 
 ### 如何停止/取消正在运行的任务
 
-发送以下任意一条 **独立消息**（不带斜杠）：```
+发送以下任意一条 **独立消息**（不带斜杠）：
+```
 stop
 abort
 esc
@@ -2202,8 +2283,8 @@ interrupt
 对于后台进程（来自 exec 工具），你可以让代理运行：
 
 process action: kill sessionId: XXX
-``````
-斜杠命令概述：参见 [斜杠命令](/tools/slash-commands)。
+```
+斜杠命令概述：参见 [斜杠命令](/tools/slash-commands.md)。
 
 大多数命令必须作为以 `/` 开头的**独立**消息发送，但一些快捷方式（如 `/status`）也允许被授权的发送者在消息中直接使用。
 
@@ -2211,7 +2292,8 @@ process action: kill sessionId: XXX
 
 Clawdbot 默认会阻止**跨平台**的消息发送。如果一个工具调用绑定到了 Telegram，它将不会向 Discord 发送消息，除非你明确允许。
 
-为代理启用跨平台消息发送：```json5
+为代理启用跨平台消息发送：
+```json5
 {
   agents: {
     defaults: {
@@ -2250,3 +2332,4 @@ Clawdbot 默认会阻止**跨平台**的消息发送。如果一个工具调用�
 ---
 
 还在卡住？在 [Discord](https://discord.com/invite/clawd) 上提问，或者打开 [GitHub 讨论](https://github.com/clawdbot/clawdbot/discussions)。
+```

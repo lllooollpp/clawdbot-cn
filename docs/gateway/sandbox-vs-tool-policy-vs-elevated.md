@@ -21,7 +21,7 @@ clawdbot sandbox explain
 clawdbot sandbox explain --session agent:main:main
 clawdbot sandbox explain --agent work
 clawdbot sandbox explain --json
-``````
+```
 它会输出：
 - 有效的沙箱模式/作用域/工作区访问权限
 - 当前会话是否处于沙箱中（主会话 vs 非主会话）
@@ -35,7 +35,7 @@ clawdbot sandbox explain --json
 - `"non-main"`：只有非主会话会被沙箱化（常见于群组/频道中的“意外”情况）。
 - `"all"`：所有内容都被沙箱化。
 
-有关完整的矩阵（作用域、工作区挂载、镜像）请参见 [沙箱化](/gateway/sandboxing)。
+有关完整的矩阵（作用域、工作区挂载、镜像）请参见 [沙箱化](/gateway/sandboxing.md)。
 
 ### 绑定挂载（安全快速检查）
 
@@ -62,7 +62,8 @@ clawdbot sandbox explain --json
 
 ### 工具组（快捷方式）
 
-工具策略（全局、代理、沙箱）支持 `group:*` 条目，这些条目会展开为多个工具：```json5
+工具策略（全局、代理、沙箱）支持 `group:*` 条目，这些条目会展开为多个工具：
+```json5
 {
   tools: {
     sandbox: {
@@ -96,7 +97,7 @@ clawdbot sandbox explain --json
 - 启用：`tools.elevated.enabled`（以及可选的 `agents.list[].tools.elevated.enabled`）
 - 发送者白名单：`tools.elevated.allowFrom.<provider>`（以及可选的 `agents.list[].tools.elevated.allowFrom.<provider>`）
 
-参见 [提权模式](/tools/elevated)。
+参见 [提权模式](/tools/elevated.md)。
 
 ## 常见的“沙箱限制”修复方法
 
@@ -111,3 +112,4 @@ clawdbot sandbox explain --json
 ### “我以为这是主会话，为什么它被沙箱限制了？”
 
 在 `"non-main"` 模式下，组/频道密钥 *不是* 主密钥。请使用主会话密钥（由 `sandbox explain` 显示）或切换模式到 `"off"`。
+```

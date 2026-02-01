@@ -22,7 +22,7 @@ Clawdbot 将 **唤醒词视为一个全局列表**，该列表由 **网关（Gat
 结构如下：
 json
 { "triggers": ["clawd", "claude", "computer"], "updatedAtMs": 1730000000000 }
-``````
+```
 ## 协议
 
 ### 方法
@@ -58,3 +58,4 @@ json
 
 - 在设置中提供一个“唤醒词”编辑器。
 - 通过网关 WebSocket 调用 `voicewake.set`，以便编辑内容在所有地方同步。
+```

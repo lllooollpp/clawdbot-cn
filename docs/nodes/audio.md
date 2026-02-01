@@ -51,8 +51,9 @@ json5
     }
   }
 }
-``````
-### 仅限提供者且作用域受限```json5
+```
+### 仅限提供者且作用域受限
+```json5
 {
   tools: {
     media: {
@@ -84,11 +85,11 @@ json5
     }
   }
 }
-``````
+```
 ## 注意事项与限制
 - 提供商认证遵循标准的认证顺序（认证配置文件、环境变量、`models.providers.*.apiKey`）。
 - 当使用 `provider: "deepgram"` 时，Deepgram 会自动读取 `DEEPGRAM_API_KEY`。
-- Deepgram 的设置详情：[Deepgram（音频转录）](/providers/deepgram)。
+- Deepgram 的设置详情：[Deepgram（音频转录）](/providers/deepgram.md)。
 - 音频提供商可以通过 `tools.media.audio` 覆盖 `baseUrl`、`headers` 和 `providerOptions`。
 - 默认的大小限制是 20MB（`tools.media.audio.maxBytes`）。超过大小的音频将被跳过，并尝试下一个条目。
 - 音频的默认 `maxChars` 是 **未设置**（完整转录文本）。可以通过设置 `tools.media.audio.maxChars` 或每个条目的 `maxChars` 来截断输出。

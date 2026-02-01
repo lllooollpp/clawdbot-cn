@@ -7,7 +7,7 @@ read_when:
 
 # 心跳（网关）
 
-> **心跳与定时任务？** 有关何时使用每种方式的指导，请参阅 [定时任务与心跳](/automation/cron-vs-heartbeat)。
+> **心跳与定时任务？** 有关何时使用每种方式的指导，请参阅 [定时任务与心跳](/automation/cron-vs-heartbeat.md)。
 
 Heartbeat 在主会话中运行**周期性代理轮次**，这样模型可以在不频繁打扰你的前提下，突出显示需要关注的内容。
 
@@ -33,7 +33,7 @@ json5
     }
   }
 }
-``````
+```
 ## 默认设置
 
 - 间隔：`30m`（当检测到 Anthropic OAuth/setup-token 认证模式时为 `1h`）。设置 `agents.defaults.heartbeat.every` 或每个代理的 `agents.list[].heartbeat.every`；使用 `0m` 来禁用。
@@ -47,7 +47,7 @@ json5
 
 默认提示是故意设计得比较宽泛的：
 - **后台任务**：“考虑未完成的任务”会提示代理检查跟进事项（收件箱、日历、提醒、排队任务），并突出显示任何紧急事项。
-- **人工检查**：“在白天有时检查你的用户”会提示代理偶尔发送一个轻量级的“你有什么需要吗？”消息，但通过使用你配置的本地时区避免夜间骚扰（参见 [/concepts/timezone](/concepts/timezone)）。
+- **人工检查**：“在白天有时检查你的用户”会提示代理偶尔发送一个轻量级的“你有什么需要吗？”消息，但通过使用你配置的本地时区避免夜间骚扰（参见 [/concepts/timezone](/concepts/timezone.md)）。
 
 如果你希望心跳执行非常特定的任务（例如“检查 Gmail PubSub 统计”或“验证网关健康”），请将 `agents.defaults.heartbeat.prompt`（或 `agents.list[].heartbeat.prompt`）设置为自定义内容（原样发送）。
 
@@ -58,7 +58,8 @@ json5
 - 如果 `HEARTBEAT_OK` 出现在回复的**中间**，则不会被特殊处理。
 - 对于警报信息，**不要**包含 `HEARTBEAT_OK`；只返回警报文本。
 
-在非心跳时段，如果消息的开头或结尾出现了多余的 `HEARTBEAT_OK`，则会被移除并记录；如果消息仅包含 `HEARTBEAT_OK`，则会被丢弃。```json5
+在非心跳时段，如果消息的开头或结尾出现了多余的 `HEARTBEAT_OK`，则会被移除并记录；如果消息仅包含 `HEARTBEAT_OK`，则会被丢弃。
+```json5
 {
   agents: {
     defaults: {
@@ -111,7 +112,7 @@ json5
     ]
   }
 }
-``````
+```
 ### 场地笔记
 
 - `every`: 心跳间隔（持续时间字符串；默认单位 = 分钟）。
@@ -119,8 +120,8 @@ json5
 - `includeReasoning`: 当启用时，也会在可用的情况下发送单独的 `Reasoning:` 消息（格式与 `/reasoning on` 相同）。
 - `session`: 可选的会话键，用于心跳运行。
   - `main`（默认）：代理主会话。
-  - 显式会话键（从 `clawdbot sessions --json` 或 [sessions CLI](/cli/sessions) 复制）。
-  - 会话键格式：参见 [会话](/concepts/session) 和 [组](/concepts/groups)。
+  - 显式会话键（从 `clawdbot sessions --json` 或 [sessions CLI](/cli/sessions.md) 复制）。
+  - 会话键格式：参见 [会话](/concepts/session.md) 和 [组](/concepts/groups.md)。
 - `target`:
   - `last`（默认）：发送到最后一个使用的外部渠道。
   - 显式渠道：`whatsapp` / `telegram` / `discord` / `googlechat` / `slack` / `msteams` / `signal` / `imessage`。
@@ -141,7 +142,8 @@ json5
 
 ## 可见性控制
 
-默认情况下，在交付警报内容时会隐藏 `HEARTBEAT_OK` 确认信息。你可以根据渠道或账户进行调整：```yaml
+默认情况下，在交付警报内容时会隐藏 `HEARTBEAT_OK` 确认信息。你可以根据渠道或账户进行调整：
+```yaml
 channels:
   defaults:
     heartbeat:
@@ -185,7 +187,7 @@ channels:
   telegram:
     heartbeat:
       showOk: true
-``````
+```
 ### 常见配置模式
 
 | 目标 | 配置 |
@@ -215,7 +217,8 @@ channels:
 
 如果你想让这个操作主动执行，也可以在你的心跳提示中包含一条明确的指令，例如：“如果检查表过时了，用更好的版本更新 HEARTBEAT.md。”
 
-安全提示：不要在 `HEARTBEAT.md` 中放入敏感信息（如 API 密钥、电话号码、私有令牌）——它会成为提示上下文的一部分。```bash
+安全提示：不要在 `HEARTBEAT.md` 中放入敏感信息（如 API 密钥、电话号码、私有令牌）——它会成为提示上下文的一部分。
+```bash
 clawdbot system event --text "Check for urgent follow-ups" --mode now
 ```
 如果多个代理配置了 `heartbeat`，手动唤醒将立即运行每个代理的心跳。
@@ -234,3 +237,4 @@ clawdbot system event --text "Check for urgent follow-ups" --mode now
 ## 成本意识
 
 心跳会执行完整的代理流程。较短的间隔会消耗更多令牌。请保持 `HEARTBEAT.md` 的内容简短，并在你只需要内部状态更新时，考虑使用更便宜的 `model` 或设置 `target: "none"`。
+```

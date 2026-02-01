@@ -15,7 +15,7 @@ read_when:
 Zalo 个人版作为插件提供，不包含在核心安装中。
 - 通过 CLI 安装：`clawdbot plugins install @clawdbot/zalouser`
 - 或从源代码仓库安装：`clawdbot plugins install ./extensions/zalouser`
-- 详情：[插件](/plugin)
+- 详情：[插件](/plugin.md)
 
 ## 前提条件：zca-cli
 网关机器必须在 `PATH` 中包含 `zca` 二进制文件。
@@ -38,7 +38,7 @@ json5
     }
   }
 }
-`````````
+```
 4) 重启网关（或完成注册流程）。
 5) DM 默认为配对模式；在首次联系时批准配对代码。
 
@@ -48,7 +48,8 @@ json5
 - 专为“个人账户”使用场景设计，此时 Zalo Bot API 不可用。
 
 ## 命名
-频道 ID 为 `zalouser`，以明确说明此功能自动化的是一个 **个人 Zalo 用户账户**（非官方）。我们保留 `zalo` 用于未来可能的官方 Zalo API 集成。```bash
+频道 ID 为 `zalouser`，以明确说明此功能自动化的是一个 **个人 Zalo 用户账户**（非官方）。我们保留 `zalo` 用于未来可能的官方 Zalo API 集成。
+```bash
 clawdbot directory self --channel zalouser
 clawdbot directory peers list --channel zalouser --query "name"
 clawdbot directory groups list --channel zalouser --query "work"
@@ -85,9 +86,10 @@ json5
     }
   }
 }
-`````````
+```
 ## 多账户
-账户对应于 zca 配置文件。示例：```json5
+账户对应于 zca 配置文件。示例：
+```json5
 {
   channels: {
     zalouser: {

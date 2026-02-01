@@ -19,8 +19,9 @@ Moonshot 提供了与 OpenAI 兼容的 Kimi API 接口。可以配置提供者�
 {/* moonshot-kimi-k2-ids:end */}
 bash
 clawdbot onboard --auth-choice moonshot-api-key
-``````
-Kimi Code:```bash
+```
+Kimi Code:
+```bash
 clawdbot onboard --auth-choice kimi-code-api-key
 ```
 注意：Moonshot 和 Kimi Code 是不同的提供方。它们的密钥不能互换，端点不同，模型引用也不同（Moonshot 使用 `moonshot/...`，Kimi Code 使用 `kimi-code/...`）。
@@ -91,8 +92,9 @@ json5
     }
   }
 }
-``````
-## Kimi Code```json5
+```
+## Kimi Code
+```json5
 {
   env: { KIMICODE_API_KEY: "sk-..." },
   agents: {

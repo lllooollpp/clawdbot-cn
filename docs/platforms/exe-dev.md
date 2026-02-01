@@ -30,8 +30,9 @@ read_when:
 - 供应商凭证（可选）：WhatsApp 二维码扫描、Telegram 机器人令牌、Discord 机器人令牌等
 bash
 ssh exe.dev new --name=clawdbot
-``````
-然后连接：```bash
+```
+然后连接：
+```bash
 ssh clawdbot.exe.xyz
 ```
 提示：请保持此虚拟机为**有状态**的。Clawdbot 会在 `~/.clawdbot/` 和 `~/clawd/` 下存储状态。
@@ -40,10 +41,11 @@ ssh clawdbot.exe.xyz
 bash
 sudo apt-get update
 sudo apt-get install -y git curl jq ca-certificates openssl
-``````
+```
 ### 节点 22
 
-安装 Node **>= 22.12**（任何方法都可以）。快速检查：```bash
+安装 Node **>= 22.12**（任何方法都可以）。快速检查：
+```bash
 node -v
 ```
 如果你的虚拟机上还没有安装 Node 22，请使用你偏好的 Node 管理器（如 nvm、mise 或 asdf），或者使用提供 Node 22+ 的发行版包源。
@@ -52,19 +54,22 @@ node -v
 bash
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt-get install -y nodejs
-``````
+```
 ## 3) 安装 Clawdbot
 
-推荐在服务器上安装：npm 全局安装。```bash
+推荐在服务器上安装：npm 全局安装。
+```bash
 npm i -g clawdbot@latest
 clawdbot --version
 ```
 如果原生依赖项安装失败（很少见；通常为 `sharp`），请添加构建工具：
 bash
-sudo apt-get install -y build-essential python3```
+sudo apt-get install -y build-essential python3
+```
 ## 4) 首次设置（向导）
 
-在虚拟机上运行引导向导：```bash
+在虚拟机上运行引导向导：
+```bash
 clawdbot onboard --install-daemon
 ```
 它可以设置：
@@ -74,7 +79,7 @@ clawdbot onboard --install-daemon
 - 模型提供者配置/登录
 - Linux systemd **user** 服务（服务）
 
-如果你在无头虚拟机上进行 OAuth 认证：请先在普通机器上进行 OAuth，然后将认证配置文件复制到虚拟机（参见[帮助](/help)）。
+如果你在无头虚拟机上进行 OAuth 认证：请先在普通机器上进行 OAuth，然后将认证配置文件复制到虚拟机（参见[帮助](/help/index.md)）。
 
 ## 5）远程访问选项
 
@@ -83,15 +88,16 @@ clawdbot onboard --install-daemon
 保持网关在环回地址（默认），然后从你的笔记本电脑进行隧道连接：
 bash
 ssh -N -L 18789:127.0.0.1:18789 clawdbot.exe.xyz
-``````
+```
 本地打开：
 - `http://127.0.0.1:18789/` (控制界面)
 
-运行手册：[远程访问](/gateway/remote)
+运行手册：[远程访问](/gateway/remote.md)
 
 ### 选项 B：exe.dev HTTPS 代理（无隧道）
 
-要让 exe.dev 将流量代理到虚拟机，请将网关绑定到局域网接口并设置一个令牌：```bash
+要让 exe.dev 将流量代理到虚拟机，请将网关绑定到局域网接口并设置一个令牌：
+```bash
 export CLAWDBOT_GATEWAY_TOKEN="$(openssl rand -hex 32)"
 clawdbot gateway --bind lan --port 8080 --token "$CLAWDBOT_GATEWAY_TOKEN"
 ```
@@ -105,12 +111,13 @@ json5
     auth: { mode: "token", token: "YOUR_TOKEN" }
   }
 }
-``````
+```
 注意事项：
 - 非回环绑定需要 `gateway.auth.token`（或 `CLAWDBOT_GATEWAY_TOKEN`）。
 - `gateway.remote.token` 仅用于远程 CLI 调用；它不会启用本地认证。
 
-然后将 exe.dev 的代理指向 `8080`（或你选择的其他端口），并打开你的 VM 的 HTTPS URL：```bash
+然后将 exe.dev 的代理指向 `8080`（或你选择的其他端口），并打开你的 VM 的 HTTPS URL：
+```bash
 ssh exe.dev share port clawdbot 8080
 ```
 打开：
@@ -122,18 +129,19 @@ ssh exe.dev share port clawdbot 8080
 - 如果你的代理需要应用端口，请优先使用 **非默认** 端口（如 `8080`）。
 - 将令牌视为密码对待。
 
-控制界面详情：[Control UI](/web/control-ui)
+控制界面详情：[Control UI](/web/control-ui.md)
 
 ## 6）让它持续运行（服务）
 
 在 Linux 上，Clawdbot 使用 systemd **用户服务**。在执行 `--install-daemon` 后，请验证：
 bash
 systemctl --user status clawdbot-gateway[-<profile>].service
-``````
-如果服务在注销后终止，请启用 lingering：```bash
+```
+如果服务在注销后终止，请启用 lingering：
+```bash
 sudo loginctl enable-linger "$USER"
 ```
-"更多：[Linux](/platforms/linux)
+"更多：[Linux](/platforms/linux.md)
 
 ## 7) 更新
 bash
@@ -141,5 +149,5 @@ npm i -g clawdbot@latest
 clawdbot doctor
 clawdbot gateway restart
 clawdbot health
-``````
-指南：[更新](/install/updating)
+```
+指南：[更新](/install/updating.md)

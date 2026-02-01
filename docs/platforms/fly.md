@@ -30,12 +30,13 @@ fly apps create my-clawdbot
 
 # 创建一个持久化卷（1GB 通常足够）
 fly volumes create clawdbot_data --size 1 --region iad
-``````
+```
 **提示:** 选择一个靠近你的区域。常见选项：`lhr`（伦敦）、`iad`（弗吉尼亚）、`sjc`（圣何塞）。
 
 ## 2）配置 fly.toml
 
-编辑 `fly.toml` 以匹配你的应用名称和需求：```toml
+编辑 `fly.toml` 以匹配你的应用名称和需求：
+```toml
 app = "my-clawdbot"  # Your app name
 primary_region = "iad"
 
@@ -89,12 +90,13 @@ fly secrets set GOOGLE_API_KEY=...
 
 # 频道令牌
 fly secrets set DISCORD_BOT_TOKEN=MTQ...
-``````
+```
 **说明：**
 - 非回环绑定（`--bind lan`）需要 `CLAWDBOT_GATEWAY_TOKEN` 以确保安全。
 - 请将这些令牌视为密码一样对待。
 
-## 4）部署```bash
+## 4）部署
+```bash
 fly deploy
 ```
 首次部署将构建 Docker 镜像（大约 2-3 分钟）。后续部署会更快。
@@ -103,8 +105,9 @@ fly deploy
 bash
 fly status
 fly logs
-``````
-你应该看到：```
+```
+你应该看到：
+```
 [gateway] listening on ws://0.0.0.0:3000 (PID xxx)
 [discord] logged in to discord as xxx
 ```
@@ -113,8 +116,9 @@ fly logs
 通过 SSH 登录到该机器以创建合适的配置文件：
 bash
 fly ssh console
-``````
-创建配置目录和文件：```bash
+```
+创建配置目录和文件：
+```bash
 mkdir -p /data
 cat > /data/clawdbot.json << 'EOF'
 {
@@ -179,12 +183,13 @@ EOF
 bash
 exit
 fly machine restart <machine-id>
-``````
+```
 ## 6) 访问网关
 
 ### 控制 UI
 
-在浏览器中打开：```bash
+在浏览器中打开：
+```bash
 fly open
 ```
 或访问 `https://my-clawdbot.fly.dev/`
@@ -195,8 +200,9 @@ fly open
 bash
 fly logs              # 实时日志
 fly logs --no-tail    # 最近的日志
-``````
-### SSH 控制台```bash
+```
+### SSH 控制台
+```bash
 fly ssh console
 ```
 ## 故障排除
@@ -220,8 +226,10 @@ Fly 无法通过配置的端口访问网关。
 **解决方法:** 在 `fly.toml` 中增加内存配置：
 toml
 [[vm]]
-  memory = "2048mb"```
-或更新现有机器：```bash
+  memory = "2048mb"
+```
+或更新现有机器：
+```bash
 fly machine update <machine-id> --vm-memory 2048 -y
 ```
 **注意：** 512MB 太小了。1GB 可能可以工作，但在负载较高或启用详细日志时可能会导致内存不足（OOM）。**建议使用 2GB。**
@@ -236,14 +244,15 @@ fly machine update <machine-id> --vm-memory 2048 -y
 bash
 fly ssh console --command "rm -f /data/gateway.*.lock"
 fly machine restart <machine-id>
-``````
+```
 锁文件位于 `/data/gateway.*.lock`（不在子目录中）。
 
 ### 配置未被读取
 
 如果使用 `--allow-unconfigured`，网关会创建一个最小配置。您在 `/data/clawdbot.json` 的自定义配置应在重启后被读取。
 
-验证配置是否存在：```bash
+验证配置是否存在：
+```bash
 fly ssh console --command "cat /data/clawdbot.json"
 ```
 ### 通过 SSH 编写配置文件
@@ -256,11 +265,12 @@ echo '{"your":"config"}' | fly ssh console -C "tee /data/clawdbot.json"
 # 或者使用 sftp
 fly sftp shell
 > put /local/path/config.json /data/clawdbot.json
-``````
-注意：如果文件已存在，`fly sftp` 可能会失败。请先删除文件：```bash
+```
+注意：如果文件已存在，`fly sftp` 可能会失败。请先删除文件：
+```bash
 fly ssh console --command "rm /data/clawdbot.json"
 ```
-### 状态未保存
+## 状态未保存
 
 如果在重启后丢失了凭据或会话，说明状态目录正在写入容器文件系统。
 
@@ -275,10 +285,11 @@ fly deploy
 # 检查健康状态
 fly status
 fly logs
-``````
-### 更新机器启动命令
+```
+## 更新机器启动命令
 
-如果您需要在不进行完整重新部署的情况下更改启动命令：```bash
+如果您需要在不进行完整重新部署的情况下更改启动命令：
+```bash
 # Get machine ID
 fly machines list
 

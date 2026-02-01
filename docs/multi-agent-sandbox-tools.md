@@ -18,14 +18,16 @@ status: active
 
 `setupCommand` 应该放在 `sandbox.docker` 下（全局或每个代理单独设置），并在容器创建时运行一次。
 
-认证是每个代理独立的：每个代理会从其自己的 `agentDir` 认证存储中读取，路径为：```
+认证是每个代理独立的：每个代理会从其自己的 `agentDir` 认证存储中读取，路径为：
+```
 ~/.clawdbot/agents/<agentId>/agent/auth-profiles.json
 ```
 凭证在代理之间 **不会** 共享。不要在多个代理之间重复使用 `agentDir`。
 如果想要共享凭证，请将 `auth-profiles.json` 复制到其他代理的 `agentDir` 中。
 
-有关运行时沙箱行为的信息，请参阅 [Sandboxing](/gateway/sandboxing)。
-有关调试“为什么被阻止了？”，请参阅 [Sandbox vs Tool Policy vs Elevated](/gateway/sandbox-vs-tool-policy-vs-elevated) 以及 `clawdbot sandbox explain`。```json
+有关运行时沙箱行为的信息，请参阅 [Sandboxing](/gateway/sandboxing.md)。
+有关调试“为什么被阻止了？”，请参阅 [Sandbox vs Tool Policy vs Elevated](/gateway/sandbox-vs-tool-policy-vs-elevated.md) 以及 `clawdbot sandbox explain`。
+```json
 {
   "agents": {
     "list": [
@@ -72,7 +74,8 @@ status: active
 
 ---
 
-### 示例 2：具有共享沙箱的工作代理```json
+### 示例 2：具有共享沙箱的工作代理
+```json
 {
   "agents": {
     "list": [
@@ -100,7 +103,8 @@ status: active
 ```
 ---
 
-### 示例 2b：全局编码配置 + 仅消息代理```json
+### 示例 2b：全局编码配置 + 仅消息代理
+```json
 {
   "tools": { "profile": "coding" },
   "agents": {
@@ -119,7 +123,8 @@ status: active
 
 ---
 
-### 示例 3：每个代理的不同沙盒模式```json
+### 示例 3：每个代理的不同沙盒模式
+```json
 {
   "agents": {
     "defaults": {
@@ -159,7 +164,8 @@ status: active
 当同时存在全局配置（`agents.defaults.*`）和代理特定配置（`agents.list[].*`）时：
 
 ### 沙盒配置
-代理特定的设置会覆盖全局设置：```
+代理特定的设置会覆盖全局设置：
+```
 agents.list[].sandbox.mode > agents.defaults.sandbox.mode
 agents.list[].sandbox.scope > agents.defaults.sandbox.scope
 agents.list[].sandbox.workspaceRoot > agents.defaults.sandbox.workspaceRoot
@@ -208,7 +214,8 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 - 拒绝不受信任代理的 `exec`（`agents.list[].tools.deny: ["exec"]`）
 - 避免允许那些路由到受限代理的发送者
 - 如果只希望沙箱执行，可以全局禁用提升（`tools.elevated.enabled: false`）
-- 对于敏感配置，可以按代理禁用提升（`agents.list[].tools.elevated.enabled: false`）```json
+- 对于敏感配置，可以按代理禁用提升（`agents.list[].tools.elevated.enabled: false`）
+```json
 {
   "agents": {
     "defaults": {
@@ -228,7 +235,8 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
   }
 }
 ```
-**在（具有不同角色的多智能体）之后：**```json
+**在（具有不同角色的多智能体）之后：**
+```json
 {
   "agents": {
     "list": [
@@ -248,7 +256,8 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 
 ## 工具限制示例
 
-### 只读代理```json
+### 只读代理
+```json
 {
   "tools": {
     "allow": ["read"],
@@ -256,7 +265,8 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
   }
 }
 ```
-### 安全执行代理（不修改文件）```json
+### 安全执行代理（不修改文件）
+```json
 {
   "tools": {
     "allow": ["read", "exec", "process"],
@@ -264,7 +274,8 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
   }
 }
 ```
-### 仅通信代理```json
+### 仅通信代理
+```json
 {
   "tools": {
     "allow": ["sessions_list", "sessions_send", "sessions_history", "session_status"],
@@ -285,19 +296,25 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 
 在配置多代理沙箱和工具之后：
 
-1. **检查代理解析：**   ```exec
+1. **检查代理解析：**   
+```exec
    clawdbot agents list --bindings
-   ```
-2. **验证沙盒容器：**   ```exec
+   
+```
+2. **验证沙盒容器：**   
+```exec
    docker ps --filter "label=clawdbot.sandbox=1"
-   ```
+   
+```
 3. **测试工具限制：**
    - 发送一个需要受限工具的消息
    - 验证代理无法使用被拒绝的工具
 
-4. **监控日志：**   ```exec
+4. **监控日志：**   
+```exec
    tail -f "${CLAWDBOT_STATE_DIR:-$HOME/.clawdbot}/logs/gateway.log" | grep -E "routing|sandbox|tools"
-   ```
+   
+```
 ---
 
 ## 故障排除
@@ -319,6 +336,6 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 
 ## 参考资料
 
-- [多代理路由](/concepts/multi-agent)
-- [沙箱配置](/gateway/configuration#agentsdefaults-sandbox)
-- [会话管理](/concepts/session)
+- [多代理路由](/concepts/multi-agent.md)
+- [沙箱配置](/gateway/configuration.md#agentsdefaults-sandbox)
+- [会话管理](/concepts/session.md)

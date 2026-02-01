@@ -24,7 +24,7 @@ json5
     }
   }
 }
-`````````
+```
 ## 目标
 - 在一个网关进程（Gateway process）中支持多个 WhatsApp 账户（多账户）。
 - 确定性路由：回复返回到 WhatsApp，不使用模型路由。
@@ -33,7 +33,8 @@ json5
 ## 配置写入
 默认情况下，允许 WhatsApp 通过 `/config set|unset` 触发配置更新（需要 `commands.config: true`）。
 
-禁用方法：```json5
+禁用方法：
+```json5
 {
   channels: { whatsapp: { configWrites: false } }
 }
@@ -60,14 +61,15 @@ json5
     }
   }
 }
-`````````
+```
 **配对模式（可选）：**
 如果你希望使用配对模式而不是允许列表，请将 `channels.whatsapp.dmPolicy` 设置为 `pairing`。未知发件人会收到一个配对代码；可以通过以下命令进行批准：
 `clawdbot pairing approve whatsapp <code>`
 
 ### 个人号码（备用方案）
 快速备用方案：在 **你自己的号码** 上运行 Clawdbot。为了测试，可以给自己发消息（WhatsApp 中的“给自己发消息”），以免骚扰联系人。在设置和实验过程中，预计需要在主手机上阅读验证码。**必须启用自对话模式。**
-当向导询问你的个人 WhatsApp 号码时，请输入你将用于发送消息的号码（即主人/发件人号码），而不是助手号码。```json
+当向导询问你的个人 WhatsApp 号码时，请输入你将用于发送消息的号码（即主人/发件人号码），而不是助手号码。
+```json
 {
   "whatsapp": {
     "selfChatMode": true,
@@ -131,8 +133,9 @@ json5
 {
   channels: { whatsapp: { sendReadReceipts: false } }
 }
-`````````
-按账户禁用：```json5
+```
+按账户禁用：
+```json5
 {
   channels: {
     whatsapp: {
@@ -158,14 +161,16 @@ json5
 - 代码在一小时内过期；每个渠道的待处理请求上限为 3 个。
 
 **能否在同一个 WhatsApp 号码上让多个人使用不同的 Clawdbot？**  
-可以，通过 `bindings` 将每个发件人路由到不同的代理（peer `kind: "dm"`，发件人 E.164 格式如 `+15551234567`）。回复仍然来自 **同一个 WhatsApp 账号**，直接聊天会合并到每个代理的主要会话中，因此请使用 **每人一个代理**。私信访问控制（`dmPolicy`/`allowFrom`）是针对每个 WhatsApp 账号全局的。详见 [多代理路由](/concepts/multi-agent)。
+可以，通过 `bindings` 将每个发件人路由到不同的代理（peer `kind: "dm"`，发件人 E.164 格式如 `+15551234567`）。回复仍然来自 **同一个 WhatsApp 账号**，直接聊天会合并到每个代理的主要会话中，因此请使用 **每人一个代理**。私信访问控制（`dmPolicy`/`allowFrom`）是针对每个 WhatsApp 账号全局的。详见 [多代理路由](/concepts/multi-agent.md)。
 
 **为什么向导要询问我的电话号码？**  
 向导会使用它来设置你的 **允许列表/所有者**，这样你自己的私信将被允许。它不会用于自动发送。如果你使用个人 WhatsApp 号码运行，请使用相同的号码并启用 `channels.whatsapp.selfChatMode`。
 
 [回复 +1555 id:ABC123]
 <quoted text or <media:...>>
-[/回复]```  ```
+[/回复]
+```  
+```
 - 回复元数据也已设置：
   - `ReplyToId` = stanzaId
   - `ReplyToBody` = 引用的内容或媒体占位符
@@ -196,7 +201,8 @@ json5
 ## 确认反应（自动反应）
 - WhatsApp 可以在机器人生成回复之前，立即对收到的消息自动发送表情符号反应。这为用户提供即时反馈，表明他们的消息已被接收。
 
-**配置：**```json
+**配置：**
+```json
 {
   "whatsapp": {
     "ackReaction": {
@@ -229,7 +235,8 @@ json
       }
     }
   }
-}``````
+}
+```
 **行为说明：**
 - 反应会在消息接收后**立即**发送，早于输入指示器或机器人回复。
 - 在 `requireMention: false`（激活：始终）的群组中，`group: "mentions"` 会响应所有消息（而不仅仅是 @ 提及）。
@@ -240,7 +247,7 @@ json
 ## 代理工具（反应）
 - 工具：`whatsapp`，使用 `react` 动作（`chatJid`、`messageId`、`emoji`，可选 `remove`）。
 - 可选参数：`participant`（群组发送者）、`fromMe`（对自己消息的反应）、`accountId`（多账号）。
-- 反应移除语义：参见 [/tools/reactions](/tools/reactions)。
+- 反应移除语义：参见 [/tools/reactions](/tools/reactions.md)。
 - 工具控制：`channels.whatsapp.actions.reactions`（默认：启用）。
 
 ## 限制
@@ -319,7 +326,7 @@ WhatsApp 将音频作为 **语音备忘录**（PTT 气泡）发送。
 ## 日志与故障排除
 - 子系统: `whatsapp/inbound`, `whatsapp/outbound`, `web-heartbeat`, `web-reconnect`。
 - 日志文件: `/tmp/clawdbot/clawdbot-YYYY-MM-DD.log`（可配置）。
-- 故障排除指南: [网关故障排除](/gateway/troubleshooting)。
+- 故障排除指南: [网关故障排除](/gateway/troubleshooting.md)。
 
 ## 快速故障排除
 
@@ -334,3 +341,4 @@ WhatsApp 将音频作为 **语音备忘录**（PTT 气泡）发送。
 **Bun 运行时**
 - Bun **不被推荐**。在 Bun 上 WhatsApp（Baileys）和 Telegram 不稳定。
   请使用 **Node** 运行网关。（参见“开始使用”中的运行时说明。）
+```

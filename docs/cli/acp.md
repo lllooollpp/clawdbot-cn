@@ -26,11 +26,13 @@ clawdbot acp --session agent:main:main
 clawdbot acp --session-label "support inbox"
 
 # 在第一个提示前重置会话密钥
-clawdbot acp --session agent:main:main --reset-session``````
+clawdbot acp --session agent:main:main --reset-session
+```
 ## ACP 客户端（调试）
 
 使用内置的 ACP 客户端在没有 IDE 的情况下对桥接器进行健康检查。
-它会启动 ACP 桥接器，并允许你交互式地输入提示。```bash
+它会启动 ACP 桥接器，并允许你交互式地输入提示。
+```bash
 clawdbot acp client
 
 # Point the spawned bridge at a remote Gateway
@@ -50,8 +52,10 @@ clawdbot acp client --server "node" --server-args dist/entry.js acp --url ws://1
 示例配置（持久化）：
 bash
 clawdbot config set gateway.remote.url wss://gateway-host:18789
-clawdbot config set gateway.remote.token <token>``````
-直接运行示例（不写入配置）：```bash
+clawdbot config set gateway.remote.token <token>
+```
+直接运行示例（不写入配置）：
+```bash
 clawdbot acp --url wss://gateway-host:18789 --token <token>
 ```
 ## 选择代理
@@ -62,8 +66,10 @@ ACP 不直接选择代理。它通过网关会话密钥进行路由。
 bash
 clawdbot acp --session agent:main:main
 clawdbot acp --session agent:design:main
-clawdbot acp --session agent:qa:bug-123``````
-每个 ACP 会话对应一个网关会话密钥。一个代理可以有多个会话；ACP 默认使用隔离的 `acp:<uuid>` 会话，除非你覆盖密钥或标签。```json
+clawdbot acp --session agent:qa:bug-123
+```
+每个 ACP 会话对应一个网关会话密钥。一个代理可以有多个会话；ACP 默认使用隔离的 `acp:<uuid>` 会话，除非你覆盖密钥或标签。
+```json
 {
   "agent_servers": {
     "Clawdbot ACP": {
@@ -91,7 +97,9 @@ json
       "env": {}
     }
   }
-}```"```
+}
+```"
+```
 在 Zed 中，打开 Agent 面板并选择 “Clawdbot ACP” 以启动一个线程。
 
 ## 会话映射
@@ -103,7 +111,8 @@ json
 - `--session-label <label>`：通过标签解析现有会话。
 - `--reset-session`：为该密钥生成一个新的会话 ID（使用相同的密钥，但生成新的对话记录）。
 
-如果您的 ACP 客户端支持元数据，您可以为每个会话进行覆盖设置：```json
+如果您的 ACP 客户端支持元数据，您可以为每个会话进行覆盖设置：
+```json
 {
   "_meta": {
     "sessionKey": "agent:main:main",
@@ -112,7 +121,7 @@ json
   }
 }
 ```
-有关会话密钥的更多信息，请访问 [/concepts/session](/concepts/session)。
+有关会话密钥的更多信息，请访问 [/concepts/session](/concepts/session.md)。
 
 ## 选项
 
@@ -133,3 +142,4 @@ json
 - `--server-args <args...>`：传递给 ACP 服务器的额外参数。
 - `--server-verbose`：在 ACP 服务器上启用详细日志。
 - `--verbose, -v`：启用详细客户端日志。
+```

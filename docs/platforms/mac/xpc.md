@@ -29,13 +29,13 @@ Agent -> Gateway -> Node Service (WS)
                       |  IPC (UDS + token + HMAC + TTL)
                       v
                   Mac App (UI + TCC + system.run)
-``````
+```
 ```md
 ### PeekabooBridge（UI自动化）
 - UI自动化使用一个名为 `bridge.sock` 的独立UNIX套接字和 PeekabooBridge JSON协议。
 - 主机优先级顺序（客户端侧）：Peekaboo.app → Claude.app → Clawdbot.app → 本地执行。
 - 安全性：bridge主机需要允许的TeamID；DEBUG模式下允许同UID的绕过机制由 `PEEKABOO_ALLOW_UNSIGNED_SOCKET_CLIENTS=1`（Peekaboo约定）保护。
-- 详情请参见：[PeekabooBridge使用说明](/platforms/mac/peekaboo)。
+- 详情请参见：[PeekabooBridge使用说明](/platforms/mac/peekaboo.md)。
 
 ## 操作流程
 - 重启/重建：`SIGN_IDENTITY="Apple Development: <Developer Name> (<TEAMID>)" scripts/restart-mac.sh`

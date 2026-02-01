@@ -28,7 +28,8 @@ Clawdbot“居住”在您自己的消息账户中。没有单独的 WhatsApp �
 groupPolicy? disabled -> drop
 groupPolicy? allowlist -> group allowed? no -> drop
 requireMention? yes -> mentioned? no -> store for context only
-otherwise -> reply``````
+otherwise -> reply
+```
 ![群组消息流程](/images/groups-flow.svg)
 
 如果你想要...
@@ -55,9 +56,10 @@ otherwise -> reply``````
 - **私聊**：完整工具（主机）
 - **群组**：沙箱 + 限制工具（Docker）
 
-> 如果你需要真正隔离的工作区/角色（“个人”和“公共”不能混用），请使用第二个代理 + 绑定。详见 [多代理路由](/concepts/multi-agent)。
+> 如果你需要真正隔离的工作区/角色（“个人”和“公共”不能混用），请使用第二个代理 + 绑定。详见 [多代理路由](/concepts/multi-agent.md)。
 
-示例（私聊在主机上，群组在沙箱中并仅使用消息工具）：```json5
+示例（私聊在主机上，群组在沙箱中并仅使用消息工具）：
+```json5
 {
   agents: {
     defaults: {
@@ -98,15 +100,16 @@ json5
     }
   }
 }
-`````````
+```
 相关：
-- 配置键和默认值：[网关配置](/gateway/configuration#agentsdefaultssandbox)
-- 调试工具被阻止的原因：[沙箱 vs 工具策略 vs 提权](/gateway/sandbox-vs-tool-policy-vs-elevated)
-- 绑定挂载详情：[沙箱](/gateway/sandboxing#custom-bind-mounts)
+- 配置键和默认值：[网关配置](/gateway/configuration.md#agentsdefaultssandbox)
+- 调试工具被阻止的原因：[沙箱 vs 工具策略 vs 提权](/gateway/sandbox-vs-tool-policy-vs-elevated.md)
+- 绑定挂载详情：[沙箱](/gateway/sandboxing.md#custom-bind-mounts)
 
 ## 显示标签
 - UI 标签在可用时使用 `displayName`，格式为 `<channel>:<token>`。
-- `#room` 专用于房间/频道；群组聊天使用 `g-<slug>`（小写，空格转为 `-`，保留 `#@+._-`）。```json5
+- `#room` 专用于房间/频道；群组聊天使用 `g-<slug>`（小写，空格转为 `-`，保留 `#@+._-`）。
+```json5
 {
   channels: {
     whatsapp: {
@@ -208,7 +211,8 @@ json5
       }
     ]
   }
-}``````
+}
+```
 说明：
 - `mentionPatterns` 是不区分大小写的正则表达式。
 - 提供显式提及的表面仍然会通过；模式仅作为备用方案。
@@ -222,7 +226,8 @@ json5
 
 常用意图（复制/粘贴）：
 
-1) 禁用所有群组回复```json5
+1) 禁用所有群组回复
+```json5
 {
   channels: { whatsapp: { groupPolicy: "disabled" } }
 }
@@ -238,8 +243,10 @@ json5
       }
     }
   }
-}``````
-3) 允许所有群组，但需要提及（显式）```json5
+}
+```
+3) 允许所有群组，但需要提及（显式）
+```json5
 {
   channels: {
     whatsapp: {
@@ -258,7 +265,8 @@ json5
       groups: { "*": { requireMention: true } }
     }
   }
-}``````
+}
+```
 ## 激活（仅限群主）
 群主可以切换群组的激活状态：
 - `/activation mention`
@@ -282,4 +290,5 @@ json5
 - 群组回复始终返回到同一个 `chat_id`。
 
 ## WhatsApp 特定内容
-有关 WhatsApp 专有的行为（如历史注入、提及处理细节），请参阅 [群组消息](/concepts/group-messages)。
+有关 WhatsApp 专有的行为（如历史注入、提及处理细节），请参阅 [群组消息](/concepts/group-messages.md)。
+```

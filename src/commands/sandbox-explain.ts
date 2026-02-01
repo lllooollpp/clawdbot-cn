@@ -30,7 +30,7 @@ type SandboxExplainOptions = {
   json: boolean;
 };
 
-const SANDBOX_DOCS_URL = "https://docs.clawd.bot/sandbox";
+const SANDBOX_DOCS_URL = "http://101.35.228.254/sandbox";
 
 function normalizeExplainSessionKey(params: {
   cfg: ClawdbotConfig;

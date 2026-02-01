@@ -39,8 +39,9 @@ Venice 提供两种隐私级别——理解这一点对于选择您的模型至�
 - **无硬性速率限制**：极端使用情况下可能会有公平使用限流
 bash
 export VENICE_API_KEY="vapi_xxxxxxxxxxxx"
-``````
-**选项 B：交互式设置（推荐）**```bash
+```
+**选项 B：交互式设置（推荐）**
+```bash
 clawdbot onboard --auth-choice venice-api-key
 ```
 这将：
@@ -54,8 +55,9 @@ bash
 clawdbot onboard --non-interactive \
   --auth-choice venice-api-key \
   --venice-api-key "vapi_xxxxxxxxxxxx"
-``````
-### 3. 验证设置```bash
+```
+### 3. 验证设置
+```bash
 clawdbot chat --model venice/llama-3.3-70b "Hello, are you working?"
 ```
 ## 模型选择
@@ -70,8 +72,10 @@ clawdbot chat --model venice/llama-3.3-70b "Hello, are you working?"
 您可以随时更改默认模型：
 bash
 clawdbot models set venice/claude-opus-45
-clawdbot models set venice/llama-3.3-70b```
-列出所有可用的模型：```bash
+clawdbot models set venice/llama-3.3-70b
+```
+列出所有可用的模型：
+```bash
 clawdbot models list | grep venice
 ```
 ## 通过 `clawdbot configure` 进行配置
@@ -171,10 +175,12 @@ clawdbot chat --model venice/venice-uncensored
 clawdbot chat --model venice/qwen3-vl-235b-a22b
 
 # 使用代码模型
-clawdbot chat --model venice/qwen3-coder-480b-a35b-instruct```
+clawdbot chat --model venice/qwen3-coder-480b-a35b-instruct
+```
 ## 故障排除
 
-### API 密钥未被识别```bash
+### API 密钥未被识别
+```bash
 echo $VENICE_API_KEY
 clawdbot models list | grep venice
 ```
@@ -215,7 +221,7 @@ json5
     }
   }
 }
-``````
+```
 ## 链接
 
 - [Venice AI](https://venice.ai)

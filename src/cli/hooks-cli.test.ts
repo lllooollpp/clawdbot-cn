@@ -16,7 +16,7 @@ const report: HookStatusReport = {
       handlerPath: "/tmp/hooks/session-memory/handler.js",
       hookKey: "session-memory",
       emoji: "💾",
-      homepage: "https://docs.clawd.bot/hooks#session-memory",
+      homepage: "http://101.35.228.254/hooks#session-memory",
       events: ["command:new"],
       always: false,
       disabled: false,

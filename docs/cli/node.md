@@ -33,8 +33,9 @@ json5
     }
   }
 }
-`````````
-## 运行（前台）```bash
+```
+## 运行（前台）
+```bash
 clawdbot node run --host <gateway-host> --port 18789
 ```
 选项：
@@ -49,7 +50,8 @@ clawdbot node run --host <gateway-host> --port 18789
 
 将无头节点主机安装为用户服务。
 bash
-clawdbot node install --host <gateway-host> --port 18789``````
+clawdbot node install --host <gateway-host> --port 18789
+```
 选项：
 - `--host <host>`：网关 WebSocket 主机（默认：`127.0.0.1`）
 - `--port <port>`：网关 WebSocket 端口（默认：`18789`）
@@ -60,7 +62,8 @@ clawdbot node install --host <gateway-host> --port 18789``````
 - `--runtime <runtime>`：服务运行时（`node` 或 `bun`）
 - `--force`：如果已安装则重新安装/覆盖
 
-管理服务：```bash
+管理服务：
+```bash
 clawdbot node status
 clawdbot node stop
 clawdbot node restart
@@ -76,7 +79,8 @@ clawdbot node uninstall
 通过以下方式批准它：
 bash
 clawdbot nodes pending
-clawdbot nodes approve <requestId>``````
+clawdbot nodes approve <requestId>
+```
 节点主机在其 `~/.clawdbot/node.json` 文件中存储节点 ID、令牌、显示名称和网关连接信息。
 
 ## 执行审批
@@ -84,5 +88,6 @@ clawdbot nodes approve <requestId>``````
 `system.run` 命令受本地执行审批的限制：
 
 - `~/.clawdbot/exec-approvals.json`
-- [执行审批](/tools/exec-approvals)
+- [执行审批](/tools/exec-approvals.md)
 - `clawdbot approvals --node <id|name|ip>`（从网关进行编辑）
+```

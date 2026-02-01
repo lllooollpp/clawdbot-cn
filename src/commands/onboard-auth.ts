@@ -28,6 +28,8 @@ export {
   applyOllamaProviderConfig,
   applyDomesticMediaDefaults,
   applyZaiConfig,
+  applyZhipuConfig,
+  applyZhipuProviderConfig,
 } from "./onboard-auth.config-core.js";
 export {
   applyMinimaxApiConfig,
@@ -55,6 +57,7 @@ export {
   setSiliconFlowApiKey,
   setVolcengineApiKey,
   setBochaApiKey,
+  setZhipuApiKey,
   setSyntheticApiKey,
   setVeniceApiKey,
   setVercelAiGatewayApiKey,
@@ -71,6 +74,7 @@ export {
   buildDeepSeekModelDefinition,
   buildSiliconFlowModelDefinition,
   buildVolcengineModelDefinition,
+  buildZhipuModelDefinition,
   buildOllamaModelDefinition,
   DEFAULT_MINIMAX_BASE_URL,
   DEEPSEEK_BASE_URL,
@@ -82,6 +86,8 @@ export {
   VOLCENGINE_BASE_URL,
   VOLCENGINE_DEFAULT_MODEL_ID,
   VOLCENGINE_DEFAULT_MODEL_REF,
+  ZHIPU_DEFAULT_MODEL_ID,
+  ZHIPU_DEFAULT_MODEL_REF,
   OLLAMA_BASE_URL,
   OLLAMA_DEFAULT_MODEL_ID,
   OLLAMA_DEFAULT_MODEL_REF,

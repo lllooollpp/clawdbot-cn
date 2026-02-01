@@ -18,7 +18,7 @@ read_when:
 - 图像有效负载清理
 
 如需了解转录本存储的详细信息，请参阅：
-- [/reference/session-management-compaction](/reference/session-management-compaction)
+- [/reference/session-management-compaction](/reference/session-management-compaction.md)
 
 ---
 
@@ -77,7 +77,8 @@ read_when:
 
 ## 历史行为（2026.1.22之前）
 
-在2026.1.22版本发布之前，Clawdbot应用了多层转录本卫生处理：```md
+在2026.1.22版本发布之前，Clawdbot应用了多层转录本卫生处理：
+```md
 - 一个 **transcript-sanitize 扩展** 在每次上下文构建时都会运行，它可以：
   - 修复工具使用/结果的配对。
   - 对工具调用 ID 进行清理（包括一种非严格模式，保留 `_`/`-`）。
@@ -88,3 +89,4 @@ read_when:
   - 在工具调用后修剪助理内容。
   
 这种复杂性导致了跨提供者的回归问题（尤其是 `openai-responses` 中的 `call_id|fc_id` 配对）。2026.1.22 清理操作移除了该扩展，将逻辑集中到运行器中，并且除了图像清理外，对 OpenAI 实施了 **无触碰** 策略。
+```

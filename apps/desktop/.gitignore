@@ -2,5 +2,7 @@
 node_modules
 /dist
 /out
+/extensions
+/src/plugin-sdk
 /release
 *.log

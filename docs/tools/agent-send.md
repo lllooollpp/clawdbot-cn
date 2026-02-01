@@ -32,7 +32,7 @@ clawdbot agent --session-id 1234 --message "Summarize inbox" --thinking medium
 clawdbot agent --to +15555550123 --message "Trace logs" --verbose on --json
 clawdbot agent --to +15555550123 --message "Summon reply" --deliver
 clawdbot agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"
-``````
+```
 ## 标志
 
 - `--local`: 本地运行（需要在你的 shell 中设置模型提供者的 API 密钥）
@@ -45,3 +45,4 @@ clawdbot agent --agent ops --message "Generate report" --deliver --reply-channel
 - `--verbose <on|full|off>`: 持久化 verbose 级别
 - `--timeout <秒数>`: 覆盖代理超时时间
 - `--json`: 输出结构化的 JSON
+```

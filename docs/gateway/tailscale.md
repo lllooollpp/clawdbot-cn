@@ -31,12 +31,13 @@ json5
     tailscale: { mode: "serve" }
   }
 }
-``````
+```
 Open: `https://<magicdns>/`（或你配置的 `gateway.controlUi.basePath`）
 
 ### 仅限 Tailnet（绑定到 Tailnet IP）
 
-当您希望网关直接在 Tailnet IP 上监听时使用此选项（无需 Serve/Funnel）。```json5
+当您希望网关直接在 Tailnet IP 上监听时使用此选项（无需 Serve/Funnel）。
+```json5
 {
   gateway: {
     bind: "tailnet",
@@ -57,8 +58,9 @@ json5
     auth: { mode: "password", password: "replace-me" }
   }
 }
-``````
-优先使用 `CLAWDBOT_GATEWAY_PASSWORD` 而不是将密码写入磁盘。```bash
+```
+优先使用 `CLAWDBOT_GATEWAY_PASSWORD` 而不是将密码写入磁盘。
+```bash
 clawdbot gateway --tailscale serve
 clawdbot gateway --tailscale funnel --auth password
 ```
@@ -78,8 +80,9 @@ bash
 # 在运行 Chrome 的机器上
 clawdbot browser serve --bind 127.0.0.1 --port 18791 --token <token>
 tailscale serve https / http://127.0.0.1:18791
-``````
-然后将网关配置指向 HTTPS URL：```json5
+```
+然后将网关配置指向 HTTPS URL：
+```json5
 {
   browser: {
     enabled: true,
@@ -88,7 +91,8 @@ tailscale serve https / http://127.0.0.1:18791
 }
 ```
 并且使用相同的令牌从网关进行身份验证（优先使用环境变量）：  
-export CLAWDBOT_BROWSER_CONTROL_TOKEN="<token>"```
+export CLAWDBOT_BROWSER_CONTROL_TOKEN="<token>"
+```
 避免在浏览器控制端点上使用 Funnel，除非你明确希望公开暴露。
 
 ## Tailscale 的先决条件和限制

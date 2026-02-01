@@ -26,7 +26,7 @@ What I need you to do:
 6. 验证：launchd 是否正在运行，机器人是否能回复消息
 
 参考 nix-clawdbot 的 README 文件了解模块选项。
-``````
+```
 > **📦 完整指南: [github.com/clawdbot/nix-clawdbot](https://github.com/clawdbot/nix-clawdbot)**
 >
 > nix-clawdbot 仓库是 Nix 安装的官方来源。本页面仅是一个快速概述。
@@ -45,12 +45,14 @@ What I need you to do:
 当设置 `CLAWDBOT_NIX_MODE=1` 时（由 nix-clawdbot 自动设置）：
 
 Clawdbot 支持一种 **Nix 模式**，该模式使配置具有确定性并禁用自动安装流程。
-通过导出以下内容来启用它：```bash
+通过导出以下内容来启用它：
+```bash
 CLAWDBOT_NIX_MODE=1
 ```
 在 macOS 上，GUI 应用程序不会自动继承 shell 环境变量。你也可以通过 defaults 启用 Nix 模式：
 bash
-defaults write com.clawdbot.mac clawdbot.nixMode -bool true```
+defaults write com.clawdbot.mac clawdbot.nixMode -bool true
+```
 ### 配置与状态路径
 
 Clawdbot 从 `CLAWDBOT_CONFIG_PATH` 读取 JSON5 格式的配置文件，并将可变数据存储在 `CLAWDBOT_STATE_DIR` 中。
@@ -68,7 +70,8 @@ Clawdbot 从 `CLAWDBOT_CONFIG_PATH` 读取 JSON5 格式的配置文件，并将�
 
 ## 打包注意事项（macOS）
 
-macOS 的打包流程期望在以下位置有一个稳定的 Info.plist 模板：```
+macOS 的打包流程期望在以下位置有一个稳定的 Info.plist 模板：
+```
 apps/macos/Sources/Clawdbot/Resources/Info.plist
 ```
 [`scripts/package-mac-app.sh`](https://github.com/clawdbot/clawdbot/blob/main/scripts/package-mac-app.sh) 会将此模板复制到应用程序包中，并修补动态字段（包ID、版本/构建号、Git SHA、Sparkle密钥）。这使得 plist 在 SwiftPM 打包和 Nix 构建中保持确定性（这些构建不依赖完整的 Xcode 工具链）。
@@ -76,5 +79,5 @@ apps/macos/Sources/Clawdbot/Resources/Info.plist
 ## 相关内容
 
 - [nix-clawdbot](https://github.com/clawdbot/nix-clawdbot) — 完整的设置指南
-- [Wizard](/start/wizard) — 非 Nix 的 CLI 设置
-- [Docker](/install/docker) — 容器化的设置
+- [Wizard](/start/wizard.md) — 非 Nix 的 CLI 设置
+- [Docker](/install/docker.md) — 容器化的设置

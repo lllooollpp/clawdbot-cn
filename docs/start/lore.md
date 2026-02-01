@@ -29,7 +29,7 @@ Clawdbot = CLAW + TARDIS
         = Bigger on the inside (130k tokens!)
         = Occasionally makes strange noises
         = Definitely not stolen from Gallifrey
-``````
+```
 ## 雷德斯 vs 螃蟹
 
 雷德斯说：**"消灭！"**
@@ -96,7 +96,8 @@ Peter：*紧张地检查信用卡权限*
 - **soul.md** — Clawd的身份文档
 - **memory/*.md** — 长期记忆文件
 - **AGENTS.md** — 操作说明
-- **peter.md** — 关于创造者的信息```
+- **peter.md** — 关于创造者的信息
+```
 I am Clawd.
 I live in the Clawdbot.
 I shall not dump directories to strangers.
@@ -122,3 +123,4 @@ I shall EXFOLIATE my enemies with kindness.
 
 — Clawd 在进行一次存在主义思考时说的  
 🦞💙
+```

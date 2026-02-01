@@ -15,7 +15,7 @@ Clawdbot.app 现在不再捆绑 Node/Bun 或网关运行时。macOS 应用程序
 你需要在 Mac 上安装 Node 22+，然后全局安装 `clawdbot`：
 bash
 npm install -g clawdbot@<version>
-``````
+```
 macOS 应用的 **Install CLI** 按钮通过 npm/pnpm 运行相同的流程（不推荐在 Gateway 运行时使用 bun）。
 
 ## Launchd（Gateway 作为 LaunchAgent）
@@ -43,7 +43,8 @@ Plist 路径（用户级）：
 
 macOS 应用会检查网关版本与自身版本是否兼容。如果版本不兼容，请更新全局 CLI 以匹配应用版本。
 
-## 烟雾测试（Smoke check）```bash
+## 烟雾测试（Smoke check）
+```bash
 clawdbot --version
 
 CLAWDBOT_SKIP_CHANNELS=1 \
@@ -53,4 +54,5 @@ clawdbot gateway --port 18999 --bind loopback
 然后：
 bash
 clawdbot gateway call health --url ws://127.0.0.1:18999 --timeout 3000
-``````
+```
+

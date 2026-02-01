@@ -22,11 +22,11 @@ Clawdbot 有两个不同的问题，表面上看起来相似：
 - **网关 WS（控制平面）**：默认的 WebSocket 端点在 `127.0.0.1:18789`；可以通过 `gateway.bind` 绑定到局域网或 tailnet。
 - **直接 WS 传输**：面向局域网或 tailnet 的网关 WS 端点（无需 SSH）。
 - **SSH 传输（备用方案）**：通过 SSH 转发 `127.0.0.1:18789` 实现远程控制。
-- **旧版 TCP 桥接（已弃用/移除）**：旧的节点传输方式（参见 [桥接协议](/gateway/bridge-protocol)）；不再用于发现。
+- **旧版 TCP 桥接（已弃用/移除）**：旧的节点传输方式（参见 [桥接协议](/gateway/bridge-protocol.md)）；不再用于发现。
 
 协议细节：
-- [网关协议](/gateway/protocol)
-- [桥接协议（旧版）](/gateway/bridge-protocol)
+- [网关协议](/gateway/protocol.md)
+- [桥接协议（旧版）](/gateway/bridge-protocol.md)
 
 ## 为什么同时保留“直接”和 SSH
 
@@ -49,7 +49,7 @@ Bonjour 是一种尽力而为的协议，不能跨网络工作。它仅用于“
 - **网关** 通过 Bonjour 广告其 WebSocket 端点。
 - 客户端浏览并显示“选择一个网关”的列表，然后存储所选的端点。
 
-故障排查和信标详情：[Bonjour](/gateway/bonjour)。
+故障排查和信标详情：[Bonjour](/gateway/bonjour.md)。
 
 #### 服务信标详情
 
@@ -84,7 +84,7 @@ Bonjour 是一种尽力而为的协议，不能跨网络工作。它仅用于“
 
 当没有直接路由（或直接路由被禁用）时，客户端始终可以通过转发回环网关端口来通过 SSH 连接。
 
-参见 [远程访问](/gateway/remote)。
+参见 [远程访问](/gateway/remote.md)。
 
 ## 传输选择（客户端策略）
 
@@ -99,7 +99,7 @@ Bonjour 是一种尽力而为的协议，不能跨网络工作。它仅用于“
 
 网关是节点/客户端准入的唯一权威来源。
 
-- 配对请求在网关中创建/批准/拒绝（参见 [网关配对](/gateway/pairing)）。
+- 配对请求在网关中创建/批准/拒绝（参见 [网关配对](/gateway/pairing.md)）。
 - 网关强制执行：
   - 认证（令牌 / 密钥对）
   - 范围/ACL（网关不是到每个方法的原始代理）
@@ -110,3 +110,4 @@ Bonjour 是一种尽力而为的协议，不能跨网络工作。它仅用于“
 - **网关**：发布发现信标，负责配对决策，并托管 WebSocket 端点。
 - **macOS 应用**：帮助你选择网关，显示配对提示，并仅在必要时使用 SSH。
 - **iOS/Android 节点**：通过Bonjour浏览作为便利功能，并连接到已配对的网关 WebSocket。
+```

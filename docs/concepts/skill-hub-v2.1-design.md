@@ -1,3 +1,7 @@
+---
+summary: "Skill Hub V2.1 Design documentation"
+---
+
 # Agent Skill Hub v2.1 深度设计文档
 
 ## 1. 核心理念：解耦、自治与动态增强
