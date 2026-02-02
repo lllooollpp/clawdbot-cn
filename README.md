@@ -2,10 +2,28 @@
 
 桌面端：
 
+![1769958220182](image/README/1769958220182.png)
+
+
+
+![1769958246734](image/README/1769958246734.png)
+
+![1769958270509](image/README/1769958270509.png)
+
+![1769958442630](image/README/1769958442630.png)
+
+
+
+
+
+
+
+![1769958334598](image/README/1769958334598.png)
+
 ![1769742814062](image/README/1769742814062.png)
 
-
 app端：
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/openclaw-cn/openclaw-cn/main/docs/whatsapp-clawd.jpg" alt="OpenClaw" width="400">
 </p>
@@ -47,8 +65,9 @@ web端：
 - **[OpenAI](https://openai.com/)** (ChatGPT/Codex)
 - **[智谱 (Zhipu)](https://open.bigmodel.cn/)** (ChatGLM 4.7 / GLM-4)
 - **[火山引擎 (Volcengine)](https://www.volcengine.com/)** (DeepSeek V3/R1, 豆包)
+- **[Moonshot (Kimi)](https://platform.moonshot.cn/)** (Kimi V1 / K2.5)
 
-模型说明：虽然支持任何模型，但我强烈推荐 **Anthropic Pro/Max (100/200) + Opus 4.5** 用于长上下文强度和更好的提示注入抵抗。对于中文用户，**DeepSeek V3/R1 (通过火山引擎)** 和 **ChatGLM 4.7** 是极佳的选择。见 [入门](./docs/start/onboarding.md)。
+模型说明：虽然支持任何模型，但我强烈推荐 **Anthropic Pro/Max (100/200) + Opus 4.5** 用于长上下文强度和更好的提示注入抵抗。对于中文用户，**DeepSeek V3/R1 (通过火山引擎)**、**Kimi K2.5** 和 **ChatGLM 4.7** 是极佳的选择。见 [入门](./docs/start/onboarding.md)。
 
 ## 模型（选择 + 认证）
 
@@ -57,7 +76,7 @@ web端：
 
 ## 安装（推荐）
 
-运行时：**Node ≥22**。
+运行时：**Node ≥22.12.0**。
 
 ```bash
 npm install -g clawdbot@latest
@@ -70,7 +89,7 @@ clawdbot onboard --install-daemon
 
 ## 快速开始（TL;DR）
 
-运行时：**Node ≥22**。
+运行时：**Node ≥22.12.0**。
 
 完整初学者指南（认证、配对、渠道）：[入门](http://101.35.228.254/start/getting-started)
 

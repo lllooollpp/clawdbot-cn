@@ -11,7 +11,7 @@ export function requireNodeSqlite(): any {
     // Use string concatenation to prevent bundlers from converting to static import
     const nodeSqlite = "node" + ":sqlite";
     return require(nodeSqlite);
-  } catch (_err) {
+  } catch {
     // Fallback to better-sqlite3 for older environments or Electron
     try {
       const Database = require("better-sqlite3");

@@ -8,7 +8,7 @@ read_when:
 
 # Node.js + npm（PATH 检查）
 
-Clawdbot 的运行时基础是 **Node 22+**。
+Clawdbot 的运行时基础是 **Node 22.12.0+**。
 
 如果你可以运行 `npm install -g clawdbot@latest`，但之后看到 `clawdbot: command not found`，这几乎总是由于 **PATH** 问题：npm 安装全局二进制文件的目录不在你的 shell 的 PATH 环境变量中。
 
@@ -57,7 +57,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 如果以以下方式安装 Node/npm，你将会遇到最少的意外情况：
 
-- 保持 Node 的更新（22+）
+- 保持 Node 的更新（22.12.0+）
 - 使全局的 npm bin 目录稳定，并在新 shell 中出现在 PATH 环境变量中
 
 常见的选择包括：

@@ -130,13 +130,16 @@ export const linePlugin: ChannelPlugin<ResolvedLineAccount> = {
       };
     },
     isConfigured: (account) => Boolean(account.channelAccessToken?.trim()),
-    describeAccount: (account) => ({
-      accountId: account.accountId,
-      name: account.name,
-      enabled: account.enabled,
-      configured: Boolean(account.channelAccessToken?.trim()),
-      tokenSource: account.tokenSource,
-    }),
+    describeAccount: (account) => {
+      if (!account) return { accountId: "unknown", configured: false };
+      return {
+        accountId: account.accountId,
+        name: account.name,
+        enabled: account.enabled,
+        configured: Boolean(account.channelAccessToken?.trim()),
+        tokenSource: account.tokenSource,
+      };
+    },
     resolveAllowFrom: ({ cfg, accountId }) =>
       (getLineRuntime().channel.line.resolveLineAccount({ cfg, accountId }).config.allowFrom ?? []).map(
         (entry) => String(entry),
@@ -590,6 +593,7 @@ export const linePlugin: ChannelPlugin<ResolvedLineAccount> = {
     probeAccount: async ({ account, timeoutMs }) =>
       getLineRuntime().channel.line.probeLineBot(account.channelAccessToken, timeoutMs),
     buildAccountSnapshot: ({ account, runtime, probe }) => {
+      if (!account) return { accountId: "error", configured: false } as any;
       const configured = Boolean(account.channelAccessToken?.trim());
       return {
         accountId: account.accountId,

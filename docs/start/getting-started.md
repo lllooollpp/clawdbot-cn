@@ -38,7 +38,7 @@ json
 ```
 ## 0) 前提条件
 
-- Node `>=22`
+- Node `>=22.12.0`
 - `pnpm`（可选；如果你从源代码构建，建议使用）
 - **推荐:** Brave Search API 密钥用于网络搜索。最简单的方法是：
   `clawdbot configure --section web`（存储 `tools.web.search.apiKey`）。

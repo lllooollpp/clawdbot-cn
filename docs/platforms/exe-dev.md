@@ -17,7 +17,7 @@ read_when:
 
 ## 初学者快速路径
 
-1) 创建虚拟机 → 安装 Node 22 → 安装 Clawdbot  
+1) 创建虚拟机 → 安装 Node 22.12.0+ → 安装 Clawdbot  
 2) 运行 `clawdbot onboard --install-daemon`  
 3) 从笔记本电脑建立隧道 (`ssh -N -L 18789:127.0.0.1:18789 …`)  
 4) 打开 `http://127.0.0.1:18789/` 并粘贴您的令牌
@@ -44,11 +44,11 @@ sudo apt-get install -y git curl jq ca-certificates openssl
 ```
 ### 节点 22
 
-安装 Node **>= 22.12**（任何方法都可以）。快速检查：
+安装 Node **>= 22.12.0**（任何方法都可以）。快速检查：
 ```bash
 node -v
 ```
-如果你的虚拟机上还没有安装 Node 22，请使用你偏好的 Node 管理器（如 nvm、mise 或 asdf），或者使用提供 Node 22+ 的发行版包源。
+如果你的虚拟机上还没有安装 Node 22.12.0+，请使用你偏好的 Node 管理器（如 nvm、mise 或 asdf），或者使用提供 Node 22.12.0+ 的发行版包源。
 
 常见的 Ubuntu/Debian 选项（NodeSource）：
 bash

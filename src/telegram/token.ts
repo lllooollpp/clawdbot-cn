@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 import type { ClawdbotConfig } from "../config/config.js";
+import type { TelegramAccountConfig } from "../config/types.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../routing/session-key.js";
 
 export type TelegramTokenSource = "env" | "tokenFile" | "config" | "none";
@@ -22,10 +23,18 @@ export function resolveTelegramToken(
 ): TelegramTokenResolution {
   const accountId = normalizeAccountId(opts.accountId);
   const telegramCfg = cfg?.channels?.telegram;
-  const accountCfg =
-    accountId !== DEFAULT_ACCOUNT_ID
-      ? telegramCfg?.accounts?.[accountId]
-      : telegramCfg?.accounts?.[DEFAULT_ACCOUNT_ID];
+  const accounts = telegramCfg?.accounts as Record<string, TelegramAccountConfig | undefined> | undefined;
+
+  const accountCfg = (() => {
+    if (!accounts) return undefined;
+    if (accounts[accountId]) return accounts[accountId];
+    // Fallback: search keys by normalized ID (e.g. if config has "MyBot" but we look for "mybot")
+    for (const [key, val] of Object.entries(accounts)) {
+      if (normalizeAccountId(key) === accountId) return val;
+    }
+    return undefined;
+  })();
+
   const accountTokenFile = accountCfg?.tokenFile?.trim();
   if (accountTokenFile) {
     if (!fs.existsSync(accountTokenFile)) {

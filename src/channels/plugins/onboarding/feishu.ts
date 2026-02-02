@@ -87,10 +87,10 @@ export const feishuOnboardingAdapter: ChannelOnboardingAdapter = {
       ],
     });
 
-    const appId = String(formResult.appId ?? "").trim();
-    const appSecret = String(formResult.appSecret ?? "").trim();
-    const encryptKey = String(formResult.encryptKey ?? "").trim();
-    const verificationToken = String(formResult.verificationToken ?? "").trim();
+    const appId = ((formResult.appId as string) || "").trim();
+    const appSecret = ((formResult.appSecret as string) || "").trim();
+    const encryptKey = ((formResult.encryptKey as string) || "").trim();
+    const verificationToken = ((formResult.verificationToken as string) || "").trim();
 
     if (!appId || !appSecret) {
       throw new Error("App ID and App Secret are required");

@@ -100,7 +100,9 @@ export function buildParseArgv(params: {
     (executable === "node" ||
       executable === "node.exe" ||
       executable === "bun" ||
-      executable === "bun.exe");
+      executable === "bun.exe" ||
+      executable === "pnpm" ||
+      executable === "npx");
   if (looksLikeNode) return normalizedArgv;
   return ["node", programName || "clawdbot", ...normalizedArgv];
 }

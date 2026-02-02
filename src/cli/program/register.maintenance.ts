@@ -1,4 +1,5 @@
 import type { Command } from "commander";
+import { completionCommand } from "../../commands/completion.js";
 import { dashboardCommand } from "../../commands/dashboard.js";
 import { doctorCommand } from "../../commands/doctor.js";
 import { resetCommand } from "../../commands/reset.js";
@@ -9,6 +10,16 @@ import { theme } from "../../terminal/theme.js";
 import { runCommandWithRuntime } from "../cli-utils.js";
 
 export function registerMaintenanceCommands(program: Command) {
+  program
+    .command("completion")
+    .description("Generate shell completion script (Bash/Zsh)")
+    .argument("[shell]", "Target shell (bash or zsh)")
+    .action(async (shell) => {
+      await runCommandWithRuntime(defaultRuntime, async () => {
+        await completionCommand(shell, defaultRuntime);
+      });
+    });
+
   program
     .command("doctor")
     .description("Health checks + quick fixes for the gateway and channels")

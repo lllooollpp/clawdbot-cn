@@ -33,6 +33,7 @@ Clawdbot 还为 [Clawd](https://clawd.me)（外星龙虾助手）提供支持。
 - **从零开始安装新版本：** [入门指南](/start/getting-started.md)
 - **引导式设置（推荐）：** [向导](/start/wizard.md) (`clawdbot onboard`)
 - **桌面版快捷配置：** 在桌面端“设置”菜单中选择“配置向导”，或在网页端侧边栏点击“配置向导”图标，即可开始图形化上线流程。
+- **Shell 自动补全：** 使用 `clawdbot completion` 为 Bash/Zsh 生成补全脚本。
 - **打开仪表盘（本地网关）：** http://127.0.0.1:18789/（或 http://localhost:18789/）
 
 如果网关运行在同一台计算机上，该链接会立即打开浏览器控制界面。如果无法打开，请先启动网关：`clawdbot gateway`。

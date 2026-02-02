@@ -128,11 +128,12 @@ function buildProfileHealth(params: {
   }
 
   const { status, remainingMs } = resolveOAuthStatus(credential.expires, now, warnAfterMs);
+  const effectiveStatus = (status === "expired" || status === "expiring") && credential.refresh ? "ok" : status;
   return {
     profileId,
     provider: credential.provider,
     type: "oauth",
-    status,
+    status: effectiveStatus,
     expiresAt: credential.expires,
     remainingMs,
     source,

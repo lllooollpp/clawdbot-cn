@@ -99,7 +99,7 @@ export function createClackPrompter(): WizardPrompter {
             value = guardCancel(
               await text({
                 message: stylePromptMessage(field.label),
-                initialValue: String(field.initialValue ?? ""),
+                initialValue: (field.initialValue as string) ?? "",
                 placeholder: field.placeholder,
               }),
             );

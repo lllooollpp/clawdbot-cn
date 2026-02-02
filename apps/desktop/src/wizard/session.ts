@@ -1,6 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import { WizardCancelledError, WizardBackError, type WizardProgress, type WizardPrompter } from "./prompts.js";
+import {
+  WizardCancelledError,
+  WizardBackError,
+  type WizardProgress,
+  type WizardPrompter,
+} from "./prompts.js";
 
 export type WizardStepOption = {
   value: unknown;
@@ -19,15 +24,7 @@ export type WizardFormField = {
 
 export type WizardStep = {
   id: string;
-  type:
-    | "note"
-    | "select"
-    | "text"
-    | "confirm"
-    | "multiselect"
-    | "progress"
-    | "action"
-    | "form";
+  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action" | "form";
   title?: string;
   message?: string;
   options?: WizardStepOption[];

@@ -19,10 +19,16 @@ function isValidMedia(candidate: string, opts?: { allowSpaces?: boolean }) {
   if (candidate.length > 4096) return false;
   if (!opts?.allowSpaces && /\s/.test(candidate)) return false;
   if (/^https?:\/\//i.test(candidate)) return true;
-  if (candidate.startsWith("/")) return true;
-  if (candidate.startsWith("./")) return true;
-  if (candidate.startsWith("../")) return true;
-  if (candidate.startsWith("~")) return true;
+
+  // LFI Prevention: LLM output should not be able to point to arbitrary local paths by default.
+  // We only allow local paths if CLAWDBOT_ALLOW_UNSAFE_LOCAL_MEDIA=1 is set.
+  if (process.env.CLAWDBOT_ALLOW_UNSAFE_LOCAL_MEDIA === "1") {
+    if (candidate.startsWith("/")) return true;
+    if (candidate.startsWith("./")) return true;
+    if (candidate.startsWith("../")) return true;
+    if (candidate.startsWith("~")) return true;
+  }
+
   return false;
 }
 

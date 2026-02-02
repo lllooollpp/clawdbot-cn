@@ -89,6 +89,10 @@
         "to": "node_modules/jiti"
       },
       {
+        "from": "../../node_modules/.pnpm/tslog@4.10.2/node_modules/tslog",
+        "to": "node_modules/tslog"
+      },
+      {
         "from": "../../node_modules/.pnpm/@sinclair+typebox@0.34.47/node_modules/@sinclair/typebox",
         "to": "node_modules/@sinclair/typebox"
       },
@@ -129,6 +133,7 @@
     "@sinclair/typebox": "0.34.47",
     "@mariozechner/pi-agent-core": "0.49.3",
     "@mariozechner/pi-coding-agent": "0.49.3",
+    "tslog": "^4.10.2",
     "zod": "4.3.6",
     "ws": "^8.19.0",
     "commander": "^14.0.2"

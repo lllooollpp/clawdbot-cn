@@ -14,7 +14,7 @@ Bun 不推荐用于网关（存在 WhatsApp/Telegram 的问题）。
 
 ## 初学者快速入门（VPS）
 
-1) 安装 Node 22+  
+1) 安装 Node 22.12.0+  
 2) `npm i -g clawdbot@latest`  
 3) `clawdbot onboard --install-daemon`  
 4) 从你的笔记本电脑：`ssh -N -L 18789:127.0.0.1:18789 <user>@<host>`  
