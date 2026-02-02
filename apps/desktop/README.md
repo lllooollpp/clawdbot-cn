@@ -1,4 +1,4 @@
-# OpenClaw Desktop
+# OpenClaw Desktop (v1.0.9)
 
 OpenClaw Desktop 是 OpenClaw 的图形化桌面客户端，支持 Windows、macOS 和 Linux。它内置了 OpenClaw Gateway，提供了一键式的 AI 助手启动体验。
 
