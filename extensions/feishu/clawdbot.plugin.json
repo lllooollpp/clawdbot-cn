@@ -1,6 +1,7 @@
 {
   "id": "feishu",
   "name": "飞书 (Feishu/Lark)",
+  "kind": "channel",
   "channels": [
     "feishu"
   ],

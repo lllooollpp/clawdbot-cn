@@ -366,6 +366,7 @@ export class ClawdbotApp extends LitElement {
   }
 
   async handleOnboardingNext() {
+    console.log("[wizard] handleOnboardingNext draft:", JSON.stringify(this.onboardingWizardDraft));
     await advanceWizard(this, this.onboardingWizardDraft);
   }
 
@@ -377,8 +378,17 @@ export class ClawdbotApp extends LitElement {
     await cancelWizard(this);
   }
 
-  handleOnboardingDraftChange(value: unknown) {
-    this.onboardingWizardDraft = value;
+  handleOnboardingDraftChange(valueOrUpdater: unknown) {
+    const isUpdater = typeof valueOrUpdater === "function";
+    console.log("[wizard] handleOnboardingDraftChange isUpdater:", isUpdater, "prev:", JSON.stringify(this.onboardingWizardDraft));
+    if (isUpdater) {
+      this.onboardingWizardDraft = (valueOrUpdater as (prev: unknown) => unknown)(
+        this.onboardingWizardDraft,
+      );
+    } else {
+      this.onboardingWizardDraft = valueOrUpdater;
+    }
+    console.log("[wizard] handleOnboardingDraftChange next:", JSON.stringify(this.onboardingWizardDraft));
   }
 
   handleOnboardingExit() {

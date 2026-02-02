@@ -291,15 +291,30 @@ importers:
       '@lydell/node-pty':
         specifier: 1.2.0-beta.3
         version: 1.2.0-beta.3
+      '@mariozechner/pi-agent-core':
+        specifier: 0.49.3
+        version: 0.49.3(ws@8.19.0)(zod@4.3.6)
+      '@mariozechner/pi-coding-agent':
+        specifier: 0.49.3
+        version: 0.49.3(ws@8.19.0)(zod@4.3.6)
       '@napi-rs/canvas':
         specifier: ^0.1.88
         version: 0.1.88
+      '@sinclair/typebox':
+        specifier: 0.34.47
+        version: 0.34.47
       better-sqlite3:
         specifier: ^12.6.2
         version: 12.6.2
       chalk:
         specifier: ^5.3.0
         version: 5.6.2
+      commander:
+        specifier: ^14.0.2
+        version: 14.0.2
+      jiti:
+        specifier: ^2.6.1
+        version: 2.6.1
       node-llama-cpp:
         specifier: 3.15.0
         version: 3.15.0(typescript@5.9.3)
@@ -318,6 +333,12 @@ importers:
       sqlite-vec:
         specifier: 0.1.7-alpha.2
         version: 0.1.7-alpha.2
+      ws:
+        specifier: ^8.19.0
+        version: 8.19.0
+      zod:
+        specifier: 4.3.6
+        version: 4.3.6
     devDependencies:
       '@electron-toolkit/eslint-config-ts':
         specifier: ^2.0.0

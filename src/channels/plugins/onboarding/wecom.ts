@@ -52,37 +52,56 @@ export const wecomOnboardingAdapter: ChannelOnboardingAdapter = {
 
     const account = resolveWeComAccount({ cfg, accountId });
 
-    const corpId = await prompter.input({
-      message: "企业 ID (CorpID)",
-      initialValue: account.corpId,
-      placeholder: "ww...",
-      validate: (v) => (v.trim() ? undefined : "CorpID 不能为空"),
+    const formResult = await prompter.form({
+      title: "企业微信配置",
+      message: "请输入应用的相关参数。你可以在企业微信后台的「应用管理」中找到这些信息。",
+      fields: [
+        {
+          key: "corpId",
+          label: "企业 ID (CorpID)",
+          type: "text",
+          initialValue: account.corpId,
+          placeholder: "ww...",
+        },
+        {
+          key: "agentId",
+          label: "应用 AgentID",
+          type: "text",
+          initialValue: account.agentId,
+          placeholder: "1000002",
+        },
+        {
+          key: "secret",
+          label: "应用 Secret",
+          type: "password",
+          initialValue: account.secret,
+        },
+        {
+          key: "token",
+          label: "Webhook Token (可选)",
+          type: "text",
+          initialValue: account.token,
+          placeholder: "用于接收消息校验",
+        },
+        {
+          key: "encodingAesKey",
+          label: "EncodingAESKey (可选)",
+          type: "text",
+          initialValue: account.encodingAesKey,
+          placeholder: "用于消息解密",
+        },
+      ],
     });
 
-    const agentId = await prompter.input({
-      message: "应用 AgentID",
-      initialValue: account.agentId,
-      placeholder: "1000002",
-      validate: (v) => (v.trim() ? undefined : "AgentID 不能为空"),
-    });
+    const corpId = String(formResult.corpId ?? "").trim();
+    const agentId = String(formResult.agentId ?? "").trim();
+    const secret = String(formResult.secret ?? "").trim();
+    const token = String(formResult.token ?? "").trim();
+    const encodingAesKey = String(formResult.encodingAesKey ?? "").trim();
 
-    const secret = await prompter.input({
-      message: "应用 Secret",
-      initialValue: account.secret,
-      validate: (v) => (v.trim() ? undefined : "Secret 不能为空"),
-    });
-
-    const token = await prompter.input({
-      message: "Webhook Token (可选)",
-      initialValue: account.token,
-      placeholder: "用于接收消息校验",
-    });
-
-    const encodingAesKey = await prompter.input({
-      message: "EncodingAESKey (可选)",
-      initialValue: account.encodingAesKey,
-      placeholder: "用于消息解密",
-    });
+    if (!corpId || !agentId || !secret) {
+      throw new Error("CorpID, AgentID and Secret are required");
+    }
 
     const next: any = { ...cfg };
     if (!next.channels) next.channels = {};

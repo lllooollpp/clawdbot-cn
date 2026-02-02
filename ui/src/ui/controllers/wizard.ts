@@ -6,12 +6,22 @@ export type WizardStepOption = {
   hint?: string;
 };
 
+export type WizardFormField = {
+  key: string;
+  label: string;
+  type: "text" | "password" | "confirm" | "select";
+  initialValue?: unknown;
+  placeholder?: string;
+  options?: WizardStepOption[];
+};
+
 export type WizardStep = {
   id: string;
-  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action";
+  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action" | "form";
   title?: string;
   message?: string;
   options?: WizardStepOption[];
+  fields?: WizardFormField[];
   initialValue?: unknown;
   placeholder?: string;
   sensitive?: boolean;
@@ -66,6 +76,13 @@ export function resolveWizardDraft(step: WizardStep | null): unknown {
   }
   if (step.type === "text") {
     return typeof step.initialValue === "string" ? step.initialValue : "";
+  }
+  if (step.type === "form") {
+    const draft: Record<string, unknown> = {};
+    for (const field of step.fields ?? []) {
+      draft[field.key] = field.initialValue ?? (field.type === "confirm" ? false : "");
+    }
+    return draft;
   }
   return step.initialValue ?? null;
 }

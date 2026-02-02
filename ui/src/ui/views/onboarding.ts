@@ -142,8 +142,82 @@ function renderStepContent(
       return renderTextInput(step, draft, (value) => onChange(value));
     case "confirm":
       return renderConfirm(step, draft, (value) => onChange(value));
+    case "form":
+      return renderForm(step, draft, onChange);
     default:
       return renderMessage(step.message);
+  }
+}
+
+function renderForm(step: WizardStep, draft: unknown, onChange: (value: unknown) => void) {
+  const values = (draft as Record<string, unknown>) ?? {};
+  const fields = step.fields ?? [];
+
+  const onFieldChange = (key: string, value: unknown) => {
+    // 使用更新函数确保获取最新的 draft 值，避免闭包问题
+    onChange((prev: Record<string, unknown>) => ({ ...(prev ?? {}), [key]: value }));
+  };
+
+  return html`
+    <div class="onboarding-form">
+      ${fields.map((field) => {
+        const value = values[field.key];
+        return html`
+          <div class="onboarding-field">
+            <div class="onboarding-field-label">${field.label}</div>
+            ${renderFieldInput(field, value, (v) => onFieldChange(field.key, v))}
+          </div>
+        `;
+      })}
+    </div>
+  `;
+}
+
+function renderFieldInput(
+  field: WizardStep["fields"] extends Array<infer T> ? T : any,
+  value: unknown,
+  onChange: (value: unknown) => void,
+) {
+  switch (field.type) {
+    case "text":
+    case "password":
+      return html`
+        <input
+          type=${field.type}
+          class="input"
+          .value=${String(value ?? "")}
+          placeholder=${field.placeholder ?? ""}
+          @input=${(e: Event) => onChange((e.target as HTMLInputElement).value)}
+        />
+      `;
+    case "confirm":
+      return html`
+        <label class="field checkbox">
+          <input
+            type="checkbox"
+            .checked=${Boolean(value)}
+            @change=${(e: Event) => onChange((e.target as HTMLInputElement).checked)}
+          />
+          <span>${field.placeholder ?? "启用"}</span>
+        </label>
+      `;
+    case "select":
+      return html`
+        <select
+          class="input"
+          @change=${(e: Event) => onChange((e.target as HTMLSelectElement).value)}
+        >
+          ${(field.options ?? []).map(
+            (opt: any) => html`
+              <option value=${opt.value} ?selected=${Object.is(opt.value, value)}>
+                ${opt.label}
+              </option>
+            `,
+          )}
+        </select>
+      `;
+    default:
+      return nothing;
   }
 }
 

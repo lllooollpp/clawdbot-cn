@@ -1,6 +1,11 @@
 import { randomUUID } from "node:crypto";
 
-import { WizardCancelledError, WizardBackError, type WizardProgress, type WizardPrompter } from "./prompts.js";
+import {
+  WizardCancelledError,
+  WizardBackError,
+  type WizardProgress,
+  type WizardPrompter,
+} from "./prompts.js";
 
 export type WizardStepOption = {
   value: unknown;
@@ -8,12 +13,22 @@ export type WizardStepOption = {
   hint?: string;
 };
 
+export type WizardFormField = {
+  key: string;
+  label: string;
+  type: "text" | "password" | "confirm" | "select";
+  initialValue?: unknown;
+  placeholder?: string;
+  options?: WizardStepOption[];
+};
+
 export type WizardStep = {
   id: string;
-  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action";
+  type: "note" | "select" | "text" | "confirm" | "multiselect" | "progress" | "action" | "form";
   title?: string;
   message?: string;
   options?: WizardStepOption[];
+  fields?: WizardFormField[];
   initialValue?: unknown;
   placeholder?: string;
   sensitive?: boolean;
@@ -137,6 +152,15 @@ class WizardSessionPrompter implements WizardPrompter {
     return value;
   }
 
+  async input(params: {
+    message: string;
+    initialValue?: string;
+    placeholder?: string;
+    validate?: (value: string) => string | undefined;
+  }): Promise<string> {
+    return this.text(params);
+  }
+
   async confirm(params: { message: string; initialValue?: boolean }): Promise<boolean> {
     const res = await this.prompt({
       type: "confirm",
@@ -145,6 +169,21 @@ class WizardSessionPrompter implements WizardPrompter {
       executor: "client",
     });
     return Boolean(res);
+  }
+
+  async form(params: {
+    title: string;
+    message?: string;
+    fields: WizardFormField[];
+  }): Promise<Record<string, unknown>> {
+    const res = await this.prompt({
+      type: "form",
+      title: params.title,
+      message: params.message,
+      fields: params.fields,
+      executor: "client",
+    });
+    return (res as Record<string, unknown>) ?? {};
   }
 
   progress(_label: string): WizardProgress {
@@ -257,6 +296,7 @@ export class WizardSession {
 
     if (this.replayIndex < this.history.length) {
       const entry = this.history[this.replayIndex++];
+      step.supportsBack = this.replayIndex > 1;
       return entry.answer;
     }
 

@@ -50,6 +50,23 @@ export const WizardStepOptionSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const WizardFormFieldSchema = Type.Object(
+  {
+    key: NonEmptyString,
+    label: NonEmptyString,
+    type: Type.Union([
+      Type.Literal("text"),
+      Type.Literal("password"),
+      Type.Literal("confirm"),
+      Type.Literal("select"),
+    ]),
+    initialValue: Type.Optional(Type.Unknown()),
+    placeholder: Type.Optional(Type.String()),
+    options: Type.Optional(Type.Array(WizardStepOptionSchema)),
+  },
+  { additionalProperties: false },
+);
+
 export const WizardStepSchema = Type.Object(
   {
     id: NonEmptyString,
@@ -61,10 +78,12 @@ export const WizardStepSchema = Type.Object(
       Type.Literal("multiselect"),
       Type.Literal("progress"),
       Type.Literal("action"),
+      Type.Literal("form"),
     ]),
     title: Type.Optional(Type.String()),
     message: Type.Optional(Type.String()),
     options: Type.Optional(Type.Array(WizardStepOptionSchema)),
+    fields: Type.Optional(Type.Array(WizardFormFieldSchema)),
     initialValue: Type.Optional(Type.Unknown()),
     placeholder: Type.Optional(Type.String()),
     sensitive: Type.Optional(Type.Boolean()),

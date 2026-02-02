@@ -74,6 +74,64 @@ export function createClackPrompter(): WizardPrompter {
           initialValue: params.initialValue,
         }),
       ),
+    input: async (params) =>
+      guardCancel(
+        await text({
+          message: stylePromptMessage(params.message),
+          initialValue: params.initialValue,
+          placeholder: params.placeholder,
+          validate: params.validate,
+        }),
+      ),
+    form: async (params) => {
+      const result: Record<string, unknown> = {};
+      if (params.title) {
+        intro(stylePromptTitle(params.title) ?? params.title);
+      }
+      if (params.message) {
+        emitNote(params.message);
+      }
+      for (const field of params.fields) {
+        let value: unknown;
+        switch (field.type) {
+          case "text":
+          case "password":
+            value = guardCancel(
+              await text({
+                message: stylePromptMessage(field.label),
+                initialValue: String(field.initialValue ?? ""),
+                placeholder: field.placeholder,
+              }),
+            );
+            break;
+          case "confirm":
+            value = guardCancel(
+              await confirm({
+                message: stylePromptMessage(field.label),
+                initialValue: Boolean(field.initialValue),
+              }),
+            );
+            break;
+          case "select":
+            value = guardCancel(
+              await select({
+                message: stylePromptMessage(field.label),
+                options: (field.options ?? []).map((opt) => ({
+                  value: opt.value,
+                  label: opt.label,
+                  hint: opt.hint ? stylePromptHint(opt.hint) : undefined,
+                })) as Option<unknown>[],
+                initialValue: field.initialValue,
+              }),
+            );
+            break;
+          default:
+            value = "";
+        }
+        result[field.key] = value;
+      }
+      return result;
+    },
     progress: (label: string): WizardProgress => {
       const spin = spinner();
       spin.start(theme.accent(label));
