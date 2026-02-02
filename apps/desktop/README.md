@@ -34,6 +34,7 @@ OpenClaw Desktop 是 OpenClaw 的图形化桌面客户端，支持 Windows、mac
 
 桌面端通过 Electron 的主进程直接启动 Gateway 进程：
 
+- **单实例运行**：为了防止端口冲突和状态混乱，程序采用了单实例锁定机制。如果您尝试启动多个实例，程序会自动聚焦到已运行的窗口。
 - **自动认证**：应用会自动读取 `~/.openclaw.json` 中的 `gateway.auth.token`，并通过 `--token` 参数传递给 Gateway 进程，确保 UI 和服务端鉴权一致。
 - **端口管理**：默认使用端口 `18789`。如果端口被占用，建议先通过任务管理器或终端（`netstat -ano | findstr :18789`）清理残留进程。
 - **日志查看**：Gateway 的运行日志保存在用户的 AppData 目录中（例如 `~\AppData\Roaming\openclaw-desktop\gateway.log`）。

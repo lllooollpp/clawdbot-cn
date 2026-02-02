@@ -485,26 +485,41 @@ function createTray(): void {
   tray.on('double-click', () => mainWindow?.show())
 }
 
-app.whenReady().then(() => {
-  // Set app user model id for windows
-  electronApp.setAppUserModelId('com.openclaw.desktop')
+const gotTheLock = app.requestSingleInstanceLock()
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  app.on('browser-window-created', (_, window) => {
-    optimizer.watchWindowShortcuts(window)
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (_event, _commandLine, _workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.show()
+      mainWindow.focus()
+    }
   })
 
-  createWindow()
-  createTray()
-  
-  // Start the gateway logic
-  startGateway()
+  app.whenReady().then(() => {
+    // Set app user model id for windows
+    electronApp.setAppUserModelId('com.openclaw.desktop')
 
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    // Default open or close DevTools by F12 in development
+    // and ignore CommandOrControl + R in production.
+    app.on('browser-window-created', (_, window) => {
+      optimizer.watchWindowShortcuts(window)
+    })
+
+    createWindow()
+    createTray()
+    
+    // Start the gateway logic
+    startGateway()
+
+    app.on('activate', function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    })
   })
-})
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
