@@ -92,6 +92,10 @@
         "from": "../../node_modules/.pnpm/@sinclair+typebox@0.34.47/node_modules/@sinclair/typebox",
         "to": "node_modules/@sinclair/typebox"
       },
+      {
+        "from": "../../node_modules/.pnpm/zod@4.3.6/node_modules/zod",
+        "to": "node_modules/zod"
+      },
       "!**/apps/desktop/dist/**",
       "!**/apps/desktop/out/**",
       "!**/apps/desktop/.electron-vite/**"
@@ -100,7 +104,10 @@
     "asarUnpack": [
       "**/better-sqlite3/**",
       "**/@napi-rs/canvas-win32-x64-msvc/**",
-      "**/@mariozechner/clipboard-win32-x64-msvc/**"
+      "**/@mariozechner/clipboard-win32-x64-msvc/**",
+      "**/@sinclair/typebox/**",
+      "**/jiti/**",
+      "**/zod/**"
     ]
   },
   "dependencies": {
