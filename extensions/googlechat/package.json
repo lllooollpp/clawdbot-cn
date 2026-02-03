@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/googlechat",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Google Chat channel plugin",
   "clawdbot": {
@@ -35,5 +35,6 @@
   },
   "peerDependencies": {
     "openclaw": "workspace:*"
-  }
+  },
+  "author": "lllooollpp"
 }

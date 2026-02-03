@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/bluebubbles",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot BlueBubbles channel plugin",
   "clawdbot": {
@@ -29,5 +29,6 @@
       "localPath": "extensions/bluebubbles",
       "defaultChoice": "npm"
     }
-  }
+  },
+  "author": "lllooollpp"
 }

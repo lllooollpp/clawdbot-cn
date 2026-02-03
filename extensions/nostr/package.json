@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/nostr",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Nostr channel plugin for NIP-04 encrypted DMs",
   "clawdbot": {
@@ -27,5 +27,6 @@
     "openclaw": "workspace:*",
     "nostr-tools": "^2.20.0",
     "zod": "^4.3.6"
-  }
+  },
+  "author": "lllooollpp"
 }

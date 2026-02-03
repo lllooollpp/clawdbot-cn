@@ -1,183 +1,128 @@
-# 🦞 OpenClaw — 个人 AI 助手控制平面
+﻿# 馃 OpenClaw 鈥?涓汉 AI 鍔╂墜鎺у埗骞抽潰
 
-> **全新升级！** 深度适配 GitHub Copilot 最新模型，针对 Windows 环境稳定性进行专项优化。
-
-![功能演示](image/README/1769958220182.png)
+> **鍏ㄦ柊鍗囩骇锛?* 娣卞害閫傞厤 GitHub Copilot 鏈€鏂版ā鍨嬶紝閽堝 Windows 鐜绋冲畾鎬ц繘琛屼笓椤逛紭鍖栥€?
+![鍔熻兘婕旂ず](image/README/1769958220182.png)
 
 <p align="center">
-  <a href="https://github.com/openclaw-cn/openclaw-cn/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/openclaw-cn/openclaw-cn/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
-  <a href="https://github.com/openclaw-cn/openclaw-cn/releases"><img src="https://img.shields.io/github/v/release/openclaw-cn/openclaw-cn?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
-  <a href="http://101.35.228.254/"><img src="https://img.shields.io/badge/文档-中文指南-blue?style=for-the-badge" alt="Docs"></a>
+  <a href="https://github.com/lllooollpp/clawdbot-cn/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/lllooollpp/clawdbot-cn/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
+  <a href="https://github.com/lllooollpp/clawdbot-cn/releases"><img src="https://img.shields.io/github/v/release/lllooollpp/clawdbot-cn?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
+  <a href="http://101.35.228.254/"><img src="https://img.shields.io/badge/鏂囨。-涓枃鎸囧崡-blue?style=for-the-badge" alt="Docs"></a>
 </p>
 
-**OpenClaw** 是一个构建在本地设备上的 *个人 AI 助手控制中心*。
-它能让你通过常用的聊天工具（企业微信、飞书、WhatsApp、Telegram、Slack、Discord、Signal、iMessage 等）与你的私人 AI 代理（Pi）进行实时对话，并赋予 AI 操作 Shell、浏览器、文件系统以及执行自动化任务的能力。
-
+**OpenClaw** 鏄竴涓瀯寤哄湪鏈湴璁惧涓婄殑 *涓汉 AI 鍔╂墜鎺у埗涓績*銆?瀹冭兘璁╀綘閫氳繃甯哥敤鐨勮亰澶╁伐鍏凤紙浼佷笟寰俊銆侀涔︺€乄hatsApp銆乀elegram銆丼lack銆丏iscord銆丼ignal銆乮Message 绛夛級涓庝綘鐨勭浜?AI 浠ｇ悊锛圥i锛夎繘琛屽疄鏃跺璇濓紝骞惰祴浜?AI 鎿嶄綔 Shell銆佹祻瑙堝櫒銆佹枃浠剁郴缁熶互鍙婃墽琛岃嚜鍔ㄥ寲浠诲姟鐨勮兘鍔涖€?
 ---
 
-### 🚀 最新功能与稳定性增强 (v1.1.4+)
+### 馃殌 鏈€鏂板姛鑳戒笌绋冲畾鎬у寮?(v1.1.4+)
 
-- **GitHub Copilot 深度适配**：支持最新的 `gpt-4.1` 等模型，修复了旧版模型版本失效导致的 404 错误。
-- **Windows 文件系统加固**：针对 Windows 平台常见的文件锁定 (EPERM) 冲突，引入了指数退避重试机制，大幅提升配对与配置保存成功率。
-- **向导会话状态自动恢复**：修复了配置向导在 WebSocket 重连或 Gateway 重启后会话丢失的异常，现在支持自动清理陈旧状态并允许无缝重试。
-- **国内生态深度集成**：原生支持 **企业微信** (AES 解密/双向传输) 与 **飞书**。
-
+- **GitHub Copilot 娣卞害閫傞厤**锛氭敮鎸佹渶鏂扮殑 `gpt-4.1` 绛夋ā鍨嬶紝淇浜嗘棫鐗堟ā鍨嬬増鏈け鏁堝鑷寸殑 404 閿欒銆?- **Windows 鏂囦欢绯荤粺鍔犲浐**锛氶拡瀵?Windows 骞冲彴甯歌鐨勬枃浠堕攣瀹?(EPERM) 鍐茬獊锛屽紩鍏ヤ簡鎸囨暟閫€閬块噸璇曟満鍒讹紝澶у箙鎻愬崌閰嶅涓庨厤缃繚瀛樻垚鍔熺巼銆?- **鍚戝浼氳瘽鐘舵€佽嚜鍔ㄦ仮澶?*锛氫慨澶嶄簡閰嶇疆鍚戝鍦?WebSocket 閲嶈繛鎴?Gateway 閲嶅惎鍚庝細璇濅涪澶辩殑寮傚父锛岀幇鍦ㄦ敮鎸佽嚜鍔ㄦ竻鐞嗛檲鏃х姸鎬佸苟鍏佽鏃犵紳閲嶈瘯銆?- **鍥藉唴鐢熸€佹繁搴﹂泦鎴?*锛氬師鐢熸敮鎸?**浼佷笟寰俊** (AES 瑙ｅ瘑/鍙屽悜浼犺緭) 涓?**椋炰功**銆?
 ---
 
 
-如果你想要一个感觉本地、快速、始终在线的个人单用户助手，这就是它。现在提供 **Desktop App (Win/macOS/Linux)**，让你无需命令行即可快速开启。针对中国用户进行了深度优化，内置 **智谱 AI (Zhipu)** 等国产模型支持。
+濡傛灉浣犳兂瑕佷竴涓劅瑙夋湰鍦般€佸揩閫熴€佸缁堝湪绾跨殑涓汉鍗曠敤鎴峰姪鎵嬶紝杩欏氨鏄畠銆傜幇鍦ㄦ彁渚?**Desktop App (Win/macOS/Linux)**锛岃浣犳棤闇€鍛戒护琛屽嵆鍙揩閫熷紑鍚€傞拡瀵逛腑鍥界敤鎴疯繘琛屼簡娣卞害浼樺寲锛屽唴缃?**鏅鸿氨 AI (Zhipu)** 绛夊浗浜фā鍨嬫敮鎸併€?
+[缃戠珯](https://openclaw.cn) 路 [鏂囨。](http://101.35.228.254/) 路 [鍏ラ棬](./docs/start/getting-started.md) 路 [妗岄潰绔痌(./docs/install/desktop.md) 路 [鏇存柊](./docs/install/updating.md) 路 [灞曠ず](./docs/start/showcase.md) 路 [FAQ](./docs/start/faq.md) 路 [鍚戝](./docs/start/wizard.md) 路 [Docker](./docs/install/docker.md) 路 [Discord](https://discord.gg/openclaw)
 
-[网站](https://openclaw.cn) · [文档](http://101.35.228.254/) · [入门](./docs/start/getting-started.md) · [桌面端](./docs/install/desktop.md) · [更新](./docs/install/updating.md) · [展示](./docs/start/showcase.md) · [FAQ](./docs/start/faq.md) · [向导](./docs/start/wizard.md) · [Docker](./docs/install/docker.md) · [Discord](https://discord.gg/openclaw)
+棣栭€夎缃細
 
-首选设置：
+1. **Desktop App (鎺ㄨ崘)**锛氫笅杞藉苟杩愯 [OpenClaw Desktop](./docs/install/desktop.md)锛岃繖鏄渶绠€鍗曡法骞冲彴 GUI 浣撻獙锛屾敮鎸?**Windows銆乵acOS 鍜?Linux**銆傛柊鐗堟湰鏀寔**鍥惧舰鍖栭厤缃悜瀵?*锛屽湪璁剧疆鑿滃崟涓嵆鍙竴閿紑鍚紝涓旈粯璁や紭鍏堥€傞厤鍥戒骇澶фā鍨嬨€?2. **CLI 鍚戝**锛氳繍琛屽叆闂ㄥ悜瀵硷紙`openclaw onboard`锛夈€傚畠浼氬紩瀵间綘瀹屾垚 Gateway銆乄orkspace銆丆hannels 鍜?Skills銆侰LI 鍚戝鎺ㄨ崘鍦?**macOS銆丩inux 鍜?Windows (閫氳繃 WSL2)** 涓婂伐浣溿€?
+鏀寔 npm銆乸npm 鎴?bun銆?鏂板畨瑁咃紵浠庤繖閲屽紑濮嬶細[鍏ラ棬](./docs/start/getting-started.md)
 
-1. **Desktop App (推荐)**：下载并运行 [OpenClaw Desktop](./docs/install/desktop.md)，这是最简单跨平台 GUI 体验，支持 **Windows、macOS 和 Linux**。新版本支持**图形化配置向导**，在设置菜单中即可一键开启，且默认优先适配国产大模型。
-2. **CLI 向导**：运行入门向导（`openclaw onboard`）。它会引导你完成 Gateway、Workspace、Channels 和 Skills。CLI 向导推荐在 **macOS、Linux 和 Windows (通过 WSL2)** 上工作。
-
-支持 npm、pnpm 或 bun。
-新安装？从这里开始：[入门](./docs/start/getting-started.md)
-
-**订阅（OAuth）：**
+**璁㈤槄锛圤Auth锛夛細**
 
 - **[Anthropic](https://www.anthropic.com/)** (Claude Pro/Max)
 - **[OpenAI](https://openai.com/)** (ChatGPT/Codex)
-- **[智谱 (Zhipu)](https://open.bigmodel.cn/)** (ChatGLM 4.7 / GLM-4)
-- **[火山引擎 (Volcengine)](https://www.volcengine.com/)** (DeepSeek V3/R1, 豆包)
+- **[鏅鸿氨 (Zhipu)](https://open.bigmodel.cn/)** (ChatGLM 4.7 / GLM-4)
+- **[鐏北寮曟搸 (Volcengine)](https://www.volcengine.com/)** (DeepSeek V3/R1, 璞嗗寘)
 - **[Moonshot (Kimi)](https://platform.moonshot.cn/)** (Kimi V1 / K2.5)
 
-模型说明：虽然支持任何模型，但我强烈推荐 **Anthropic Pro/Max (100/200) + Opus 4.5** 用于长上下文强度和更好的提示注入抵抗。对于中文用户，**DeepSeek V3/R1 (通过火山引擎)**、**Kimi K2.5** 和 **ChatGLM 4.7** 是极佳的选择。见 [入门](./docs/start/onboarding.md)。
+妯″瀷璇存槑锛氳櫧鐒舵敮鎸佷换浣曟ā鍨嬶紝浣嗘垜寮虹儓鎺ㄨ崘 **Anthropic Pro/Max (100/200) + Opus 4.5** 鐢ㄤ簬闀夸笂涓嬫枃寮哄害鍜屾洿濂界殑鎻愮ず娉ㄥ叆鎶垫姉銆傚浜庝腑鏂囩敤鎴凤紝**DeepSeek V3/R1 (閫氳繃鐏北寮曟搸)**銆?*Kimi K2.5** 鍜?**ChatGLM 4.7** 鏄瀬浣崇殑閫夋嫨銆傝 [鍏ラ棬](./docs/start/onboarding.md)銆?
+## 妯″瀷锛堥€夋嫨 + 璁よ瘉锛?
+- 妯″瀷閰嶇疆 + CLI锛歔妯″瀷](./docs/concepts/models.md)
+- 璁よ瘉閰嶇疆鏂囦欢杞崲锛圤Auth vs API 瀵嗛挜锛? 鍥為€€锛歔妯″瀷鏁呴殰杞Щ](./docs/concepts/model-failover.md)
 
-## 模型（选择 + 认证）
+## 瀹夎锛堟帹鑽愶級
 
-- 模型配置 + CLI：[模型](./docs/concepts/models.md)
-- 认证配置文件轮换（OAuth vs API 密钥）+ 回退：[模型故障转移](./docs/concepts/model-failover.md)
-
-## 安装（推荐）
-
-运行时：**Node ≥22.12.0**。
-
+杩愯鏃讹細**Node 鈮?2.12.0**銆?
 ```bash
 npm install -g clawdbot@latest
-# 或: pnpm add -g clawdbot@latest
+# 鎴? pnpm add -g clawdbot@latest
 
 clawdbot onboard --install-daemon
 ```
 
-向导会安装 Gateway 守护进程（launchd/systemd 用户服务），使其保持运行。
-
-## 快速开始（TL;DR）
-
-运行时：**Node ≥22.12.0**。
-
-完整初学者指南（认证、配对、渠道）：[入门](http://101.35.228.254/start/getting-started)
+鍚戝浼氬畨瑁?Gateway 瀹堟姢杩涚▼锛坙aunchd/systemd 鐢ㄦ埛鏈嶅姟锛夛紝浣垮叾淇濇寔杩愯銆?
+## 蹇€熷紑濮嬶紙TL;DR锛?
+杩愯鏃讹細**Node 鈮?2.12.0**銆?
+瀹屾暣鍒濆鑰呮寚鍗楋紙璁よ瘉銆侀厤瀵广€佹笭閬擄級锛歔鍏ラ棬](http://101.35.228.254/start/getting-started)
 
 ```bash
 clawdbot onboard --install-daemon
 
 clawdbot gateway --port 18789 --verbose
 
-# 发送消息
-clawdbot message send --to +1234567890 --message "Hello from Clawdbot"
+# 鍙戦€佹秷鎭?clawdbot message send --to +1234567890 --message "Hello from Clawdbot"
 
-# 与助手对话（可选地传回任何连接的渠道：WhatsApp/Telegram/Slack/Discord/Google Chat/Signal/iMessage/BlueBubbles/Microsoft Teams/Matrix/Zalo/Zalo Personal/WebChat）
-clawdbot agent --message "Ship checklist" --thinking high
+# 涓庡姪鎵嬪璇濓紙鍙€夊湴浼犲洖浠讳綍杩炴帴鐨勬笭閬擄細WhatsApp/Telegram/Slack/Discord/Google Chat/Signal/iMessage/BlueBubbles/Microsoft Teams/Matrix/Zalo/Zalo Personal/WebChat锛?clawdbot agent --message "Ship checklist" --thinking high
 ```
 
-升级？[更新指南](http://101.35.228.254/install/updating)（并运行 `clawdbot doctor`）。
+鍗囩骇锛焄鏇存柊鎸囧崡](http://101.35.228.254/install/updating)锛堝苟杩愯 `clawdbot doctor`锛夈€?
+## 寮€鍙戞笭閬?
+- **stable**锛氭爣璁板彂甯冿紙`vYYYY.M.D` 鎴?`vYYYY.M.D-<patch>`锛夛紝npm dist-tag `latest`銆?- **beta**锛氶鍙戝竷鏍囪锛坄vYYYY.M.D-beta.N`锛夛紝npm dist-tag `beta`锛坢acOS 搴旂敤鍙兘缂哄け锛夈€?- **dev**锛歚main` 鐨勭Щ鍔ㄥご锛宯pm dist-tag `dev`锛堝彂甯冩椂锛夈€?
+鍒囨崲娓犻亾锛坓it + npm锛夛細`clawdbot update --channel stable|beta|dev`銆?璇︽儏锛歔寮€鍙戞笭閬揮(./docs/install/development-channels.md)銆?
+## 浠庢簮鐮侊紙寮€鍙戯級
 
-## 开发渠道
-
-- **stable**：标记发布（`vYYYY.M.D` 或 `vYYYY.M.D-<patch>`），npm dist-tag `latest`。
-- **beta**：预发布标记（`vYYYY.M.D-beta.N`），npm dist-tag `beta`（macOS 应用可能缺失）。
-- **dev**：`main` 的移动头，npm dist-tag `dev`（发布时）。
-
-切换渠道（git + npm）：`clawdbot update --channel stable|beta|dev`。
-详情：[开发渠道](./docs/install/development-channels.md)。
-
-## 从源码（开发）
-
-从源码构建时首选 `pnpm`。Bun 可选用于直接运行 TypeScript。
-
+浠庢簮鐮佹瀯寤烘椂棣栭€?`pnpm`銆侭un 鍙€夌敤浜庣洿鎺ヨ繍琛?TypeScript銆?
 ```bash
-git clone https://github.com/clawdbot/clawdbot.git
+git clone https://github.com/lllooollpp/clawdbot-cn.git
 cd clawdbot
 
 pnpm install
-pnpm ui:build # 首次运行时自动安装 UI 依赖
+pnpm ui:build # 棣栨杩愯鏃惰嚜鍔ㄥ畨瑁?UI 渚濊禆
 pnpm build
 
 pnpm clawdbot onboard --install-daemon
 
-# 开发循环（TS 更改时自动重载）
+# 寮€鍙戝惊鐜紙TS 鏇存敼鏃惰嚜鍔ㄩ噸杞斤級
 pnpm gateway:watch
 ```
 
-注意：`pnpm clawdbot ...` 通过 `tsx` 直接运行 TypeScript。`pnpm build` 生成 `dist/` 用于通过 Node / 打包的 `clawdbot` 二进制运行。
+娉ㄦ剰锛歚pnpm clawdbot ...` 閫氳繃 `tsx` 鐩存帴杩愯 TypeScript銆俙pnpm build` 鐢熸垚 `dist/` 鐢ㄤ簬閫氳繃 Node / 鎵撳寘鐨?`clawdbot` 浜岃繘鍒惰繍琛屻€?
+## 瀹夊叏榛樿锛圖M 璁块棶锛?
+Clawdbot 杩炴帴鍒扮湡瀹炵殑閫氳琛ㄩ潰銆傚皢鍏ョ珯 DM 瑙嗕负**涓嶅彈淇′换鐨勮緭鍏?*銆?
+瀹屾暣瀹夊叏鎸囧崡锛歔瀹夊叏](./docs/gateway/security.md)
 
-## 安全默认（DM 访问）
+Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack 鐨勯粯璁よ涓猴細
 
-Clawdbot 连接到真实的通讯表面。将入站 DM 视为**不受信任的输入**。
+- **DM 閰嶅**锛坄dmPolicy="pairing"` / `channels.discord.dm.policy="pairing"` / `channels.slack.dm.policy="pairing"`锛夛細鏈煡鍙戦€佽€呮敹鍒颁竴涓畝鐭厤瀵逛唬鐮侊紝鏈哄櫒浜轰笉浼氬鐞嗕粬浠殑娑堟伅銆?- 鎵瑰噯锛歚clawdbot pairing approve <channel> <code>`锛堢劧鍚庡彂閫佽€呰娣诲姞鍒版湰鍦板厑璁稿垪琛ㄥ瓨鍌級銆?- 鍏叡鍏ョ珯 DM 闇€瑕佹槑纭€夋嫨鍔犲叆锛氳缃?`dmPolicy="open"` 骞跺湪娓犻亾鍏佽鍒楄〃涓寘鍚?`"*"`锛坄allowFrom` / `channels.discord.dm.allowFrom` / `channels.slack.dm.allowFrom`锛夈€?
+杩愯 `clawdbot doctor` 浠ョ獊鍑洪闄?閿欒閰嶇疆鐨?DM 绛栫暐銆?
+## 馃挕 鏍稿績鐗规€?
+- **[鏈湴浼樺厛 Gateway](./docs/gateway/index.md)** 鈥?浼氳瘽銆佹笭閬撱€佸伐鍏峰拰浜嬩欢鐨勫崟涓€鎺у埗骞抽潰銆?- **涓枃浼佷笟绾ф笭閬撴敮鎸?* 鈥?**[浼佷笟寰俊](./docs/channels/wecom.md)** 鍜?**[椋炰功](./docs/channels/feishu.md)** 鐨勬繁搴﹂泦鎴愶紝鏀寔娑堟伅瑙ｅ瘑銆佸獟浣撲紶杈撱€?- **楂樻€ц兘涓枃妯″瀷** 鈥?鏀寔 **[鐏北寮曟搸 (Volcengine)](./docs/providers/volcengine.md)** (DeepSeek, 璞嗗寘) 鍜?**[鏅鸿氨 AI](./docs/providers/glm.md)**锛岄€傞厤涓枃璇涓嬬殑闀挎枃鏈鐞嗐€?- **[澶氭笭閬撴敹浠剁](./docs/channels/index.md)** 鈥?WhatsApp銆乀elegram銆丼lack銆丏iscord銆乮Message銆丼ignal 绛夈€?- **[澶氫唬鐞嗚矾鐢盷(./docs/gateway/configuration.md)** 鈥?灏嗗叆绔欐笭閬?璐︽埛/瀵圭瓑鏂硅矾鐢卞埌闅旂浠ｇ悊锛堝伐浣滃尯 + 姣忎釜浠ｇ悊浼氳瘽锛夈€?- **[璇煶鍞ら啋](./docs/nodes/voicewake.md) + [瀵硅瘽妯″紡](./docs/nodes/talk.md)** 鈥?macOS/iOS/Android 鐨勫缁堝湪绾胯闊充笌 ElevenLabs銆?- **[瀹炴椂 Canvas](./docs/platforms/mac/canvas.md)** 鈥?浠ｇ悊椹卞姩鐨勮瑙夊伐浣滃尯涓?[A2UI](./docs/platforms/mac/canvas.md#canvas-a2ui)銆?- **[涓€娴佸伐鍏穄(./docs/tools/index.md)** 鈥?娴忚鍣ㄣ€丆anvas銆佽妭鐐广€丆ron銆佷細璇濆拰 Discord/Slack 鎿嶄綔銆?- **[閰嶅搴旂敤](./docs/platforms/macos/index.md)** 鈥?macOS 鑿滃崟鏍忓簲鐢?+ iOS/Android [鑺傜偣](./docs/nodes/index.md)銆?- **[鍏ラ棬](./docs/start/wizard.md) + [鎶€鑳絔(./docs/tools/skills.md)** 鈥?鍚戝椹卞姩璁剧疆涓庢崋缁?绠＄悊/宸ヤ綔鍖烘妧鑳姐€?
+## 鏄熸爣鍘嗗彶
 
-完整安全指南：[安全](./docs/gateway/security.md)
+[![Star History Chart](https://api.star-history.com/svg?repos=lllooollpp/clawdbot-cn&type=date&legend=top-left)](https://www.star-history.com/#lllooollpp/clawdbot-cn&type=date&legend=top-left)
 
-Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack 的默认行为：
+## 馃 鍙備笌璐＄尞
 
-- **DM 配对**（`dmPolicy="pairing"` / `channels.discord.dm.policy="pairing"` / `channels.slack.dm.policy="pairing"`）：未知发送者收到一个简短配对代码，机器人不会处理他们的消息。
-- 批准：`clawdbot pairing approve <channel> <code>`（然后发送者被添加到本地允许列表存储）。
-- 公共入站 DM 需要明确选择加入：设置 `dmPolicy="open"` 并在渠道允许列表中包含 `"*"`（`allowFrom` / `channels.discord.dm.allowFrom` / `channels.slack.dm.allowFrom`）。
+鏌ョ湅 `CONTRIBUTING.md` 鑾峰彇璐＄尞鎸囧崡涓庢彁浜?PR 鐨勬柟寮忋€傛垜浠鎵撻€犳渶鎳備腑鍥藉紑鍙戣€呯殑 AI 鍔╂墜鎺у埗骞抽潰銆?
+- [Gateway WS 鎺у埗骞抽潰](./docs/gateway/index.md) 涓庝細璇濄€佸瓨鍦ㄣ€侀厤缃€丆ron銆乄ebhook銆乕鎺у埗 UI](./docs/web/index.md) 鍜?[Canvas 涓绘満](./docs/platforms/mac/canvas.md#canvas-a2ui)銆?- [CLI 琛ㄩ潰](./docs/tools/agent-send.md)锛欸ateway銆佷唬鐞嗐€佸彂閫併€乕鍚戝](./docs/start/wizard.md) 鍜?[鍖荤敓](./docs/gateway/doctor.md)銆?- [Pi 浠ｇ悊杩愯鏃禲(./docs/concepts/agent.md) 鍦?RPC 妯″紡涓嬩笌宸ュ叿娴佸拰鍧楁祦銆?- [浼氳瘽妯″瀷](./docs/concepts/session.md)锛歚main` 鐢ㄤ簬鐩存帴鑱婂ぉ銆佺粍闅旂銆佹縺娲绘ā寮忋€侀槦鍒楁ā寮忋€佸洖澶嶃€傜粍瑙勫垯锛歔缁刔(./docs/concepts/groups.md)銆?- [濯掍綋绠￠亾](./docs/nodes/images.md)锛氬浘鍍?闊抽/瑙嗛銆佽浆褰曢挬瀛愩€佸ぇ灏忎笂闄愩€佷复鏃舵枃浠剁敓鍛藉懆鏈熴€傞煶棰戣鎯咃細[闊抽](./docs/nodes/audio.md)銆?
+### 娓犻亾
 
-运行 `clawdbot doctor` 以突出风险/错误配置的 DM 策略。
+- [娓犻亾](./docs/channels/index.md)锛歔WhatsApp](./docs/channels/whatsapp.md) (Baileys)銆乕Telegram](./docs/channels/telegram.md) (grammY)銆乕Slack](./docs/channels/slack.md) (Bolt)銆乕Discord](./docs/channels/discord.md) (discord.js)銆乕Google Chat](./docs/channels/googlechat.md) (Chat API)銆乕Signal](./docs/channels/signal.md) (signal-cli)銆乕iMessage](./docs/channels/imessage.md) (imsg)銆乕椋炰功](./docs/channels/feishu.md) (Lark SDK)銆乕浼佷笟寰俊](./docs/channels/wecom.md) (WeCom)銆乕BlueBubbles](./docs/channels/bluebubbles.md) (鎵╁睍)銆乕Microsoft Teams](./docs/channels/msteams.md) (鎵╁睍)銆乕Matrix](./docs/channels/matrix.md) (鎵╁睍)銆乕Zalo](./docs/channels/zalo.md) (鎵╁睍)銆乕Zalo Personal](./docs/channels/zalouser.md) (鎵╁睍)銆乕WebChat](./docs/web/webchat.md)銆?
+### 鑺傜偣
 
-## 💡 核心特性
+- [鑺傜偣](./docs/nodes/index.md)锛歔macOS](./docs/platforms/mac/index.md) (鑿滃崟鏍忓簲?)銆乕iOS](./docs/platforms/ios/index.md) (鑺傜偣搴旂敤)銆乕Android](./docs/platforms/android/index.md) (鑺傜偣搴旂敤)銆乕Pi](./docs/nodes/pi.md) (Raspberry Pi)銆乕璇煶鍞ら啋](./docs/nodes/voicewake.md)銆乕瀵硅瘽](./docs/nodes/talk.md)銆乕鍥惧儚](./docs/nodes/images.md)銆乕闊抽](./docs/nodes/audio.md)銆乕瑙嗛](./docs/nodes/video.md)銆乕娴忚鍣╙(./docs/nodes/browser.md)銆乕Canvas](./docs/platforms/mac/canvas.md)銆?
+### 宸ュ叿
 
-- **[本地优先 Gateway](./docs/gateway/index.md)** — 会话、渠道、工具和事件的单一控制平面。
-- **中文企业级渠道支持** — **[企业微信](./docs/channels/wecom.md)** 和 **[飞书](./docs/channels/feishu.md)** 的深度集成，支持消息解密、媒体传输。
-- **高性能中文模型** — 支持 **[火山引擎 (Volcengine)](./docs/providers/volcengine.md)** (DeepSeek, 豆包) 和 **[智谱 AI](./docs/providers/glm.md)**，适配中文语境下的长文本处理。
-- **[多渠道收件箱](./docs/channels/index.md)** — WhatsApp、Telegram、Slack、Discord、iMessage、Signal 等。
-- **[多代理路由](./docs/gateway/configuration.md)** — 将入站渠道/账户/对等方路由到隔离代理（工作区 + 每个代理会话）。
-- **[语音唤醒](./docs/nodes/voicewake.md) + [对话模式](./docs/nodes/talk.md)** — macOS/iOS/Android 的始终在线语音与 ElevenLabs。
-- **[实时 Canvas](./docs/platforms/mac/canvas.md)** — 代理驱动的视觉工作区与 [A2UI](./docs/platforms/mac/canvas.md#canvas-a2ui)。
-- **[一流工具](./docs/tools/index.md)** — 浏览器、Canvas、节点、Cron、会话和 Discord/Slack 操作。
-- **[配套应用](./docs/platforms/macos/index.md)** — macOS 菜单栏应用 + iOS/Android [节点](./docs/nodes/index.md)。
-- **[入门](./docs/start/wizard.md) + [技能](./docs/tools/skills.md)** — 向导驱动设置与捆绑/管理/工作区技能。
+- [宸ュ叿](./docs/tools/index.md)锛歔浠ｇ悊鍙戦€乚(./docs/tools/agent-send.md)銆乕娴忚鍣╙(./docs/tools/browser.md)銆乕Canvas](./docs/tools/canvas.md)銆乕Cron](./docs/tools/cron.md)銆乕浼氳瘽](./docs/tools/sessions.md)銆乕Discord 鎿嶄綔](./docs/tools/discord.md)銆乕Slack 鎿嶄綔](./docs/tools/slack.md)銆乕鎶€鑳絔(./docs/tools/skills.md)銆?
+### 骞冲彴
 
-## 星标历史
+- [骞冲彴](./docs/platforms/index.md)锛歔macOS](./docs/platforms/mac/index.md) (鑿滃崟鏍忓簲鐢?+ Canvas)銆乕iOS](./docs/platforms/ios/index.md) (鑺傜偣搴旂敤)銆乕Android](./docs/platforms/android/index.md) (鑺傜偣搴旂敤)銆乕Web](./docs/web/index.md) (鎺у埗 UI + WebChat)銆乕Docker](./docs/install/docker.md)銆乕Nix](https://github.com/clawdbot/nix-clawdbot)銆?
+### 姒傚康
 
-[![Star History Chart](https://api.star-history.com/svg?repos=clawdbot/clawdbot&type=date&legend=top-left)](https://www.star-history.com/#clawdbot/clawdbot&type=date&legend=top-left)
-
-## 🤝 参与贡献
-
-查看 `CONTRIBUTING.md` 获取贡献指南与提交 PR 的方式。我们要打造最懂中国开发者的 AI 助手控制平面。
-
-- [Gateway WS 控制平面](./docs/gateway/index.md) 与会话、存在、配置、Cron、Webhook、[控制 UI](./docs/web/index.md) 和 [Canvas 主机](./docs/platforms/mac/canvas.md#canvas-a2ui)。
-- [CLI 表面](./docs/tools/agent-send.md)：Gateway、代理、发送、[向导](./docs/start/wizard.md) 和 [医生](./docs/gateway/doctor.md)。
-- [Pi 代理运行时](./docs/concepts/agent.md) 在 RPC 模式下与工具流和块流。
-- [会话模型](./docs/concepts/session.md)：`main` 用于直接聊天、组隔离、激活模式、队列模式、回复。组规则：[组](./docs/concepts/groups.md)。
-- [媒体管道](./docs/nodes/images.md)：图像/音频/视频、转录钩子、大小上限、临时文件生命周期。音频详情：[音频](./docs/nodes/audio.md)。
-
-### 渠道
-
-- [渠道](./docs/channels/index.md)：[WhatsApp](./docs/channels/whatsapp.md) (Baileys)、[Telegram](./docs/channels/telegram.md) (grammY)、[Slack](./docs/channels/slack.md) (Bolt)、[Discord](./docs/channels/discord.md) (discord.js)、[Google Chat](./docs/channels/googlechat.md) (Chat API)、[Signal](./docs/channels/signal.md) (signal-cli)、[iMessage](./docs/channels/imessage.md) (imsg)、[飞书](./docs/channels/feishu.md) (Lark SDK)、[企业微信](./docs/channels/wecom.md) (WeCom)、[BlueBubbles](./docs/channels/bluebubbles.md) (扩展)、[Microsoft Teams](./docs/channels/msteams.md) (扩展)、[Matrix](./docs/channels/matrix.md) (扩展)、[Zalo](./docs/channels/zalo.md) (扩展)、[Zalo Personal](./docs/channels/zalouser.md) (扩展)、[WebChat](./docs/web/webchat.md)。
-
-### 节点
-
-- [节点](./docs/nodes/index.md)：[macOS](./docs/platforms/mac/index.md) (菜单栏应?)、[iOS](./docs/platforms/ios/index.md) (节点应用)、[Android](./docs/platforms/android/index.md) (节点应用)、[Pi](./docs/nodes/pi.md) (Raspberry Pi)、[语音唤醒](./docs/nodes/voicewake.md)、[对话](./docs/nodes/talk.md)、[图像](./docs/nodes/images.md)、[音频](./docs/nodes/audio.md)、[视频](./docs/nodes/video.md)、[浏览器](./docs/nodes/browser.md)、[Canvas](./docs/platforms/mac/canvas.md)。
-
-### 工具
-
-- [工具](./docs/tools/index.md)：[代理发送](./docs/tools/agent-send.md)、[浏览器](./docs/tools/browser.md)、[Canvas](./docs/tools/canvas.md)、[Cron](./docs/tools/cron.md)、[会话](./docs/tools/sessions.md)、[Discord 操作](./docs/tools/discord.md)、[Slack 操作](./docs/tools/slack.md)、[技能](./docs/tools/skills.md)。
-
-### 平台
-
-- [平台](./docs/platforms/index.md)：[macOS](./docs/platforms/mac/index.md) (菜单栏应用 + Canvas)、[iOS](./docs/platforms/ios/index.md) (节点应用)、[Android](./docs/platforms/android/index.md) (节点应用)、[Web](./docs/web/index.md) (控制 UI + WebChat)、[Docker](./docs/install/docker.md)、[Nix](https://github.com/clawdbot/nix-clawdbot)。
-
-### 概念
-
-- [概念](./docs/concepts/index.md)：[代理](./docs/concepts/agent.md)、[会话](./docs/concepts/session.md)、[组](./docs/concepts/groups.md)、[模型](./docs/concepts/models.md)、[模型故障转移](./docs/concepts/model-failover.md)、[工具](./docs/concepts/tools.md)、[技能](./docs/concepts/skills.md)。
-
-### 调试
+- [姒傚康](./docs/concepts/index.md)锛歔浠ｇ悊](./docs/concepts/agent.md)銆乕浼氳瘽](./docs/concepts/session.md)銆乕缁刔(./docs/concepts/groups.md)銆乕妯″瀷](./docs/concepts/models.md)銆乕妯″瀷鏁呴殰杞Щ](./docs/concepts/model-failover.md)銆乕宸ュ叿](./docs/concepts/tools.md)銆乕鎶€鑳絔(./docs/concepts/skills.md)銆?
+### 璋冭瘯
 
 ---
 
-*Clawdbot 是一个开源项目，致力于让每个人都能拥有属于自己的超级助手。* 🦞
+*Clawdbot 鏄竴涓紑婧愰」鐩紝鑷村姏浜庤姣忎釜浜洪兘鑳芥嫢鏈夊睘浜庤嚜宸辩殑瓒呯骇鍔╂墜銆? 馃
+
 

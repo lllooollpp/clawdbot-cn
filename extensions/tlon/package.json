@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/tlon",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Tlon/Urbit channel plugin",
   "clawdbot": {
@@ -26,5 +26,6 @@
   "dependencies": {
     "@urbit/aura": "^3.0.0",
     "@urbit/http-api": "^3.0.0"
-  }
+  },
+  "author": "lllooollpp"
 }
