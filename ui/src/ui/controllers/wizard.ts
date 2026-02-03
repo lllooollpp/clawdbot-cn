@@ -149,7 +149,15 @@ export async function advanceWizard(state: WizardState, value?: unknown) {
     })) as WizardNextResult;
     applyWizardNextResult(state, result);
   } catch (err) {
-    state.onboardingWizardError = String(err);
+    const errStr = String(err);
+    // 如果 session 丢失（gateway 重启），清除本地状态让用户可以重新开始
+    if (errStr.includes("wizard not found")) {
+      state.onboardingWizardSessionId = null;
+      state.onboardingWizardStep = null;
+      state.onboardingWizardStatus = null;
+      state.onboardingWizardDraft = null;
+    }
+    state.onboardingWizardError = errStr;
   } finally {
     state.onboardingWizardBusy = false;
   }
@@ -168,7 +176,15 @@ export async function backWizard(state: WizardState) {
     })) as WizardNextResult;
     applyWizardNextResult(state, result);
   } catch (err) {
-    state.onboardingWizardError = String(err);
+    const errStr = String(err);
+    // 如果 session 丢失（gateway 重启），清除本地状态让用户可以重新开始
+    if (errStr.includes("wizard not found")) {
+      state.onboardingWizardSessionId = null;
+      state.onboardingWizardStep = null;
+      state.onboardingWizardStatus = null;
+      state.onboardingWizardDraft = null;
+    }
+    state.onboardingWizardError = errStr;
   } finally {
     state.onboardingWizardBusy = false;
   }

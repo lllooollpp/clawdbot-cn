@@ -24,6 +24,7 @@ import {
   buildVolcengineModelDefinition,
   buildOllamaModelDefinition,
   buildZhipuModelDefinition,
+  buildCopilotModelDefinition,
   DEEPSEEK_BASE_URL,
   DEEPSEEK_DEFAULT_MODEL_ID,
   DEEPSEEK_DEFAULT_MODEL_REF,
@@ -474,6 +475,70 @@ export function applyZhipuConfig(cfg: ClawdbotConfig): ClawdbotConfig {
               }
             : undefined),
           primary: ZHIPU_DEFAULT_MODEL_REF,
+        },
+      },
+    },
+  };
+}
+
+export function applyGitHubCopilotProviderConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const modelId = "gpt-4.1";
+  const modelRef = `github-copilot/${modelId}`;
+
+  const models = { ...cfg.agents?.defaults?.models };
+  models[modelRef] = {
+    ...models[modelRef],
+    alias: models[modelRef]?.alias ?? "Copilot (GPT-4.1)",
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers["github-copilot"];
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildCopilotModelDefinition(modelId);
+  const hasDefaultModel = existingModels.some((model) => model.id === modelId);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+
+  providers["github-copilot"] = {
+    ...((existingProvider ?? {}) as Record<string, unknown>),
+    baseUrl: "https://api.github.com", // Standard GitHub API
+    api: "openai-responses",
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
+    },
+  };
+}
+
+export function applyGitHubCopilotConfig(cfg: ClawdbotConfig): ClawdbotConfig {
+  const next = applyGitHubCopilotProviderConfig(cfg);
+  const modelRef = "github-copilot/gpt-4.1";
+
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? {
+                fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks,
+              }
+            : undefined),
+          primary: modelRef,
         },
       },
     },

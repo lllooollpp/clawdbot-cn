@@ -1,15 +1,41 @@
-import { intro, note, outro, spinner } from "@clack/prompts";
+import { ProxyAgent } from "undici";
 
 import { ensureAuthProfileStore, upsertAuthProfile } from "../agents/auth-profiles.js";
 import { updateConfig } from "../commands/models/shared.js";
 import { applyAuthProfileConfig } from "../commands/onboard-auth.js";
 import { logConfigUpdated } from "../config/logging.js";
 import type { RuntimeEnv } from "../runtime.js";
-import { stylePromptTitle } from "../terminal/prompt-style.js";
+import type { WizardPrompter } from "../wizard/prompts.js";
 
 const CLIENT_ID = "Iv1.b507a08c87ecfe98";
 const DEVICE_CODE_URL = "https://github.com/login/device/code";
 const ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
+
+// 获取代理配置（支持环境变量和系统代理）
+function getProxyUrl(): string | undefined {
+  return (
+    process.env.HTTPS_PROXY ||
+    process.env.https_proxy ||
+    process.env.HTTP_PROXY ||
+    process.env.http_proxy ||
+    undefined
+  );
+}
+
+// 创建支持代理的 fetch
+function createProxiedFetch(): typeof fetch {
+  const proxyUrl = getProxyUrl();
+  if (!proxyUrl) {
+    return fetch;
+  }
+  const agent = new ProxyAgent(proxyUrl);
+  return (input: RequestInfo | URL, init?: RequestInit) => {
+    const base = init ? { ...init } : {};
+    return fetch(input, { ...base, dispatcher: agent } as RequestInit);
+  };
+}
+
+const FETCH_TIMEOUT_MS = 30000; // 30秒超时
 
 type DeviceCodeResponse = {
   device_code: string;
@@ -44,24 +70,48 @@ async function requestDeviceCode(params: { scope: string }): Promise<DeviceCodeR
     scope: params.scope,
   });
 
-  const res = await fetch(DEVICE_CODE_URL, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body,
-  });
+  const proxyUrl = getProxyUrl();
+  const proxiedFetch = createProxiedFetch();
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-  if (!res.ok) {
-    throw new Error(`GitHub device code failed: HTTP ${res.status}`);
-  }
+  try {
+    const res = await proxiedFetch(DEVICE_CODE_URL, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body,
+      signal: controller.signal,
+    });
 
-  const json = parseJsonResponse<DeviceCodeResponse>(await res.json());
-  if (!json.device_code || !json.user_code || !json.verification_uri) {
-    throw new Error("GitHub device code response missing fields");
+    if (!res.ok) {
+      throw new Error(`GitHub device code failed: HTTP ${res.status}`);
+    }
+
+    const json = parseJsonResponse<DeviceCodeResponse>(await res.json());
+    if (!json.device_code || !json.user_code || !json.verification_uri) {
+      throw new Error("GitHub device code response missing fields");
+    }
+    return json;
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      const hint = proxyUrl
+        ? `(当前代理: ${proxyUrl})`
+        : "(提示: 设置 HTTPS_PROXY 环境变量可能有帮助)";
+      throw new Error(`GitHub 请求超时 ${hint}`);
+    }
+    if (err instanceof Error && err.message.includes("fetch failed")) {
+      const hint = proxyUrl
+        ? `请检查代理设置: ${proxyUrl}`
+        : "网络无法连接 GitHub。请设置 HTTPS_PROXY 环境变量或使用 VPN";
+      throw new Error(`GitHub 连接失败: ${hint}`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
-  return json;
 }
 
 async function pollForAccessToken(params: {
@@ -75,89 +125,103 @@ async function pollForAccessToken(params: {
     grant_type: "urn:ietf:params:oauth:grant-type:device_code",
   });
 
+  const proxiedFetch = createProxiedFetch();
+
   while (Date.now() < params.expiresAt) {
-    const res = await fetch(ACCESS_TOKEN_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: bodyBase,
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-    if (!res.ok) {
-      throw new Error(`GitHub device token failed: HTTP ${res.status}`);
-    }
+    try {
+      const res = await proxiedFetch(ACCESS_TOKEN_URL, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: bodyBase,
+        signal: controller.signal,
+      });
 
-    const json = parseJsonResponse<DeviceTokenResponse>(await res.json());
-    if ("access_token" in json && typeof json.access_token === "string") {
-      return json.access_token;
-    }
+      if (!res.ok) {
+        throw new Error(`GitHub device token failed: HTTP ${res.status}`);
+      }
 
-    const err = "error" in json ? json.error : "unknown";
-    if (err === "authorization_pending") {
-      await new Promise((r) => setTimeout(r, params.intervalMs));
-      continue;
+      const json = parseJsonResponse<DeviceTokenResponse>(await res.json());
+      if ("access_token" in json && typeof json.access_token === "string") {
+        return json.access_token;
+      }
+
+      const err = "error" in json ? json.error : "unknown";
+      if (err === "authorization_pending") {
+        await new Promise((r) => setTimeout(r, params.intervalMs));
+        continue;
+      }
+      if (err === "slow_down") {
+        await new Promise((r) => setTimeout(r, params.intervalMs + 2000));
+        continue;
+      }
+      if (err === "expired_token") {
+        throw new Error("GitHub device code expired; run login again");
+      }
+      if (err === "access_denied") {
+        throw new Error("GitHub login cancelled");
+      }
+      throw new Error(`GitHub device flow error: ${err}`);
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") {
+        // 超时后继续重试
+        await new Promise((r) => setTimeout(r, params.intervalMs));
+        continue;
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeoutId);
     }
-    if (err === "slow_down") {
-      await new Promise((r) => setTimeout(r, params.intervalMs + 2000));
-      continue;
-    }
-    if (err === "expired_token") {
-      throw new Error("GitHub device code expired; run login again");
-    }
-    if (err === "access_denied") {
-      throw new Error("GitHub login cancelled");
-    }
-    throw new Error(`GitHub device flow error: ${err}`);
   }
 
   throw new Error("GitHub device code expired; run login again");
 }
 
-export async function githubCopilotLoginCommand(
-  opts: { profileId?: string; yes?: boolean },
-  runtime: RuntimeEnv,
-) {
-  if (!process.stdin.isTTY) {
-    throw new Error("github-copilot login requires an interactive TTY.");
-  }
+export async function performGitHubCopilotLogin(params: {
+  prompter: WizardPrompter;
+  runtime: RuntimeEnv;
+  profileId?: string;
+  yes?: boolean;
+}) {
+  const { prompter, runtime } = params;
 
-  intro(stylePromptTitle("GitHub Copilot login"));
-
-  const profileId = opts.profileId?.trim() || "github-copilot:github";
+  const profileId = params.profileId?.trim() || "github-copilot:github";
   const store = ensureAuthProfileStore(undefined, {
     allowKeychainPrompt: false,
   });
 
-  if (store.profiles[profileId] && !opts.yes) {
-    note(
-      `Auth profile already exists: ${profileId}\nRe-running will overwrite it.`,
-      stylePromptTitle("Existing credentials"),
-    );
+  if (store.profiles[profileId] && !params.yes) {
+    const ok = await prompter.confirm({
+      message: `认证配置文件 ${profileId} 已存在。是否覆盖？`,
+      initialValue: false,
+    });
+    if (!ok) return;
   }
 
-  const spin = spinner();
-  spin.start("Requesting device code from GitHub...");
+  const prog = prompter.progress("正在向 GitHub 请求设备代码...");
   const device = await requestDeviceCode({ scope: "read:user" });
-  spin.stop("Device code ready");
+  prog.stop("设备代码已就绪");
 
-  note(
-    [`Visit: ${device.verification_uri}`, `Code: ${device.user_code}`].join("\n"),
-    stylePromptTitle("Authorize"),
+  await prompter.note(
+    [`请访问: ${device.verification_uri}`, `输入代码: ${device.user_code}`].join("\n"),
+    "GitHub 授权",
   );
 
   const expiresAt = Date.now() + device.expires_in * 1000;
   const intervalMs = Math.max(1000, device.interval * 1000);
 
-  const polling = spinner();
-  polling.start("Waiting for GitHub authorization...");
+  const polling = prompter.progress("正在等待 GitHub 授权完成...");
   const accessToken = await pollForAccessToken({
     deviceCode: device.device_code,
     intervalMs,
     expiresAt,
   });
-  polling.stop("GitHub access token acquired");
+  polling.stop("已获得 GitHub 访问令牌");
 
   upsertAuthProfile({
     profileId,
@@ -165,8 +229,6 @@ export async function githubCopilotLoginCommand(
       type: "token",
       provider: "github-copilot",
       token: accessToken,
-      // GitHub device flow token doesn't reliably include expiry here.
-      // Leave expires unset; we'll exchange into Copilot token plus expiry later.
     },
   });
 
@@ -179,7 +241,23 @@ export async function githubCopilotLoginCommand(
   );
 
   logConfigUpdated(runtime);
-  runtime.log(`Auth profile: ${profileId} (github-copilot/token)`);
+}
 
-  outro("Done");
+export async function githubCopilotLoginCommand(
+  opts: { profileId?: string; yes?: boolean },
+  runtime: RuntimeEnv,
+) {
+  const { createClackPrompter } = await import("../wizard/clack-prompter.js");
+  const prompter = createClackPrompter();
+
+  await prompter.intro("GitHub Copilot 登录");
+
+  await performGitHubCopilotLogin({
+    prompter,
+    runtime,
+    profileId: opts.profileId,
+    yes: opts.yes,
+  });
+
+  await prompter.outro("登录完成");
 }

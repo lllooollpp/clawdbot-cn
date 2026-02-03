@@ -1,51 +1,29 @@
-# 🦞 OpenClaw — 个人 AI 助手
+# 🦞 OpenClaw — 个人 AI 助手控制平面
 
-桌面端：
+> **全新升级！** 深度适配 GitHub Copilot 最新模型，针对 Windows 环境稳定性进行专项优化。
 
-![1769958220182](image/README/1769958220182.png)
-
-
-
-![1769958246734](image/README/1769958246734.png)
-
-![1769958270509](image/README/1769958270509.png)
-
-![1769958442630](image/README/1769958442630.png)
-
-
-
-
-
-
-
-![1769958334598](image/README/1769958334598.png)
-
-![1769742814062](image/README/1769742814062.png)
-
-app端：
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/openclaw-cn/openclaw-cn/main/docs/whatsapp-clawd.jpg" alt="OpenClaw" width="400">
-</p>
-web端：
-<p align="center">
-  <img src="./images/chat.jpg" alt="Chat Example" width="400">
-</p>
-
-<p align="center">
-  <strong>EXFOLIATE! EXFOLIATE!</strong>
-</p>
+![功能演示](image/README/1769958220182.png)
 
 <p align="center">
   <a href="https://github.com/openclaw-cn/openclaw-cn/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/openclaw-cn/openclaw-cn/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
   <a href="https://github.com/openclaw-cn/openclaw-cn/releases"><img src="https://img.shields.io/github/v/release/openclaw-cn/openclaw-cn?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
-  <a href="https://deepwiki.com/openclaw-cn/openclaw-cn"><img src="https://img.shields.io/badge/DeepWiki-openclaw-111111?style=for-the-badge" alt="DeepWiki"></a>
-  <a href="https://discord.gg/clawd"><img src="https://img.shields.io/discord/1456350064065904867?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" alt="Discord"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
+  <a href="http://101.35.228.254/"><img src="https://img.shields.io/badge/文档-中文指南-blue?style=for-the-badge" alt="Docs"></a>
 </p>
 
-**OpenClaw** 是一个你可以在自己设备上运行的*个人 AI 助手*。
-它通过你常用的渠道回复你（WhatsApp、Telegram、Slack、Discord、Google Chat、Signal、iMessage、Microsoft Teams、飞书、WebChat），以及扩展渠道如 BlueBubbles、Matrix、Zalo 和 Zalo Personal。它可以在 macOS/iOS/Android 上说话和聆听，并可以渲染你控制的实时 Canvas。Gateway 只是控制平面——产品是助手。
+**OpenClaw** 是一个构建在本地设备上的 *个人 AI 助手控制中心*。
+它能让你通过常用的聊天工具（企业微信、飞书、WhatsApp、Telegram、Slack、Discord、Signal、iMessage 等）与你的私人 AI 代理（Pi）进行实时对话，并赋予 AI 操作 Shell、浏览器、文件系统以及执行自动化任务的能力。
+
+---
+
+### 🚀 最新功能与稳定性增强 (v1.1.4+)
+
+- **GitHub Copilot 深度适配**：支持最新的 `gpt-4.1` 等模型，修复了旧版模型版本失效导致的 404 错误。
+- **Windows 文件系统加固**：针对 Windows 平台常见的文件锁定 (EPERM) 冲突，引入了指数退避重试机制，大幅提升配对与配置保存成功率。
+- **向导会话状态自动恢复**：修复了配置向导在 WebSocket 重连或 Gateway 重启后会话丢失的异常，现在支持自动清理陈旧状态并允许无缝重试。
+- **国内生态深度集成**：原生支持 **企业微信** (AES 解密/双向传输) 与 **飞书**。
+
+---
+
 
 如果你想要一个感觉本地、快速、始终在线的个人单用户助手，这就是它。现在提供 **Desktop App (Win/macOS/Linux)**，让你无需命令行即可快速开启。针对中国用户进行了深度优化，内置 **智谱 AI (Zhipu)** 等国产模型支持。
 
@@ -167,9 +145,9 @@ Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack 的�
 
 [![Star History Chart](https://api.star-history.com/svg?repos=clawdbot/clawdbot&type=date&legend=top-left)](https://www.star-history.com/#clawdbot/clawdbot&type=date&legend=top-left)
 
-## 我们迄今为止构建的一切
+## 🤝 参与贡献
 
-### 核心平台
+查看 `CONTRIBUTING.md` 获取贡献指南与提交 PR 的方式。我们要打造最懂中国开发者的 AI 助手控制平面。
 
 - [Gateway WS 控制平面](./docs/gateway/index.md) 与会话、存在、配置、Cron、Webhook、[控制 UI](./docs/web/index.md) 和 [Canvas 主机](./docs/platforms/mac/canvas.md#canvas-a2ui)。
 - [CLI 表面](./docs/tools/agent-send.md)：Gateway、代理、发送、[向导](./docs/start/wizard.md) 和 [医生](./docs/gateway/doctor.md)。
@@ -199,22 +177,7 @@ Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack 的�
 
 ### 调试
 
-- [调试](./docs/debugging.md)：[日志](./docs/logging.md)、[诊断](./docs/diagnostics.md)、[医生](./docs/gateway/doctor.md)、[测试](./docs/testing.md)。
-
-### 安装
-
-- [安装](./docs/install/index.md)：[入门](./docs/start/getting-started.md)、[向导](./docs/start/wizard.md)、[更新](./docs/install/updating.md)、[开发渠道](./docs/install/development-channels.md)、[Docker](./docs/install/docker.md)、[Nix](https://github.com/clawdbot/nix-clawdbot)。
-
-### 入门
-
-- [入门](./docs/start/index.md)：[入门](./docs/start/getting-started.md)、[向导](./docs/start/wizard.md)、[展示](./docs/start/showcase.md)、[FAQ](./docs/start/faq.md)。
-
-## 贡献与社区
-
-查看 `CONTRIBUTING.md` 获取贡献指南与提交 PR 的方式。
-
-特别感谢所有贡献者与社区支持。
-
 ---
 
-*Clawdbot 是一个开源项目。*
+*Clawdbot 是一个开源项目，致力于让每个人都能拥有属于自己的超级助手。* 🦞
+
