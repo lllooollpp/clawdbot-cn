@@ -3,8 +3,8 @@ import { join, dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { spawn } from 'child_process'
 
-console.log('[OpenClaw] Electron version:', process.versions.electron)
-console.log('[OpenClaw] Node version:', process.versions.node)
+console.log('[Clawdbot] Electron version:', process.versions.electron)
+console.log('[Clawdbot] Node version:', process.versions.node)
 
 import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -46,7 +46,7 @@ function findNodeBin(): string | null {
 
 async function startGateway(): Promise<void> {
   const stateDir = app.getPath('userData')
-  const configPath = join(stateDir, 'openclaw.json')
+  const configPath = join(stateDir, 'clawdbot.json')
 
   // Ensure config directory exists
   if (!fs.existsSync(stateDir)) {
@@ -55,7 +55,7 @@ async function startGateway(): Promise<void> {
 
   // Double-check: Create a minimal config if none exists to satisfy the "mode=local" check
   if (!fs.existsSync(configPath)) {
-    console.log('[OpenClaw] Initializing default config at:', configPath)
+    console.log('[Clawdbot] Initializing default config at:', configPath)
     const defaultConfig = {
       gateway: {
         mode: 'local',
@@ -95,21 +95,21 @@ async function startGateway(): Promise<void> {
   
   const isPackaged = app.isPackaged
   const workspaceRoot = isPackaged ? app.getAppPath() : resolve(__dirname, '../../../..')
-  console.log('[OpenClaw] Workspace root:', workspaceRoot)
+  console.log('[Clawdbot] Workspace root:', workspaceRoot)
   const nodeBin = findNodeBin()
   const packagedRoot = process.resourcesPath
   const entryTs = join(workspaceRoot, 'src/entry.ts')
   const entryJs = join(workspaceRoot, 'dist/entry.js')
   
   // Try both ASAR and unpacked paths
-  let packagedEntryJs = join(packagedRoot, 'app.asar', 'node_modules', 'openclaw', 'dist', 'entry.js')
+  let packagedEntryJs = join(packagedRoot, 'app.asar', 'node_modules', 'clawdbot', 'dist', 'entry.js')
   if (!fs.existsSync(packagedEntryJs)) {
-      packagedEntryJs = join(packagedRoot, 'app', 'node_modules', 'openclaw', 'dist', 'entry.js')
+      packagedEntryJs = join(packagedRoot, 'app', 'node_modules', 'clawdbot', 'dist', 'entry.js')
   }
   
   if (isPackaged && !fs.existsSync(packagedEntryJs)) {
-    console.error('[OpenClaw] Packaged entry.js missing at:', packagedEntryJs)
-    sendGatewayLog(`[OpenClaw] Packaged entry.js missing at: ${packagedEntryJs}`)
+    console.error('[Clawdbot] Packaged entry.js missing at:', packagedEntryJs)
+    sendGatewayLog(`[Clawdbot] Packaged entry.js missing at: ${packagedEntryJs}`)
   }
   
   const entryPath = isPackaged
@@ -134,12 +134,12 @@ async function startGateway(): Promise<void> {
   // Don't use asar path for cwd, it causes spawn ENOENT on Windows
   const spawnCwd = isPackaged ? dirname(process.execPath) : workspaceRoot
 
-  console.log('[OpenClaw] Starting gateway with:', spawnBin, gatewayArgs)
-  console.log('[OpenClaw] CWD:', spawnCwd)
-  console.log('[OpenClaw] State directory:', process.env.CLAWDBOT_STATE_DIR)
-  sendGatewayLog(`[OpenClaw] Starting gateway with: ${[spawnBin, ...gatewayArgs].join(' ')}`)
-  sendGatewayLog(`[OpenClaw] CWD: ${spawnCwd}`)
-  sendGatewayLog(`[OpenClaw] State directory: ${process.env.CLAWDBOT_STATE_DIR ?? ''}`)
+  console.log('[Clawdbot] Starting gateway with:', spawnBin, gatewayArgs)
+  console.log('[Clawdbot] CWD:', spawnCwd)
+  console.log('[Clawdbot] State directory:', process.env.CLAWDBOT_STATE_DIR)
+  sendGatewayLog(`[Clawdbot] Starting gateway with: ${[spawnBin, ...gatewayArgs].join(' ')}`)
+  sendGatewayLog(`[Clawdbot] CWD: ${spawnCwd}`)
+  sendGatewayLog(`[Clawdbot] State directory: ${process.env.CLAWDBOT_STATE_DIR ?? ''}`)
   
   const logFile = join(stateDir, 'gateway.log')
   const logStream = fs.createWriteStream(logFile, { flags: 'a' })
@@ -177,28 +177,28 @@ async function startGateway(): Promise<void> {
         .forEach((line) => sendGatewayLog(line))
     })
     child.on('error', (err) => {
-      console.error('[OpenClaw] Failed to spawn gateway process:', err)
-      sendGatewayLog(`[OpenClaw] Failed to spawn gateway process: ${String(err)}`)
+      console.error('[Clawdbot] Failed to spawn gateway process:', err)
+      sendGatewayLog(`[Clawdbot] Failed to spawn gateway process: ${String(err)}`)
     })
     child.on('exit', (code, signal) => {
       if (signal) {
-        console.error('[OpenClaw] Gateway process exited with signal:', signal)
-        sendGatewayLog(`[OpenClaw] Gateway process exited with signal: ${signal}`)
+        console.error('[Clawdbot] Gateway process exited with signal:', signal)
+        sendGatewayLog(`[Clawdbot] Gateway process exited with signal: ${signal}`)
         return
       }
       if (code && code !== 0) {
-        console.error('[OpenClaw] Gateway process exited with code:', code)
-        sendGatewayLog(`[OpenClaw] Gateway process exited with code: ${code}`)
+        console.error('[Clawdbot] Gateway process exited with code:', code)
+        sendGatewayLog(`[Clawdbot] Gateway process exited with code: ${code}`)
       }
     })
-    console.log('[OpenClaw] Gateway initialization triggered')
+    console.log('[Clawdbot] Gateway initialization triggered')
 
     // Poll for gateway readiness to load the UI
     const checkGatewayReady = async (): Promise<void> => {
       try {
         const response = await fetch('http://127.0.0.1:18789/health')
         if (response.ok) {
-          console.log('[OpenClaw] Gateway is ready, loading dashboard')
+          console.log('[Clawdbot] Gateway is ready, loading dashboard')
           mainWindow?.loadURL('http://127.0.0.1:18789')
           return
         }
@@ -209,12 +209,12 @@ async function startGateway(): Promise<void> {
     }
     checkGatewayReady()
   } catch (error) {
-    console.error('[OpenClaw] Failed to start gateway:', error)
+    console.error('[Clawdbot] Failed to start gateway:', error)
   }
 }
 
 function createWindow(): void {
-  console.log('[OpenClaw] Creating window...')
+  console.log('[Clawdbot] Creating window...')
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -228,7 +228,7 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
-    console.log('[OpenClaw] Window ready to show')
+    console.log('[Clawdbot] Window ready to show')
     mainWindow?.show()
     mainWindow?.focus() // Force focus
   })
@@ -236,7 +236,7 @@ function createWindow(): void {
   // Fallback if ready-to-show doesn't fire
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {
-      console.log('[OpenClaw] ready-to-show timeout, forcing show')
+      console.log('[Clawdbot] ready-to-show timeout, forcing show')
       mainWindow.show()
     }
   }, 5000)
@@ -269,7 +269,7 @@ function createTray(): void {
   tray = new Tray(trayIcon.resize({ width: 16, height: 16 }))
   
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show OpenClaw', click: () => mainWindow?.show() },
+    { label: 'Show Clawdbot', click: () => mainWindow?.show() },
     { type: 'separator' },
     { label: 'Quit', click: () => {
       isAppQuitting = true
@@ -277,14 +277,14 @@ function createTray(): void {
     }}
   ])
 
-  tray.setToolTip('OpenClaw Gateway')
+  tray.setToolTip('Clawdbot Gateway')
   tray.setContextMenu(contextMenu)
   tray.on('double-click', () => mainWindow?.show())
 }
 
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.openclaw.desktop')
+  electronApp.setAppUserModelId('com.clawdbot.desktop')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

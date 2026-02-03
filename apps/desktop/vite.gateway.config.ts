@@ -37,7 +37,7 @@ const externalModules = [
 export default defineConfig({
   resolve: {
     alias: {
-      'openclaw': resolve(workspaceRoot, 'src/index.ts'),
+      'clawdbot': resolve(workspaceRoot, 'src/index.ts'),
       'node:sqlite': resolve(__dirname, 'src/main/node-sqlite-shim.ts')
     }
   },

@@ -1,4 +1,3 @@
-import { intro, note, outro, spinner } from "@clack/prompts";
 import { ProxyAgent } from "undici";
 
 import { ensureAuthProfileStore, upsertAuthProfile } from "../agents/auth-profiles.js";
@@ -6,7 +5,7 @@ import { updateConfig } from "../commands/models/shared.js";
 import { applyAuthProfileConfig } from "../commands/onboard-auth.js";
 import { logConfigUpdated } from "../config/logging.js";
 import type { RuntimeEnv } from "../runtime.js";
-import { stylePromptTitle } from "../terminal/prompt-style.js";
+import type { WizardPrompter } from "../wizard/prompts.js";
 
 const CLIENT_ID = "Iv1.b507a08c87ecfe98";
 const DEVICE_CODE_URL = "https://github.com/login/device/code";
@@ -183,49 +182,46 @@ async function pollForAccessToken(params: {
   throw new Error("GitHub device code expired; run login again");
 }
 
-export async function githubCopilotLoginCommand(
-  opts: { profileId?: string; yes?: boolean },
-  runtime: RuntimeEnv,
-) {
-  if (!process.stdin.isTTY) {
-    throw new Error("github-copilot login requires an interactive TTY.");
-  }
+export async function performGitHubCopilotLogin(params: {
+  prompter: WizardPrompter;
+  runtime: RuntimeEnv;
+  profileId?: string;
+  yes?: boolean;
+}) {
+  const { prompter, runtime } = params;
 
-  intro(stylePromptTitle("GitHub Copilot login"));
-
-  const profileId = opts.profileId?.trim() || "github-copilot:github";
+  const profileId = params.profileId?.trim() || "github-copilot:github";
   const store = ensureAuthProfileStore(undefined, {
     allowKeychainPrompt: false,
   });
 
-  if (store.profiles[profileId] && !opts.yes) {
-    note(
-      `Auth profile already exists: ${profileId}\nRe-running will overwrite it.`,
-      stylePromptTitle("Existing credentials"),
-    );
+  if (store.profiles[profileId] && !params.yes) {
+    const ok = await prompter.confirm({
+      message: `认证配置文件 ${profileId} 已存在。是否覆盖？`,
+      initialValue: false,
+    });
+    if (!ok) return;
   }
 
-  const spin = spinner();
-  spin.start("Requesting device code from GitHub...");
+  const prog = prompter.progress("正在向 GitHub 请求设备代码...");
   const device = await requestDeviceCode({ scope: "read:user" });
-  spin.stop("Device code ready");
+  prog.stop("设备代码已就绪");
 
-  note(
-    [`Visit: ${device.verification_uri}`, `Code: ${device.user_code}`].join("\n"),
-    stylePromptTitle("Authorize"),
+  await prompter.note(
+    [`请访问: ${device.verification_uri}`, `输入代码: ${device.user_code}`].join("\n"),
+    "GitHub 授权",
   );
 
   const expiresAt = Date.now() + device.expires_in * 1000;
   const intervalMs = Math.max(1000, device.interval * 1000);
 
-  const polling = spinner();
-  polling.start("Waiting for GitHub authorization...");
+  const polling = prompter.progress("正在等待 GitHub 授权完成...");
   const accessToken = await pollForAccessToken({
     deviceCode: device.device_code,
     intervalMs,
     expiresAt,
   });
-  polling.stop("GitHub access token acquired");
+  polling.stop("已获得 GitHub 访问令牌");
 
   upsertAuthProfile({
     profileId,
@@ -233,8 +229,6 @@ export async function githubCopilotLoginCommand(
       type: "token",
       provider: "github-copilot",
       token: accessToken,
-      // GitHub device flow token doesn't reliably include expiry here.
-      // Leave expires unset; we'll exchange into Copilot token plus expiry later.
     },
   });
 
@@ -247,7 +241,23 @@ export async function githubCopilotLoginCommand(
   );
 
   logConfigUpdated(runtime);
-  runtime.log(`Auth profile: ${profileId} (github-copilot/token)`);
+}
 
-  outro("Done");
+export async function githubCopilotLoginCommand(
+  opts: { profileId?: string; yes?: boolean },
+  runtime: RuntimeEnv,
+) {
+  const { createClackPrompter } = await import("../wizard/clack-prompter.js");
+  const prompter = createClackPrompter();
+
+  await prompter.intro("GitHub Copilot 登录");
+
+  await performGitHubCopilotLogin({
+    prompter,
+    runtime,
+    profileId: opts.profileId,
+    yes: opts.yes,
+  });
+
+  await prompter.outro("登录完成");
 }

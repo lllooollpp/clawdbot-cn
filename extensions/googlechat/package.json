@@ -31,10 +31,10 @@
     "google-auth-library": "^10.5.0"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "clawdbot": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": "workspace:*"
+    "clawdbot": "workspace:*"
   },
   "author": "lllooollpp"
 }

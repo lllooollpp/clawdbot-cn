@@ -1,4 +1,4 @@
-﻿# 馃 OpenClaw 鈥?涓汉 AI 鍔╂墜鎺у埗骞抽潰
+﻿# 馃 Clawdbot-CN 鈥?涓汉 AI 鍔╂墜鎺у埗骞抽潰
 
 > **鍏ㄦ柊鍗囩骇锛?* 娣卞害閫傞厤 GitHub Copilot 鏈€鏂版ā鍨嬶紝閽堝 Windows 鐜绋冲畾鎬ц繘琛屼笓椤逛紭鍖栥€?
 ![鍔熻兘婕旂ず](image/README/1769958220182.png)
@@ -9,7 +9,7 @@
   <a href="http://101.35.228.254/"><img src="https://img.shields.io/badge/鏂囨。-涓枃鎸囧崡-blue?style=for-the-badge" alt="Docs"></a>
 </p>
 
-**OpenClaw** 鏄竴涓瀯寤哄湪鏈湴璁惧涓婄殑 *涓汉 AI 鍔╂墜鎺у埗涓績*銆?瀹冭兘璁╀綘閫氳繃甯哥敤鐨勮亰澶╁伐鍏凤紙浼佷笟寰俊銆侀涔︺€乄hatsApp銆乀elegram銆丼lack銆丏iscord銆丼ignal銆乮Message 绛夛級涓庝綘鐨勭浜?AI 浠ｇ悊锛圥i锛夎繘琛屽疄鏃跺璇濓紝骞惰祴浜?AI 鎿嶄綔 Shell銆佹祻瑙堝櫒銆佹枃浠剁郴缁熶互鍙婃墽琛岃嚜鍔ㄥ寲浠诲姟鐨勮兘鍔涖€?
+**Clawdbot-CN** 鏄竴涓瀯寤哄湪鏈湴璁惧涓婄殑 *涓汉 AI 鍔╂墜鎺у埗涓績*銆?瀹冭兘璁╀綘閫氳繃甯哥敤鐨勮亰澶╁伐鍏凤紙浼佷笟寰俊銆侀涔︺€乄hatsApp銆乀elegram銆丼lack銆丏iscord銆丼ignal銆乮Message 绛夛級涓庝綘鐨勭浜?AI 浠ｇ悊锛圥i锛夎繘琛屽疄鏃跺璇濓紝骞惰祴浜?AI 鎿嶄綔 Shell銆佹祻瑙堝櫒銆佹枃浠剁郴缁熶互鍙婃墽琛岃嚜鍔ㄥ寲浠诲姟鐨勮兘鍔涖€?
 ---
 
 ### 馃殌 鏈€鏂板姛鑳戒笌绋冲畾鎬у寮?(v1.1.4+)
@@ -19,11 +19,11 @@
 
 
 濡傛灉浣犳兂瑕佷竴涓劅瑙夋湰鍦般€佸揩閫熴€佸缁堝湪绾跨殑涓汉鍗曠敤鎴峰姪鎵嬶紝杩欏氨鏄畠銆傜幇鍦ㄦ彁渚?**Desktop App (Win/macOS/Linux)**锛岃浣犳棤闇€鍛戒护琛屽嵆鍙揩閫熷紑鍚€傞拡瀵逛腑鍥界敤鎴疯繘琛屼簡娣卞害浼樺寲锛屽唴缃?**鏅鸿氨 AI (Zhipu)** 绛夊浗浜фā鍨嬫敮鎸併€?
-[缃戠珯](https://openclaw.cn) 路 [鏂囨。](http://101.35.228.254/) 路 [鍏ラ棬](./docs/start/getting-started.md) 路 [妗岄潰绔痌(./docs/install/desktop.md) 路 [鏇存柊](./docs/install/updating.md) 路 [灞曠ず](./docs/start/showcase.md) 路 [FAQ](./docs/start/faq.md) 路 [鍚戝](./docs/start/wizard.md) 路 [Docker](./docs/install/docker.md) 路 [Discord](https://discord.gg/openclaw)
+[缃戠珯](https://clawdbot.cn) 路 [鏂囨。](http://101.35.228.254/) 路 [鍏ラ棬](./docs/start/getting-started.md) 路 [妗岄潰绔痌(./docs/install/desktop.md) 路 [鏇存柊](./docs/install/updating.md) 路 [灞曠ず](./docs/start/showcase.md) 路 [FAQ](./docs/start/faq.md) 路 [鍚戝](./docs/start/wizard.md) 路 [Docker](./docs/install/docker.md) 路 [Discord](https://discord.gg/clawdbot)
 
 棣栭€夎缃細
 
-1. **Desktop App (鎺ㄨ崘)**锛氫笅杞藉苟杩愯 [OpenClaw Desktop](./docs/install/desktop.md)锛岃繖鏄渶绠€鍗曡法骞冲彴 GUI 浣撻獙锛屾敮鎸?**Windows銆乵acOS 鍜?Linux**銆傛柊鐗堟湰鏀寔**鍥惧舰鍖栭厤缃悜瀵?*锛屽湪璁剧疆鑿滃崟涓嵆鍙竴閿紑鍚紝涓旈粯璁や紭鍏堥€傞厤鍥戒骇澶фā鍨嬨€?2. **CLI 鍚戝**锛氳繍琛屽叆闂ㄥ悜瀵硷紙`openclaw onboard`锛夈€傚畠浼氬紩瀵间綘瀹屾垚 Gateway銆乄orkspace銆丆hannels 鍜?Skills銆侰LI 鍚戝鎺ㄨ崘鍦?**macOS銆丩inux 鍜?Windows (閫氳繃 WSL2)** 涓婂伐浣溿€?
+1. **Desktop App (鎺ㄨ崘)**锛氫笅杞藉苟杩愯 [Clawdbot-CN Desktop](./docs/install/desktop.md)锛岃繖鏄渶绠€鍗曡法骞冲彴 GUI 浣撻獙锛屾敮鎸?**Windows銆乵acOS 鍜?Linux**銆傛柊鐗堟湰鏀寔**鍥惧舰鍖栭厤缃悜瀵?*锛屽湪璁剧疆鑿滃崟涓嵆鍙竴閿紑鍚紝涓旈粯璁や紭鍏堥€傞厤鍥戒骇澶фā鍨嬨€?2. **CLI 鍚戝**锛氳繍琛屽叆闂ㄥ悜瀵硷紙`clawdbot onboard`锛夈€傚畠浼氬紩瀵间綘瀹屾垚 Gateway銆乄orkspace銆丆hannels 鍜?Skills銆侰LI 鍚戝鎺ㄨ崘鍦?**macOS銆丩inux 鍜?Windows (閫氳繃 WSL2)** 涓婂伐浣溿€?
 鏀寔 npm銆乸npm 鎴?bun銆?鏂板畨瑁咃紵浠庤繖閲屽紑濮嬶細[鍏ラ棬](./docs/start/getting-started.md)
 
 **璁㈤槄锛圤Auth锛夛細**

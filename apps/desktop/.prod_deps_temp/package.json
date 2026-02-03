@@ -1,10 +1,10 @@
 {
-    "name":  "openclaw-desktop",
+    "name":  "clawdbot-desktop",
     "version":  "1.0.8",
-    "description":  "OpenClaw Desktop App for Cross-Platform Support",
+    "description":  "Clawdbot Desktop App for Cross-Platform Support",
     "type":  "module",
     "main":  "./out/main/index.cjs",
-    "author":  "OpenClaw",
+    "author":  "Clawdbot",
     "license":  "MIT",
     "scripts":  {
                     "format":  "prettier --write .",
@@ -20,8 +20,8 @@
                     "build:win":  "npm run build \u0026\u0026 electron-builder --win"
                 },
     "build":  {
-                  "appId":  "com.openclaw.desktop",
-                  "productName":  "OpenClaw",
+                  "appId":  "com.clawdbot.desktop",
+                  "productName":  "Clawdbot",
                   "directories":  {
                                       "output":  "dist"
                                   },
@@ -76,7 +76,7 @@
                          "better-sqlite3":  "^12.6.2",
                          "sharp":  "^0.34.5",
                          "sqlite-vec":  "0.1.7-alpha.2",
-                         "openclaw":  "workspace:*"
+                         "clawdbot":  "workspace:*"
                      },
     "devDependencies":  {
                             "@electron-toolkit/eslint-config-ts":  "^2.0.0",

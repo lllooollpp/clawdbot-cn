@@ -7,7 +7,6 @@ const DEFAULT_MAX_TOKENS = 8192;
 // We keep this list intentionally broad; if a model isn't available Copilot will
 // return an error and users can remove it from their config.
 const DEFAULT_MODEL_IDS = [
-  "gpt-4o",
   "gpt-4.1",
   "gpt-4.1-mini",
   "gpt-4.1-nano",

@@ -27,7 +27,7 @@
     }
   },
   "dependencies": {
-    "openclaw": "workspace:*",
+    "clawdbot": "workspace:*",
     "undici": "7.19.0"
   },
   "author": "lllooollpp"

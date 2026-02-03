@@ -96,7 +96,35 @@ async function writeJSONAtomic(filePath: string, value: unknown) {
   } catch {
     // best-effort
   }
-  await fs.rename(tmp, filePath);
+  // Windows 文件锁定可能导致 EPERM 错误，使用指数退避重试
+  let retries = 5;
+  let delay = 50;
+  while (retries > 0) {
+    try {
+      await fs.rename(tmp, filePath);
+      break;
+    } catch (err) {
+      if (
+        err instanceof Error &&
+        "code" in err &&
+        (err.code === "EPERM" || err.code === "EACCES") &&
+        retries > 1
+      ) {
+        retries--;
+        await new Promise((r) => setTimeout(r, delay));
+        delay = Math.min(delay * 2, 500); // 指数退避，最大 500ms
+        continue;
+      }
+      // 最后一次重试失败或其他错误，尝试直接写入
+      try {
+        await fs.unlink(tmp);
+      } catch {
+        // ignore cleanup error
+      }
+      await fs.writeFile(filePath, JSON.stringify(value, null, 2), "utf8");
+      break;
+    }
+  }
   try {
     await fs.chmod(filePath, 0o600);
   } catch {

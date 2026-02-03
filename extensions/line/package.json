@@ -24,7 +24,7 @@
     }
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "clawdbot": "workspace:*"
   },
   "author": "lllooollpp"
 }
