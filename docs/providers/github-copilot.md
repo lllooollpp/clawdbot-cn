@@ -34,12 +34,12 @@ clawdbot models auth login-github-copilot --yes
 ```
 ## 设置默认模型
 bash
-clawdbot models set github-copilot/gpt-4o
+clawdbot models set github-copilot/gpt-4.1
 ```
 ### 配置片段
 ```json5
 {
-  agents: { defaults: { model: { primary: "github-copilot/gpt-4o" } } }
+  agents: { defaults: { model: { primary: "github-copilot/gpt-4.1" } } }
 }
 ```
 ## 注意事项

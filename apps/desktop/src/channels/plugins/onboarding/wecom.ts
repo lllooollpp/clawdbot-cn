@@ -93,11 +93,11 @@ export const wecomOnboardingAdapter: ChannelOnboardingAdapter = {
       ],
     });
 
-    const corpId = String(formResult.corpId ?? "").trim();
-    const agentId = String(formResult.agentId ?? "").trim();
-    const secret = String(formResult.secret ?? "").trim();
-    const token = String(formResult.token ?? "").trim();
-    const encodingAesKey = String(formResult.encodingAesKey ?? "").trim();
+    const corpId = ((formResult.corpId as string) || "").trim();
+    const agentId = ((formResult.agentId as string) || "").trim();
+    const secret = ((formResult.secret as string) || "").trim();
+    const token = ((formResult.token as string) || "").trim();
+    const encodingAesKey = ((formResult.encodingAesKey as string) || "").trim();
 
     if (!corpId || !agentId || !secret) {
       throw new Error("CorpID, AgentID and Secret are required");

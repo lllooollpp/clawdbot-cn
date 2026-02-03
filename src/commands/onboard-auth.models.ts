@@ -210,3 +210,15 @@ export function buildZhipuModelDefinition(): ModelDefinitionConfig {
     maxTokens: ZHIPU_DEFAULT_MAX_TOKENS,
   };
 }
+
+export function buildCopilotModelDefinition(modelId: string): ModelDefinitionConfig {
+  return {
+    id: modelId,
+    name: `GitHub Copilot (${modelId})`,
+    reasoning: modelId.startsWith("o1") || modelId.startsWith("o3"),
+    input: ["text", "image"],
+    cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+    contextWindow: 128000,
+    maxTokens: 8192,
+  };
+}

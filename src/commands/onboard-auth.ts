@@ -30,6 +30,8 @@ export {
   applyZaiConfig,
   applyZhipuConfig,
   applyZhipuProviderConfig,
+  applyGitHubCopilotConfig,
+  applyGitHubCopilotProviderConfig,
 } from "./onboard-auth.config-core.js";
 export {
   applyMinimaxApiConfig,

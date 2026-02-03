@@ -1,6 +1,6 @@
-import { githubCopilotLoginCommand } from "../providers/github-copilot-auth.js";
+import { performGitHubCopilotLogin } from "../providers/github-copilot-auth.js";
 import type { ApplyAuthChoiceParams, ApplyAuthChoiceResult } from "./auth-choice.apply.js";
-import { applyAuthProfileConfig } from "./onboard-auth.js";
+import { applyAuthProfileConfig, applyGitHubCopilotConfig } from "./onboard-auth.js";
 
 export async function applyAuthChoiceGitHubCopilot(
   params: ApplyAuthChoiceParams,
@@ -10,17 +10,20 @@ export async function applyAuthChoiceGitHubCopilot(
   let nextConfig = params.config;
 
   await params.prompter.note(
-    ["这将打开 GitHub 设备登录以授权 Copilot。", "需要有效的 GitHub Copilot 订阅。"].join("\n"),
+    [
+      "这将通过 GitHub 设备授权流 (Device Flow) 启用 GitHub Copilot。",
+      "需要有效的 GitHub Copilot 订阅。",
+      "授权令牌将安全存储在本地（~/.clawdbot/credentials/）并自动刷新。",
+    ].join("\n"),
     "GitHub Copilot",
   );
 
-  if (!process.stdin.isTTY) {
-    await params.prompter.note("GitHub Copilot 登录需要交互式 TTY。", "GitHub Copilot");
-    return { config: nextConfig };
-  }
-
   try {
-    await githubCopilotLoginCommand({ yes: true }, params.runtime);
+    await performGitHubCopilotLogin({
+      prompter: params.prompter,
+      runtime: params.runtime,
+      yes: true,
+    });
   } catch (err) {
     await params.prompter.note(`GitHub Copilot 登录失败：${String(err)}`, "GitHub Copilot");
     return { config: nextConfig };
@@ -33,23 +36,8 @@ export async function applyAuthChoiceGitHubCopilot(
   });
 
   if (params.setDefaultModel) {
-    const model = "github-copilot/gpt-4o";
-    nextConfig = {
-      ...nextConfig,
-      agents: {
-        ...nextConfig.agents,
-        defaults: {
-          ...nextConfig.agents?.defaults,
-          model: {
-            ...(typeof nextConfig.agents?.defaults?.model === "object"
-              ? nextConfig.agents.defaults.model
-              : undefined),
-            primary: model,
-          },
-        },
-      },
-    };
-    await params.prompter.note(`默认模型已设置为 ${model}`, "模型配置完成");
+    nextConfig = applyGitHubCopilotConfig(nextConfig);
+    await params.prompter.note("默认模型已设置为 github-copilot/gpt-4.1", "模型配置完成");
   }
 
   return { config: nextConfig };

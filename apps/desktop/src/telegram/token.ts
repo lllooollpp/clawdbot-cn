@@ -1,6 +1,7 @@
 import fs from "node:fs";
 
 import type { ClawdbotConfig } from "../config/config.js";
+import type { TelegramAccountConfig } from "../config/types.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../routing/session-key.js";
 
 export type TelegramTokenSource = "env" | "tokenFile" | "config" | "none";

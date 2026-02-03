@@ -47,6 +47,17 @@ def install_dependencies():
 
 def cleanup_port(port):
     print(f"\n=== 端口清理 ({port}) ===")
+    
+    # 检查是否有正在运行的 Windows 计划任务可能导致冲突
+    try:
+        task_check = subprocess.run("Get-ScheduledTask -TaskName 'Clawdbot Gateway' -ErrorAction SilentlyContinue", 
+                                   shell=True, capture_output=True, text=True)
+        if "Running" in task_check.stdout:
+            print("⚠️  警告: 后台计划任务 'Clawdbot Gateway' 正在运行。")
+            print("💡 建议运行: Stop-ScheduledTask -TaskName 'Clawdbot Gateway'")
+    except:
+        pass
+
     try:
         # Windows Find PIDs
         cmd = f"netstat -ano | findstr :{port}"
@@ -77,6 +88,23 @@ def cleanup_port(port):
     except Exception as e:
         print(f"端口检查跳过: {e}")
 
+def get_gateway_token():
+    """获取网关认证 Token"""
+    try:
+        # 优先从配置中获取
+        token = subprocess.check_output("pnpm clawdbot config get gateway.auth.token", 
+                                       shell=True, stderr=subprocess.DEVNULL).decode().strip()
+        # 过滤掉龙虾哥的骚话（如果有多行）
+        lines = [line.strip() for line in token.split('\n') if line.strip()]
+        if lines:
+            # 找到看起来像 token 的一行
+            for line in reversed(lines):
+                if '-' in line or len(line) > 8:
+                    return line
+    except:
+        pass
+    return None
+
 def start_debug():
     print("\n=== 2. 启动开发模式 (Debug Mode) ===")
     print("🚀 特性: 无需等待编译 (TSX), 实时日志, 热重载")
@@ -91,7 +119,12 @@ def start_debug():
     env["CLAWDBOT_CONSOLE_LEVEL"] = "debug"
     env["CLAWDBOT_CONSOLE_STYLE"] = "pretty"
     
+    token = get_gateway_token()
     dashboard_url = f"http://127.0.0.1:{PORT}"
+    if token:
+        dashboard_url += f"/?token={token}"
+        print(f"🔑 检测到认证 Token: {token}")
+
     print(f"\n🌐 控制台地址: {dashboard_url}")
     print(f"▶️  正在启动网关 (Gateway)...")
     
@@ -123,7 +156,12 @@ def start_build():
     if not run_command("pnpm ui:build", "编译前端界面 (UI)"):
         sys.exit(1)
     
+    token = get_gateway_token()
     dashboard_url = f"http://127.0.0.1:{PORT}"
+    if token:
+        dashboard_url += f"/?token={token}"
+        print(f"🔑 检测到认证 Token: {token}")
+
     print(f"\n🎉 构建成功!")
     print(f"🌐 控制台地址: {dashboard_url}")
     

@@ -224,7 +224,7 @@ describe("applyAuthChoice", () => {
         setDefaultModel: true,
       });
 
-      expect(result.config.agents?.defaults?.model?.primary).toBe("github-copilot/gpt-4o");
+      expect(result.config.agents?.defaults?.model?.primary).toBe("github-copilot/gpt-4.1");
     } finally {
       stdin.isTTY = previousTty;
     }
