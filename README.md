@@ -126,3 +126,21 @@ Telegram/WhatsApp/Signal/iMessage/Microsoft Teams/Discord/Google Chat/Slack 鐨�
 *Clawdbot 鏄竴涓紑婧愰」鐩紝鑷村姏浜庤姣忎釜浜洪兘鑳芥嫢鏈夊睘浜庤嚜宸辩殑瓒呯骇鍔╂墜銆? 馃
 
 
+
+
+##  v1.1.4 Agent 功能亮点
+
+###  Agent 管理与安全
+
+- **Agent Dashboard**: 全新 Web UI 管理界面 (/agents),可视化管理所有 agent 配置、工作空间和文件
+- **系统提示安全防护**: 智能检测和过滤提示注入、越权指令等恶意内容
+- **agents.update API**: Gateway 新增 API,支持动态更新 agent 配置
+- **OpenRouter 归因**: 自动添加应用归因 headers
+
+###  核心改进
+
+- **GitHub Copilot**: 支持最新 gpt-4.1 模型
+- **Windows 优化**: 指数退避重试解决文件锁定冲突
+- **会话恢复**: 向导支持 Gateway 重启后自动恢复
+
+详见 [CHANGELOG.md](./CHANGELOG.md)
