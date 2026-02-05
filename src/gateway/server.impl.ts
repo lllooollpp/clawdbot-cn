@@ -1,6 +1,8 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { initSubagentRegistry } from "../agents/subagent-registry.js";
 import { registerSkillsChangeListener } from "../agents/skills/refresh.js";
+import { setAgentFilesBroadcast } from "../agents/agent-files-broadcast.js";
+import { startAgentFilesWatcher } from "../agents/agent-files-watcher.js";
 import type { CanvasHostServer } from "../canvas-host/server.js";
 import { type ChannelId, listChannelPlugins } from "../channels/plugins/index.js";
 import { createDefaultDeps } from "../cli/deps.js";
@@ -372,6 +374,19 @@ export async function startGatewayServer(
       void refreshRemoteBinsForConnectedNodes(latest);
     }, skillsRefreshDelayMs);
   });
+
+  // Initialize agent files monitoring and broadcasting
+  setAgentFilesBroadcast(broadcast);
+  // Start watching default agent directory
+  if (defaultWorkspaceDir) {
+    const agentDir = defaultWorkspaceDir;
+    startAgentFilesWatcher({
+      agentId: defaultAgentId,
+      agentDir,
+      debounceMs: 500,
+    });
+    log.info(`watching agent directory: ${defaultAgentId} (${agentDir})`);
+  }
 
   const { tickInterval, healthInterval, dedupeCleanup } = startGatewayMaintenanceTimers({
     broadcast,

@@ -6,7 +6,7 @@ export const TAB_GROUPS = [
     label: "管理",
     tabs: ["overview", "channels", "instances", "sessions", "cron"],
   },
-  { label: "智能体", tabs: ["skills", "nodes"] },
+  { label: "智能体", tabs: ["agents", "skills", "nodes"] },
   { label: "设置", tabs: ["onboarding", "config", "debug", "logs"] },
 ] as const;
 
@@ -17,6 +17,7 @@ export type Tab =
   | "instances"
   | "sessions"
   | "cron"
+  | "agents"
   | "skills"
   | "nodes"
   | "chat"
@@ -31,6 +32,7 @@ const TAB_PATHS: Record<Tab, string> = {
   instances: "/instances",
   sessions: "/sessions",
   cron: "/cron",
+  agents: "/agents",
   skills: "/skills",
   nodes: "/nodes",
   chat: "/chat",
@@ -118,6 +120,8 @@ export function iconForTab(tab: Tab): IconName {
       return "fileText";
     case "cron":
       return "loader";
+    case "agents":
+      return "user";
     case "skills":
       return "zap";
     case "nodes":
@@ -147,6 +151,8 @@ export function titleForTab(tab: Tab) {
       return "会话";
     case "cron":
       return "定时任务";
+    case "agents":
+      return "智能体";
     case "skills":
       return "技能";
     case "nodes":
@@ -178,6 +184,8 @@ export function subtitleForTab(tab: Tab) {
       return "查看活跃会话并调整会话默认值。";
     case "cron":
       return "安排智能体的唤醒和循环运行。";
+    case "agents":
+      return "管理智能体配置、文件和工作空间。";
     case "skills":
       return "管理技能可用性和 API 密钥注入。";
     case "nodes":

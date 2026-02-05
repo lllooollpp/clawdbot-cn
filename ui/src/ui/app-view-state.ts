@@ -135,6 +135,10 @@ export type AppViewState = {
   skillEdits: Record<string, string>;
   skillMessages: Record<string, SkillMessage>;
   skillsBusyKey: string | null;
+  skillsStoreOpen: boolean;
+  skillsStoreLoading: boolean;
+  skillsStoreError: string | null;
+  skillsStoreCatalog: Array<import("./types").SkillsCatalogEntry>;
   debugLoading: boolean;
   debugStatus: StatusSummary | null;
   debugHealth: HealthSnapshot | null;

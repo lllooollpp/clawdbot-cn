@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mijia-skills"
+version = "0.1.0"
+description = "A universal AI agent skill pack for Mijia device control"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+    { name = "MijiaSkillBot" },
+]
+dependencies = [
+    "mijiaAPI>=3.0.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/lllooollpp/mijia-skills"

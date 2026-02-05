@@ -29,6 +29,7 @@ export type AuthChoice =
   | "zhipu-api-key"
   | "bocha-api-key"
   | "ollama"
+  | "lmstudio"
   | "minimax-cloud"
   | "minimax"
   | "minimax-api"

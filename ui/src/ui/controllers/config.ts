@@ -6,10 +6,20 @@ import type {
 } from "../types";
 import {
   cloneConfigObject,
+  getPathValue,
   removePathValue,
   serializeConfigForm,
   setPathValue,
 } from "./config/form-utils";
+
+/** 字段保存状态 */
+export type FieldSaveStatus = "idle" | "saving" | "saved" | "error";
+
+/** 字段保存状态映射 (path => status) */
+export type FieldSaveStatusMap = Map<string, FieldSaveStatus>;
+
+/** 防抖定时器映射 (path => timeoutId) */
+type DebounceTimerMap = Map<string, ReturnType<typeof setTimeout>>;
 
 export type ConfigState = {
   client: GatewayBrowserClient | null;
@@ -36,7 +46,22 @@ export type ConfigState = {
   configActiveSection: string | null;
   configActiveSubsection: string | null;
   lastError: string | null;
+  /** 字段级别保存状态 */
+  fieldSaveStatus: FieldSaveStatusMap;
+  /** 是否启用自动保存 */
+  autoSaveEnabled: boolean;
 };
+
+/** 防抖定时器存储 (模块级别) */
+const debounceTimers: DebounceTimerMap = new Map();
+
+/** 自动保存延迟 (毫秒) */
+const AUTO_SAVE_DELAY_MS = 1500;
+
+/** 将路径数组转换为字符串键 */
+function pathToKey(path: Array<string | number>): string {
+  return path.join(".");
+}
 
 export async function loadConfig(state: ConfigState) {
   if (!state.client || !state.connected) return;
@@ -242,4 +267,141 @@ export async function discoverModels(state: ConfigState, provider: string) {
   } finally {
     state.configSaving = false;
   }
+}
+
+/**
+ * 使用 config.patch API 保存单个配置路径的值
+ * 这会立即保存到磁盘，不需要点击全局保存按钮
+ */
+export async function patchConfigField(
+  state: ConfigState,
+  path: Array<string | number>,
+  value: unknown,
+): Promise<{ success: boolean; error?: string }> {
+  if (!state.client || !state.connected) {
+    return { success: false, error: "未连接到网关" };
+  }
+
+  const baseHash = state.configSnapshot?.hash;
+  if (!baseHash) {
+    return { success: false, error: "配置哈希缺失，请重新加载" };
+  }
+
+  const key = pathToKey(path);
+  state.fieldSaveStatus.set(key, "saving");
+
+  try {
+    // 构建部分配置对象
+    const patchObj: Record<string, unknown> = {};
+    let current: Record<string, unknown> = patchObj;
+    for (let i = 0; i < path.length - 1; i++) {
+      const segment = path[i];
+      current[segment] = {};
+      current = current[segment] as Record<string, unknown>;
+    }
+    const lastSegment = path[path.length - 1];
+    current[lastSegment] = value;
+
+    const raw = serializeConfigForm(patchObj);
+
+    await state.client.request("config.patch", {
+      raw,
+      baseHash,
+      note: `字段更新: ${key}`,
+    });
+
+    // 保存成功后更新状态
+    state.fieldSaveStatus.set(key, "saved");
+    
+    // 重新加载配置以获取最新 hash
+    await loadConfig(state);
+
+    // 3 秒后清除 "saved" 状态
+    setTimeout(() => {
+      if (state.fieldSaveStatus.get(key) === "saved") {
+        state.fieldSaveStatus.delete(key);
+      }
+    }, 3000);
+
+    return { success: true };
+  } catch (err) {
+    state.fieldSaveStatus.set(key, "error");
+    const errorMsg = String(err);
+    state.lastError = errorMsg;
+    return { success: false, error: errorMsg };
+  }
+}
+
+/**
+ * 调度自动保存 (带防抖)
+ * 用户停止输入后延迟保存
+ */
+export function scheduleAutoSave(
+  state: ConfigState,
+  path: Array<string | number>,
+  value: unknown,
+  onSaveComplete?: (result: { success: boolean; error?: string }) => void,
+): void {
+  if (!state.autoSaveEnabled) return;
+
+  const key = pathToKey(path);
+
+  // 清除之前的定时器
+  const existingTimer = debounceTimers.get(key);
+  if (existingTimer) {
+    clearTimeout(existingTimer);
+  }
+
+  // 设置新的定时器
+  const timer = setTimeout(async () => {
+    debounceTimers.delete(key);
+    const result = await patchConfigField(state, path, value);
+    onSaveComplete?.(result);
+  }, AUTO_SAVE_DELAY_MS);
+
+  debounceTimers.set(key, timer);
+}
+
+/**
+ * 取消指定路径的自动保存
+ */
+export function cancelAutoSave(path: Array<string | number>): void {
+  const key = pathToKey(path);
+  const timer = debounceTimers.get(key);
+  if (timer) {
+    clearTimeout(timer);
+    debounceTimers.delete(key);
+  }
+}
+
+/**
+ * 获取字段的保存状态
+ */
+export function getFieldSaveStatus(
+  state: ConfigState,
+  path: Array<string | number>,
+): FieldSaveStatus {
+  return state.fieldSaveStatus.get(pathToKey(path)) ?? "idle";
+}
+
+/**
+ * 清除所有字段保存状态
+ */
+export function clearAllFieldSaveStatus(state: ConfigState): void {
+  state.fieldSaveStatus.clear();
+  // 清除所有待处理的自动保存
+  for (const timer of debounceTimers.values()) {
+    clearTimeout(timer);
+  }
+  debounceTimers.clear();
+}
+
+/**
+ * 创建默认的配置状态初始值
+ */
+export function createDefaultConfigState(): Pick<ConfigState, "fieldSaveStatus" | "autoSaveEnabled"> {
+  return {
+    fieldSaveStatus: new Map(),
+    autoSaveEnabled: true,
+  };
 }

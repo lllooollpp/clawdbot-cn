@@ -333,6 +333,9 @@ importers:
       sqlite-vec:
         specifier: 0.1.7-alpha.2
         version: 0.1.7-alpha.2
+      tslog:
+        specifier: ^4.10.2
+        version: 4.10.2
       ws:
         specifier: ^8.19.0
         version: 8.19.0

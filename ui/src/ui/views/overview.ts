@@ -130,7 +130,22 @@ export function renderOverview(props: OverviewProps) {
                 props.onSettingsChange({ ...props.settings, gatewayUrl: v });
               }}
               placeholder="ws://127.0.0.1:18789"
+              style="${
+                props.settings.gatewayUrl.trim().startsWith('http://') ||
+                props.settings.gatewayUrl.trim().startsWith('https://')
+                  ? 'border-color: var(--danger-color, #d14343);'
+                  : ''
+              }"
             />
+            ${props.settings.gatewayUrl.trim().startsWith('http://') ||
+            props.settings.gatewayUrl.trim().startsWith('https://')
+              ? html`<div class="callout danger" style="margin-top: 8px; font-size: 0.9em;">
+                  ❌ 错误：这是一个 HTTP/HTTPS 地址！网关需要 WebSocket 地址（ws:// 或 wss://）<br/>
+                  如果您想配置搜索引擎，请到"配置"页面选择对应的预设。
+                </div>`
+              : html`<div class="muted" style="margin-top: 4px; font-size: 0.85em;">
+                  💡 提示：这是 Clawdbot 网关的 WebSocket 地址（以 ws:// 或 wss:// 开头），不是搜索引擎或其他服务的地址
+                </div>`}
           </label>
           <label class="field">
             <span>网关令牌 (Token)</span>

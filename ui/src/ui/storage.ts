@@ -15,6 +15,25 @@ export type UiSettings = {
   navGroupsCollapsed: Record<string, boolean>; // Which nav groups are collapsed
 };
 
+function validateGatewayUrl(url: string, fallback: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return fallback;
+  
+  // 如果是 HTTP/HTTPS URL，可能是误输入了其他服务的地址
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    console.warn('[storage] Gateway URL should use ws:// or wss://, not http(s)://. Resetting to default:', fallback);
+    return fallback;
+  }
+  
+  // 必须是 ws:// 或 wss://
+  if (!trimmed.startsWith('ws://') && !trimmed.startsWith('wss://')) {
+    console.warn('[storage] Invalid gateway URL format. Expected ws:// or wss://, got:', trimmed, '. Resetting to default:', fallback);
+    return fallback;
+  }
+  
+  return trimmed;
+}
+
 export function loadSettings(): UiSettings {
   const defaultUrl = (() => {
     const proto = location.protocol === "https:" ? "wss" : "ws";
@@ -41,7 +60,7 @@ export function loadSettings(): UiSettings {
     return {
       gatewayUrl:
         typeof parsed.gatewayUrl === "string" && parsed.gatewayUrl.trim()
-          ? parsed.gatewayUrl.trim()
+          ? validateGatewayUrl(parsed.gatewayUrl, defaults.gatewayUrl)
           : defaults.gatewayUrl,
       token: typeof parsed.token === "string" ? parsed.token : defaults.token,
       sessionKey:

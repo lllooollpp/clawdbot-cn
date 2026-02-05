@@ -164,6 +164,8 @@ export function createSessionsSpawnTool(opts?: {
         normalizeModelSelection(modelOverride) ??
         normalizeModelSelection(targetAgentConfig?.subagents?.model) ??
         normalizeModelSelection(cfg.agents?.defaults?.subagents?.model);
+      const defaultThinking =
+        targetAgentConfig?.subagents?.thinking ?? cfg.agents?.defaults?.subagents?.thinking;
       let thinkingOverride: string | undefined;
       if (thinkingOverrideRaw) {
         const normalized = normalizeThinkLevel(thinkingOverrideRaw);
@@ -176,6 +178,8 @@ export function createSessionsSpawnTool(opts?: {
           });
         }
         thinkingOverride = normalized;
+      } else if (defaultThinking) {
+        thinkingOverride = defaultThinking;
       }
       if (resolvedModel) {
         try {

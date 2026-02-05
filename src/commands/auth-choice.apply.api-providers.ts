@@ -29,6 +29,7 @@ import {
   applyVolcengineProviderConfig,
   applyBochaConfig,
   applyOllamaConfig,
+  applyLMStudioConfig,
   applyZhipuConfig,
   applyZhipuProviderConfig,
   applyDomesticMediaDefaults,
@@ -620,6 +621,38 @@ export async function applyAuthChoiceApiProviders(
     // Set as default if requested
     if (params.setDefaultModel) {
       nextConfig = applyOllamaConfig(nextConfig, configParams);
+    } else {
+      agentModelOverride = modelRef;
+      await noteAgentModel(modelRef);
+    }
+    return { config: nextConfig, agentModelOverride };
+  }
+
+  if (authChoice === "lmstudio") {
+    const baseUrl = await params.prompter.text({
+      message: "输入 LM Studio 基础 URL",
+      initialValue: "http://127.0.0.1:1234/v1",
+    });
+    const modelId = await params.prompter.text({
+      message: "输入 LM Studio 模型名称",
+      initialValue: "local-model",
+    });
+
+    const configParams = {
+      baseUrl: String(baseUrl).trim(),
+      modelId: String(modelId).trim(),
+    };
+
+    nextConfig = applyLMStudioConfig(nextConfig, configParams);
+    const modelRef = `lmstudio/${configParams.modelId}`;
+    await params.prompter.note(
+      `LM Studio 已配置，模型为 ${configParams.modelId}。`,
+      "本地模型配置完成",
+    );
+
+    // Set as default if requested
+    if (params.setDefaultModel) {
+      nextConfig = applyLMStudioConfig(nextConfig, configParams);
     } else {
       agentModelOverride = modelRef;
       await noteAgentModel(modelRef);

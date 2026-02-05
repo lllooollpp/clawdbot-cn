@@ -1,13 +1,19 @@
+/**
+ * 预设配置管理界面
+ * 简洁的卡片式设计，支持增删改查
+ */
+
 import { html, nothing } from "lit";
+import type { TemplateResult } from "lit";
+import type { JsonSchema } from "./config-form.shared";
 import type { ConfigUiHints } from "../types";
-import { icons } from "../icons";
 import {
-  hintForPath,
-  humanize,
-  schemaType,
-  type JsonSchema,
-} from "./config-form.shared";
-import { renderNode } from "./config-form.node";
+  MODEL_PRESETS,
+  CHANNEL_PRESETS,
+  TOOL_PRESETS,
+  type PresetItem,
+  type PresetCategory,
+} from "./config-presets";
 
 export type ConfigFormProps = {
   schema: JsonSchema | null;
@@ -20,261 +26,440 @@ export type ConfigFormProps = {
   activeSubsection?: string | null;
   onPatch: (path: Array<string | number>, value: unknown) => void;
   onDiscoverModels?: (provider: string) => void;
+  onSectionChange?: (section: string | null) => void;
 };
 
-// SVG Icons for section cards (Lucide-style)
-const sectionIcons = {
-  env: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
-  update: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
-  agents: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"></path><circle cx="8" cy="14" r="1"></circle><circle cx="16" cy="14" r="1"></circle></svg>`,
-  auth: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`,
-  channels: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`,
-  messages: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`,
-  commands: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`,
-  hooks: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`,
-  skills: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
-  tools: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>`,
-  gateway: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
-  wizard: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 4V2"></path><path d="M15 16v-2"></path><path d="M8 9h2"></path><path d="M20 9h2"></path><path d="M17.8 11.8 19 13"></path><path d="M15 9h0"></path><path d="M17.8 6.2 19 5"></path><path d="m3 21 9-9"></path><path d="M12.2 6.2 11 5"></path></svg>`,
-  // Additional sections
-  meta: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>`,
-  logging: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
-  browser: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="21.17" y1="8" x2="12" y2="8"></line><line x1="3.95" y1="6.06" x2="8.54" y2="14"></line><line x1="10.88" y1="21.94" x2="15.46" y2="14"></line></svg>`,
-  ui: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>`,
-  models: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
-  bindings: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
-  broadcast: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>`,
-  audio: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`,
-  session: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
-  cron: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
-  web: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`,
-  discovery: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`,
-  canvasHost: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
-  talk: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>`,
-  plugins: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6"></path><path d="m4.93 10.93 4.24 4.24"></path><path d="M2 12h6"></path><path d="m4.93 13.07 4.24-4.24"></path><path d="M12 22v-6"></path><path d="m19.07 13.07-4.24-4.24"></path><path d="M22 12h-6"></path><path d="m19.07 10.93-4.24 4.24"></path></svg>`,
-  default: html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`,
+// 配置状态
+type ConfiguredItem = {
+  preset: PresetItem;
+  values: Record<string, unknown>;
+  enabled: boolean;
 };
 
-// Section metadata
-export const SECTION_META: Record<string, { label: string; description: string }> = {
-  env: { label: "环境", description: "传递给网关进程的环境变量" },
-  update: { label: "更新", description: "自动更新设置与发布渠道" },
-  agents: { label: "智能体", description: "智能体配置、模型与身份" },
-  auth: { label: "身份验证", description: "API 密钥与身份验证配置文件" },
-  channels: { label: "渠道", description: "消息渠道 (Telegram, Discord, Slack 等)" },
-  messages: { label: "消息", description: "消息处理与路由设置" },
-  commands: { label: "命令", description: "自定义斜杠命令" },
-  hooks: { label: "钩子", description: "Webhook 与事件钩子" },
-  skills: { label: "技能", description: "技能包与底层技术能力" },
-  tools: { label: "工具", description: "工具配置 (浏览器、搜索等)" },
-  gateway: { label: "网关", description: "网关服务器设置 (端口、身份验证、绑定)" },
-  wizard: { label: "设置向导", description: "设置向导状态与历史记录" },
-  // Additional sections
-  meta: { label: "元数据", description: "网关元数据与版本信息" },
-  logging: { label: "日志", description: "日志级别与输出配置" },
-  browser: { label: "浏览器", description: "浏览器自动化设置" },
-  ui: { label: "界面", description: "用户界面偏好设置" },
-  models: { label: "模型", description: "AI 模型配置与供应商" },
-  bindings: { label: "绑定", description: "按键绑定与快捷键" },
-  broadcast: { label: "广播", description: "广播与通知设置" },
-  audio: { label: "音频", description: "音频输入/输出设置" },
-  session: { label: "会话", description: "会话管理与持久化" },
-  cron: { label: "定时任务", description: "计划任务与自动化" },
-  web: { label: "网页", description: "Web 服务器与 API 设置" },
-  discovery: { label: "发现", description: "服务发现与网络设置" },
-  canvasHost: { label: "画布宿主", description: "画布渲染与显示" },
-  talk: { label: "语音", description: "语音与对话设置" },
-  plugins: { label: "插件", description: "插件管理与扩展" },
-};
-
-function getSectionIcon(key: string) {
-  return sectionIcons[key as keyof typeof sectionIcons] ?? sectionIcons.default;
+// 将 configPath 字符串转换为路径数组
+function configPathToArray(configPath: string): string[] {
+  return configPath.split('.');
 }
 
-function matchesSearch(key: string, schema: JsonSchema, query: string): boolean {
-  if (!query) return true;
-  const q = query.toLowerCase();
-  const meta = SECTION_META[key];
-
-  // Check key name
-  if (key.toLowerCase().includes(q)) return true;
-
-  // Check label and description
-  if (meta) {
-    if (meta.label.toLowerCase().includes(q)) return true;
-    if (meta.description.toLowerCase().includes(q)) return true;
+// 根据路径数组从对象中获取值
+function getValueAtPath(obj: Record<string, unknown> | null, path: string[]): Record<string, unknown> | undefined {
+  if (!obj) return undefined;
+  let current: unknown = obj;
+  for (const key of path) {
+    if (current && typeof current === 'object' && key in current) {
+      current = (current as Record<string, unknown>)[key];
+    } else {
+      return undefined;
+    }
   }
-
-  return schemaMatches(schema, q);
+  return current as Record<string, unknown> | undefined;
 }
 
-function schemaMatches(schema: JsonSchema, query: string): boolean {
-  if (schema.title?.toLowerCase().includes(query)) return true;
-  if (schema.description?.toLowerCase().includes(query)) return true;
-  if (schema.enum?.some((value) => String(value).toLowerCase().includes(query))) return true;
-
-  if (schema.properties) {
-    for (const [propKey, propSchema] of Object.entries(schema.properties)) {
-      if (propKey.toLowerCase().includes(query)) return true;
-      if (schemaMatches(propSchema, query)) return true;
+// 展开嵌套字段键，如 { 'searxng.baseUrl': 'x' } -> { searxng: { baseUrl: 'x' } }
+function expandNestedValues(values: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(values)) {
+    if (value === undefined) continue;
+    if (key.includes('.')) {
+      const parts = key.split('.');
+      let current = result;
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        if (!(part in current)) {
+          current[part] = {};
+        }
+        current = current[part] as Record<string, unknown>;
+      }
+      current[parts[parts.length - 1]] = value;
+    } else {
+      result[key] = value;
     }
   }
-
-  if (schema.items) {
-    const items = Array.isArray(schema.items) ? schema.items : [schema.items];
-    for (const item of items) {
-      if (item && schemaMatches(item, query)) return true;
-    }
-  }
-
-  if (schema.additionalProperties && typeof schema.additionalProperties === "object") {
-    if (schemaMatches(schema.additionalProperties, query)) return true;
-  }
-
-  const unions = schema.anyOf ?? schema.oneOf ?? schema.allOf;
-  if (unions) {
-    for (const entry of unions) {
-      if (entry && schemaMatches(entry, query)) return true;
-    }
-  }
-
-  return false;
+  return result;
 }
 
-export function renderConfigForm(props: ConfigFormProps) {
-  if (!props.schema) {
-    return html`<div class="muted">架构定义不可用。</div>`;
-  }
-  const schema = props.schema;
-  const value = props.value ?? {};
-  if (schemaType(schema) !== "object" || !schema.properties) {
-    return html`<div class="callout danger">不支持的架构。请使用原生模式 (Raw)。</div>`;
-  }
-  const unsupported = new Set(props.unsupportedPaths ?? []);
-  const properties = schema.properties;
-  const searchQuery = props.searchQuery ?? "";
-  const activeSection = props.activeSection;
-  const activeSubsection = props.activeSubsection ?? null;
-
-  const entries = Object.entries(properties).sort((a, b) => {
-    const orderA = hintForPath([a[0]], props.uiHints)?.order ?? 50;
-    const orderB = hintForPath([b[0]], props.uiHints)?.order ?? 50;
-    if (orderA !== orderB) return orderA - orderB;
-    return a[0].localeCompare(b[0]);
-  });
-
-  const filteredEntries = entries.filter(([key, node]) => {
-    if (activeSection && key !== activeSection) return false;
-    if (searchQuery && !matchesSearch(key, node, searchQuery)) return false;
-    return true;
-  });
-
-  let subsectionContext:
-    | { sectionKey: string; subsectionKey: string; schema: JsonSchema }
-    | null = null;
-  if (activeSection && activeSubsection && filteredEntries.length === 1) {
-    const sectionSchema = filteredEntries[0]?.[1];
-    if (
-      sectionSchema &&
-      schemaType(sectionSchema) === "object" &&
-      sectionSchema.properties &&
-      sectionSchema.properties[activeSubsection]
-    ) {
-      subsectionContext = {
-        sectionKey: activeSection,
-        subsectionKey: activeSubsection,
-        schema: sectionSchema.properties[activeSubsection],
-      };
+// 展平嵌套对象用于表单显示，如 { searxng: { baseUrl: 'x' } } -> { 'searxng.baseUrl': 'x' }
+function flattenForForm(values: Record<string, unknown>, prefix = ''): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(values)) {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      Object.assign(result, flattenForForm(value as Record<string, unknown>, newKey));
+    } else {
+      result[newKey] = value;
     }
   }
+  return result;
+}
 
-  if (filteredEntries.length === 0) {
-    return html`
-      <div class="config-empty">
-        <div class="config-empty__icon">${icons.search}</div>
-        <div class="config-empty__text">
-          ${searchQuery
-            ? `没有匹配 “${searchQuery}” 的设置`
-            : "此部分暂无设置"}
+// 从 value 中提取已配置的项目
+function getConfiguredItems(
+  category: PresetCategory,
+  value: Record<string, unknown> | null,
+  presets: PresetItem[]
+): ConfiguredItem[] {
+  if (!value) return [];
+  
+  const items: ConfiguredItem[] = [];
+  
+  for (const preset of presets) {
+    let itemValue: Record<string, unknown> | undefined;
+    let enabled = false;
+    
+    if (category === 'models') {
+      // 模型配置在 models.providers.<id> 下
+      const providers = (value.models as Record<string, unknown>)?.providers as Record<string, unknown> | undefined;
+      itemValue = providers?.[preset.id] as Record<string, unknown> | undefined;
+      enabled = !!itemValue?.apiKey || !!itemValue?.baseUrl;
+    } else if (category === 'channels') {
+      // 渠道配置在对应的顶级键下
+      itemValue = value[preset.id] as Record<string, unknown> | undefined;
+      enabled = itemValue?.enabled !== false && Object.keys(itemValue ?? {}).length > 0;
+    } else if (category === 'tools') {
+      // 工具配置使用 configPath 获取值
+      const path = configPathToArray(preset.configPath);
+      itemValue = getValueAtPath(value, path);
+      // 对于同一个 configPath 的多个预设，检查 provider 字段来区分
+      if (itemValue && preset.defaultValues?.provider) {
+        // 只匹配 provider 相同的预设
+        if (itemValue.provider !== preset.defaultValues.provider) {
+          continue;
+        }
+      }
+      enabled = itemValue?.enabled !== false;
+    }
+    
+    if (itemValue && Object.keys(itemValue).length > 0) {
+      items.push({ preset, values: itemValue, enabled });
+    }
+  }
+  
+  return items;
+}
+
+// 获取未配置的预设（用于添加）
+function getAvailablePresets(
+  category: PresetCategory,
+  value: Record<string, unknown> | null,
+  presets: PresetItem[]
+): PresetItem[] {
+  const configured = getConfiguredItems(category, value, presets);
+  const configuredIds = new Set(configured.map(c => c.preset.id));
+  return presets.filter(p => !configuredIds.has(p.id));
+}
+
+// 渲染单个配置项卡片
+function renderConfigCard(
+  item: ConfiguredItem,
+  onEdit: (id: string) => void,
+  onDelete: (id: string) => void,
+  onToggle: (id: string, enabled: boolean) => void
+): TemplateResult {
+  const { preset, values, enabled } = item;
+  const hasApiKey = !!(values.apiKey || values.token || values.secret);
+  const statusIcon = hasApiKey ? '🟢' : '🟡';
+  const statusText = hasApiKey ? '已配置' : '未配置密钥';
+  
+  return html`
+    <div class="preset-card ${enabled ? '' : 'preset-card--disabled'}">
+      <div class="preset-card__header">
+        <span class="preset-card__icon">${preset.icon}</span>
+        <div class="preset-card__info">
+          <h4 class="preset-card__name">${preset.name}</h4>
+          <span class="preset-card__status">${statusIcon} ${statusText}</span>
+        </div>
+        <div class="preset-card__actions">
+          <button class="preset-btn preset-btn--icon" title="编辑" @click=${() => onEdit(preset.id)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="preset-btn preset-btn--icon preset-btn--danger" title="删除" @click=${() => onDelete(preset.id)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
         </div>
       </div>
+      <p class="preset-card__desc">${preset.description}</p>
+    </div>
+  `;
+}
+
+// 渲染预设选择器（用于添加新配置）
+function renderPresetPicker(
+  presets: PresetItem[],
+  onSelect: (id: string) => void
+): TemplateResult {
+  if (presets.length === 0) {
+    return html`<p class="preset-empty">所有可用选项都已添加</p>`;
+  }
+  
+  // 按区域分组
+  const chinaPresets = presets.filter(p => p.region === 'china');
+  const intlPresets = presets.filter(p => p.region === 'international');
+  const otherPresets = presets.filter(p => !p.region);
+  
+  const renderGroup = (items: PresetItem[], title?: string) => {
+    if (items.length === 0) return nothing;
+    return html`
+      ${title ? html`<h5 class="preset-picker__group-title">${title}</h5>` : nothing}
+      <div class="preset-picker__grid">
+        ${items.map(preset => html`
+          <button class="preset-picker__item" @click=${() => onSelect(preset.id)}>
+            <span class="preset-picker__icon">${preset.icon}</span>
+            <span class="preset-picker__name">${preset.name}</span>
+          </button>
+        `)}
+      </div>
+    `;
+  };
+  
+  return html`
+    <div class="preset-picker">
+      ${renderGroup(chinaPresets, chinaPresets.length > 0 && intlPresets.length > 0 ? '🇨🇳 国内 (已更新)' : undefined)}
+      ${renderGroup(intlPresets, chinaPresets.length > 0 && intlPresets.length > 0 ? '🌍 国际' : undefined)}
+      ${renderGroup(otherPresets)}
+    </div>
+  `;
+}
+
+// 渲染编辑表单
+function renderEditForm(
+  preset: PresetItem,
+  values: Record<string, unknown>,
+  onSave: (values: Record<string, unknown>) => void,
+  onCancel: () => void
+): TemplateResult {
+  // 展平嵌套值用于表单显示
+  const flatValues = flattenForForm(values);
+  const formValues = { ...preset.defaultValues, ...flatValues };
+  
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const newValues: Record<string, unknown> = {};
+    for (const field of preset.fields) {
+      // 处理 hidden 类型字段，使用预设定义的值
+      if (field.type === 'hidden') {
+        newValues[field.key] = field.value ?? preset.defaultValues?.[field.key];
+        continue;
+      }
+      const value = formData.get(field.key);
+      if (field.type === 'toggle') {
+        newValues[field.key] = form.querySelector<HTMLInputElement>(`[name="${field.key}"]`)?.checked ?? false;
+      } else if (field.type === 'number') {
+        newValues[field.key] = value ? Number(value) : undefined;
+      } else {
+        newValues[field.key] = value || undefined;
+      }
+    }
+    onSave(newValues);
+  };
+  
+  return html`
+    <div class="preset-edit">
+      <div class="preset-edit__header">
+        <span class="preset-edit__icon">${preset.icon}</span>
+        <h3 class="preset-edit__title">${preset.name}</h3>
+      </div>
+      <form class="preset-edit__form" @submit=${handleSubmit}>
+        ${preset.fields.filter(f => f.type !== 'hidden').map(field => html`
+          <div class="preset-field">
+            <label class="preset-field__label">
+              ${field.label}
+              ${field.required ? html`<span class="preset-field__required">*</span>` : nothing}
+            </label>
+            ${field.type === 'select' ? html`
+              <select class="preset-field__input" name="${field.key}">
+                ${field.options?.map(opt => html`
+                  <option value="${opt.value}" ?selected=${formValues[field.key] === opt.value}>${opt.label}</option>
+                `)}
+              </select>
+            ` : field.type === 'toggle' ? html`
+              <label class="preset-toggle">
+                <input type="checkbox" name="${field.key}" ?checked=${!!formValues[field.key]}>
+                <span class="preset-toggle__slider"></span>
+              </label>
+            ` : html`
+              <input
+                class="preset-field__input"
+                type="${field.type === 'password' ? 'password' : field.type === 'number' ? 'number' : 'text'}"
+                name="${field.key}"
+                .value=${String(formValues[field.key] ?? '')}
+                placeholder="${field.placeholder ?? ''}"
+                ?required=${field.required}
+              >
+            `}
+            ${field.hint ? html`<p class="preset-field__hint">${field.hint}</p>` : nothing}
+          </div>
+        `)}
+        <div class="preset-edit__actions">
+          <button type="button" class="preset-btn preset-btn--secondary" @click=${onCancel}>取消</button>
+          <button type="submit" class="preset-btn preset-btn--primary">保存</button>
+        </div>
+      </form>
+    </div>
+  `;
+}
+
+// 渲染分类区块
+function renderCategorySection(
+  title: string,
+  icon: string,
+  category: PresetCategory,
+  presets: PresetItem[],
+  props: ConfigFormProps,
+  editingId: string | null,
+  showPicker: boolean,
+  onEditStart: (id: string | null) => void,
+  onPickerToggle: (show: boolean) => void
+): TemplateResult {
+  const configured = getConfiguredItems(category, props.value, presets);
+  const available = getAvailablePresets(category, props.value, presets);
+  
+  const handleEdit = (id: string) => onEditStart(id);
+  const handleDelete = (id: string) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    // 使用 configPath 构建删除路径
+    if (category === 'models') {
+      props.onPatch(['models', 'providers', id], undefined);
+    } else if (category === 'channels') {
+      props.onPatch([id], undefined);
+    } else {
+      const path = configPathToArray(preset.configPath);
+      props.onPatch(path, undefined);
+    }
+  };
+  const handleToggle = (id: string, enabled: boolean) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    if (category === 'models') {
+      props.onPatch(['models', 'providers', id, 'enabled'], enabled);
+    } else if (category === 'channels') {
+      props.onPatch([id, 'enabled'], enabled);
+    } else {
+      const path = configPathToArray(preset.configPath);
+      props.onPatch([...path, 'enabled'], enabled);
+    }
+  };
+  const handleAdd = (id: string) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    const defaultValues = preset.defaultValues ?? {};
+    if (category === 'models') {
+      props.onPatch(['models', 'providers', id], defaultValues);
+    } else if (category === 'channels') {
+      props.onPatch([id], { enabled: true, ...defaultValues });
+    } else {
+      // 使用 configPath 构建保存路径
+      const path = configPathToArray(preset.configPath);
+      props.onPatch(path, { enabled: true, ...defaultValues });
+    }
+    onPickerToggle(false);
+    onEditStart(id);
+  };
+  const handleSave = (id: string, values: Record<string, unknown>) => {
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+    if (category === 'models') {
+      props.onPatch(['models', 'providers', id], values);
+    } else if (category === 'channels') {
+      props.onPatch([id], values);
+    } else {
+      // 使用 configPath 构建保存路径，并展开嵌套字段
+      const path = configPathToArray(preset.configPath);
+      // 处理嵌套字段如 'searxng.baseUrl' -> { searxng: { baseUrl: value } }
+      const expandedValues = expandNestedValues(values);
+      props.onPatch(path, expandedValues);
+    }
+    onEditStart(null);
+  };
+  
+  // 如果正在编辑某个项目
+  const editingPreset = editingId ? presets.find(p => p.id === editingId) : null;
+  const editingValues = editingId ? configured.find(c => c.preset.id === editingId)?.values ?? {} : {};
+  
+  if (editingPreset) {
+    return html`
+      <section class="preset-section">
+        <div class="preset-section__header">
+          <span class="preset-section__icon">${icon}</span>
+          <h3 class="preset-section__title">${title}</h3>
+        </div>
+        ${renderEditForm(editingPreset, editingValues, (values) => handleSave(editingId!, values), () => onEditStart(null))}
+      </section>
     `;
   }
-
+  
   return html`
-    <div class="config-form config-form--modern">
-      ${subsectionContext
-        ? (() => {
-            const { sectionKey, subsectionKey, schema: node } = subsectionContext;
-            const hint = hintForPath([sectionKey, subsectionKey], props.uiHints);
-            const label = hint?.label ?? node.title ?? humanize(subsectionKey);
-            const description = hint?.help ?? node.description ?? "";
-            const sectionValue = (value as Record<string, unknown>)[sectionKey];
-            const scopedValue =
-              sectionValue && typeof sectionValue === "object"
-                ? (sectionValue as Record<string, unknown>)[subsectionKey]
-                : undefined;
-            const id = `config-section-${sectionKey}-${subsectionKey}`;
-            return html`
-              <section class="config-section-card" id=${id}>
-                <div class="config-section-card__header">
-                  <span class="config-section-card__icon">${getSectionIcon(sectionKey)}</span>
-                  <div class="config-section-card__titles">
-                    <h3 class="config-section-card__title">${label}</h3>
-                    ${description
-                      ? html`<p class="config-section-card__desc">${description}</p>`
-                      : nothing}
-                  </div>
-                </div>
-                <div class="config-section-card__content">
-                  ${renderNode({
-                    schema: node,
-                    value: scopedValue,
-                    path: [sectionKey, subsectionKey],
-                    hints: props.uiHints,
-                    unsupported,
-                    disabled: props.disabled ?? false,
-                    showLabel: false,
-                    onPatch: props.onPatch,
-                    onDiscoverModels: props.onDiscoverModels,
-                  })}
-                </div>
-              </section>
-            `;
-          })()
-        : filteredEntries.map(([key, node]) => {
-            const meta = SECTION_META[key] ?? {
-              label: key.charAt(0).toUpperCase() + key.slice(1),
-              description: node.description ?? "",
-            };
+    <section class="preset-section">
+      <div class="preset-section__header">
+        <span class="preset-section__icon">${icon}</span>
+        <h3 class="preset-section__title">${title}</h3>
+        <button class="preset-btn preset-btn--add" @click=${() => onPickerToggle(!showPicker)}>
+          ${showPicker ? '取消' : '+ 添加'}
+        </button>
+      </div>
+      
+      ${showPicker ? html`
+        <div class="preset-section__picker">
+          ${renderPresetPicker(available, handleAdd)}
+        </div>
+      ` : nothing}
+      
+      <div class="preset-section__list">
+        ${configured.length === 0 ? html`
+          <p class="preset-empty">暂无配置，点击"+ 添加"开始</p>
+        ` : configured.map(item => renderConfigCard(item, handleEdit, handleDelete, handleToggle))}
+      </div>
+    </section>
+  `;
+}
 
-            return html`
-              <section class="config-section-card" id="config-section-${key}">
-                <div class="config-section-card__header">
-                  <span class="config-section-card__icon">${getSectionIcon(key)}</span>
-                  <div class="config-section-card__titles">
-                    <h3 class="config-section-card__title">${meta.label}</h3>
-                    ${meta.description
-                      ? html`<p class="config-section-card__desc">${meta.description}</p>`
-                      : nothing}
-                  </div>
-                </div>
-                <div class="config-section-card__content">
-                  ${renderNode({
-                    schema: node,
-                    value: (value as Record<string, unknown>)[key],
-                    path: [key],
-                    hints: props.uiHints,
-                    unsupported,
-                    disabled: props.disabled ?? false,
-                    showLabel: false,
-                    onPatch: props.onPatch,
-                    onDiscoverModels: props.onDiscoverModels,
-                  })}
-                </div>
-              </section>
-            `;
-          })}
+// 状态管理（简单的闭包状态）
+let editingState: { category: PresetCategory | null; id: string | null } = { category: null, id: null };
+let pickerState: { category: PresetCategory | null } = { category: null };
+
+// 主渲染函数
+export function renderConfigForm(props: ConfigFormProps): TemplateResult {
+  const { activeSection } = props;
+  
+  // 如果有活动区块，只渲染该区块
+  const sections: Array<{ key: string; title: string; icon: string; category: PresetCategory; presets: PresetItem[] }> = [
+    { key: 'models', title: '模型供应商', icon: '🤖', category: 'models', presets: MODEL_PRESETS },
+    { key: 'channels', title: '消息渠道', icon: '💬', category: 'channels', presets: CHANNEL_PRESETS },
+    { key: 'tools', title: '工具', icon: '🛠️', category: 'tools', presets: TOOL_PRESETS },
+  ];
+  
+  const filtered = activeSection 
+    ? sections.filter(s => s.key === activeSection)
+    : sections;
+  
+  return html`
+    <div class="preset-manager">
+      ${filtered.map(section => {
+        const isEditing = editingState.category === section.category;
+        const showPicker = pickerState.category === section.category;
+        
+        return renderCategorySection(
+          section.title,
+          section.icon,
+          section.category,
+          section.presets,
+          props,
+          isEditing ? editingState.id : null,
+          showPicker,
+          (id) => {
+            if (id) {
+              editingState = { category: section.category, id };
+            } else {
+              editingState = { category: null, id: null };
+            }
+          },
+          (show) => {
+            pickerState = { category: show ? section.category : null };
+          }
+        );
+      })}
     </div>
   `;
 }

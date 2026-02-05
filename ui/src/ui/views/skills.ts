@@ -1,8 +1,58 @@
 import { html, nothing } from "lit";
 
 import { clampText } from "../format";
-import type { SkillStatusEntry, SkillStatusReport } from "../types";
+import type { SkillStatusEntry, SkillStatusReport, SkillsCatalogEntry } from "../types";
 import type { SkillMessageMap } from "../controllers/skills";
+
+// 技能商店弹窗 props
+export type SkillsStoreProps = {
+  open: boolean;
+  loading: boolean;
+  error: string | null;
+  catalog: SkillsCatalogEntry[];
+  onClose: () => void;
+  onInstall: (name: string) => void;
+};
+
+export function renderSkillsStore(props: SkillsStoreProps) {
+  return html`
+    <div class="modal" ?open=${props.open}>
+      <div class="modal-header">
+        <div class="modal-title">技能商店</div>
+        <button class="btn" @click=${props.onClose}>关闭</button>
+      </div>
+      <div class="modal-body">
+        ${props.loading
+          ? html`<div>加载中…</div>`
+          : props.error
+          ? html`<div class="callout danger">${props.error}</div>`
+          : html`
+              <div class="list">
+                ${props.catalog.map(
+                  (skill) => html`
+                    <div class="list-item">
+                      <div class="list-title">
+                        ${skill.emoji ? html`<span>${skill.emoji}</span>` : nothing}
+                        <span>${skill.name}</span>
+                        ${skill.installed
+                          ? html`<span class="muted">已安装</span>`
+                          : html`<button class="btn" @click=${() => props.onInstall(skill.name)}>
+                              安装
+                            </button>`}
+                      </div>
+                      <div class="list-desc">${skill.description}</div>
+                      ${skill.homepage
+                        ? html`<a href="${skill.homepage}" target="_blank">主页</a>`
+                        : nothing}
+                    </div>
+                  `,
+                )}
+              </div>
+            `}
+      </div>
+    </div>
+  `;
+}
 
 export type SkillsProps = {
   loading: boolean;
@@ -18,6 +68,7 @@ export type SkillsProps = {
   onEdit: (skillKey: string, value: string) => void;
   onSaveKey: (skillKey: string) => void;
   onInstall: (skillKey: string, name: string, installId: string) => void;
+  onOpenStore?: () => void;
 };
 
 export function renderSkills(props: SkillsProps) {
@@ -39,9 +90,12 @@ export function renderSkills(props: SkillsProps) {
           <div class="card-title">技能 (Skills)</div>
           <div class="card-sub">包含内置、托管及工作区技能。</div>
         </div>
-        <button class="btn" ?disabled=${props.loading} @click=${props.onRefresh}>
-          ${props.loading ? "加载中…" : "刷新"}
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn" ?disabled=${props.loading} @click=${props.onRefresh}>
+            ${props.loading ? "加载中…" : "刷新"}
+          </button>
+          ${props.onOpenStore ? html`<button class="btn" @click=${props.onOpenStore}>技能商店</button>` : nothing}
+        </div>
       </div>
 
       <div class="filters" style="margin-top: 14px;">

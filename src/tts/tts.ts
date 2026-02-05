@@ -51,6 +51,10 @@ const DEFAULT_OPENAI_VOICE = "alloy";
 const DEFAULT_EDGE_VOICE = "en-US-MichelleNeural";
 const DEFAULT_EDGE_LANG = "en-US";
 const DEFAULT_EDGE_OUTPUT_FORMAT = "audio-24khz-48kbitrate-mono-mp3";
+const DEFAULT_ALIYUN_VOICE = "xiaoyun";
+const DEFAULT_ALIYUN_FORMAT = "mp3" as const;
+const DEFAULT_ALIYUN_SAMPLE_RATE = 16000;
+const ALIYUN_NLS_ENDPOINT = "https://nls-gateway-cn-shanghai.aliyuncs.com";
 
 const DEFAULT_ELEVENLABS_VOICE_SETTINGS = {
   stability: 0.5,
@@ -123,6 +127,17 @@ export type ResolvedTtsConfig = {
     saveSubtitles: boolean;
     proxy?: string;
     timeoutMs?: number;
+  };
+  aliyun: {
+    accessKeyId?: string;
+    accessKeySecret?: string;
+    appKey?: string;
+    voice: string;
+    speechRate: number;
+    pitchRate: number;
+    volume: number;
+    format: "mp3" | "wav" | "pcm";
+    sampleRate: number;
   };
   prefsPath?: string;
   maxTextLength: number;
@@ -295,6 +310,17 @@ export function resolveTtsConfig(cfg: ClawdbotConfig): ResolvedTtsConfig {
       saveSubtitles: raw.edge?.saveSubtitles ?? false,
       proxy: raw.edge?.proxy?.trim() || undefined,
       timeoutMs: raw.edge?.timeoutMs,
+    },
+    aliyun: {
+      accessKeyId: raw.aliyun?.accessKeyId || process.env.ALIYUN_ACCESS_KEY_ID,
+      accessKeySecret: raw.aliyun?.accessKeySecret || process.env.ALIYUN_ACCESS_KEY_SECRET,
+      appKey: raw.aliyun?.appKey || process.env.ALIYUN_NLS_APP_KEY,
+      voice: raw.aliyun?.voice?.trim() || DEFAULT_ALIYUN_VOICE,
+      speechRate: raw.aliyun?.speechRate ?? 0,
+      pitchRate: raw.aliyun?.pitchRate ?? 0,
+      volume: raw.aliyun?.volume ?? 50,
+      format: raw.aliyun?.format ?? DEFAULT_ALIYUN_FORMAT,
+      sampleRate: raw.aliyun?.sampleRate ?? DEFAULT_ALIYUN_SAMPLE_RATE,
     },
     prefsPath: raw.prefsPath,
     maxTextLength: raw.maxTextLength ?? DEFAULT_MAX_TEXT_LENGTH,
@@ -474,10 +500,18 @@ export function resolveTtsApiKey(
   if (provider === "openai") {
     return config.openai.apiKey || process.env.OPENAI_API_KEY;
   }
+  if (provider === "aliyun") {
+    // Aliyun uses accessKeyId + accessKeySecret, return combined check
+    const keyId = config.aliyun.accessKeyId;
+    const keySecret = config.aliyun.accessKeySecret;
+    const appKey = config.aliyun.appKey;
+    if (keyId && keySecret && appKey) return `${keyId}:${keySecret}:${appKey}`;
+    return undefined;
+  }
   return undefined;
 }
 
-export const TTS_PROVIDERS = ["openai", "elevenlabs", "edge"] as const;
+export const TTS_PROVIDERS = ["openai", "elevenlabs", "edge", "aliyun"] as const;
 
 export function resolveTtsProviderOrder(primary: TtsProvider): TtsProvider[] {
   return [primary, ...TTS_PROVIDERS.filter((provider) => provider !== primary)];
@@ -485,6 +519,11 @@ export function resolveTtsProviderOrder(primary: TtsProvider): TtsProvider[] {
 
 export function isTtsProviderConfigured(config: ResolvedTtsConfig, provider: TtsProvider): boolean {
   if (provider === "edge") return config.edge.enabled;
+  if (provider === "aliyun") {
+    return Boolean(
+      config.aliyun.accessKeyId && config.aliyun.accessKeySecret && config.aliyun.appKey,
+    );
+  }
   return Boolean(resolveTtsApiKey(config, provider));
 }
 
@@ -1068,6 +1107,110 @@ async function edgeTTS(params: {
   await tts.ttsPromise(text, outputPath);
 }
 
+async function aliyunTTS(params: {
+  text: string;
+  accessKeyId: string;
+  accessKeySecret: string;
+  appKey: string;
+  voice: string;
+  speechRate: number;
+  pitchRate: number;
+  volume: number;
+  format: "mp3" | "wav" | "pcm";
+  sampleRate: number;
+  timeoutMs: number;
+}): Promise<Buffer> {
+  const {
+    text,
+    accessKeyId,
+    accessKeySecret,
+    appKey,
+    voice,
+    speechRate,
+    pitchRate,
+    volume,
+    format,
+    sampleRate,
+    timeoutMs,
+  } = params;
+
+  // Generate timestamp and nonce for signature
+  const timestamp = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+  const nonce = Math.random().toString(36).substring(2, 15);
+
+  // Build canonical request for Aliyun signature
+  const queryParams = new URLSearchParams({
+    Format: "JSON",
+    Version: "2019-02-28",
+    AccessKeyId: accessKeyId,
+    SignatureMethod: "HMAC-SHA1",
+    Timestamp: timestamp,
+    SignatureVersion: "1.0",
+    SignatureNonce: nonce,
+    Action: "CreateToken",
+  });
+  queryParams.sort();
+
+  // Create string to sign
+  const sortedQuery = queryParams.toString();
+  const stringToSign = `GET&${encodeURIComponent("/")}&${encodeURIComponent(sortedQuery)}`;
+
+  // Calculate HMAC-SHA1 signature
+  const crypto = await import("node:crypto");
+  const signature = crypto
+    .createHmac("sha1", `${accessKeySecret}&`)
+    .update(stringToSign)
+    .digest("base64");
+
+  // Get token from Aliyun
+  const tokenUrl = `https://nls-meta.cn-shanghai.aliyuncs.com/?${sortedQuery}&Signature=${encodeURIComponent(signature)}`;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const tokenResponse = await fetch(tokenUrl, { signal: controller.signal });
+    if (!tokenResponse.ok) {
+      throw new Error(`Aliyun token request failed (${tokenResponse.status})`);
+    }
+    const tokenData = (await tokenResponse.json()) as { Token?: { Id?: string } };
+    const token = tokenData.Token?.Id;
+    if (!token) {
+      throw new Error("Failed to get Aliyun NLS token");
+    }
+
+    // Call NLS TTS API
+    const ttsUrl = `${ALIYUN_NLS_ENDPOINT}/stream/v1/tts`;
+    const ttsResponse = await fetch(ttsUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-NLS-Token": token,
+      },
+      body: JSON.stringify({
+        appkey: appKey,
+        text,
+        format,
+        sample_rate: sampleRate,
+        voice,
+        speech_rate: speechRate,
+        pitch_rate: pitchRate,
+        volume,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!ttsResponse.ok) {
+      const errorText = await ttsResponse.text();
+      throw new Error(`Aliyun TTS API error (${ttsResponse.status}): ${errorText}`);
+    }
+
+    return Buffer.from(await ttsResponse.arrayBuffer());
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function textToSpeech(params: {
   text: string;
   cfg: ClawdbotConfig;
@@ -1162,6 +1305,43 @@ export async function textToSpeech(params: {
           provider,
           outputFormat: edgeResult.outputFormat,
           voiceCompatible,
+        };
+      }
+
+      if (provider === "aliyun") {
+        const { accessKeyId, accessKeySecret, appKey } = config.aliyun;
+        if (!accessKeyId || !accessKeySecret || !appKey) {
+          lastError = "aliyun: missing credentials";
+          continue;
+        }
+
+        const audioBuffer = await aliyunTTS({
+          text: params.text,
+          accessKeyId,
+          accessKeySecret,
+          appKey,
+          voice: config.aliyun.voice,
+          speechRate: config.aliyun.speechRate,
+          pitchRate: config.aliyun.pitchRate,
+          volume: config.aliyun.volume,
+          format: config.aliyun.format,
+          sampleRate: config.aliyun.sampleRate,
+          timeoutMs: config.timeoutMs,
+        });
+
+        const tempDir = mkdtempSync(path.join(tmpdir(), "tts-"));
+        const extension = config.aliyun.format === "wav" ? ".wav" : ".mp3";
+        const audioPath = path.join(tempDir, `voice-${Date.now()}${extension}`);
+        writeFileSync(audioPath, audioBuffer);
+        scheduleCleanup(tempDir);
+
+        return {
+          success: true,
+          audioPath,
+          latencyMs: Date.now() - providerStart,
+          provider,
+          outputFormat: config.aliyun.format,
+          voiceCompatible: false,
         };
       }
 

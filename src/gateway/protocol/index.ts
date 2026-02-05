@@ -13,6 +13,8 @@ import {
   AgentsListParamsSchema,
   type AgentsListResult,
   AgentsListResultSchema,
+  type AgentsUpdateParams,
+  AgentsUpdateParamsSchema,
   type AgentWaitParams,
   AgentWaitParamsSchema,
   type ChannelsLogoutParams,
@@ -159,6 +161,10 @@ import {
   SkillsStatusParamsSchema,
   type SkillsUpdateParams,
   SkillsUpdateParamsSchema,
+  type SkillsCatalogParams,
+  SkillsCatalogParamsSchema,
+  type SkillsAddBundledParams,
+  SkillsAddBundledParamsSchema,
   type Snapshot,
   SnapshotSchema,
   type StateVersion,
@@ -211,6 +217,7 @@ export const validateAgentIdentityParams =
 export const validateAgentWaitParams = ajv.compile<AgentWaitParams>(AgentWaitParamsSchema);
 export const validateWakeParams = ajv.compile<WakeParams>(WakeParamsSchema);
 export const validateAgentsListParams = ajv.compile<AgentsListParams>(AgentsListParamsSchema);
+export const validateAgentsUpdateParams = ajv.compile<AgentsUpdateParams>(AgentsUpdateParamsSchema);
 export const validateNodePairRequestParams = ajv.compile<NodePairRequestParams>(
   NodePairRequestParamsSchema,
 );
@@ -274,6 +281,11 @@ export const validateSkillsBinsParams = ajv.compile<SkillsBinsParams>(SkillsBins
 export const validateSkillsInstallParams =
   ajv.compile<SkillsInstallParams>(SkillsInstallParamsSchema);
 export const validateSkillsUpdateParams = ajv.compile<SkillsUpdateParams>(SkillsUpdateParamsSchema);
+export const validateSkillsCatalogParams =
+  ajv.compile<SkillsCatalogParams>(SkillsCatalogParamsSchema);
+export const validateSkillsAddBundledParams = ajv.compile<SkillsAddBundledParams>(
+  SkillsAddBundledParamsSchema,
+);
 export const validateCronListParams = ajv.compile<CronListParams>(CronListParamsSchema);
 export const validateCronStatusParams = ajv.compile<CronStatusParams>(CronStatusParamsSchema);
 export const validateCronAddParams = ajv.compile<CronAddParams>(CronAddParamsSchema);
@@ -413,11 +425,14 @@ export {
   AgentSummarySchema,
   AgentsListParamsSchema,
   AgentsListResultSchema,
+  AgentsUpdateParamsSchema,
   ModelsListParamsSchema,
   ModelsDiscoverParamsSchema,
   SkillsStatusParamsSchema,
   SkillsInstallParamsSchema,
   SkillsUpdateParamsSchema,
+  SkillsCatalogParamsSchema,
+  SkillsAddBundledParamsSchema,
   CronJobSchema,
   CronListParamsSchema,
   CronStatusParamsSchema,

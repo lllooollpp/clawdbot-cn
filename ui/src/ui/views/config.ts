@@ -1,12 +1,42 @@
 import { html, nothing } from "lit";
 import type { ConfigUiHints } from "../types";
-import { analyzeConfigSchema, renderConfigForm, SECTION_META } from "./config-form";
+import { analyzeConfigSchema, renderConfigForm } from "./config-form";
 import {
   hintForPath,
   humanize,
   schemaType,
   type JsonSchema,
 } from "./config-form.shared";
+
+// Section metadata for labels and descriptions
+const SECTION_META: Record<string, { label: string; description?: string }> = {
+  models: { label: "模型", description: "AI 模型配置与供应商" },
+  auth: { label: "身份验证", description: "API 密钥与认证配置" },
+  agents: { label: "智能体", description: "智能体配置与身份" },
+  channels: { label: "渠道", description: "消息渠道配置" },
+  env: { label: "环境", description: "环境变量" },
+  gateway: { label: "网关", description: "服务器设置" },
+  skills: { label: "技能", description: "技能配置" },
+  tools: { label: "工具", description: "浏览器、搜索、TTS 等" },
+  messages: { label: "消息", description: "消息处理与路由" },
+  commands: { label: "命令", description: "斜杠命令" },
+  hooks: { label: "钩子", description: "钩子配置" },
+  update: { label: "更新", description: "自动更新设置" },
+  wizard: { label: "设置向导", description: "引导式配置" },
+  ui: { label: "界面", description: "界面设置" },
+  logging: { label: "日志", description: "日志配置" },
+  meta: { label: "元信息", description: "元数据配置" },
+  bindings: { label: "绑定", description: "绑定配置" },
+  broadcast: { label: "广播", description: "广播配置" },
+  audio: { label: "音频", description: "音频配置" },
+  session: { label: "会话", description: "会话配置" },
+  cron: { label: "定时任务", description: "定时任务配置" },
+  web: { label: "网页", description: "网页配置" },
+  discovery: { label: "发现", description: "服务发现配置" },
+  canvasHost: { label: "画布", description: "画布主机配置" },
+  talk: { label: "语音", description: "语音配置" },
+  plugins: { label: "插件", description: "插件配置" },
+};
 
 export type ConfigProps = {
   raw: string;
@@ -255,86 +285,11 @@ export function renderConfig(props: ConfigProps) {
   const canUpdate = props.connected && !props.applying && !props.updating;
 
   return html`
-    <div class="config-layout">
-      <!-- Sidebar -->
-      <aside class="config-sidebar">
-        <div class="config-sidebar__header">
-          <div class="config-sidebar__title">设置</div>
-          <span class="pill pill--sm ${validity === "valid" ? "pill--ok" : validity === "invalid" ? "pill--danger" : ""}">${validity === "valid" ? "有效" : validity === "invalid" ? "无效" : "未知"}</span>
-        </div>
-
-        <!-- Search -->
-        <div class="config-search">
-          <svg class="config-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="M21 21l-4.35-4.35"></path>
-          </svg>
-          <input
-            type="text"
-            class="config-search__input"
-            placeholder="搜索设置..."
-            .value=${props.searchQuery}
-            @input=${(e: Event) => props.onSearchChange((e.target as HTMLInputElement).value)}
-          />
-          ${props.searchQuery ? html`
-            <button
-              class="config-search__clear"
-              @click=${() => props.onSearchChange("")}
-            >×</button>
-          ` : nothing}
-        </div>
-
-        <!-- Section nav -->
-        <nav class="config-nav">
-          <button
-            class="config-nav__item ${props.activeSection === null ? "active" : ""}"
-            @click=${() => props.onSectionChange(null)}
-          >
-            <span class="config-nav__icon">${sidebarIcons.all}</span>
-            <span class="config-nav__label">所有设置</span>
-          </button>
-          ${allSections.map(section => html`
-            <button
-              class="config-nav__item ${props.activeSection === section.key ? "active" : ""}"
-              @click=${() => props.onSectionChange(section.key)}
-            >
-              <span class="config-nav__icon">${getSectionIcon(section.key)}</span>
-              <span class="config-nav__label">${section.label}</span>
-            </button>
-          `)}
-        </nav>
-
-        <!-- Mode toggle at bottom -->
-        <div class="config-sidebar__footer">
-          <div class="config-mode-toggle">
-            <button
-              class="config-mode-toggle__btn ${props.formMode === "form" ? "active" : ""}"
-              ?disabled=${props.schemaLoading || !props.schema}
-              @click=${() => props.onFormModeChange("form")}
-            >
-              表单
-            </button>
-            <button
-              class="config-mode-toggle__btn ${props.formMode === "raw" ? "active" : ""}"
-              @click=${() => props.onFormModeChange("raw")}
-            >
-              原文 (JSON5)
-            </button>
-          </div>
-        </div>
-      </aside>
-
+    <div class="config-layout config-layout--simple">
       <!-- Main content -->
-      <main class="config-main">
-        <!-- Action bar -->
+      <main class="config-main config-main--full">
+        <!-- Action bar (simplified) -->
         <div class="config-actions">
-          <div class="config-actions__left">
-            ${hasChanges ? html`
-              <span class="config-changes-badge">${props.formMode === "raw" ? "未保存的更改" : `有 ${diff.length} 项更改未保存`}</span>
-            ` : html`
-              <span class="config-status muted">无更改</span>
-            `}
-          </div>
           <div class="config-actions__right">
             <button class="btn btn--sm" ?disabled=${props.loading} @click=${props.onReload}>
               ${props.loading ? "正在加载..." : "重新加载"}
@@ -346,86 +301,10 @@ export function renderConfig(props: ConfigProps) {
             >
               ${props.saving ? "正在保存..." : "保存"}
             </button>
-            <button
-              class="btn btn--sm"
-              ?disabled=${!canApply}
-              @click=${props.onApply}
-            >
-              ${props.applying ? "正在应用..." : "应用"}
-            </button>
-            <button
-              class="btn btn--sm"
-              ?disabled=${!canUpdate}
-              @click=${props.onUpdate}
-            >
-              ${props.updating ? "正在更新..." : "更新"}
-            </button>
           </div>
         </div>
 
-        <!-- Diff panel (form mode only - raw mode doesn't have granular diff) -->
-        ${hasChanges && props.formMode === "form" ? html`
-          <details class="config-diff">
-            <summary class="config-diff__summary">
-              <span>查看 ${diff.length} 项待处理的更改</span>
-              <svg class="config-diff__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-            </summary>
-            <div class="config-diff__content">
-              ${diff.map(change => html`
-                <div class="config-diff__item">
-                  <div class="config-diff__path">${change.path}</div>
-                  <div class="config-diff__values">
-                    <span class="config-diff__from">${truncateValue(change.from)}</span>
-                    <span class="config-diff__arrow">→</span>
-                    <span class="config-diff__to">${truncateValue(change.to)}</span>
-                  </div>
-                </div>
-              `)}
-            </div>
-          </details>
-        ` : nothing}
-
-        ${activeSectionMeta && props.formMode === "form"
-          ? html`
-              <div class="config-section-hero">
-                <div class="config-section-hero__icon">${getSectionIcon(props.activeSection ?? "")}</div>
-                <div class="config-section-hero__text">
-                  <div class="config-section-hero__title">${activeSectionMeta.label}</div>
-                  ${activeSectionMeta.description
-                    ? html`<div class="config-section-hero__desc">${activeSectionMeta.description}</div>`
-                    : nothing}
-                </div>
-              </div>
-            `
-          : nothing}
-
-        ${allowSubnav
-          ? html`
-              <div class="config-subnav">
-                <button
-                  class="config-subnav__item ${effectiveSubsection === null ? "active" : ""}"
-                  @click=${() => props.onSubsectionChange(ALL_SUBSECTION)}
-                >
-                  全部
-                </button>
-                ${subsections.map(
-                  (entry) => html`
-                    <button
-                      class="config-subnav__item ${
-                        effectiveSubsection === entry.key ? "active" : ""
-                      }"
-                      title=${entry.description || entry.label}
-                      @click=${() => props.onSubsectionChange(entry.key)}
-                    >
-                      ${entry.label}
-                    </button>
-                  `,
-                )}
-              </div>
-            `
-          : nothing}
+        <!-- Config form content (no diff panel) -->
 
         <!-- Form content -->
         <div class="config-content">
@@ -447,13 +326,9 @@ export function renderConfig(props: ConfigProps) {
                       searchQuery: props.searchQuery,
                       activeSection: props.activeSection,
                       activeSubsection: effectiveSubsection,
+                      onSectionChange: props.onSectionChange,
                     })}
-                ${formUnsafe
-                  ? html`<div class="callout danger" style="margin-top: 12px;">
-                      表单视图无法安全编辑某些字段。
-                      请使用“原文”模式以避免丢失配置项。
-                    </div>`
-                  : nothing}
+
               `
             : html`
                 <label class="field config-raw-field">
@@ -466,12 +341,6 @@ export function renderConfig(props: ConfigProps) {
                 </label>
               `}
         </div>
-
-        ${props.issues.length > 0
-          ? html`<div class="callout danger" style="margin-top: 12px;">
-              <pre class="code-block">${JSON.stringify(props.issues, null, 2)}</pre>
-            </div>`
-          : nothing}
       </main>
     </div>
   `;

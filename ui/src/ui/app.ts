@@ -23,6 +23,7 @@ import type {
   SkillStatusReport,
   StatusSummary,
   NostrProfile,
+  SkillsCatalogEntry,
 } from "./types";
 import { type ChatAttachment, type ChatQueueItem, type CronFormState } from "./ui-types";
 import type { EventLogEntry } from "./app-events";
@@ -37,6 +38,7 @@ import {
   resetToolStream as resetToolStreamInternal,
   type ToolStreamEntry,
 } from "./app-tool-stream";
+import type { SkillMessage } from "./controllers/skills";
 import {
   exportLogs as exportLogsInternal,
   handleChatScroll as handleChatScrollInternal,
@@ -239,6 +241,10 @@ export class ClawdbotApp extends LitElement {
   @state() skillEdits: Record<string, string> = {};
   @state() skillsBusyKey: string | null = null;
   @state() skillMessages: Record<string, SkillMessage> = {};
+  @state() skillsStoreOpen = false;
+  @state() skillsStoreLoading = false;
+  @state() skillsStoreError: string | null = null;
+  @state() skillsStoreCatalog: import("./types").SkillsCatalogEntry[] = [];
 
   @state() debugLoading = false;
   @state() debugStatus: StatusSummary | null = null;

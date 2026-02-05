@@ -44,6 +44,9 @@ import {
   MOONSHOT_BASE_URL,
   MOONSHOT_DEFAULT_MODEL_ID,
   MOONSHOT_DEFAULT_MODEL_REF,
+  buildLMStudioModelDefinition,
+  LMSTUDIO_BASE_URL,
+  LMSTUDIO_DEFAULT_MODEL_ID,
 } from "./onboard-auth.models.js";
 
 export function applyZaiConfig(cfg: ClawdbotConfig): ClawdbotConfig {
@@ -739,6 +742,78 @@ export function applyDomesticMediaDefaults(cfg: ClawdbotConfig): ClawdbotConfig 
         ...cfg.tools?.media,
         models,
       },
+    },
+  };
+}
+
+// === LM Studio Configuration ===
+export function applyLMStudioConfig(
+  cfg: ClawdbotConfig,
+  params: { baseUrl?: string; modelId?: string },
+): ClawdbotConfig {
+  const next = applyLMStudioProviderConfig(cfg, params);
+  const modelId = params.modelId || LMSTUDIO_DEFAULT_MODEL_ID;
+  const modelRef = `lmstudio/${modelId}`;
+
+  const existingModel = next.agents?.defaults?.model;
+  return {
+    ...next,
+    agents: {
+      ...next.agents,
+      defaults: {
+        ...next.agents?.defaults,
+        model: {
+          ...(existingModel && "fallbacks" in (existingModel as Record<string, unknown>)
+            ? { fallbacks: (existingModel as { fallbacks?: string[] }).fallbacks }
+            : undefined),
+          primary: modelRef,
+        },
+      },
+    },
+  };
+}
+
+export function applyLMStudioProviderConfig(
+  cfg: ClawdbotConfig,
+  params: { baseUrl?: string; modelId?: string },
+): ClawdbotConfig {
+  const baseUrl = params.baseUrl || LMSTUDIO_BASE_URL;
+  const modelId = params.modelId || LMSTUDIO_DEFAULT_MODEL_ID;
+  const modelRef = `lmstudio/${modelId}`;
+
+  const models = { ...cfg.agents?.defaults?.models };
+  models[modelRef] = {
+    ...models[modelRef],
+    alias: models[modelRef]?.alias ?? `LM Studio (${modelId})`,
+  };
+
+  const providers = { ...cfg.models?.providers };
+  const existingProvider = providers.lmstudio;
+  const existingModels = Array.isArray(existingProvider?.models) ? existingProvider.models : [];
+  const defaultModel = buildLMStudioModelDefinition(modelId);
+  const hasDefaultModel = existingModels.some((model) => model.id === modelId);
+  const mergedModels = hasDefaultModel ? existingModels : [...existingModels, defaultModel];
+
+  providers.lmstudio = {
+    ...((existingProvider ?? {}) as Record<string, unknown>),
+    baseUrl,
+    api: "openai-completions",
+    apiKey: "lmstudio",
+    models: mergedModels.length > 0 ? mergedModels : [defaultModel],
+  };
+
+  return {
+    ...cfg,
+    agents: {
+      ...cfg.agents,
+      defaults: {
+        ...cfg.agents?.defaults,
+        models,
+      },
+    },
+    models: {
+      mode: cfg.models?.mode ?? "merge",
+      providers,
     },
   };
 }

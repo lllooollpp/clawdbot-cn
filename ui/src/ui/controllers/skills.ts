@@ -1,5 +1,6 @@
 import type { GatewayBrowserClient } from "../gateway";
 import type { SkillStatusReport } from "../types";
+import type { SkillsCatalogResult } from '../types';
 
 export type SkillsState = {
   client: GatewayBrowserClient | null;
@@ -10,6 +11,9 @@ export type SkillsState = {
   skillsBusyKey: string | null;
   skillEdits: Record<string, string>;
   skillMessages: SkillMessageMap;
+  skillsStoreCatalog: Array<import("../types").SkillsCatalogEntry>;
+  skillsStoreLoading: boolean;
+  skillsStoreError: string | null;
 };
 
 export type SkillMessage = {
@@ -144,5 +148,32 @@ export async function installSkill(
     });
   } finally {
     state.skillsBusyKey = null;
+  }
+}
+
+// 加载技能商店目录
+export async function loadCatalog(state: SkillsState): Promise<SkillsCatalogResult> {
+  if (!state.client) throw new Error("Not connected");
+  return await state.client.request('skills.catalog', {});
+}
+
+// 安装技能（从商店安装内置技能）
+export async function addBundledSkill(state: SkillsState, name: string): Promise<{ success: boolean; error?: string }> {
+  if (!state.client) throw new Error("Not connected");
+  return await state.client.request('skills.addBundled', { name });
+}
+
+// 加载技能商店数据
+export async function loadSkillsStore(state: SkillsState): Promise<void> {
+  state.skillsStoreLoading = true;
+  state.skillsStoreError = null;
+  try {
+    const result = await loadCatalog(state);
+    state.skillsStoreCatalog = result.skills;
+  } catch (err) {
+    state.skillsStoreError = String(err);
+    state.skillsStoreCatalog = [];
+  } finally {
+    state.skillsStoreLoading = false;
   }
 }

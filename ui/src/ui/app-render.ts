@@ -50,8 +50,10 @@ import {
   revokeDeviceToken,
   rotateDeviceToken,
 } from "./controllers/devices";
-import { renderSkills } from "./views/skills";
+import { renderSkills, renderSkillsStore } from "./views/skills";
 import { renderChatControls, renderTab, renderThemeToggle } from "./app-render.helpers";
+import { loadSkillsStore, addBundledSkill } from "./controllers/skills";
+import { loadAgents } from "./controllers/agents";
 import { loadChannels } from "./controllers/channels";
 import { loadPresence } from "./controllers/presence";
 import { deleteSession, loadSessions, patchSession } from "./controllers/sessions";
@@ -348,23 +350,64 @@ export function renderApp(state: AppViewState) {
             })
           : nothing}
 
+        ${state.tab === "agents"
+          ? html`
+              <agents-dashboard
+                .loading=${state.agentsLoading}
+                .agents=${state.agentsList}
+                .error=${state.agentsError}
+                @refresh=${() => loadAgents(state)}
+              ></agents-dashboard>
+            `
+          : nothing}
+
         ${state.tab === "skills"
-          ? renderSkills({
-              loading: state.skillsLoading,
-              report: state.skillsReport,
-              error: state.skillsError,
-              filter: state.skillsFilter,
-              edits: state.skillEdits,
-              messages: state.skillMessages,
-              busyKey: state.skillsBusyKey,
-              onFilterChange: (next) => (state.skillsFilter = next),
-              onRefresh: () => loadSkills(state, { clearMessages: true }),
-              onToggle: (key, enabled) => updateSkillEnabled(state, key, enabled),
-              onEdit: (key, value) => updateSkillEdit(state, key, value),
-              onSaveKey: (key) => saveSkillApiKey(state, key),
-              onInstall: (skillKey, name, installId) =>
-                installSkill(state, skillKey, name, installId),
-            })
+          ? html`
+              ${renderSkills({
+                loading: state.skillsLoading,
+                report: state.skillsReport,
+                error: state.skillsError,
+                filter: state.skillsFilter,
+                edits: state.skillEdits,
+                messages: state.skillMessages,
+                busyKey: state.skillsBusyKey,
+                onFilterChange: (next) => (state.skillsFilter = next),
+                onRefresh: () => loadSkills(state, { clearMessages: true }),
+                onToggle: (key, enabled) => updateSkillEnabled(state, key, enabled),
+                onEdit: (key, value) => updateSkillEdit(state, key, value),
+                onSaveKey: (key) => saveSkillApiKey(state, key),
+                onInstall: (skillKey, name, installId) => installSkill(state, skillKey, name, installId),
+                onOpenStore: () => {
+                  state.skillsStoreOpen = true;
+                  void loadSkillsStore(state);
+                },
+              })}
+              ${renderSkillsStore({
+                open: state.skillsStoreOpen,
+                loading: state.skillsStoreLoading,
+                error: state.skillsStoreError,
+                catalog: state.skillsStoreCatalog,
+                onClose: () => (state.skillsStoreOpen = false),
+                onInstall: async (name: string) => {
+                  state.skillsStoreLoading = true;
+                  state.skillsStoreError = null;
+                  try {
+                    const result = await addBundledSkill(state, name);
+                    if (!result.success) {
+                      state.skillsStoreError = result.error || "安装失败";
+                    } else {
+                      // 刷新技能列表和商店目录
+                      await loadSkills(state, { clearMessages: true });
+                      await loadSkillsStore(state);
+                    }
+                  } catch (err) {
+                    state.skillsStoreError = String(err);
+                  } finally {
+                    state.skillsStoreLoading = false;
+                  }
+                },
+              })}
+            `
           : nothing}
 
         ${state.tab === "nodes"

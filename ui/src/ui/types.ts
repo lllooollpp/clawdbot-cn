@@ -547,6 +547,21 @@ export type SkillStatusReport = {
   skills: SkillStatusEntry[];
 };
 
+export type SkillsCatalogEntry = {
+  name: string;
+  description: string;
+  emoji?: string;
+  homepage?: string;
+  primaryEnv?: string;
+  installed: boolean;
+};
+
+export type SkillsCatalogResult = {
+  skills: SkillsCatalogEntry[];
+  bundledDir?: string;
+  managedDir: string;
+};
+
 export type StatusSummary = Record<string, unknown>;
 
 export type HealthSnapshot = Record<string, unknown>;

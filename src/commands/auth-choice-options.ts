@@ -41,7 +41,7 @@ const AUTH_CHOICE_GROUP_DEFS: {
   {
     value: "domestic",
     label: "国内优先 / 本地模型 (Domestic Priority 🇨🇳)",
-    hint: "DeepSeek, SiliconFlow, 智谱 AI, 火山引擎, 博查, Ollama",
+    hint: "DeepSeek, SiliconFlow, 智谱 AI, 火山引擎, 博查, Ollama, LM Studio",
     choices: [
       "deepseek-api-key",
       "siliconflow-api-key",
@@ -49,6 +49,7 @@ const AUTH_CHOICE_GROUP_DEFS: {
       "zhipu-api-key",
       "bocha-api-key",
       "ollama",
+      "lmstudio",
     ],
   },
   {
@@ -239,6 +240,11 @@ export function buildAuthChoiceOptions(params: {
     value: "ollama",
     label: "Ollama (本地大模型 🏠)",
     hint: "在您自己的机器上运行开源模型",
+  });
+  options.push({
+    value: "lmstudio",
+    label: "LM Studio (本地大模型 🏠)",
+    hint: "通过 LM Studio 运行本地模型 (OpenAI 兼容 API)",
   });
   options.push({ value: "synthetic-api-key", label: "Synthetic API 密钥" });
   options.push({

@@ -1,4 +1,4 @@
-export type TtsProvider = "elevenlabs" | "openai" | "edge";
+export type TtsProvider = "elevenlabs" | "openai" | "edge" | "aliyun";
 
 export type TtsMode = "final" | "all";
 
@@ -72,6 +72,27 @@ export type TtsConfig = {
     saveSubtitles?: boolean;
     proxy?: string;
     timeoutMs?: number;
+  };
+  /** Aliyun NLS TTS configuration (China region). */
+  aliyun?: {
+    /** Aliyun access key ID. */
+    accessKeyId?: string;
+    /** Aliyun access key secret. */
+    accessKeySecret?: string;
+    /** NLS application key. */
+    appKey?: string;
+    /** Voice name (e.g. xiaoyun, xiaogang, ruoxi). */
+    voice?: string;
+    /** Speech rate (-500 to 500, default 0). */
+    speechRate?: number;
+    /** Pitch rate (-500 to 500, default 0). */
+    pitchRate?: number;
+    /** Volume (0 to 100, default 50). */
+    volume?: number;
+    /** Audio format (mp3, wav, pcm). */
+    format?: "mp3" | "wav" | "pcm";
+    /** Sample rate (8000, 16000, 24000). */
+    sampleRate?: number;
   };
   /** Optional path for local TTS user preferences JSON. */
   prefsPath?: string;

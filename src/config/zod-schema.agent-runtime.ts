@@ -158,7 +158,14 @@ export const ToolPolicySchema = z
 export const ToolsWebSearchSchema = z
   .object({
     enabled: z.boolean().optional(),
-    provider: z.union([z.literal("brave"), z.literal("perplexity"), z.literal("bocha")]).optional(),
+    provider: z
+      .union([
+        z.literal("brave"),
+        z.literal("perplexity"),
+        z.literal("bocha"),
+        z.literal("searxng"),
+      ])
+      .optional(),
     apiKey: z.string().optional(),
     maxResults: z.number().int().positive().optional(),
     timeoutSeconds: z.number().int().positive().optional(),
@@ -168,6 +175,16 @@ export const ToolsWebSearchSchema = z
         apiKey: z.string().optional(),
         baseUrl: z.string().optional(),
         model: z.string().optional(),
+      })
+      .strict()
+      .optional(),
+    searxng: z
+      .object({
+        baseUrl: z.string().optional(),
+        apiKey: z.string().optional(),
+        engines: z.string().optional(),
+        language: z.string().optional(),
+        safesearch: z.number().int().min(0).max(2).optional(),
       })
       .strict()
       .optional(),
@@ -183,6 +200,24 @@ export const ToolsWebFetchSchema = z
     cacheTtlMinutes: z.number().nonnegative().optional(),
     maxRedirects: z.number().int().nonnegative().optional(),
     userAgent: z.string().optional(),
+    proxyUrl: z.string().optional(),
+    readability: z.boolean().optional(),
+    jina: z
+      .object({
+        enabled: z.boolean().optional(),
+        apiKey: z.string().optional(),
+        baseUrl: z.string().optional(),
+      })
+      .strict()
+      .optional(),
+    firecrawl: z
+      .object({
+        apiKey: z.string().optional(),
+        baseUrl: z.string().optional(),
+        mode: z.string().optional(),
+      })
+      .strict()
+      .optional(),
   })
   .strict()
   .optional();

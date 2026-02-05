@@ -435,6 +435,13 @@ function resolveToolPolicies(params: {
 
 function hasWebSearchKey(cfg: ClawdbotConfig, env: NodeJS.ProcessEnv): boolean {
   const search = cfg.tools?.web?.search;
+  const provider = search?.provider;
+
+  // SearXNG 不需要 API key，只需要 baseUrl
+  if (provider === "searxng") {
+    return Boolean(search?.searxng?.baseUrl || env.SEARXNG_URL);
+  }
+
   return Boolean(
     search?.apiKey ||
     search?.perplexity?.apiKey ||
@@ -446,8 +453,17 @@ function hasWebSearchKey(cfg: ClawdbotConfig, env: NodeJS.ProcessEnv): boolean {
 
 function isWebSearchEnabled(cfg: ClawdbotConfig, env: NodeJS.ProcessEnv): boolean {
   const enabled = cfg.tools?.web?.search?.enabled;
+  const provider = cfg.tools?.web?.search?.provider;
+
   if (enabled === false) return false;
   if (enabled === true) return true;
+
+  // SearXNG 只需要 baseUrl，不需要 API key
+  if (provider === "searxng") {
+    const baseUrl = cfg.tools?.web?.search?.searxng?.baseUrl || env.SEARXNG_URL;
+    return Boolean(baseUrl);
+  }
+
   return hasWebSearchKey(cfg, env);
 }
 

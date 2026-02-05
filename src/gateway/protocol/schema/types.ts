@@ -12,6 +12,7 @@ import type {
   AgentSummarySchema,
   AgentsListParamsSchema,
   AgentsListResultSchema,
+  AgentsUpdateParamsSchema,
   ModelChoiceSchema,
   ModelsListParamsSchema,
   ModelsListResultSchema,
@@ -21,6 +22,10 @@ import type {
   SkillsInstallParamsSchema,
   SkillsStatusParamsSchema,
   SkillsUpdateParamsSchema,
+  SkillsCatalogParamsSchema,
+  SkillsCatalogEntrySchema,
+  SkillsCatalogResultSchema,
+  SkillsAddBundledParamsSchema,
 } from "./agents-models-skills.js";
 import type {
   ChannelsLogoutParamsSchema,
@@ -175,6 +180,7 @@ export type WebLoginWaitParams = Static<typeof WebLoginWaitParamsSchema>;
 export type AgentSummary = Static<typeof AgentSummarySchema>;
 export type AgentsListParams = Static<typeof AgentsListParamsSchema>;
 export type AgentsListResult = Static<typeof AgentsListResultSchema>;
+export type AgentsUpdateParams = Static<typeof AgentsUpdateParamsSchema>;
 export type ModelChoice = Static<typeof ModelChoiceSchema>;
 export type ModelsListParams = Static<typeof ModelsListParamsSchema>;
 export type ModelsListResult = Static<typeof ModelsListResultSchema>;
@@ -184,6 +190,10 @@ export type SkillsBinsParams = Static<typeof SkillsBinsParamsSchema>;
 export type SkillsBinsResult = Static<typeof SkillsBinsResultSchema>;
 export type SkillsInstallParams = Static<typeof SkillsInstallParamsSchema>;
 export type SkillsUpdateParams = Static<typeof SkillsUpdateParamsSchema>;
+export type SkillsCatalogParams = Static<typeof SkillsCatalogParamsSchema>;
+export type SkillsCatalogEntry = Static<typeof SkillsCatalogEntrySchema>;
+export type SkillsCatalogResult = Static<typeof SkillsCatalogResultSchema>;
+export type SkillsAddBundledParams = Static<typeof SkillsAddBundledParamsSchema>;
 export type CronJob = Static<typeof CronJobSchema>;
 export type CronListParams = Static<typeof CronListParamsSchema>;
 export type CronStatusParams = Static<typeof CronStatusParamsSchema>;

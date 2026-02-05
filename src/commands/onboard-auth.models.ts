@@ -52,6 +52,19 @@ export const OLLAMA_DEFAULT_MODEL_REF = `ollama/${OLLAMA_DEFAULT_MODEL_ID}`;
 export const OLLAMA_DEFAULT_CONTEXT_WINDOW = 32000;
 export const OLLAMA_DEFAULT_MAX_TOKENS = 8192;
 
+export const LMSTUDIO_BASE_URL = "http://127.0.0.1:1234/v1";
+export const LMSTUDIO_API_BASE_URL = "http://127.0.0.1:1234";
+export const LMSTUDIO_DEFAULT_MODEL_ID = "local-model";
+export const LMSTUDIO_DEFAULT_MODEL_REF = `lmstudio/${LMSTUDIO_DEFAULT_MODEL_ID}`;
+export const LMSTUDIO_DEFAULT_CONTEXT_WINDOW = 32000;
+export const LMSTUDIO_DEFAULT_MAX_TOKENS = 8192;
+export const LMSTUDIO_DEFAULT_COST = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+};
+
 // Pricing: MiniMax doesn't publish public rates. Override in models.json for accurate costs.
 export const MINIMAX_API_COST = {
   input: 15,
@@ -196,6 +209,19 @@ export function buildOllamaModelDefinition(modelId?: string): ModelDefinitionCon
     cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
     contextWindow: OLLAMA_DEFAULT_CONTEXT_WINDOW,
     maxTokens: OLLAMA_DEFAULT_MAX_TOKENS,
+  };
+}
+
+export function buildLMStudioModelDefinition(modelId?: string): ModelDefinitionConfig {
+  const id = modelId ?? LMSTUDIO_DEFAULT_MODEL_ID;
+  return {
+    id,
+    name: `LM Studio (${id})`,
+    reasoning: false,
+    input: ["text"],
+    cost: LMSTUDIO_DEFAULT_COST,
+    contextWindow: LMSTUDIO_DEFAULT_CONTEXT_WINDOW,
+    maxTokens: LMSTUDIO_DEFAULT_MAX_TOKENS,
   };
 }
 
