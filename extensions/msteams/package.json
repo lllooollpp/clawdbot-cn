@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/msteams",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Microsoft Teams channel plugin",
   "clawdbot": {
@@ -29,8 +29,9 @@
     "@microsoft/agents-hosting": "^1.2.2",
     "@microsoft/agents-hosting-express": "^1.2.2",
     "@microsoft/agents-hosting-extensions-teams": "^1.2.2",
-    "openclaw": "workspace:*",
+    "clawdbot": "workspace:*",
     "express": "^5.2.1",
     "proper-lockfile": "^4.1.2"
-  }
+  },
+  "author": "lllooollpp"
 }

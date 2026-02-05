@@ -8,7 +8,7 @@
 - **系统提示安全防护**: 实现系统提示安全防护（safety guardrails），防止提示注入攻击和恶意指令。(#5445) 感谢 @joshp123。
 - **Agent 会话扩展**: 扩展 CreateAgentSessionOptions 支持 systemPrompt、skills 和 contextFiles 配置。
 - **工具策略快照**: 添加工具策略符合性快照（tool policy conformance snapshot），无运行时行为变更。(#6011)
-- **消息时间戳**: Gateway 自动向 agent 和 chat.send 消息注入时间戳。(#3705) 感谢 @conroywhitney, @CashWilliams。
+- **消息时间戳**: Gateway 自动向 agent 和 chat.send 消息注入时间戳。(#3703) 感谢 @conroywhitney, @CashWilliams。
 - **before_tool_call 钩子**: 将 before_tool_call 插件钩子集成到工具执行流程中。(#6570, #6660) 感谢 @ryancnelson。
 
 ### Agent 相关修复
@@ -24,6 +24,14 @@
 - **Agent 管理界面**: 新增 Agent Dashboard，支持查看和管理 agent 配置、文件和工作空间。
 - **Agent 配置 API**: 添加 agents.update API，支持通过 gateway 更新 agent 配置。
 - **导航集成**: 将 Agent Dashboard 集成到 Web UI 导航栏（/agents 路由）。
+
+### 稳定性与核心修复
+
+- **GitHub Copilot 适配**: 默认模型更新为 `gpt-4.1`，解决旧版模型失效导致的认证及 404 错误。
+- **Windows 文件系统优化**: 为配置文件写入逻辑增加指数退避重试机制，彻底解决杀毒软件或系统索引导致的文件锁定 (EPERM/EACCES) 崩溃问题。
+- **向导会话鲁棒性**: 修复 Onboarding Wizard 在 Gateway 重启后出现 `wizard not found` 的错误，实现会话自动重置与清理。
+- **性能优化**: 清理冗余依赖引用，减小构建体积。
+- **品牌重塑**: 正式更名为 **Clawdbot-CN**，由 `lllooollpp` 维护。
 
 ## v1.1.3 (2026.2.2)
 

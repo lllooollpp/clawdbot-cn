@@ -3,8 +3,8 @@ import { join, dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { spawn } from 'child_process'
 
-console.log('[OpenClaw] Electron version:', process.versions.electron)
-console.log('[OpenClaw] Node version:', process.versions.node)
+console.log('[Clawdbot] Electron version:', process.versions.electron)
+console.log('[Clawdbot] Node version:', process.versions.node)
 
 import fs from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -28,24 +28,24 @@ function sendGatewayLog(line: string): void {
   // Secondary check for readiness based on log output
   if (line.includes('主面板地址:') || line.includes('listening on')) {
     if (!isGatewayReady) {
-      console.log('[OpenClaw] Gateway detected as ready via logs')
+      console.log('[Clawdbot] Gateway detected as ready via logs')
       isGatewayReady = true
       
       let tokenValue = ''
       try {
         const stateDir = app.getPath('userData')
-        const configPath = join(stateDir, 'openclaw.json')
-        console.log('[OpenClaw] Reading token from config path:', configPath)
+        const configPath = join(stateDir, 'clawdbot.json')
+        console.log('[Clawdbot] Reading token from config path:', configPath)
         if (fs.existsSync(configPath)) {
           const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
           tokenValue = configData.gateway?.auth?.token || ''
-          console.log('[OpenClaw] Token from config:', tokenValue ? `${tokenValue.slice(0, 6)}...` : '(empty)')
-          console.log('[OpenClaw] Config gateway.auth:', JSON.stringify(configData.gateway?.auth || {}))
+          console.log('[Clawdbot] Token from config:', tokenValue ? `${tokenValue.slice(0, 6)}...` : '(empty)')
+          console.log('[Clawdbot] Config gateway.auth:', JSON.stringify(configData.gateway?.auth || {}))
         } else {
-          console.log('[OpenClaw] Config file does not exist yet')
+          console.log('[Clawdbot] Config file does not exist yet')
         }
       } catch (e) {
-        console.warn('[OpenClaw] Failed to read token from config for URL:', e)
+        console.warn('[Clawdbot] Failed to read token from config for URL:', e)
       }
 
       setTimeout(() => {
@@ -56,7 +56,7 @@ function sendGatewayLog(line: string): void {
         if (tokenValue) {
           url += (url.includes('?') ? '&' : '?') + `token=${tokenValue}`
         }
-        console.log('[OpenClaw] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
+        console.log('[Clawdbot] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
         mainWindow?.loadURL(url)
       }, 500)
     }
@@ -86,7 +86,7 @@ let isOnboardingNeeded = false
 
 async function startGateway(): Promise<void> {
   const stateDir = app.getPath('userData')
-  const configPath = join(stateDir, 'openclaw.json')
+  const configPath = join(stateDir, 'clawdbot.json')
 
   // Ensure config directory exists
   if (!fs.existsSync(stateDir)) {
@@ -97,7 +97,7 @@ async function startGateway(): Promise<void> {
 
   // Double-check: Create a minimal config if none exists to satisfy the "mode=local" check
   if (isOnboardingNeeded) {
-    console.log('[OpenClaw] Initializing default config for new install at:', configPath)
+    console.log('[Clawdbot] Initializing default config for new install at:', configPath)
     const defaultConfig = {
       gateway: {
         mode: 'local',
@@ -132,7 +132,7 @@ async function startGateway(): Promise<void> {
           : join(workspaceRoot, extensionRelPath)
         
         if (!fs.existsSync(extensionPath)) {
-          console.log(`[OpenClaw] Missing memory extension at ${extensionPath}, disabling slot`)
+          console.log(`[Clawdbot] Missing memory extension at ${extensionPath}, disabling slot`)
           configData.plugins.slots.memory = null // Explicitly disable to avoid default 'memory-core' fallback
           modified = true
         }
@@ -149,10 +149,10 @@ async function startGateway(): Promise<void> {
       
       if (modified) {
         fs.writeFileSync(configPath, JSON.stringify(configData, null, 2))
-        console.log('[OpenClaw] Config sanitized for desktop environment')
+        console.log('[Clawdbot] Config sanitized for desktop environment')
       }
     } catch (err) {
-      console.warn('[OpenClaw] Failed to sanitize config:', err)
+      console.warn('[Clawdbot] Failed to sanitize config:', err)
     }
   }
 
@@ -178,7 +178,7 @@ async function startGateway(): Promise<void> {
   
   const isPackaged = app.isPackaged
   const workspaceRoot = isPackaged ? app.getAppPath() : resolve(__dirname, '../../../..')
-  console.log('[OpenClaw] Workspace root:', workspaceRoot)
+  console.log('[Clawdbot] Workspace root:', workspaceRoot)
   const nodeBin = findNodeBin()
   
   // Bundled gateway entry point (created by vite.gateway.config.ts)
@@ -190,11 +190,11 @@ async function startGateway(): Promise<void> {
     entryPath = join(workspaceRoot, 'src/entry.ts')
   }
 
-  console.log('[OpenClaw] Target entry path:', entryPath)
+  console.log('[Clawdbot] Target entry path:', entryPath)
   
   if (isPackaged && !fs.existsSync(entryPath)) {
-    console.error('[OpenClaw] Packaged gateway missing at:', entryPath)
-    sendGatewayLog(`[OpenClaw] Packaged gateway missing at: ${entryPath}`)
+    console.error('[Clawdbot] Packaged gateway missing at:', entryPath)
+    sendGatewayLog(`[Clawdbot] Packaged gateway missing at: ${entryPath}`)
   }
 
   const shouldUseElectronNode =
@@ -214,10 +214,10 @@ async function startGateway(): Promise<void> {
     if (fs.existsSync(configPath)) {
       const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
       gatewayToken = configData?.gateway?.auth?.token
-      console.log('[OpenClaw] Gateway token from config:', gatewayToken ? `${gatewayToken.slice(0, 8)}...` : 'not set')
+      console.log('[Clawdbot] Gateway token from config:', gatewayToken ? `${gatewayToken.slice(0, 8)}...` : 'not set')
     }
   } catch (err) {
-    console.warn('[OpenClaw] Failed to read gateway token from config:', err)
+    console.warn('[Clawdbot] Failed to read gateway token from config:', err)
   }
   
   // Build gateway arguments with token if available
@@ -233,12 +233,12 @@ async function startGateway(): Promise<void> {
   // Don't use asar path for cwd, it causes spawn ENOENT on Windows
   const spawnCwd = isPackaged ? dirname(process.execPath) : workspaceRoot
 
-  console.log('[OpenClaw] Starting gateway with:', spawnBin, gatewayArgs)
-  console.log('[OpenClaw] CWD:', spawnCwd)
-  console.log('[OpenClaw] State directory:', process.env.CLAWDBOT_STATE_DIR)
-  sendGatewayLog(`[OpenClaw] Starting gateway with: ${[spawnBin, ...gatewayArgs].join(' ')}`)
-  sendGatewayLog(`[OpenClaw] CWD: ${spawnCwd}`)
-  sendGatewayLog(`[OpenClaw] State directory: ${process.env.CLAWDBOT_STATE_DIR ?? ''}`)
+  console.log('[Clawdbot] Starting gateway with:', spawnBin, gatewayArgs)
+  console.log('[Clawdbot] CWD:', spawnCwd)
+  console.log('[Clawdbot] State directory:', process.env.CLAWDBOT_STATE_DIR)
+  sendGatewayLog(`[Clawdbot] Starting gateway with: ${[spawnBin, ...gatewayArgs].join(' ')}`)
+  sendGatewayLog(`[Clawdbot] CWD: ${spawnCwd}`)
+  sendGatewayLog(`[Clawdbot] State directory: ${process.env.CLAWDBOT_STATE_DIR ?? ''}`)
   
   const logFile = join(stateDir, 'gateway.log')
   const logStream = fs.createWriteStream(logFile, { flags: 'a' })
@@ -276,21 +276,21 @@ async function startGateway(): Promise<void> {
         .forEach((line) => sendGatewayLog(line))
     })
     child.on('error', (err) => {
-      console.error('[OpenClaw] Failed to spawn gateway process:', err)
-      sendGatewayLog(`[OpenClaw] Failed to spawn gateway process: ${String(err)}`)
+      console.error('[Clawdbot] Failed to spawn gateway process:', err)
+      sendGatewayLog(`[Clawdbot] Failed to spawn gateway process: ${String(err)}`)
     })
     child.on('exit', (code, signal) => {
       if (signal) {
-        console.error('[OpenClaw] Gateway process exited with signal:', signal)
-        sendGatewayLog(`[OpenClaw] Gateway process exited with signal: ${signal}`)
+        console.error('[Clawdbot] Gateway process exited with signal:', signal)
+        sendGatewayLog(`[Clawdbot] Gateway process exited with signal: ${signal}`)
         return
       }
       if (code && code !== 0) {
-        console.error('[OpenClaw] Gateway process exited with code:', code)
-        sendGatewayLog(`[OpenClaw] Gateway process exited with code: ${code}`)
+        console.error('[Clawdbot] Gateway process exited with code:', code)
+        sendGatewayLog(`[Clawdbot] Gateway process exited with code: ${code}`)
       }
     })
-    console.log('[OpenClaw] Gateway initialization triggered')
+    console.log('[Clawdbot] Gateway initialization triggered')
 
     // Poll for gateway readiness to load the UI
     const checkGatewayReady = async (): Promise<void> => {
@@ -299,27 +299,27 @@ async function startGateway(): Promise<void> {
         const response = await fetch('http://127.0.0.1:18789/health')
         // Even if 404/503, if the server is responding, it's alive
         if (response.status < 500) {
-          console.log('[OpenClaw] Gateway is ready via health check, status:', response.status)
+          console.log('[Clawdbot] Gateway is ready via health check, status:', response.status)
           isGatewayReady = true
 
           let tokenValue = ''
           try {
-            console.log('[OpenClaw] Token: Reading from config path:', configPath)
-            console.log('[OpenClaw] Token: Config exists:', fs.existsSync(configPath))
+            console.log('[Clawdbot] Token: Reading from config path:', configPath)
+            console.log('[Clawdbot] Token: Config exists:', fs.existsSync(configPath))
             if (fs.existsSync(configPath)) {
               const configData = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
               tokenValue = configData.gateway?.auth?.token || ''
-              console.log('[OpenClaw] Token: gateway.auth =', JSON.stringify(configData.gateway?.auth || {}))
-              console.log('[OpenClaw] Token: value =', tokenValue ? `${tokenValue.slice(0, 8)}...` : '(empty)')
+              console.log('[Clawdbot] Token: gateway.auth =', JSON.stringify(configData.gateway?.auth || {}))
+              console.log('[Clawdbot] Token: value =', tokenValue ? `${tokenValue.slice(0, 8)}...` : '(empty)')
             }
           } catch (e) {
-            console.warn('[OpenClaw] Failed to read token from config for URL:', e)
+            console.warn('[Clawdbot] Failed to read token from config for URL:', e)
           }
 
           const url = isOnboardingNeeded
             ? `http://127.0.0.1:18789?onboarding=1${tokenValue ? `&token=${tokenValue}` : ''}`
             : `http://127.0.0.1:18789${tokenValue ? `?token=${tokenValue}` : ''}`
-          console.log('[OpenClaw] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
+          console.log('[Clawdbot] Loading URL:', url.replace(/token=[^&]+/, 'token=***'))
           mainWindow?.loadURL(url)
           return
         }
@@ -330,12 +330,12 @@ async function startGateway(): Promise<void> {
     }
     checkGatewayReady()
   } catch (error) {
-    console.error('[OpenClaw] Failed to start gateway:', error)
+    console.error('[Clawdbot] Failed to start gateway:', error)
   }
 }
 
 function createWindow(): void {
-  console.log('[OpenClaw] Creating window...')
+  console.log('[Clawdbot] Creating window...')
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -413,7 +413,7 @@ function createWindow(): void {
   Menu.setApplicationMenu(menu)
 
   mainWindow.on('ready-to-show', () => {
-    console.log('[OpenClaw] Window ready to show')
+    console.log('[Clawdbot] Window ready to show')
     mainWindow?.show()
     mainWindow?.focus() // Force focus
   })
@@ -421,7 +421,7 @@ function createWindow(): void {
   // Fallback if ready-to-show doesn't fire
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {
-      console.log('[OpenClaw] ready-to-show timeout, forcing show')
+      console.log('[Clawdbot] ready-to-show timeout, forcing show')
       mainWindow.show()
     }
   }, 5000)
@@ -462,7 +462,7 @@ function createTray(): void {
   tray = new Tray(trayIcon.resize({ width: 16, height: 16 }))
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: '显示 OpenClaw', click: () => mainWindow?.show() },
+    { label: '显示 Clawdbot', click: () => mainWindow?.show() },
     {
       label: '配置向导 (Onboarding)',
       click: () => {
@@ -480,7 +480,7 @@ function createTray(): void {
     }
   ])
 
-  tray.setToolTip('OpenClaw Gateway')
+  tray.setToolTip('Clawdbot Gateway')
   tray.setContextMenu(contextMenu)
   tray.on('double-click', () => mainWindow?.show())
 }
@@ -501,7 +501,7 @@ if (!gotTheLock) {
 
   app.whenReady().then(() => {
     // Set app user model id for windows
-    electronApp.setAppUserModelId('com.openclaw.desktop')
+    electronApp.setAppUserModelId('com.clawdbot.desktop')
 
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.

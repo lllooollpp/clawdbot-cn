@@ -1,6 +1,6 @@
 {
   "name": "@clawdbot/memory-core",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot core memory search plugin",
   "clawdbot": {
@@ -9,6 +9,7 @@
     ]
   },
   "peerDependencies": {
-    "openclaw": "workspace:*"
-  }
+    "clawdbot": "workspace:*"
+  },
+  "author": "lllooollpp"
 }

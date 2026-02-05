@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.4
+
+### Changes
+- Version alignment with core Clawdbot release numbers.
+
 ## 2026.1.25
 
 ### Changes

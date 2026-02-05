@@ -1,17 +1,18 @@
 {
   "name": "@clawdbot/feishu",
-  "version": "1.0.0",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Feishu (Lark) channel plugin",
   "dependencies": {
     "@larksuiteoapi/node-sdk": "^1.40.4"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "clawdbot": "workspace:*"
   },
   "clawdbot": {
     "extensions": [
       "./index.ts"
     ]
-  }
+  },
+  "author": "lllooollpp"
 }

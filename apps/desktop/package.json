@@ -1,10 +1,10 @@
 {
-  "name": "openclaw-desktop",
-  "version": "1.0.9",
-  "description": "OpenClaw Desktop App for Cross-Platform Support",
+  "name": "clawtbot-desktop-cn",
+  "version": "1.1.4",
+  "description": "Clawdbot Desktop App for Cross-Platform Support",
   "type": "module",
   "main": "./out/main/index.cjs",
-  "author": "OpenClaw",
+  "author": "lllooollpp",
   "license": "MIT",
   "scripts": {
     "format": "prettier --write .",
@@ -19,8 +19,8 @@
     "build:win": "npm run build && electron-builder --win"
   },
   "build": {
-    "appId": "com.openclaw.desktop",
-    "productName": "OpenClaw",
+    "appId": "com.clawdbot.desktop.cn",
+    "productName": "Clawdbot",
     "directories": {
       "output": "dist"
     },

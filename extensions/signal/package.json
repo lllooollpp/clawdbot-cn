@@ -1,11 +1,12 @@
 {
   "name": "@clawdbot/signal",
-  "version": "2026.1.25",
+  "version": "1.1.4",
   "type": "module",
   "description": "Clawdbot Signal channel plugin",
   "clawdbot": {
     "extensions": [
       "./index.ts"
     ]
-  }
+  },
+  "author": "lllooollpp"
 }
