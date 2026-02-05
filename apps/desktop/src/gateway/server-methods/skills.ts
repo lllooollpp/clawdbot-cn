@@ -1,15 +1,22 @@
+import fs from "node:fs";
+import path from "node:path";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
+import { resolveBundledSkillsDir } from "../../agents/skills/bundled-dir.js";
+import { parseFrontmatter, resolveClawdbotMetadata } from "../../agents/skills/frontmatter.js";
 import { installSkill } from "../../agents/skills-install.js";
 import { buildWorkspaceSkillStatus } from "../../agents/skills-status.js";
 import { loadWorkspaceSkillEntries, type SkillEntry } from "../../agents/skills.js";
 import type { ClawdbotConfig } from "../../config/config.js";
 import { loadConfig, writeConfigFile } from "../../config/config.js";
 import { getRemoteSkillEligibility } from "../../infra/skills-remote.js";
+import { CONFIG_DIR } from "../../utils.js";
 import {
   ErrorCodes,
   errorShape,
   formatValidationErrors,
+  validateSkillsAddBundledParams,
   validateSkillsBinsParams,
+  validateSkillsCatalogParams,
   validateSkillsInstallParams,
   validateSkillsStatusParams,
   validateSkillsUpdateParams,
@@ -178,5 +185,93 @@ export const skillsHandlers: GatewayRequestHandlers = {
     };
     await writeConfigFile(nextConfig);
     respond(true, { ok: true, skillKey: p.skillKey, config: current }, undefined);
+  },
+  "skills.catalog": ({ params, respond }) => {
+    if (!validateSkillsCatalogParams(params)) {
+      respond(
+        false,
+        undefined,
+        errorShape(
+          ErrorCodes.INVALID_REQUEST,
+          `invalid skills.catalog params: ${formatValidationErrors(validateSkillsCatalogParams.errors)}`,
+        ),
+      );
+      return;
+    }
+    const bundledDir = resolveBundledSkillsDir();
+    const managedDir = path.join(CONFIG_DIR, "skills");
+    const installedSet = new Set<string>();
+    if (fs.existsSync(managedDir)) {
+      for (const name of fs.readdirSync(managedDir)) {
+        const stat = fs.statSync(path.join(managedDir, name));
+        if (stat.isDirectory()) installedSet.add(name);
+      }
+    }
+    const skills: Array<{
+      name: string;
+      description: string;
+      emoji?: string;
+      homepage?: string;
+      primaryEnv?: string;
+      installed: boolean;
+    }> = [];
+    if (bundledDir && fs.existsSync(bundledDir)) {
+      for (const name of fs.readdirSync(bundledDir)) {
+        const skillDir = path.join(bundledDir, name);
+        const stat = fs.statSync(skillDir);
+        if (!stat.isDirectory()) continue;
+        const skillMd = path.join(skillDir, "SKILL.md");
+        if (!fs.existsSync(skillMd)) continue;
+        const content = fs.readFileSync(skillMd, "utf-8");
+        const fm = parseFrontmatter(content);
+        const meta = resolveClawdbotMetadata(fm);
+        skills.push({
+          name: fm.name ?? name,
+          description: fm.description ?? "",
+          emoji: meta?.emoji,
+          homepage: fm.homepage,
+          primaryEnv: meta?.requires?.env?.[0],
+          installed: installedSet.has(name),
+        });
+      }
+    }
+    respond(true, { skills, bundledDir, managedDir }, undefined);
+  },
+  "skills.addBundled": async ({ params, respond }) => {
+    if (!validateSkillsAddBundledParams(params)) {
+      respond(
+        false,
+        undefined,
+        errorShape(
+          ErrorCodes.INVALID_REQUEST,
+          `invalid skills.addBundled params: ${formatValidationErrors(validateSkillsAddBundledParams.errors)}`,
+        ),
+      );
+      return;
+    }
+    const p = params as { skillName: string };
+    const bundledDir = resolveBundledSkillsDir();
+    if (!bundledDir) {
+      respond(
+        false,
+        undefined,
+        errorShape(ErrorCodes.UNAVAILABLE, "bundled skills directory not found"),
+      );
+      return;
+    }
+    const managedDir = path.join(CONFIG_DIR, "skills");
+    const src = path.join(bundledDir, p.skillName);
+    const dest = path.join(managedDir, p.skillName);
+    if (!fs.existsSync(src)) {
+      respond(
+        false,
+        undefined,
+        errorShape(ErrorCodes.UNAVAILABLE, `skill not found: ${p.skillName}`),
+      );
+      return;
+    }
+    await fs.promises.mkdir(managedDir, { recursive: true });
+    await fs.promises.cp(src, dest, { recursive: true });
+    respond(true, { ok: true, skillName: p.skillName, installedPath: dest }, undefined);
   },
 };

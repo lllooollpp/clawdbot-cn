@@ -45,6 +45,17 @@ export const AgentsListResultSchema = Type.Object(
   { additionalProperties: false },
 );
 
+export const AgentsUpdateParamsSchema = Type.Object(
+  {
+    agentId: NonEmptyString,
+    name: Type.Optional(Type.String()),
+    workspace: Type.Optional(Type.String()),
+    model: Type.Optional(Type.String()),
+    enabled: Type.Optional(Type.Boolean()),
+  },
+  { additionalProperties: false },
+);
+
 export const ModelsListParamsSchema = Type.Object({}, { additionalProperties: false });
 
 export const ModelsListResultSchema = Type.Object(
@@ -89,6 +100,38 @@ export const SkillsUpdateParamsSchema = Type.Object(
     enabled: Type.Optional(Type.Boolean()),
     apiKey: Type.Optional(Type.String()),
     env: Type.Optional(Type.Record(NonEmptyString, Type.String())),
+  },
+  { additionalProperties: false },
+);
+
+// Skills catalog - list all available bundled skills
+export const SkillsCatalogParamsSchema = Type.Object({}, { additionalProperties: false });
+
+export const SkillsCatalogEntrySchema = Type.Object(
+  {
+    name: NonEmptyString,
+    description: Type.String(),
+    emoji: Type.Optional(Type.String()),
+    homepage: Type.Optional(Type.String()),
+    primaryEnv: Type.Optional(Type.String()),
+    installed: Type.Boolean(),
+  },
+  { additionalProperties: false },
+);
+
+export const SkillsCatalogResultSchema = Type.Object(
+  {
+    skills: Type.Array(SkillsCatalogEntrySchema),
+    bundledDir: Type.Optional(Type.String()),
+    managedDir: Type.String(),
+  },
+  { additionalProperties: false },
+);
+
+// Add bundled skill to managed directory
+export const SkillsAddBundledParamsSchema = Type.Object(
+  {
+    skillName: NonEmptyString,
   },
   { additionalProperties: false },
 );

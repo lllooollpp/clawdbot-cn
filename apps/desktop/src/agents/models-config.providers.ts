@@ -122,6 +122,17 @@ const OLLAMA_DEFAULT_COST = {
   cacheWrite: 0,
 };
 
+const LMSTUDIO_BASE_URL = "http://127.0.0.1:1234/v1";
+const LMSTUDIO_API_BASE_URL = "http://127.0.0.1:1234";
+const LMSTUDIO_DEFAULT_CONTEXT_WINDOW = 32000;
+const LMSTUDIO_DEFAULT_MAX_TOKENS = 8192;
+const LMSTUDIO_DEFAULT_COST = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+};
+
 interface OllamaModel {
   name: string;
   modified_at: string;
@@ -536,6 +547,63 @@ async function buildOllamaProvider(): Promise<ProviderConfig> {
   };
 }
 
+interface LMStudioModel {
+  id: string;
+  object: string;
+  owned_by?: string;
+}
+
+interface LMStudioModelsResponse {
+  data: LMStudioModel[];
+}
+
+export async function discoverLMStudioModels(): Promise<ModelDefinitionConfig[]> {
+  // Skip LMStudio discovery in test environments
+  if (process.env.VITEST || process.env.NODE_ENV === "test") {
+    return [];
+  }
+  try {
+    const response = await fetch(`${LMSTUDIO_API_BASE_URL}/v1/models`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) {
+      console.warn(`Failed to discover LMStudio models: ${response.status}`);
+      return [];
+    }
+    const data = (await response.json()) as LMStudioModelsResponse;
+    if (!data.data || data.data.length === 0) {
+      console.warn("No LMStudio models found on local instance");
+      return [];
+    }
+    return data.data.map((model) => {
+      const modelId = model.id;
+      const isReasoning =
+        modelId.toLowerCase().includes("r1") || modelId.toLowerCase().includes("reasoning");
+      return {
+        id: modelId,
+        name: modelId,
+        reasoning: isReasoning,
+        input: ["text"],
+        cost: LMSTUDIO_DEFAULT_COST,
+        contextWindow: LMSTUDIO_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: LMSTUDIO_DEFAULT_MAX_TOKENS,
+      };
+    });
+  } catch (error) {
+    console.warn(`Failed to discover LMStudio models: ${String(error)}`);
+    return [];
+  }
+}
+
+async function buildLMStudioProvider(): Promise<ProviderConfig> {
+  const models = await discoverLMStudioModels();
+  return {
+    baseUrl: LMSTUDIO_BASE_URL,
+    api: "openai-completions",
+    models,
+  };
+}
+
 export async function resolveImplicitProviders(params: {
   agentDir: string;
 }): Promise<ModelsConfig["providers"]> {
@@ -621,6 +689,14 @@ export async function resolveImplicitProviders(params: {
     resolveApiKeyFromProfiles({ provider: "ollama", store: authStore });
   if (ollamaKey) {
     providers.ollama = { ...(await buildOllamaProvider()), apiKey: ollamaKey };
+  }
+
+  // LMStudio provider - add if explicitly configured or if lmstudio profile exists
+  const lmstudioKey =
+    resolveEnvApiKeyVarName("lmstudio") ??
+    resolveApiKeyFromProfiles({ provider: "lmstudio", store: authStore });
+  if (lmstudioKey) {
+    providers.lmstudio = { ...(await buildLMStudioProvider()), apiKey: lmstudioKey };
   }
 
   const volcengineKey =

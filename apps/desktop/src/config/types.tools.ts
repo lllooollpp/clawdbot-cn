@@ -319,8 +319,8 @@ export type ToolsConfig = {
     search?: {
       /** Enable web search tool (default: true when API key is present). */
       enabled?: boolean;
-      /** Search provider ("brave", "perplexity", or "bocha"). */
-      provider?: "brave" | "perplexity" | "bocha";
+      /** Search provider ("brave", "perplexity", "bocha", or "searxng"). */
+      provider?: "brave" | "perplexity" | "bocha" | "searxng";
       /** Brave Search API key (optional; defaults to BRAVE_API_KEY env var). */
       apiKey?: string;
       /** Default search results count (1-10). */
@@ -338,6 +338,19 @@ export type ToolsConfig = {
         /** Model to use (defaults to "perplexity/sonar-pro"). */
         model?: string;
       };
+      /** SearXNG-specific configuration (used when provider="searxng"). */
+      searxng?: {
+        /** Base URL for SearXNG instance (required; defaults to SEARXNG_URL env var). */
+        baseUrl?: string;
+        /** Optional API key for SearXNG authentication. */
+        apiKey?: string;
+        /** Preferred search engines to use. */
+        engines?: string;
+        /** Language preference for search results. */
+        language?: string;
+        /** SafeSearch setting (0=off, 1=moderate, 2=strict). */
+        safesearch?: number;
+      };
     };
     fetch?: {
       /** Enable web fetch tool (default: true). */
@@ -352,8 +365,18 @@ export type ToolsConfig = {
       maxRedirects?: number;
       /** Override User-Agent header for fetch requests. */
       userAgent?: string;
+      /** Use a proxy (HTTP/HTTPS) for fetch requests. */
+      proxyUrl?: string;
       /** Use Readability to extract main content (default: true). */
       readability?: boolean;
+      jina?: {
+        /** Enable Jina Reader (r.jina.ai) (default: true when apiKey is set). */
+        enabled?: boolean;
+        /** Jina API key (optional; defaults to JINA_API_KEY env var). */
+        apiKey?: string;
+        /** Jina base URL (default: https://r.jina.ai). */
+        baseUrl?: string;
+      };
       firecrawl?: {
         /** Enable Firecrawl fallback (default: true when apiKey is set). */
         enabled?: boolean;

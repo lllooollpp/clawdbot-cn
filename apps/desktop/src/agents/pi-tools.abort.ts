@@ -12,8 +12,14 @@ function combineAbortSignals(a?: AbortSignal, b?: AbortSignal): AbortSignal | un
   if (b && !a) return b;
   if (a?.aborted) return a;
   if (b?.aborted) return b;
+  // Validate signals are AbortSignal instances before calling AbortSignal.any
   if (typeof AbortSignal.any === "function") {
-    return AbortSignal.any([a as AbortSignal, b as AbortSignal]);
+    const validSignals = [a, b].filter((sig): sig is AbortSignal => sig instanceof AbortSignal);
+    if (validSignals.length === 2) {
+      return AbortSignal.any(validSignals);
+    }
+    // If only one valid signal, return it directly
+    if (validSignals.length === 1) return validSignals[0];
   }
   const controller = new AbortController();
   const onAbort = () => controller.abort();

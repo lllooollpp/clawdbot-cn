@@ -1,4 +1,5 @@
 import { Type } from "@sinclair/typebox";
+import { ProxyAgent } from "undici";
 
 import type { ClawdbotConfig } from "../../config/config.js";
 import { assertPublicHostname, SsrFBlockedError } from "../../infra/net/ssrf.js";
@@ -34,6 +35,7 @@ const DEFAULT_FETCH_MAX_REDIRECTS = 3;
 const DEFAULT_ERROR_MAX_CHARS = 4_000;
 const DEFAULT_FIRECRAWL_BASE_URL = "https://api.firecrawl.dev";
 const DEFAULT_FIRECRAWL_MAX_AGE_MS = 172_800_000;
+const DEFAULT_JINA_BASE_URL = "https://r.jina.ai";
 const DEFAULT_FETCH_USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
 
@@ -72,6 +74,14 @@ type FirecrawlFetchConfig =
     }
   | undefined;
 
+type JinaFetchConfig =
+  | {
+      enabled?: boolean;
+      apiKey?: string;
+      baseUrl?: string;
+    }
+  | undefined;
+
 function resolveFetchConfig(cfg?: ClawdbotConfig): WebFetchConfig {
   const fetch = cfg?.tools?.web?.fetch;
   if (!fetch || typeof fetch !== "object") return undefined;
@@ -95,12 +105,26 @@ function resolveFirecrawlConfig(fetch?: WebFetchConfig): FirecrawlFetchConfig {
   return firecrawl as FirecrawlFetchConfig;
 }
 
+function resolveJinaConfig(fetch?: WebFetchConfig): JinaFetchConfig {
+  if (!fetch || typeof fetch !== "object") return undefined;
+  const jina = "jina" in fetch ? fetch.jina : undefined;
+  if (!jina || typeof jina !== "object") return undefined;
+  return jina as JinaFetchConfig;
+}
+
 function resolveFirecrawlApiKey(firecrawl?: FirecrawlFetchConfig): string | undefined {
   const fromConfig =
     firecrawl && "apiKey" in firecrawl && typeof firecrawl.apiKey === "string"
       ? firecrawl.apiKey.trim()
       : "";
   const fromEnv = (process.env.FIRECRAWL_API_KEY ?? "").trim();
+  return fromConfig || fromEnv || undefined;
+}
+
+function resolveJinaApiKey(jina?: JinaFetchConfig): string | undefined {
+  const fromConfig =
+    jina && "apiKey" in jina && typeof jina.apiKey === "string" ? jina.apiKey.trim() : "";
+  const fromEnv = (process.env.JINA_API_KEY ?? "").trim();
   return fromConfig || fromEnv || undefined;
 }
 
@@ -112,12 +136,24 @@ function resolveFirecrawlEnabled(params: {
   return Boolean(params.apiKey);
 }
 
+function resolveJinaEnabled(params: { jina?: JinaFetchConfig; apiKey?: string }): boolean {
+  if (typeof params.jina?.enabled === "boolean") return params.jina.enabled;
+  // Jina works without API key too (rate limited)
+  return true;
+}
+
 function resolveFirecrawlBaseUrl(firecrawl?: FirecrawlFetchConfig): string {
   const raw =
     firecrawl && "baseUrl" in firecrawl && typeof firecrawl.baseUrl === "string"
       ? firecrawl.baseUrl.trim()
       : "";
   return raw || DEFAULT_FIRECRAWL_BASE_URL;
+}
+
+function resolveJinaBaseUrl(jina?: JinaFetchConfig): string {
+  const raw =
+    jina && "baseUrl" in jina && typeof jina.baseUrl === "string" ? jina.baseUrl.trim() : "";
+  return raw || DEFAULT_JINA_BASE_URL;
 }
 
 function resolveFirecrawlOnlyMainContent(firecrawl?: FirecrawlFetchConfig): boolean {
@@ -167,11 +203,14 @@ async function fetchWithRedirects(params: {
   maxRedirects: number;
   timeoutSeconds: number;
   userAgent: string;
+  proxyUrl?: string;
 }): Promise<{ response: Response; finalUrl: string }> {
   const signal = withTimeout(undefined, params.timeoutSeconds * 1000);
   const visited = new Set<string>();
   let currentUrl = params.url;
   let redirectCount = 0;
+
+  const dispatcher = params.proxyUrl ? new ProxyAgent(params.proxyUrl) : undefined;
 
   while (true) {
     let parsedUrl: URL;
@@ -186,7 +225,7 @@ async function fetchWithRedirects(params: {
 
     await assertPublicHostname(parsedUrl.hostname);
 
-    const res = await fetch(parsedUrl.toString(), {
+    const res = await (fetch as any)(parsedUrl.toString(), {
       method: "GET",
       headers: {
         Accept: "*/*",
@@ -195,6 +234,7 @@ async function fetchWithRedirects(params: {
       },
       signal,
       redirect: "manual",
+      dispatcher,
     });
 
     if (isRedirectStatus(res.status)) {
@@ -312,6 +352,48 @@ export async function fetchFirecrawlContent(params: {
   };
 }
 
+async function fetchJinaContent(params: {
+  url: string;
+  extractMode: ExtractMode;
+  apiKey?: string;
+  baseUrl: string;
+  timeoutSeconds: number;
+}): Promise<{ text: string; title?: string }> {
+  // Jina requires the full URL as part of the path or passed in special way,
+  // but most common is r.jina.ai/URL
+  const endpoint = `${params.baseUrl.replace(/\/$/, "")}/${params.url}`;
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "X-Return-Format": params.extractMode === "text" ? "text" : "markdown",
+  };
+  if (params.apiKey) {
+    headers["Authorization"] = `Bearer ${params.apiKey}`;
+  }
+
+  const res = await fetch(endpoint, {
+    method: "GET",
+    headers,
+    signal: withTimeout(undefined, params.timeoutSeconds * 1000),
+  });
+
+  if (!res.ok) {
+    const detail = await readResponseText(res);
+    throw new Error(`Jina Reader failed (${res.status}): ${detail || res.statusText}`);
+  }
+
+  const data = (await res.json()) as {
+    data?: {
+      title?: string;
+      content?: string;
+    };
+  };
+
+  return {
+    text: data.data?.content || "",
+    title: data.data?.title,
+  };
+}
+
 async function runWebFetch(params: {
   url: string;
   extractMode: ExtractMode;
@@ -320,6 +402,7 @@ async function runWebFetch(params: {
   timeoutSeconds: number;
   cacheTtlMs: number;
   userAgent: string;
+  proxyUrl?: string;
   readabilityEnabled: boolean;
   firecrawlEnabled: boolean;
   firecrawlApiKey?: string;
@@ -329,6 +412,9 @@ async function runWebFetch(params: {
   firecrawlProxy: "auto" | "basic" | "stealth";
   firecrawlStoreInCache: boolean;
   firecrawlTimeoutSeconds: number;
+  jinaEnabled: boolean;
+  jinaApiKey?: string;
+  jinaBaseUrl: string;
 }): Promise<Record<string, unknown>> {
   const cacheKey = normalizeCacheKey(
     `fetch:${params.url}:${params.extractMode}:${params.maxChars}`,
@@ -355,6 +441,7 @@ async function runWebFetch(params: {
       maxRedirects: params.maxRedirects,
       timeoutSeconds: params.timeoutSeconds,
       userAgent: params.userAgent,
+      proxyUrl: params.proxyUrl,
     });
     res = result.response;
     finalUrl = result.finalUrl;
@@ -362,33 +449,24 @@ async function runWebFetch(params: {
     if (error instanceof SsrFBlockedError) {
       throw error;
     }
-    if (params.firecrawlEnabled && params.firecrawlApiKey) {
-      const firecrawl = await fetchFirecrawlContent({
-        url: finalUrl,
-        extractMode: params.extractMode,
-        apiKey: params.firecrawlApiKey,
-        baseUrl: params.firecrawlBaseUrl,
-        onlyMainContent: params.firecrawlOnlyMainContent,
-        maxAgeMs: params.firecrawlMaxAgeMs,
-        proxy: params.firecrawlProxy,
-        storeInCache: params.firecrawlStoreInCache,
-        timeoutSeconds: params.firecrawlTimeoutSeconds,
-      });
-      const truncated = truncateText(firecrawl.text, params.maxChars);
+    // Handle failures (like 403 or network errors) with fallbacks
+    const fallback = await tryWebFetchFallbacks({ ...params, url: finalUrl });
+    if (fallback) {
+      const truncated = truncateText(fallback.text, params.maxChars);
       const payload = {
         url: params.url,
-        finalUrl: firecrawl.finalUrl || finalUrl,
-        status: firecrawl.status ?? 200,
+        finalUrl: fallback.finalUrl || finalUrl,
+        status: fallback.status ?? 200,
         contentType: "text/markdown",
-        title: firecrawl.title,
+        title: fallback.title,
         extractMode: params.extractMode,
-        extractor: "firecrawl",
+        extractor: fallback.extractor,
         truncated: truncated.truncated,
         length: truncated.text.length,
         fetchedAt: new Date().toISOString(),
         tookMs: Date.now() - start,
         text: truncated.text,
-        warning: firecrawl.warning,
+        warning: fallback.warning,
       };
       writeCache(FETCH_CACHE, cacheKey, payload, params.cacheTtlMs);
       return payload;
@@ -397,33 +475,23 @@ async function runWebFetch(params: {
   }
 
   if (!res.ok) {
-    if (params.firecrawlEnabled && params.firecrawlApiKey) {
-      const firecrawl = await fetchFirecrawlContent({
-        url: params.url,
-        extractMode: params.extractMode,
-        apiKey: params.firecrawlApiKey,
-        baseUrl: params.firecrawlBaseUrl,
-        onlyMainContent: params.firecrawlOnlyMainContent,
-        maxAgeMs: params.firecrawlMaxAgeMs,
-        proxy: params.firecrawlProxy,
-        storeInCache: params.firecrawlStoreInCache,
-        timeoutSeconds: params.firecrawlTimeoutSeconds,
-      });
-      const truncated = truncateText(firecrawl.text, params.maxChars);
+    const fallback = await tryWebFetchFallbacks({ ...params, url: params.url });
+    if (fallback) {
+      const truncated = truncateText(fallback.text, params.maxChars);
       const payload = {
         url: params.url,
-        finalUrl: firecrawl.finalUrl || finalUrl,
-        status: firecrawl.status ?? res.status,
+        finalUrl: fallback.finalUrl || finalUrl,
+        status: fallback.status ?? res.status,
         contentType: "text/markdown",
-        title: firecrawl.title,
+        title: fallback.title,
         extractMode: params.extractMode,
-        extractor: "firecrawl",
+        extractor: fallback.extractor,
         truncated: truncated.truncated,
         length: truncated.text.length,
         fetchedAt: new Date().toISOString(),
         tookMs: Date.now() - start,
         text: truncated.text,
-        warning: firecrawl.warning,
+        warning: fallback.warning,
       };
       writeCache(FETCH_CACHE, cacheKey, payload, params.cacheTtlMs);
       return payload;
@@ -455,21 +523,28 @@ async function runWebFetch(params: {
         title = readable.title;
         extractor = "readability";
       } else {
-        const firecrawl = await tryFirecrawlFallback({ ...params, url: finalUrl });
-        if (firecrawl) {
-          text = firecrawl.text;
-          title = firecrawl.title;
-          extractor = "firecrawl";
+        const fallback = await tryWebFetchFallbacks({ ...params, url: finalUrl });
+        if (fallback) {
+          text = fallback.text;
+          title = fallback.title;
+          extractor = fallback.extractor;
         } else {
           throw new Error(
-            "Web fetch extraction failed: Readability and Firecrawl returned no content.",
+            "Web fetch extraction failed: Readability, Jina and Firecrawl returned no content.",
           );
         }
       }
     } else {
-      throw new Error(
-        "Web fetch extraction failed: Readability disabled and Firecrawl unavailable.",
-      );
+      const fallback = await tryWebFetchFallbacks({ ...params, url: finalUrl });
+      if (fallback) {
+        text = fallback.text;
+        title = fallback.title;
+        extractor = fallback.extractor;
+      } else {
+        throw new Error(
+          "Web fetch extraction failed: Readability disabled and fallbacks unavailable.",
+        );
+      }
     }
   } else if (contentType.includes("application/json")) {
     try {
@@ -500,9 +575,12 @@ async function runWebFetch(params: {
   return payload;
 }
 
-async function tryFirecrawlFallback(params: {
+async function tryWebFetchFallbacks(params: {
   url: string;
   extractMode: ExtractMode;
+  jinaEnabled: boolean;
+  jinaApiKey?: string;
+  jinaBaseUrl: string;
   firecrawlEnabled: boolean;
   firecrawlApiKey?: string;
   firecrawlBaseUrl: string;
@@ -511,24 +589,50 @@ async function tryFirecrawlFallback(params: {
   firecrawlProxy: "auto" | "basic" | "stealth";
   firecrawlStoreInCache: boolean;
   firecrawlTimeoutSeconds: number;
-}): Promise<{ text: string; title?: string } | null> {
-  if (!params.firecrawlEnabled || !params.firecrawlApiKey) return null;
-  try {
-    const firecrawl = await fetchFirecrawlContent({
-      url: params.url,
-      extractMode: params.extractMode,
-      apiKey: params.firecrawlApiKey,
-      baseUrl: params.firecrawlBaseUrl,
-      onlyMainContent: params.firecrawlOnlyMainContent,
-      maxAgeMs: params.firecrawlMaxAgeMs,
-      proxy: params.firecrawlProxy,
-      storeInCache: params.firecrawlStoreInCache,
-      timeoutSeconds: params.firecrawlTimeoutSeconds,
-    });
-    return { text: firecrawl.text, title: firecrawl.title };
-  } catch {
-    return null;
+}): Promise<{
+  text: string;
+  title?: string;
+  finalUrl?: string;
+  status?: number;
+  warning?: string;
+  extractor: string;
+} | null> {
+  // Try Jina first as it's often more reliable and faster
+  if (params.jinaEnabled) {
+    try {
+      const jina = await fetchJinaContent({
+        url: params.url,
+        extractMode: params.extractMode,
+        apiKey: params.jinaApiKey,
+        baseUrl: params.jinaBaseUrl,
+        timeoutSeconds: 20, // Shorter timeout for fallback
+      });
+      return { ...jina, extractor: "jina" };
+    } catch {
+      // ignore and try next fallback
+    }
   }
+
+  if (params.firecrawlEnabled && params.firecrawlApiKey) {
+    try {
+      const firecrawl = await fetchFirecrawlContent({
+        url: params.url,
+        extractMode: params.extractMode,
+        apiKey: params.firecrawlApiKey,
+        baseUrl: params.firecrawlBaseUrl,
+        onlyMainContent: params.firecrawlOnlyMainContent,
+        maxAgeMs: params.firecrawlMaxAgeMs,
+        proxy: params.firecrawlProxy,
+        storeInCache: params.firecrawlStoreInCache,
+        timeoutSeconds: params.firecrawlTimeoutSeconds,
+      });
+      return { ...firecrawl, extractor: "firecrawl" };
+    } catch {
+      // ignore
+    }
+  }
+
+  return null;
 }
 
 function resolveFirecrawlEndpoint(baseUrl: string): string {
@@ -553,6 +657,10 @@ export function createWebFetchTool(options?: {
   const fetch = resolveFetchConfig(options?.config);
   if (!resolveFetchEnabled({ fetch, sandboxed: options?.sandboxed })) return null;
   const readabilityEnabled = resolveFetchReadabilityEnabled(fetch);
+  const jina = resolveJinaConfig(fetch);
+  const jinaApiKey = resolveJinaApiKey(jina);
+  const jinaEnabled = resolveJinaEnabled({ jina, apiKey: jinaApiKey });
+  const jinaBaseUrl = resolveJinaBaseUrl(jina);
   const firecrawl = resolveFirecrawlConfig(fetch);
   const firecrawlApiKey = resolveFirecrawlApiKey(firecrawl);
   const firecrawlEnabled = resolveFirecrawlEnabled({ firecrawl, apiKey: firecrawlApiKey });
@@ -566,6 +674,10 @@ export function createWebFetchTool(options?: {
   const userAgent =
     (fetch && "userAgent" in fetch && typeof fetch.userAgent === "string" && fetch.userAgent) ||
     DEFAULT_FETCH_USER_AGENT;
+  const proxyUrl =
+    (fetch && "proxyUrl" in fetch && typeof fetch.proxyUrl === "string" && fetch.proxyUrl) ||
+    undefined;
+
   return {
     label: "Web Fetch",
     name: "web_fetch",
@@ -585,7 +697,11 @@ export function createWebFetchTool(options?: {
         timeoutSeconds: resolveTimeoutSeconds(fetch?.timeoutSeconds, DEFAULT_TIMEOUT_SECONDS),
         cacheTtlMs: resolveCacheTtlMs(fetch?.cacheTtlMinutes, DEFAULT_CACHE_TTL_MINUTES),
         userAgent,
+        proxyUrl,
         readabilityEnabled,
+        jinaEnabled,
+        jinaApiKey,
+        jinaBaseUrl,
         firecrawlEnabled,
         firecrawlApiKey,
         firecrawlBaseUrl,

@@ -3,6 +3,7 @@ import { SILENT_REPLY_TOKEN } from "../auto-reply/tokens.js";
 import { listDeliverableMessageChannels } from "../utils/message-channel.js";
 import type { ResolvedTimeFormat } from "./date-time.js";
 import type { EmbeddedContextFile } from "./pi-embedded-helpers.js";
+import { applySystemPromptGuardrails } from "./system-prompt-safety.js";
 
 /**
  * Controls which hardcoded sections are included in the system prompt.
@@ -277,7 +278,12 @@ export function buildAgentSystemPrompt(params: {
   const readToolName = resolveToolName("read");
   const execToolName = resolveToolName("exec");
   const processToolName = resolveToolName("process");
-  const extraSystemPrompt = params.extraSystemPrompt?.trim();
+  const extraSystemPromptRaw = params.extraSystemPrompt?.trim();
+  // Apply safety guardrails to user-provided system prompt
+  const safeExtraPrompt = extraSystemPromptRaw
+    ? applySystemPromptGuardrails(extraSystemPromptRaw)
+    : { content: "", applied: false, warnings: [] };
+  const extraSystemPrompt = safeExtraPrompt.content || undefined;
   const ownerNumbers = (params.ownerNumbers ?? []).map((value) => value.trim()).filter(Boolean);
   const ownerLine =
     ownerNumbers.length > 0
@@ -299,6 +305,7 @@ export function buildAgentSystemPrompt(params: {
   const userTimezone = params.userTimezone?.trim();
   const skillsPrompt = params.skillsPrompt?.trim();
   const heartbeatPrompt = params.heartbeatPrompt?.trim();
+
   const heartbeatPromptLine = heartbeatPrompt
     ? `Heartbeat prompt: ${heartbeatPrompt}`
     : "Heartbeat prompt: (configured)";
