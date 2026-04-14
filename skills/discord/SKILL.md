@@ -1,6 +1,6 @@
 ---
 name: discord
-description: Use when you need to control Discord from Clawdbot via the discord tool: send messages, react, post or upload stickers, upload emojis, run polls, manage threads/pins/search, create/edit/delete channels and categories, fetch permissions or member/role/channel info, or handle moderation actions in Discord DMs or channels.
+description: "Control Discord from Clawdbot: send messages, react, post stickers, upload emojis, run polls, manage threads/pins/channels, and handle moderation. Use when the user wants to send a Discord message, react to a message, create a poll, manage channels or threads, upload emojis or stickers, search messages, or perform moderation actions."
 metadata: {"clawdbot":{"emoji":"🎮","requires":{"config":["channels.discord"]}}}
 ---
 
