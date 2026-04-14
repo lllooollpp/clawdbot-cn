@@ -1,3 +1,8 @@
+---
+name: lobster
+description: "Execute multi-step workflows with approval checkpoints using the Lobster pipeline tool. Use when the user wants a repeatable automation (triage, monitor, sync), needs human approval before executing actions (send, post, delete), or wants multiple tool calls to run as one deterministic operation."
+---
+
 # Lobster
 
 Lobster executes multi-step workflows with approval checkpoints. Use it when:

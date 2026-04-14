@@ -1,6 +1,6 @@
 ---
 name: peekaboo
-description: Capture and automate macOS UI with the Peekaboo CLI.
+description: "Capture screenshots, inspect UI elements, and automate macOS interactions using the Peekaboo CLI. Use when the user wants to take a screenshot, click a UI element, type into an app, automate macOS window/app/menu actions, or inspect the screen visually on macOS."
 homepage: https://peekaboo.boo
 metadata: {"clawdbot":{"emoji":"👀","os":["darwin"],"requires":{"bins":["peekaboo"]},"install":[{"id":"brew","kind":"brew","formula":"steipete/tap/peekaboo","bins":["peekaboo"],"label":"Install Peekaboo (brew)"}]}}
 ---
